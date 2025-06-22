@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e6a862dae1ccf488ae4d4570f9f88c, type: 3}
+  m_Name: Pink
+  m_EditorClassIdentifier: 
+  speakerName: "\u547C\u547C"
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  BackColor: {fileID: 21300000, guid: 6dafb3ae7aa0ef14dae4925d6167ec24, type: 3}
+  sprites:
+  - {fileID: 21300000, guid: 24eb215ad707593419ed1b54adf46f97, type: 3}
+  - {fileID: 21300000, guid: 059a98039e7689b4c936ad92c88f9090, type: 3}
+  - {fileID: 21300000, guid: 7c810f97c78a2af43b506c2e91d35a5a, type: 3}
+  - {fileID: 21300000, guid: 113124d24e6d18d4aa750d560c71a53e, type: 3}
+  - {fileID: 21300000, guid: 7e6813b344e8fb149a890d36d8f0287e, type: 3}
+  - {fileID: 21300000, guid: b90be627ecccc3044ad4d586751ca96b, type: 3}
+  prefab: {fileID: 181739033971714129, guid: d4f90453b3edcdd40913f1eb1f708567, type: 3}

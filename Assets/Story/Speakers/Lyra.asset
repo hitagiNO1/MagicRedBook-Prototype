@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e6a862dae1ccf488ae4d4570f9f88c, type: 3}
+  m_Name: Lyra
+  m_EditorClassIdentifier: 
+  speakerName: "\u840A\u83C8"
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  BackColor: {fileID: 21300000, guid: 486a31c21ec8c6448807c39373d0abeb, type: 3}
+  sprites:
+  - {fileID: 21300000, guid: 056a4cafb1e6ece46b2cad8c3df61eb4, type: 3}
+  - {fileID: 21300000, guid: 81eb106a1615a9844a36a8f674d7f9ef, type: 3}
+  - {fileID: 21300000, guid: ddf5328d36599db419ea576077e69904, type: 3}
+  - {fileID: 21300000, guid: dfe8aed4d6c1d2445919973c67759fb3, type: 3}
+  - {fileID: 21300000, guid: e2e392214c55e4b47beedbd37263bdef, type: 3}
+  - {fileID: 21300000, guid: aee5afc2442c62141b6deacfae392c87, type: 3}
+  - {fileID: 21300000, guid: 99b17f2e51d868f498836f6c5754a2f5, type: 3}
+  - {fileID: 21300000, guid: 9a778fcff32a55a40b2d57f35f99f9db, type: 3}
+  - {fileID: 21300000, guid: 2de356995b67aa142b96ef4f4b2cf263, type: 3}
+  - {fileID: 21300000, guid: 35f93ef569f09f0459abe4b6b07f727b, type: 3}
+  - {fileID: 21300000, guid: 7caf828fc58d0304695855742d9fc523, type: 3}
+  - {fileID: 21300000, guid: 2f1c2948705f69d4d9512feeb41d1565, type: 3}
+  - {fileID: 21300000, guid: fee42ca321df6c742b2315d719f4f8af, type: 3}
+  - {fileID: 21300000, guid: cea7804d4471e4443bebf23705b10754, type: 3}
+  - {fileID: 21300000, guid: 36e8a269763d5964085467779627fac1, type: 3}
+  - {fileID: 21300000, guid: d14ff248160e3724e9ef0e0d188135a2, type: 3}
+  - {fileID: 21300000, guid: d154497bebf0d3443a607e8f8868a607, type: 3}
+  prefab: {fileID: 181739033971714129, guid: 134bd1f66dca5e4418e981216547edd3, type: 3}

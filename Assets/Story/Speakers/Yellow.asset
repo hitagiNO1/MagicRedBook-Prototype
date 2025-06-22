@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e6a862dae1ccf488ae4d4570f9f88c, type: 3}
+  m_Name: Yellow
+  m_EditorClassIdentifier: 
+  speakerName: "\u5630\u5630"
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  BackColor: {fileID: 21300000, guid: 8586b28dd7189004b95d5e402a89a5b1, type: 3}
+  sprites:
+  - {fileID: 21300000, guid: b8e50024a69f49c4babce0a4d63cd0f3, type: 3}
+  - {fileID: 21300000, guid: b2d9cbb993d5fb84db2b289730e16ed4, type: 3}
+  - {fileID: 21300000, guid: 0aa0db4506ea1984f89a6f7f5afa9ede, type: 3}
+  - {fileID: 21300000, guid: feb2c1acbb614894699ead7311b4a44d, type: 3}
+  - {fileID: 21300000, guid: f499884d9ad3e8b418f4c06cffd873d5, type: 3}
+  - {fileID: 21300000, guid: 44480f30f98847a4aa6b10490e6e556b, type: 3}
+  prefab: {fileID: 181739033971714129, guid: d4f90453b3edcdd40913f1eb1f708567, type: 3}

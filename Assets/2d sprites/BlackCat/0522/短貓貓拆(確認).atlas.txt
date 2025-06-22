@@ -1,0 +1,194 @@
+
+短貓貓拆(確認).png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+L Ebrow
+  rotate: false
+  xy: 1312, 1201
+  size: 106, 92
+  orig: 106, 92
+  offset: 0, 0
+  index: -1
+L ear
+  rotate: 270
+  xy: 1341, 668
+  size: 673, 685
+  orig: 673, 685
+  offset: 0, 0
+  index: -1
+L eye
+  rotate: false
+  xy: 2, 953
+  size: 184, 201
+  orig: 184, 201
+  offset: 0, 0
+  index: -1
+LU hand
+  rotate: false
+  xy: 1614, 1329
+  size: 388, 698
+  orig: 388, 698
+  offset: 0, 0
+  index: -1
+LW eye
+  rotate: false
+  xy: 2, 62
+  size: 335, 256
+  orig: 335, 256
+  offset: 0, 0
+  index: -1
+R Ebrow
+  rotate: false
+  xy: 855, 1039
+  size: 112, 100
+  orig: 112, 100
+  offset: 0, 0
+  index: -1
+R ear
+  rotate: false
+  xy: 949, 1202
+  size: 665, 825
+  orig: 665, 825
+  offset: 0, 0
+  index: -1
+R eye
+  rotate: false
+  xy: 1477, 1851
+  size: 140, 176
+  orig: 140, 176
+  offset: 0, 0
+  index: -1
+RD leg
+  rotate: false
+  xy: 1614, 104
+  size: 380, 561
+  orig: 380, 561
+  offset: 0, 0
+  index: -1
+body
+  rotate: 180
+  xy: 982, 122
+  size: 649, 697
+  orig: 649, 770
+  offset: 0, 73
+  index: -1
+cloak
+  rotate: false
+  xy: 2, 89
+  size: 1144, 949
+  orig: 1144, 949
+  offset: 0, 0
+  index: -1
+collar
+  rotate: true
+  xy: 1029, 949
+  size: 548, 281
+  orig: 548, 281
+  offset: 0, 0
+  index: -1
+face
+  rotate: false
+  xy: 2, 1039
+  size: 1039, 989
+  orig: 1039, 989
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: false
+  xy: 775, 1977
+  size: 69, 50
+  orig: 69, 50
+  offset: 0, 0
+  index: -1
+nose
+  rotate: false
+  xy: 2, 1959
+  size: 78, 68
+  orig: 78, 68
+  offset: 0, 0
+  index: -1
+
+短貓貓拆(確認)2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+L ear_li
+  rotate: false
+  xy: 1677, 1585
+  size: 353, 461
+  orig: 353, 461
+  offset: 0, 0
+  index: -1
+LD leg
+  rotate: false
+  xy: 1188, 1472
+  size: 443, 575
+  orig: 443, 575
+  offset: 0, 0
+  index: -1
+LH eye
+  rotate: false
+  xy: 883, 1822
+  size: 353, 224
+  orig: 353, 224
+  offset: 0, 0
+  index: -1
+RH eye
+  rotate: false
+  xy: 1634, 1056
+  size: 333, 215
+  orig: 805, 215
+  offset: 0, 0
+  index: -1
+RU hand
+  rotate: false
+  xy: 1197, 822
+  size: 361, 592
+  orig: 361, 592
+  offset: 0, 0
+  index: -1
+RW eye
+  rotate: false
+  xy: 479, 1238
+  size: 291, 256
+  orig: 291, 256
+  offset: 0, 0
+  index: -1
+Tail
+  rotate: false
+  xy: 2, 773
+  size: 1194, 1273
+  orig: 1194, 1273
+  offset: 0, 0
+  index: -1
+ball
+  rotate: 180
+  xy: 109, 624
+  size: 687, 765
+  orig: 687, 765
+  offset: 0, 0
+  index: -1
+book1
+  rotate: false
+  xy: 30, 1221
+  size: 580, 623
+  orig: 580, 623
+  offset: 0, 0
+  index: -1
+book2
+  rotate: false
+  xy: 1509, 1128
+  size: 537, 614
+  orig: 537, 614
+  offset: 0, 0
+  index: -1
+face hair
+  rotate: false
+  xy: 2, 921
+  size: 510, 354
+  orig: 510, 354
+  offset: 0, 0
+  index: -1

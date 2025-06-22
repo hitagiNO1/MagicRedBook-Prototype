@@ -1,0 +1,617 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0a1dca959ea9aa4c8dac873f5edbd3a, type: 3}
+  m_Name: DefenseData
+  m_EditorClassIdentifier: 
+  defenseEntries:
+  - defenseValue: 0
+    damageReduction: 0
+  - defenseValue: 1
+    damageReduction: 0.0099
+  - defenseValue: 2
+    damageReduction: 0.0196
+  - defenseValue: 3
+    damageReduction: 0.0291
+  - defenseValue: 4
+    damageReduction: 0.0385
+  - defenseValue: 5
+    damageReduction: 0.0476
+  - defenseValue: 6
+    damageReduction: 0.056599997
+  - defenseValue: 7
+    damageReduction: 0.0654
+  - defenseValue: 8
+    damageReduction: 0.074099995
+  - defenseValue: 9
+    damageReduction: 0.082600005
+  - defenseValue: 10
+    damageReduction: 0.090900004
+  - defenseValue: 11
+    damageReduction: 0.0991
+  - defenseValue: 12
+    damageReduction: 0.1071
+  - defenseValue: 13
+    damageReduction: 0.115
+  - defenseValue: 14
+    damageReduction: 0.1228
+  - defenseValue: 15
+    damageReduction: 0.1304
+  - defenseValue: 16
+    damageReduction: 0.1379
+  - defenseValue: 17
+    damageReduction: 0.1453
+  - defenseValue: 18
+    damageReduction: 0.1525
+  - defenseValue: 19
+    damageReduction: 0.1597
+  - defenseValue: 20
+    damageReduction: 0.1667
+  - defenseValue: 21
+    damageReduction: 0.1736
+  - defenseValue: 22
+    damageReduction: 0.18030001
+  - defenseValue: 23
+    damageReduction: 0.187
+  - defenseValue: 24
+    damageReduction: 0.1935
+  - defenseValue: 25
+    damageReduction: 0.2
+  - defenseValue: 26
+    damageReduction: 0.20629999
+  - defenseValue: 27
+    damageReduction: 0.21260001
+  - defenseValue: 28
+    damageReduction: 0.2188
+  - defenseValue: 29
+    damageReduction: 0.22479999
+  - defenseValue: 30
+    damageReduction: 0.2308
+  - defenseValue: 31
+    damageReduction: 0.2366
+  - defenseValue: 32
+    damageReduction: 0.24239999
+  - defenseValue: 33
+    damageReduction: 0.2481
+  - defenseValue: 34
+    damageReduction: 0.25370002
+  - defenseValue: 35
+    damageReduction: 0.2593
+  - defenseValue: 36
+    damageReduction: 0.2647
+  - defenseValue: 37
+    damageReduction: 0.2701
+  - defenseValue: 38
+    damageReduction: 0.2754
+  - defenseValue: 39
+    damageReduction: 0.28059998
+  - defenseValue: 40
+    damageReduction: 0.2857
+  - defenseValue: 41
+    damageReduction: 0.2908
+  - defenseValue: 42
+    damageReduction: 0.2958
+  - defenseValue: 43
+    damageReduction: 0.3007
+  - defenseValue: 44
+    damageReduction: 0.3056
+  - defenseValue: 45
+    damageReduction: 0.3103
+  - defenseValue: 46
+    damageReduction: 0.3151
+  - defenseValue: 47
+    damageReduction: 0.3197
+  - defenseValue: 48
+    damageReduction: 0.3243
+  - defenseValue: 49
+    damageReduction: 0.32889998
+  - defenseValue: 50
+    damageReduction: 0.33330002
+  - defenseValue: 51
+    damageReduction: 0.3377
+  - defenseValue: 52
+    damageReduction: 0.3421
+  - defenseValue: 53
+    damageReduction: 0.3464
+  - defenseValue: 54
+    damageReduction: 0.3506
+  - defenseValue: 55
+    damageReduction: 0.3548
+  - defenseValue: 56
+    damageReduction: 0.35900003
+  - defenseValue: 57
+    damageReduction: 0.36310002
+  - defenseValue: 58
+    damageReduction: 0.3671
+  - defenseValue: 59
+    damageReduction: 0.3711
+  - defenseValue: 60
+    damageReduction: 0.375
+  - defenseValue: 61
+    damageReduction: 0.3789
+  - defenseValue: 62
+    damageReduction: 0.3827
+  - defenseValue: 63
+    damageReduction: 0.3865
+  - defenseValue: 64
+    damageReduction: 0.39020002
+  - defenseValue: 65
+    damageReduction: 0.3939
+  - defenseValue: 66
+    damageReduction: 0.3976
+  - defenseValue: 67
+    damageReduction: 0.4012
+  - defenseValue: 68
+    damageReduction: 0.4048
+  - defenseValue: 69
+    damageReduction: 0.4083
+  - defenseValue: 70
+    damageReduction: 0.4118
+  - defenseValue: 71
+    damageReduction: 0.4152
+  - defenseValue: 72
+    damageReduction: 0.4186
+  - defenseValue: 73
+    damageReduction: 0.42200002
+  - defenseValue: 74
+    damageReduction: 0.4253
+  - defenseValue: 75
+    damageReduction: 0.4286
+  - defenseValue: 76
+    damageReduction: 0.4318
+  - defenseValue: 77
+    damageReduction: 0.435
+  - defenseValue: 78
+    damageReduction: 0.4382
+  - defenseValue: 79
+    damageReduction: 0.4413
+  - defenseValue: 80
+    damageReduction: 0.44439998
+  - defenseValue: 81
+    damageReduction: 0.4475
+  - defenseValue: 82
+    damageReduction: 0.45049998
+  - defenseValue: 83
+    damageReduction: 0.45360002
+  - defenseValue: 84
+    damageReduction: 0.45650002
+  - defenseValue: 85
+    damageReduction: 0.4595
+  - defenseValue: 86
+    damageReduction: 0.46240002
+  - defenseValue: 87
+    damageReduction: 0.4652
+  - defenseValue: 88
+    damageReduction: 0.4681
+  - defenseValue: 89
+    damageReduction: 0.4709
+  - defenseValue: 90
+    damageReduction: 0.4737
+  - defenseValue: 91
+    damageReduction: 0.4764
+  - defenseValue: 92
+    damageReduction: 0.47919998
+  - defenseValue: 93
+    damageReduction: 0.48189998
+  - defenseValue: 94
+    damageReduction: 0.48450002
+  - defenseValue: 95
+    damageReduction: 0.48720002
+  - defenseValue: 96
+    damageReduction: 0.4898
+  - defenseValue: 97
+    damageReduction: 0.49240002
+  - defenseValue: 98
+    damageReduction: 0.49490002
+  - defenseValue: 99
+    damageReduction: 0.4975
+  - defenseValue: 100
+    damageReduction: 0.5
+  - defenseValue: 101
+    damageReduction: 0.5025
+  - defenseValue: 102
+    damageReduction: 0.505
+  - defenseValue: 103
+    damageReduction: 0.50740004
+  - defenseValue: 104
+    damageReduction: 0.5098
+  - defenseValue: 105
+    damageReduction: 0.5122
+  - defenseValue: 106
+    damageReduction: 0.5146
+  - defenseValue: 107
+    damageReduction: 0.5169
+  - defenseValue: 108
+    damageReduction: 0.51919997
+  - defenseValue: 109
+    damageReduction: 0.5215
+  - defenseValue: 110
+    damageReduction: 0.5238
+  - defenseValue: 111
+    damageReduction: 0.5261
+  - defenseValue: 112
+    damageReduction: 0.52830005
+  - defenseValue: 113
+    damageReduction: 0.5305
+  - defenseValue: 114
+    damageReduction: 0.5327
+  - defenseValue: 115
+    damageReduction: 0.5349
+  - defenseValue: 116
+    damageReduction: 0.537
+  - defenseValue: 117
+    damageReduction: 0.5392
+  - defenseValue: 118
+    damageReduction: 0.5413
+  - defenseValue: 119
+    damageReduction: 0.5434
+  - defenseValue: 120
+    damageReduction: 0.5455
+  - defenseValue: 121
+    damageReduction: 0.5475
+  - defenseValue: 122
+    damageReduction: 0.5495
+  - defenseValue: 123
+    damageReduction: 0.5516
+  - defenseValue: 124
+    damageReduction: 0.5536
+  - defenseValue: 125
+    damageReduction: 0.5556
+  - defenseValue: 126
+    damageReduction: 0.5575
+  - defenseValue: 127
+    damageReduction: 0.5595
+  - defenseValue: 128
+    damageReduction: 0.5614
+  - defenseValue: 129
+    damageReduction: 0.5633
+  - defenseValue: 130
+    damageReduction: 0.56520003
+  - defenseValue: 131
+    damageReduction: 0.5671
+  - defenseValue: 132
+    damageReduction: 0.569
+  - defenseValue: 133
+    damageReduction: 0.5708
+  - defenseValue: 134
+    damageReduction: 0.5726
+  - defenseValue: 135
+    damageReduction: 0.5745
+  - defenseValue: 136
+    damageReduction: 0.5763
+  - defenseValue: 137
+    damageReduction: 0.5781
+  - defenseValue: 138
+    damageReduction: 0.5798
+  - defenseValue: 139
+    damageReduction: 0.5816
+  - defenseValue: 140
+    damageReduction: 0.5833
+  - defenseValue: 141
+    damageReduction: 0.5851
+  - defenseValue: 142
+    damageReduction: 0.5868
+  - defenseValue: 143
+    damageReduction: 0.58849996
+  - defenseValue: 144
+    damageReduction: 0.5902
+  - defenseValue: 145
+    damageReduction: 0.5918
+  - defenseValue: 146
+    damageReduction: 0.59349996
+  - defenseValue: 147
+    damageReduction: 0.5951
+  - defenseValue: 148
+    damageReduction: 0.5968
+  - defenseValue: 149
+    damageReduction: 0.5984
+  - defenseValue: 150
+    damageReduction: 0.6
+  - defenseValue: 151
+    damageReduction: 0.6016
+  - defenseValue: 152
+    damageReduction: 0.6032
+  - defenseValue: 153
+    damageReduction: 0.6047
+  - defenseValue: 154
+    damageReduction: 0.6063
+  - defenseValue: 155
+    damageReduction: 0.6078
+  - defenseValue: 156
+    damageReduction: 0.6094
+  - defenseValue: 157
+    damageReduction: 0.6109
+  - defenseValue: 158
+    damageReduction: 0.6124
+  - defenseValue: 159
+    damageReduction: 0.6139
+  - defenseValue: 160
+    damageReduction: 0.6154
+  - defenseValue: 161
+    damageReduction: 0.61689997
+  - defenseValue: 162
+    damageReduction: 0.6183
+  - defenseValue: 163
+    damageReduction: 0.6198
+  - defenseValue: 164
+    damageReduction: 0.62119997
+  - defenseValue: 165
+    damageReduction: 0.62259996
+  - defenseValue: 166
+    damageReduction: 0.62409997
+  - defenseValue: 167
+    damageReduction: 0.62549996
+  - defenseValue: 168
+    damageReduction: 0.62689996
+  - defenseValue: 169
+    damageReduction: 0.6283
+  - defenseValue: 170
+    damageReduction: 0.6296
+  - defenseValue: 171
+    damageReduction: 0.631
+  - defenseValue: 172
+    damageReduction: 0.63240004
+  - defenseValue: 173
+    damageReduction: 0.6337
+  - defenseValue: 174
+    damageReduction: 0.635
+  - defenseValue: 175
+    damageReduction: 0.6364
+  - defenseValue: 176
+    damageReduction: 0.6377
+  - defenseValue: 177
+    damageReduction: 0.639
+  - defenseValue: 178
+    damageReduction: 0.6403
+  - defenseValue: 179
+    damageReduction: 0.6416
+  - defenseValue: 180
+    damageReduction: 0.6429
+  - defenseValue: 181
+    damageReduction: 0.6441
+  - defenseValue: 182
+    damageReduction: 0.6454
+  - defenseValue: 183
+    damageReduction: 0.6466
+  - defenseValue: 184
+    damageReduction: 0.6479
+  - defenseValue: 185
+    damageReduction: 0.64910007
+  - defenseValue: 186
+    damageReduction: 0.65029997
+  - defenseValue: 187
+    damageReduction: 0.65160006
+  - defenseValue: 188
+    damageReduction: 0.65279996
+  - defenseValue: 189
+    damageReduction: 0.65400004
+  - defenseValue: 190
+    damageReduction: 0.65519994
+  - defenseValue: 191
+    damageReduction: 0.65639997
+  - defenseValue: 192
+    damageReduction: 0.6575
+  - defenseValue: 193
+    damageReduction: 0.65870005
+  - defenseValue: 194
+    damageReduction: 0.65989995
+  - defenseValue: 195
+    damageReduction: 0.661
+  - defenseValue: 196
+    damageReduction: 0.66220003
+  - defenseValue: 197
+    damageReduction: 0.66330004
+  - defenseValue: 198
+    damageReduction: 0.66440004
+  - defenseValue: 199
+    damageReduction: 0.6656
+  - defenseValue: 200
+    damageReduction: 0.6667
+  - defenseValue: 201
+    damageReduction: 0.6678
+  - defenseValue: 202
+    damageReduction: 0.6689
+  - defenseValue: 203
+    damageReduction: 0.67
+  - defenseValue: 204
+    damageReduction: 0.6711
+  - defenseValue: 205
+    damageReduction: 0.6721
+  - defenseValue: 206
+    damageReduction: 0.6732
+  - defenseValue: 207
+    damageReduction: 0.6743
+  - defenseValue: 208
+    damageReduction: 0.6753
+  - defenseValue: 209
+    damageReduction: 0.6764
+  - defenseValue: 210
+    damageReduction: 0.6774
+  - defenseValue: 211
+    damageReduction: 0.6785
+  - defenseValue: 212
+    damageReduction: 0.6795
+  - defenseValue: 213
+    damageReduction: 0.68050003
+  - defenseValue: 214
+    damageReduction: 0.6815
+  - defenseValue: 215
+    damageReduction: 0.6825
+  - defenseValue: 216
+    damageReduction: 0.6835
+  - defenseValue: 217
+    damageReduction: 0.6845
+  - defenseValue: 218
+    damageReduction: 0.6855
+  - defenseValue: 219
+    damageReduction: 0.6865
+  - defenseValue: 220
+    damageReduction: 0.6875
+  - defenseValue: 221
+    damageReduction: 0.6885
+  - defenseValue: 222
+    damageReduction: 0.6894
+  - defenseValue: 223
+    damageReduction: 0.6904
+  - defenseValue: 224
+    damageReduction: 0.6914
+  - defenseValue: 225
+    damageReduction: 0.6923
+  - defenseValue: 226
+    damageReduction: 0.6933
+  - defenseValue: 227
+    damageReduction: 0.6942
+  - defenseValue: 228
+    damageReduction: 0.6951
+  - defenseValue: 229
+    damageReduction: 0.696
+  - defenseValue: 230
+    damageReduction: 0.69699997
+  - defenseValue: 231
+    damageReduction: 0.6979
+  - defenseValue: 232
+    damageReduction: 0.69879997
+  - defenseValue: 233
+    damageReduction: 0.6997
+  - defenseValue: 234
+    damageReduction: 0.70059997
+  - defenseValue: 235
+    damageReduction: 0.7015
+  - defenseValue: 236
+    damageReduction: 0.70239997
+  - defenseValue: 237
+    damageReduction: 0.7033
+  - defenseValue: 238
+    damageReduction: 0.7041
+  - defenseValue: 239
+    damageReduction: 0.705
+  - defenseValue: 240
+    damageReduction: 0.70589995
+  - defenseValue: 241
+    damageReduction: 0.70669997
+  - defenseValue: 242
+    damageReduction: 0.7076
+  - defenseValue: 243
+    damageReduction: 0.70849997
+  - defenseValue: 244
+    damageReduction: 0.7093
+  - defenseValue: 245
+    damageReduction: 0.7101
+  - defenseValue: 246
+    damageReduction: 0.71099997
+  - defenseValue: 247
+    damageReduction: 0.7118
+  - defenseValue: 248
+    damageReduction: 0.7126
+  - defenseValue: 249
+    damageReduction: 0.71349996
+  - defenseValue: 250
+    damageReduction: 0.7143
+  - defenseValue: 251
+    damageReduction: 0.71510005
+  - defenseValue: 252
+    damageReduction: 0.71589994
+  - defenseValue: 253
+    damageReduction: 0.71669996
+  - defenseValue: 254
+    damageReduction: 0.7175
+  - defenseValue: 255
+    damageReduction: 0.71830004
+  - defenseValue: 256
+    damageReduction: 0.71910006
+  - defenseValue: 257
+    damageReduction: 0.71989995
+  - defenseValue: 258
+    damageReduction: 0.7207
+  - defenseValue: 259
+    damageReduction: 0.7214
+  - defenseValue: 260
+    damageReduction: 0.72220004
+  - defenseValue: 261
+    damageReduction: 0.72300005
+  - defenseValue: 262
+    damageReduction: 0.72379994
+  - defenseValue: 263
+    damageReduction: 0.72449994
+  - defenseValue: 264
+    damageReduction: 0.7253
+  - defenseValue: 265
+    damageReduction: 0.726
+  - defenseValue: 266
+    damageReduction: 0.7268
+  - defenseValue: 267
+    damageReduction: 0.7275
+  - defenseValue: 268
+    damageReduction: 0.72830003
+  - defenseValue: 269
+    damageReduction: 0.72900003
+  - defenseValue: 270
+    damageReduction: 0.7297
+  - defenseValue: 271
+    damageReduction: 0.73050004
+  - defenseValue: 272
+    damageReduction: 0.73120004
+  - defenseValue: 273
+    damageReduction: 0.73190004
+  - defenseValue: 274
+    damageReduction: 0.73260003
+  - defenseValue: 275
+    damageReduction: 0.73330003
+  - defenseValue: 276
+    damageReduction: 0.734
+  - defenseValue: 277
+    damageReduction: 0.7347
+  - defenseValue: 278
+    damageReduction: 0.7354
+  - defenseValue: 279
+    damageReduction: 0.7361
+  - defenseValue: 280
+    damageReduction: 0.7368
+  - defenseValue: 281
+    damageReduction: 0.7375
+  - defenseValue: 282
+    damageReduction: 0.7382
+  - defenseValue: 283
+    damageReduction: 0.7389
+  - defenseValue: 284
+    damageReduction: 0.7396
+  - defenseValue: 285
+    damageReduction: 0.7403
+  - defenseValue: 286
+    damageReduction: 0.7409
+  - defenseValue: 287
+    damageReduction: 0.74160004
+  - defenseValue: 288
+    damageReduction: 0.74230003
+  - defenseValue: 289
+    damageReduction: 0.7429
+  - defenseValue: 290
+    damageReduction: 0.7436
+  - defenseValue: 291
+    damageReduction: 0.7442
+  - defenseValue: 292
+    damageReduction: 0.7449
+  - defenseValue: 293
+    damageReduction: 0.7455
+  - defenseValue: 294
+    damageReduction: 0.7462
+  - defenseValue: 295
+    damageReduction: 0.7468
+  - defenseValue: 296
+    damageReduction: 0.7475
+  - defenseValue: 297
+    damageReduction: 0.7481
+  - defenseValue: 298
+    damageReduction: 0.7487
+  - defenseValue: 299
+    damageReduction: 0.7494
+  - defenseValue: 300
+    damageReduction: 0.75
