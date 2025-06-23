@@ -12,85 +12,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: 0-1-1
   m_EditorClassIdentifier: 
+  StopMove: 1
   sentences:
   - text: "\u4F60\u5011\u77E5\u9053\u55CE\uFF1F"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 12
-      actionType: 1
-      coords: {x: 0, y: 0}
-      Right: 0
+    actions: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: c37e6e58e64061f4e8be522711ddb563, type: 2}
   - text: "\u8070\u660E\u7684\u7375\u4EBA\u2026\u2026\u7E3D\u662F\u85CF\u5728\u6697\u8655\uFF0C\u7136\u5F8C\u2014\u2014"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 12
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
+    actions: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 114db20d0278c444dab948227976896c, type: 2}
   - text: "\u78C5\uFF01\uFF01\u4E00\u8209\u885D\u51FA\u53BB\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 7
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
-  - text: "\u6E96\u5099\u597D\u4E86\u55CE\uFF1F"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 7
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
-  - text: "\u5630\u4F30\u2026\u2026\u54AA\u547C\uFF5E\u55B3\u55B3\uFF1F"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 7
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
+    actions: []
+    timline: []
   - text: "\u53EF\u2026\u2026\u53EF\u60E1\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
     - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
       spriteIndex: 14
-      actionType: 0
+      actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: c304dcc14d0ef1d409659b32fcd84585, type: 2}
   - text: "\u4E0B\u6B21\u4E00\u5B9A\u80FD\u6293\u5230\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
     - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 11
+      spriteIndex: 10
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
+    timline: []
   - text: "\u5630\u4F30\u2026\u2026"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 11
-      actionType: 0
+    - speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
+      spriteIndex: 1
+      actionType: 1
       coords: {x: 0, y: 0}
-      Right: 0
-  - text: "\u55B3\u55B3\uFF1F"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 11
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
+      Right: 1
+    timline: []
   - text: "\u54AA\u547C\uFF5E"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 11
-      actionType: 0
+    - speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
+      spriteIndex: 1
+      actionType: 4
       coords: {x: 0, y: 0}
-      Right: 0
+      Right: 1
+    - speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
+      spriteIndex: 2
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u55B3\u55B3\uFF1F"
+    speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
+      spriteIndex: 2
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 1
+    - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+      spriteIndex: 3
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
   nextScene: {fileID: 0}

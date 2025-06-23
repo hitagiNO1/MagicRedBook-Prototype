@@ -27,6 +27,8 @@ public class BottomBarController : MonoBehaviour
     public GameObject spritesPrefab; // Sprite 父物件，用來放角色物件
     public Image LBack;
     public Image RBack;
+
+    bool playedTimeline = false;
     private enum State
     {
         PLAYING, COMPLETED
@@ -130,7 +132,7 @@ public class BottomBarController : MonoBehaviour
         sentenceIndex = -1;
         previousSpeakerPositions.Clear(); // 清空之前的角色位置
         sprites.Clear();
-        PlayNextSentence();
+        PlayNextSentence(); // 讓第一句自然由 Coroutine 控制 Show()
     }
 
     // 播放下一句話
@@ -145,12 +147,15 @@ public class BottomBarController : MonoBehaviour
             Debug.LogError("當前場景或句子列表為空，無法播放下一句。");
             yield break;
         }
-
         //紀錄前一句角色位置
         if (sentenceIndex >= 0 && sentenceIndex < currentScene.sentences.Count)
         {
-            var prevAction = currentScene.sentences[sentenceIndex].actions[0];
-            previousSpeakerPositions.Add(prevAction.Right);
+            var prevSentence = currentScene.sentences[sentenceIndex];
+            if (prevSentence.actions != null && prevSentence.actions.Count > 0)
+            {
+                var prevAction = prevSentence.actions[0];
+                previousSpeakerPositions.Add(prevAction.Right);
+            }
         }
 
         sentenceIndex++;
@@ -159,24 +164,30 @@ public class BottomBarController : MonoBehaviour
             Debug.Log("已經播放完所有句子。");
             yield break;
         }
-
         var sentence = currentScene.sentences[sentenceIndex];
-
-        //播 Timeline
+        //播放 Timeline 動畫（如果有）
+        bool hasTimeline = false;
         foreach (var timeline in sentence.timline)
         {
             if (timeline.animation && timeline.myPlayableAsset != null)
             {
+                hasTimeline = true;
                 TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
                 yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
             }
         }
-
-        //顯示講話者資訊
+        //只在第一句動畫播完後顯示對話框
+        if (sentenceIndex == 0)
+        {
+            if (hasTimeline)
+                yield return new WaitForSeconds(0.3f); // 微延遲
+            Show();
+        }
+        // 顯示講話者資訊
         personNameText.text = sentence.speaker.speakerName;
         personNameText.color = sentence.speaker.textColor;
 
-        //切換對話框左右與背景
+        // 切換對話框左右與背景
         foreach (var action in sentence.actions)
         {
             if (!action.Right)
@@ -190,11 +201,9 @@ public class BottomBarController : MonoBehaviour
                 RBack.sprite = action.speaker.BackColor;
             }
         }
-
-        //執行角色動作
+        // 執行角色動作
         ActSpeakers();
-
-        //顯示文字動畫
+        // 顯示文字動畫
         yield return TypeText(sentence.text);
     }
 

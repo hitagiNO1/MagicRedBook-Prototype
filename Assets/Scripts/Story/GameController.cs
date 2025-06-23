@@ -87,7 +87,6 @@ public class GameController : MonoBehaviour
         {
             bottomBar.ClearText();
             yield return new WaitForSeconds(1f);
-            bottomBar.Show();
             bottomBar.PlayScene(scene);
             state = State.STORYING;
         }
