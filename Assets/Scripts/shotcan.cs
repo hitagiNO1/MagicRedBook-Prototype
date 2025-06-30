@@ -6,62 +6,82 @@ using TMPro;
 
 public class shotcan : MonoBehaviour
 {
-    public GameObject CanPrefab;
-    public int totalCans = 10;
-    public float spawnInterval = 1f;
-    public float gameTime = 30f;
+    public Vector3 spawnAreaSize = new Vector3(10f, 3f, 4f);
+    public GameObject canPrefab;
+    public Transform spawnArea;
+    public int totalCans = 15;
+    public float gameDuration = 30f;
 
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI statusText;
-
-    private int cansSpawned = 0;
-    private int cansShot = 0;
     private float timeRemaining;
-    private bool gameOver = false;
+    private int cansLeft;
+    private bool isGameActive = false;
+
+    public QTEUI uiManager;
 
     void Start()
     {
-        timeRemaining = gameTime;
-        StartCoroutine(SpawnCans());
+        StartGame();
     }
 
     void Update()
     {
-        if (gameOver) return;
+        if (!isGameActive) return;
 
         timeRemaining -= Time.deltaTime;
-        timerText.text = "Time: " + Mathf.CeilToInt(timeRemaining);
+        uiManager.UpdateTimer(timeRemaining);
 
-        if (timeRemaining <= 0)
+        if (timeRemaining <= 0f)
         {
-            EndGame(false); // 時間到未通關
+            EndGame(false);
         }
     }
 
-    IEnumerator SpawnCans()
+    public void StartGame()
     {
-        while (cansSpawned < totalCans)
+        timeRemaining = gameDuration;
+        cansLeft = totalCans;
+        isGameActive = true;
+        SpawnCans();
+        uiManager.UpdateCanCounter(cansLeft);
+    }
+
+    void SpawnCans()
+    {
+        int totalCans = 15;
+        float spacingY = 1.5f;   // 每排的垂直間距（你也可以改成 Z）
+        float[] xPositions = { -2f, 0f, 2f }; // 左、中、右 對應的 X 座標
+
+        Vector3 startPos = spawnArea.position;
+
+        for (int i = 0; i < totalCans; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-6f, 6f), 0, Random.Range(3f, 7f));
-            Instantiate(CanPrefab, pos, Quaternion.identity);
-            cansSpawned++;
-            yield return new WaitForSeconds(spawnInterval);
+            int side = Random.Range(0, 3); // 0: 左, 1: 中, 2: 右
+
+            float x = startPos.x + xPositions[side]; // 根據位置決定 X
+            float y = startPos.y + i * spacingY;     // 每排往上排
+            float z = startPos.z;
+
+            Vector3 spawnPos = new Vector3(x, y, z);
+            Instantiate(canPrefab, spawnPos, Quaternion.identity);
         }
     }
 
-    public void OnCansShot()
+    public void OnCanShot()
     {
-        cansShot++;
-        if (cansShot >= totalCans)
+        if (!isGameActive) return;
+
+        cansLeft--;
+        uiManager.UpdateCanCounter(cansLeft);
+
+        if (cansLeft <= 0)
         {
-            EndGame(true); // 全部擊殺，過關
+            EndGame(true);
         }
     }
 
     void EndGame(bool success)
     {
-        gameOver = true;
-        statusText.text = success ? " 你贏了！" : " 失敗了...";
-        Time.timeScale = 0; // 暫停遊戲
+        isGameActive = false;
+        uiManager.ShowResult(success);
     }
 }
