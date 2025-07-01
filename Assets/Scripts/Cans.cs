@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class Cans : MonoBehaviour
 {
-    private bool isShot = false;
+    public int row;
+    public int col;
+    public shotcan manager;
 
-    void OnMouseDown()
+    public void OnShot()
     {
-        if (isShot) return;
-
-        isShot = true;
-        FindObjectOfType<shotcan>().OnCanShot();
-
-        // 可以加動畫或物理效果
+        manager.HandleCanShot(this.row, this.col);
         Destroy(gameObject);
     }
 }
