@@ -42607,6 +42607,7 @@ GameObject:
   - component: {fileID: 3567700090688083515}
   - component: {fileID: 8963592478681553701}
   - component: {fileID: 8963592478681553702}
+  - component: {fileID: 8963592478681553703}
   m_Layer: 0
   m_Name: FISH1
   m_TagString: Untagged
@@ -53137,6 +53138,27 @@ MonoBehaviour:
   playerHUD: {fileID: 4477255336795696411}
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
+--- !u!95 &8963592478681553703
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982475317498548013}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0ab06933c7f121d49b14e4345f75e548, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8972926862841453217
 GameObject:
   m_ObjectHideFlags: 0
