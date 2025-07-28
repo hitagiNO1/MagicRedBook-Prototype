@@ -10,7 +10,7 @@ public class SpriteController : MonoBehaviour
     private RectTransform rect;
     GameObject first;
 
-    private bool isVisible = true;
+    private bool isVisible = true; //讓disappear消失一次
     private void Awake()
     {
         switcher = GetComponent<SpriteSwitcher>();
@@ -37,11 +37,10 @@ public class SpriteController : MonoBehaviour
         isVisible = false;
         StartCoroutine(WaitAndDisable());
     }
-    public void Show(Vector2 coords)
+    public void Show()
     {
-        rect.localPosition = coords;
         isVisible = true;
-        //first.SetActive(true);
+        first.SetActive(true);
         Flip();
     }
     public void Hide()
