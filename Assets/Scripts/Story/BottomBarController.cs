@@ -22,12 +22,13 @@ public class BottomBarController : MonoBehaviour
     public Sprite LBar;
     public Sprite RBar;
     private Image image;
+    public Image LBack;
+    public Image RBack;
+    private int leftCharacters = 0;
+    private int rightCharacters = 0;
     // 管理場景中所有角色的 Sprite
     public Dictionary<Speaker, SpriteController> sprites;
     public GameObject spritesPrefab; // Sprite 父物件，用來放角色物件
-    public Image LBack;
-    public Image RBack;
-
     bool playedTimeline = false;
     private enum State
     {
@@ -89,7 +90,7 @@ public class BottomBarController : MonoBehaviour
                 }
             }
 
-            //Debug.Log($"Hide: hasLeft={hasLeft}, hasRight={hasRight}");            // 調試日誌 - 確認標誌的值
+            //Debug.Log($"Hide: hasLeft={hasLeft}, hasRight={hasRight}");
             // 根據角色的存在情況觸發動畫
             if (hasLeft && !hasRight)
             {
@@ -131,8 +132,11 @@ public class BottomBarController : MonoBehaviour
         currentScene = scene;
         sentenceIndex = -1;
         previousSpeakerPositions.Clear(); // 清空之前的角色位置
+        //初始化左右兩邊存在的腳色數量
+        leftCharacters = 0;
+        rightCharacters = 0;
         sprites.Clear();
-        PlayNextSentence(); // 讓第一句自然由 Coroutine 控制 Show()
+        PlayNextSentence();
     }
 
     // 播放下一句話
@@ -172,8 +176,22 @@ public class BottomBarController : MonoBehaviour
             if (timeline.animation && timeline.myPlayableAsset != null)
             {
                 hasTimeline = true;
+
+                /* 對話框暫時隱藏
+                if (!isHidden)
+                {
+                    Hide();
+                }
+                */
                 TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
                 yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+
+                /* Timeline 播完再顯示
+                if (sentenceIndex == 0 || sentence.text != "")
+                {
+                    Show(); //若該句是有內容的，播完動畫再顯示回來
+                }
+                */
             }
         }
         //只在第一句動畫播完後顯示對話框
@@ -183,6 +201,7 @@ public class BottomBarController : MonoBehaviour
                 yield return new WaitForSeconds(0.3f); // 微延遲
             Show();
         }
+
         // 顯示講話者資訊
         personNameText.text = sentence.speaker.speakerName;
         personNameText.color = sentence.speaker.textColor;
@@ -258,7 +277,7 @@ public class BottomBarController : MonoBehaviour
 
         switch (action.actionType)
         {
-            case StoryScene.Sentence.Action.Type.APPEAR:
+            case StoryScene.Sentence.Action.Type.APPEAR: //帶動畫的出現，生成新的
                 // 如果該角色尚未生成，則創建並加入字典
                 if (!sprites.ContainsKey(action.speaker))
                 {
@@ -270,24 +289,24 @@ public class BottomBarController : MonoBehaviour
                 {
                     controller = sprites[action.speaker];
                 }
-
                 // 設定角色圖片與位置
                 controller.Setup(action.speaker.sprites[action.spriteIndex]);
 
                 if (action.Right == false)
                 {
                     controller.Appear(Lcoords);
-                    animator.SetTrigger("LheadShow");
+                    if (leftCharacters == 0) animator.SetTrigger("LheadShow");
+                    leftCharacters++;
                 }
                 else
                 {
                     controller.Appear(Rcoords);
-
-                    animator.SetTrigger("RheadShow");
+                    if (rightCharacters == 0) animator.SetTrigger("RheadShow");
+                    rightCharacters++;
                 }
                 return; // 注意這裡直接 return，不會執行下面的 SwitchSprite
 
-            case StoryScene.Sentence.Action.Type.MOVE:
+            case StoryScene.Sentence.Action.Type.MOVE:  //已出現的腳色，換到對面
                 if (sprites.ContainsKey(action.speaker))
                 {
                     controller = sprites[action.speaker];
@@ -298,46 +317,33 @@ public class BottomBarController : MonoBehaviour
                 }
                 break;
 
-            case StoryScene.Sentence.Action.Type.DISAPPEAR:
+            case StoryScene.Sentence.Action.Type.DISAPPEAR: //已出現的腳色退場，直接刪除
                 if (sprites.ContainsKey(action.speaker))
                 {
+                    controller = sprites[action.speaker];
+                    controller.Disappear();
                     if (action.Right == false)
                     {
-                        animator.SetTrigger("LheadHide");
+                        leftCharacters--;
+                        if (leftCharacters == 0) animator.SetTrigger("LheadHide");
                     }
                     else
                     {
-                        animator.SetTrigger("RheadHide");
+                        rightCharacters--;
+                        if (rightCharacters == 0) animator.SetTrigger("RheadHide");
                     }
-                    controller = sprites[action.speaker];
-                    controller.Disappear();
                 }
                 break;
 
-            case StoryScene.Sentence.Action.Type.SHOW:
-                if (!sprites.ContainsKey(action.speaker))
-                {
-                    controller = Instantiate(action.speaker.prefab.gameObject, spritesPrefab.transform)
-                        .GetComponent<SpriteController>();
-                    sprites.Add(action.speaker, controller);
-                }
-                else
+            case StoryScene.Sentence.Action.Type.SHOW:   //已生成過的腳色再出現，將隱藏的打開，不帶動畫
+                if (sprites.ContainsKey(action.speaker))
                 {
                     controller = sprites[action.speaker];
-                }
-                // 設定角色圖片與位置
-                controller.Setup(action.speaker.sprites[action.spriteIndex]);
-                if (action.Right == false)
-                {
-                    controller.Show(Lcoords);
-                }
-                else
-                {
-                    controller.Show(Rcoords);
+                    controller.Show();
                 }
                 break;
 
-            case StoryScene.Sentence.Action.Type.HIDE:
+            case StoryScene.Sentence.Action.Type.HIDE:   //已出現的腳色暫時消失，隱藏
                 if (sprites.ContainsKey(action.speaker))
                 {
                     controller = sprites[action.speaker];
@@ -345,7 +351,7 @@ public class BottomBarController : MonoBehaviour
                 }
                 break;
 
-            case StoryScene.Sentence.Action.Type.NONE:
+            case StoryScene.Sentence.Action.Type.NONE:   //不動，僅變表情
                 if (sprites.ContainsKey(action.speaker))
                 {
                     controller = sprites[action.speaker];
