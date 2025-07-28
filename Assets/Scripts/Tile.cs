@@ -10,9 +10,22 @@ public class Tile : MonoBehaviour
 
     public void OnClicked()
     {
+        if (canclick.gameEnded) return;
+
         if (isBlack)
             canclick.OnCorrectTileClicked(this);
         else
             canclick.OnWrongTileClicked(this);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("EndLine") && isBlack)
+        {
+            if (!canclick.gameEnded)
+            {
+                canclick.GameOver("§Aº|ÂI¤F¶Â¶ô¡I");
+            }
+        }
     }
 }

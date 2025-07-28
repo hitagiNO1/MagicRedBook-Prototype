@@ -9,6 +9,7 @@ TagManager:
   - Bush
   - Stone
   - Grass
+  - EndLine
   layers:
   - Default
   - TransparentFX
