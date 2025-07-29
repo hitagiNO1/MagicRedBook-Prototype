@@ -10,7 +10,7 @@ public class canclick : MonoBehaviour
     public GameObject tileBlackPrefab;
     public Transform spawnPoint;
     public float fallSpeed = 2f;
-
+    public float columnSpacing = 10f; // 設定軌道間距
     public int targetSuccessCount = 15;
     private int currentSuccessCount = 0;
     public bool gameEnded = false;
@@ -20,7 +20,8 @@ public class canclick : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI resultText;
     public GameObject restartButton;
-
+    public float columnAngle = 0f; // 3條軌道左右的夾角，可從 Inspector 調整
+    public GameFlowManager gameflow;
     void Start()
     {
        
@@ -43,11 +44,7 @@ public class canclick : MonoBehaviour
             }
         }
 
-        // Tile 移動
-        foreach (var tile in activeTiles)
-        {
-            tile.transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
-        }
+        
 
         // 判斷最底層的 tile 是否掉到底
         if (activeTiles.Count > 0)
@@ -66,6 +63,10 @@ public class canclick : MonoBehaviour
                 }
             }
         }
+
+
+
+       
     }
 
     void SpawnRow()
@@ -79,7 +80,7 @@ public class canclick : MonoBehaviour
             GameObject prefab = (col == blackCol) ? tileBlackPrefab : tileWhitePrefab;
             GameObject tile = Instantiate(prefab);
 
-            tile.transform.position = spawnPoint.position + new Vector3((col - 1) * 2f, 0f, 0f);
+            tile.transform.position = spawnPoint.position + new Vector3((col - 1) * columnSpacing, 0f, 0f);
 
             Tile tileScript = tile.GetComponent<Tile>();
             tileScript.isBlack = (col == blackCol);
@@ -132,6 +133,7 @@ public class canclick : MonoBehaviour
         activeTiles.Clear();
 
         // 顯示結果文字
+        gameflow.ShowResult();
         resultText.text = $"失敗！\n{reason}";
         resultText.gameObject.SetActive(true);
         restartButton.SetActive(true);
@@ -148,7 +150,7 @@ public class canclick : MonoBehaviour
             Destroy(tile.gameObject);
         }
         activeTiles.Clear();
-
+        gameflow.ShowResult();
         resultText.text = "成功！\n你點滿了 15 個黑塊！";
         resultText.gameObject.SetActive(true);
         restartButton.SetActive(true);
@@ -158,15 +160,40 @@ public class canclick : MonoBehaviour
     {
         if (gameEnded) return;
 
-        InvokeRepeating(nameof(SpawnRow), 0.5f, 0.6f);
+        StartCoroutine(SpawnRowCoroutine());
 
         // 隱藏按鈕
         startButton.SetActive(false);
     }
 
+    IEnumerator SpawnRowCoroutine()
+    {
+        float delay = 1f; // 固定間隔
+
+        while (!gameEnded && blackTileGenerated < targetSuccessCount)
+        {
+            SpawnRow();
+            yield return new WaitForSeconds(delay);
+        }
+    }
+
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // 重設變數
+        gameEnded = false;
+        currentSuccessCount = 0;
+        blackTileGenerated = 0;
+        resultText.gameObject.SetActive(false);
+        restartButton.SetActive(false);
+        startButton.SetActive(true);
+        UpdateScoreText();
+
+        // 清除舊的 tile
+        foreach (var tile in activeTiles)
+        {
+            Destroy(tile.gameObject);
+        }
+        activeTiles.Clear();
     }
 
     void UpdateScoreText()
