@@ -105,7 +105,7 @@ MonoBehaviour:
       Right: 1
     - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
       spriteIndex: 1
-      actionType: 5
+      actionType: 1
       coords: {x: 0, y: 0}
       Right: 1
     timline: []
@@ -128,7 +128,7 @@ MonoBehaviour:
       Right: 1
     - speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
       spriteIndex: 0
-      actionType: 5
+      actionType: 1
       coords: {x: 0, y: 0}
       Right: 1
     timline: []
