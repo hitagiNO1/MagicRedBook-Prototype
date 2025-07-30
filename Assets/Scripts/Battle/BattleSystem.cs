@@ -25,7 +25,8 @@ public class BattleSystem : MonoBehaviour
     public Enemyskill enemyskill;  // 指向技能腳本（拖拉或程式指派）
     private List<System.Action> enemySkills;     // 儲存當前敵人的技能列表
     public int turnCounter = 0;
-
+    private GetBattle GetBattle;
+    public GameController Gamescript;
     void Start()
     {
         //SetupSkillsForEnemy(enemyUnit.unitName); // 假設 unitName 為 "Fish"
@@ -57,6 +58,7 @@ public class BattleSystem : MonoBehaviour
         playerUnit = playerPrefab.GetComponent<Unit>();
         enemyUnit = enemyPrefab.GetComponent<Unit>();
         enemyskill = enemyPrefab.GetComponent<Enemyskill>(); // 建立後才指派
+        GetBattle = enemyPrefab.GetComponentInChildren<GetBattle>();
         if (enemyskill == null)
         {
             Debug.LogError(" 無法在 enemyPrefab 上取得 Enemyskill 組件！");
@@ -127,18 +129,27 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.WON)
         {
             dialogueText.text = "你贏得了戰鬥!";
+
+            if (GetBattle.IfScenes.Count == 1)
+            {
+                Gamescript.PlayScene(GetBattle.IfScenes[0] as StoryScene); //如果GetBattle有劇情就撥放
+            }
+            else
+            {
+                GameStateManager.Instance.SetState(GameState.Playing);
+            }
             Destroy(enemyPrefab);
         }
         else if (state == BattleState.LOST)
         {
             dialogueText.text = "你輸了...";
+            GameStateManager.Instance.SetState(GameState.Playing);
         }
         else if (state == BattleState.RUN)
         {
             dialogueText.text = "逃跑成功...";
+            GameStateManager.Instance.SetState(GameState.Playing);
         }
-
-        GameStateManager.Instance.SetState(GameState.Playing);
         animator.SetTrigger("Hide");
         skillManager.ClearSkillIcons();
         isHidden = false;

@@ -1,5 +1,6 @@
 using Cinemachine;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GetBattle : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GetBattle : MonoBehaviour
     public MonsterEntryUI Addmonster;
     public MonsterData monster;
     //public Unit enemybuffdebuff;
+    public List<GameScene> IfScenes;
+
     private void Start()
     {
         virtualCamera.enabled = false;

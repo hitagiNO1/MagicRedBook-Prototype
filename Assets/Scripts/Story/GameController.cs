@@ -66,6 +66,13 @@ public class GameController : MonoBehaviour
 
     public void PlayScene(StoryScene scene)
     {
+        /*
+        if (scene == null)
+        {
+            Debug.LogError("PlayScene 收到 null 的 scene！呼叫堆疊:\n" + System.Environment.StackTrace);
+            return;
+        }
+        */
         StartCoroutine(SwitchScene(scene));
         IsDone = true;
         if (scene.StopMove)
