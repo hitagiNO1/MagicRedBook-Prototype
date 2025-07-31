@@ -20,11 +20,27 @@ public class canclick : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI resultText;
     public GameObject restartButton;
+    public GameObject BackButton;
     public float columnAngle = 0f; // 3條軌道左右的夾角，可從 Inspector 調整
     public GameFlowManager gameflow;
+    public ItemData[] itemOptions; // 在 Inspector 拖入 4 個 ItemData 資料
+    private ItemData selectedItem;
+    public int randomAmount;
+
     void Start()
     {
-       
+        if (itemOptions.Length == 0)
+        {
+            Debug.LogWarning("請在 Inspector 設定 itemOptions！");
+            return;
+        }
+
+        int randomIndex = Random.Range(0, itemOptions.Length); // 取得 0~3 間的整數
+        selectedItem = itemOptions[randomIndex];
+        randomAmount = Random.Range(1, 4);
+
+
+        Debug.Log($"選中：{selectedItem.itemName}，數量：{randomAmount}");
     }
 
     void Update()
@@ -155,6 +171,7 @@ public class canclick : MonoBehaviour
         resultText.gameObject.SetActive(true);
         restartButton.SetActive(true);
         Debug.Log("遊戲成功！");
+        selectedItem.amount += randomAmount;
     }
     public void StartGame()
     {
@@ -175,6 +192,11 @@ public class canclick : MonoBehaviour
             SpawnRow();
             yield return new WaitForSeconds(delay);
         }
+    }
+
+    public void BackGame()
+    {
+        SceneManager.LoadScene("Prologue");
     }
 
     public void RestartGame()
