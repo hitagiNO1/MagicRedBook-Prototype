@@ -16,6 +16,7 @@ public class RedBook : MonoBehaviour
     private int currentPage = 0;
     private bool isOpen = false;
     private Animator animator;
+    public GameObject inventoryUI;
 
     //public CinemachineVirtualCamera BookCamera = null;
     private void Start()
@@ -32,6 +33,8 @@ public class RedBook : MonoBehaviour
                 // 打開紅書 
                 GameStateManager.Instance.SetState(GameState.Redbook);
                 StartCoroutine(OpenBook());
+                // 更新道具UI
+                inventoryUI.GetComponent<InventoryUI>().RefreshUI();
             }
             else if (isOpen == true)
             {

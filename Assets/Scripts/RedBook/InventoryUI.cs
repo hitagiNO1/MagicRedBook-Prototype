@@ -19,14 +19,15 @@ public class InventoryUI : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-
         // 產生新的 UI 欄位
         foreach (ItemData item in InventoryManager.Instance.items)
         {
-            GameObject slot = Instantiate(itemSlotPrefab, contentPanel);
-            slot.GetComponent<ItemSlot>().Setup(item, this);
+            if (item.amount >= 1)
+            {
+                GameObject slot = Instantiate(itemSlotPrefab, contentPanel);
+                slot.GetComponent<ItemSlot>().Setup(item, this);
+            }
         }
-
     }
 
     // 顯示是否使用道具的確認面板
