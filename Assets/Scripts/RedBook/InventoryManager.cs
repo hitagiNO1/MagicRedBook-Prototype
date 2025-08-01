@@ -13,7 +13,7 @@ public class InventoryManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public void AddItem(ItemData newItem)
+    public void AddItem(ItemData newItem,int Itemamount)
     {
         // 嘗試找到已擁有相同名稱的道具
         ItemData existingItem = items.FirstOrDefault(i => i.itemName == newItem.itemName);
@@ -21,12 +21,12 @@ public class InventoryManager : MonoBehaviour
         if (existingItem != null)
         {
             
-            existingItem.amount += 1;
+            existingItem.amount += Itemamount;
         }
         else
         {
             items.Add(newItem);
-            newItem.amount = 1;
+            newItem.amount += Itemamount;
         }
     }
 

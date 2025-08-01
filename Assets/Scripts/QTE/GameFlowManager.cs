@@ -9,6 +9,7 @@ public class GameFlowManager : MonoBehaviour
     public GameObject resultCanvas;
     public GameObject startbutton;
     public canclick canclick;
+    public GameObject track;
    
   
 
@@ -22,6 +23,7 @@ public class GameFlowManager : MonoBehaviour
         mainCanvas.SetActive(true);
         gameCanvas.SetActive(false);
         resultCanvas.SetActive(false);
+        track.SetActive(false);
     }
 
     public void StartGame()
@@ -31,6 +33,7 @@ public class GameFlowManager : MonoBehaviour
         resultCanvas.SetActive(false);
         startbutton.SetActive(true);
         canclick.RestartGame();
+        track.SetActive(true);
 
     }
 
@@ -44,6 +47,7 @@ public class GameFlowManager : MonoBehaviour
         mainCanvas.SetActive(false);
         gameCanvas.SetActive(false);
         resultCanvas.SetActive(true);
+        track.SetActive(false);
 
         // 顯示最終得分
         

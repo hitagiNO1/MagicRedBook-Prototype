@@ -9,7 +9,7 @@ public class Tile : MonoBehaviour
     public bool isBlack = false;
     public int col;                      // 欄位：0, 1, 2
     public canclick canclick;           // 控制腳本
-    private float fallSpeed = 3f;
+
 
     void Update()
     {
@@ -26,7 +26,7 @@ public class Tile : MonoBehaviour
         Vector3 finalDirection = yRotation * baseFallDir;
 
         // 3. 平移
-        transform.Translate(finalDirection.normalized * fallSpeed * Time.deltaTime, Space.World);
+        transform.Translate(finalDirection.normalized * canclick.fallSpeed * Time.deltaTime, Space.World);
 
         // 4. 近大遠小縮放
         float scale = Mathf.Lerp(0.1f, 0.2f, Mathf.InverseLerp(7f, -4f, transform.position.z));

@@ -9,7 +9,6 @@ public class canclick : MonoBehaviour
     public GameObject tileWhitePrefab;
     public GameObject tileBlackPrefab;
     public Transform spawnPoint;
-    public float fallSpeed = 2f;
     public float columnSpacing = 10f; // 設定軌道間距
     public int targetSuccessCount = 15;
     private int currentSuccessCount = 0;
@@ -26,6 +25,7 @@ public class canclick : MonoBehaviour
     public ItemData[] itemOptions; // 在 Inspector 拖入 4 個 ItemData 資料
     private ItemData selectedItem;
     public int randomAmount;
+    public float fallSpeed = 5f;
 
     void Start()
     {
@@ -171,7 +171,8 @@ public class canclick : MonoBehaviour
         resultText.gameObject.SetActive(true);
         restartButton.SetActive(true);
         Debug.Log("遊戲成功！");
-        selectedItem.amount += randomAmount;
+
+        InventoryManager.Instance.AddItem(selectedItem, randomAmount);
     }
     public void StartGame()
     {
@@ -185,7 +186,7 @@ public class canclick : MonoBehaviour
 
     IEnumerator SpawnRowCoroutine()
     {
-        float delay = 1f; // 固定間隔
+        float delay = 0.6f; // 固定間隔
 
         while (!gameEnded && blackTileGenerated < targetSuccessCount)
         {
