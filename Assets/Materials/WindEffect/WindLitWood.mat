@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WindLitWood
-  m_Shader: {fileID: -6465566751694194690, guid: 2be280dc2d063164985c89ae27a3c579, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: bdbb388e38531264ab2aea8285a6501a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
