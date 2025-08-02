@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
-  m_Name: 3
+  m_Name: 0-2-1
   m_EditorClassIdentifier: 
   StopMove: 1
   sentences:
@@ -22,12 +22,14 @@ MonoBehaviour:
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 11ec7ef09ec5f004aa518897f49992cf, type: 2}
   - text: "\u5630\u4F30\uFF01"
     speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
     actions:
     - speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
-      spriteIndex: 2
+      spriteIndex: 3
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 1
@@ -42,18 +44,13 @@ MonoBehaviour:
       Right: 1
     - speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
       spriteIndex: 3
-      actionType: 5
+      actionType: 1
       coords: {x: 0, y: 0}
       Right: 1
     timline: []
   - text: "\u5478\u5478\u5478\uFF01\u5225\u4E82\u8B1B\uFF0C\u4EC0\u9EBC\u50CF\u5893\u7891\u2026\u2026\u592A\u6666\u6C23\u4E86\u5427\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
-      spriteIndex: 3
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 1
     - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
       spriteIndex: 4
       actionType: 0
@@ -65,15 +62,6 @@ MonoBehaviour:
     actions:
     - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
       spriteIndex: 1
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
-    timline: []
-  - text: "\u9019\u500B\u5716\u6848\u2026\u2026\u611F\u89BA\u5728\u54EA\u88E1\u898B\u904E\u3002"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 9
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
