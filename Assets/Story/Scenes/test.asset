@@ -15,23 +15,49 @@ MonoBehaviour:
   StopMove: 0
   sentences:
   - text: "............\uFF01\uFF01"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 6
+    - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+      spriteIndex: 1
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
-    timline:
-    - animation: 0
-      myPlayableAsset: {fileID: 0}
-  - text: "............\uFF01\uFF01"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    timline: []
+  - text: 444444
+    speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 6
+    - speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
+      spriteIndex: 1
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: 555555
+    speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+      spriteIndex: 1
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: eec5a822a2838904aa349f646a9c0c4d, type: 2}
+      spriteIndex: 1
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
+    timline: []
+  - text: 7777777777
+    speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 0aaa2446a39af8d49b11ff10e0474279, type: 2}
+      spriteIndex: 1
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 1
+    - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+      spriteIndex: 1
+      actionType: 3
+      coords: {x: 0, y: 0}
+      Right: 1
     timline: []
   nextScene: {fileID: 0}

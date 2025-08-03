@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 public class StoryTrigger : MonoBehaviour
 {
     bool scope = false;
-    public bool IfIDLE = false;
+    private bool IfIDLE = false;
     public GameScene currentScene;      //當前的劇情
     public GameController Gamescript;
     public List<GameScene> LimitScenes; //限制哪些故事沒播過就不能播此currentScene

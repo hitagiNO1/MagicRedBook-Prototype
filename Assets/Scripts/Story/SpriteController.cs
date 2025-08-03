@@ -50,6 +50,7 @@ public class SpriteController : MonoBehaviour
     public void Move(Vector2 coords)
     {
         rect.localPosition = coords;
+        first.SetActive(true);
         Flip();
     }
     private void Flip()
