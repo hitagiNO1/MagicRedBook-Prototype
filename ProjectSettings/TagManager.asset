@@ -10,6 +10,8 @@ TagManager:
   - Stone
   - Grass
   - EndLine
+  - mouse
+  - C4
   layers:
   - Default
   - TransparentFX
