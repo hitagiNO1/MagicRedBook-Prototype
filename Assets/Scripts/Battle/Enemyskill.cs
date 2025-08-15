@@ -22,6 +22,7 @@ public class Enemyskill : MonoBehaviour
         bool isDead = playerUnit.TakeDamage(buffedDamage);
         playerHUD.SetHP(playerUnit.currentHP);
         dialogueText.text = "³½¤e¬ð¨ë¡I";
+        EffectManager.Instance.PlayUIEffect("test1", new Vector2(-751, -279), 1f, 1f);
     }
 
     public void Fishskill_2()
