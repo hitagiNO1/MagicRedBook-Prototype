@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class usercontrol : MonoBehaviour
 {
     private List<mouseset> mouseset;
     public bool gameover = false;
-    private float timer = 60f; // 1分鐘倒數計時器 (秒)
+    public float timer = 60f; // 1分鐘倒數計時器 (秒)
     private int mouseClickCount = 0; // 記錄點擊老鼠的次數
     private const int requiredClicks = 15; // 需要點擊15次老鼠
     private bool gameWon = false; // 記錄遊戲是否成功
+    public TextMeshProUGUI resault;
+    public boxgameflow gameflow;
+    public GameObject backbutton;
 
     // Start 在第一幀之前調用
     void Start()
     {
-        mouseset = new List<mouseset>();
-        // 初次收集場景中的老鼠物件
-        GetMouse();
+       
     }
 
     // Update 每幀調用一次
@@ -30,6 +33,8 @@ public class usercontrol : MonoBehaviour
             {
                 Debug.Log("時間到！未達標，遊戲結束！");
                 gameover = true;
+                gamelose();
+                gameflow.ShowResult();
             }
 
             // 每幀檢查是否有新的老鼠物件需要加入列表
@@ -38,7 +43,7 @@ public class usercontrol : MonoBehaviour
         }
     }
 
-    private void userinput()
+    public void userinput()
     {
         if (Input.GetMouseButtonDown(0)) // 左鍵點擊
         {
@@ -52,6 +57,8 @@ public class usercontrol : MonoBehaviour
                 {
                     Debug.Log("點擊到 C4，遊戲結束！");
                     gameover = true;
+                    getC4();
+                    gameflow.ShowResult();
                 }
                 // 檢查點擊的物件是否有 mouseset 組件
                 else if (hit.collider.CompareTag("mouse"))
@@ -71,6 +78,9 @@ public class usercontrol : MonoBehaviour
                         {
                             Debug.Log("成功點擊15次老鼠！遊戲勝利！");
                             gameWon = true;
+                            gameWin();
+                            backbutton.SetActive(true);
+                            gameflow.ShowResult();
                         }
                     }
                 }
@@ -86,7 +96,7 @@ public class usercontrol : MonoBehaviour
         }
     }
 
-    private void GetMouse()
+    public void GetMouse()
     {
         // 如果遊戲結束或勝利，停止生成老鼠
         if (gameover || gameWon)
@@ -107,7 +117,7 @@ public class usercontrol : MonoBehaviour
     }
 
     // 移除無效的老鼠物件（例如已被銷毀的）
-    private void CleanUpMouseList()
+    public void CleanUpMouseList()
     {
         mouseset.RemoveAll(mouse => mouse == null || mouse.gameObject == null);
     }
@@ -117,4 +127,37 @@ public class usercontrol : MonoBehaviour
     {
         return !gameover && !gameWon;
     }
+
+    public void getC4()
+    {
+        resault.text = "你點錯了!";
+    }
+
+    public void gamelose()
+    {
+        resault.text = "沒在時間內達成目標!";
+    }
+
+    public void gameWin()
+    {
+        resault.text = "達成目標!";
+    }
+
+    public void RestartGame()
+    {
+        // 重設變數
+        gameover = false;
+        mouseClickCount = 0;
+        timer = 60f;
+        gameWon = false;
+        mouseset = new List<mouseset>();
+        // 初次收集場景中的老鼠物件
+        GetMouse();
+        backbutton.SetActive(false);
+    }
+    public void BackGame()
+    {
+        SceneManager.LoadScene("Prologue");
+    }
 }
+

@@ -6,9 +6,9 @@ public class mouseborn : MonoBehaviour
 {
     public GameObject mouse;
     public GameObject C4;
-    private Transform mouseRoot;
-    private List<Holenumber> occupiedHoles = new List<Holenumber>(); // 儲存當前占用的位置
-    private usercontrol usercontrol; // 引用 MouseClickHandler
+    public Transform mouseRoot;
+    public List<Holenumber> occupiedHoles = new List<Holenumber>(); // 儲存當前占用的位置
+    public usercontrol usercontrol; // 引用 MouseClickHandler
 
     // Start 在第一幀之前調用
     void Start()
@@ -27,18 +27,25 @@ public class mouseborn : MonoBehaviour
     // Update 每幀調用一次
     void Update()
     {
-        // 如果遊戲結束或勝利，取消生成
+        // 如果遊戲結束或勝利，取消生成並禁用腳本
         if (usercontrol != null && !usercontrol.IsGameActive())
         {
             CancelInvoke("Create");
             CancelInvoke("boom");
+            enabled = false; // 禁用腳本以防止進一步更新
         }
     }
 
-    private void Create()
+    // 當 GameObject 被停用時記錄日誌
+    void OnDisable()
     {
-        // 檢查遊戲是否活躍
-        if (usercontrol == null || !usercontrol.IsGameActive())
+        Debug.Log($"GameCanvas 在 {Time.time} 秒時被停用");
+    }
+
+    public void Create()
+    {
+        // 檢查遊戲是否活躍以及 GameObject 是否在層級中活躍
+        if (usercontrol == null || !usercontrol.IsGameActive() || !gameObject.activeInHierarchy)
         {
             return;
         }
@@ -52,10 +59,10 @@ public class mouseborn : MonoBehaviour
         Destroy(go, 2f);
     }
 
-    private void boom()
+    public void boom()
     {
-        // 檢查遊戲是否活躍
-        if (usercontrol == null || !usercontrol.IsGameActive())
+        // 檢查遊戲是否活躍以及 GameObject 是否在層級中活躍
+        if (usercontrol == null || !usercontrol.IsGameActive() || !gameObject.activeInHierarchy)
         {
             return;
         }
@@ -70,7 +77,7 @@ public class mouseborn : MonoBehaviour
     }
 
     // 獲取一個不重複的 Holenumber
-    private Holenumber GetUniqueHole()
+    public Holenumber GetUniqueHole()
     {
         Holenumber newHole;
         do
@@ -81,7 +88,7 @@ public class mouseborn : MonoBehaviour
     }
 
     // 在物件銷毀後從占用列表中移除位置
-    private IEnumerator RemoveHoleAfterDelay(Holenumber hole, float delay)
+    public IEnumerator RemoveHoleAfterDelay(Holenumber hole, float delay)
     {
         yield return new WaitForSeconds(delay);
         occupiedHoles.Remove(hole);
