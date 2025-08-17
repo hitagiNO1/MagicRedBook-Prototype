@@ -32,5 +32,6 @@ public class Enemyskill : MonoBehaviour
         bool isDead = playerUnit.TakeDamage(buffedDamage);
         playerHUD.SetHP(playerUnit.currentHP);
         dialogueText.text = "¯«³½Â\§À¡I";
+        EffectManager.Instance.PlayUIEffect("test2", new Vector2(-654, -61), 1f, 1f);
     }
 }

@@ -1,6 +1,7 @@
-using UnityEngine;
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 public class EffectManager : MonoBehaviour
 {
     public static EffectManager Instance; // 單例靜態
@@ -96,5 +97,37 @@ public class EffectManager : MonoBehaviour
         GameObject fx = Instantiate(prefab, targetCanvas.transform);       // 在 Canvas 內生成特效
         fx.GetComponent<RectTransform>().anchoredPosition = uiPosition;    // 設定特效的 UI 座標
         fx.transform.localScale *= scale;    // 縮放
+    }
+
+
+    // 簡單的晃動：使用 Noise Profile
+    public void ShakeCamera(float amplitude, float frequency, float duration)
+    {
+        // 取得目前啟用的 VCam
+        CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
+        var vcam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
+
+        if (vcam != null)
+        {
+            var noise = vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            if (noise != null)
+            {
+                StartCoroutine(DoShake(noise, amplitude, frequency, duration));
+            }
+        }
+    }
+    private IEnumerator DoShake(
+        CinemachineBasicMultiChannelPerlin noise,
+        float amplitude, float frequency, float duration)
+    {
+        // 設定晃動強度
+        noise.m_AmplitudeGain = amplitude;
+        noise.m_FrequencyGain = frequency;
+
+        yield return new WaitForSeconds(duration);
+
+        // 恢復成 0
+        noise.m_AmplitudeGain = 0;
+        noise.m_FrequencyGain = 0;
     }
 }
