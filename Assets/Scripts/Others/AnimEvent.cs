@@ -14,4 +14,8 @@ public class AnimEvent : MonoBehaviour
     {
         EffectManager.Instance.ShakeCamera(2f, 5f, 0.3f);
     }
+    public void Red()
+    {
+        EffectManager.Instance.FlashRed(0.5f);
+    }
 }

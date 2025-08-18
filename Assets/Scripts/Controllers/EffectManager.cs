@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 public class EffectManager : MonoBehaviour
 {
     public static EffectManager Instance; // 單例靜態
@@ -16,6 +17,11 @@ public class EffectManager : MonoBehaviour
 
     private Dictionary<string, GameObject> effectDict; // 用來快速查找特效的字典
     public GameObject targetCanvas;
+
+    [Header("受傷表情Sprites、Image")]
+    public Image BlackHead;   //腳色變紅
+    public Sprite hurtFace;
+
     void Awake()
     {
         // 單例 EffectManager
@@ -129,5 +135,26 @@ public class EffectManager : MonoBehaviour
         // 恢復成 0
         noise.m_AmplitudeGain = 0;
         noise.m_FrequencyGain = 0;
+    }
+
+
+    //閃紅
+    public void FlashRed(float duration)
+    {
+        StartCoroutine(DoFlashRed(duration));
+    }
+
+    private IEnumerator DoFlashRed(float duration)
+    {
+        // 保存原始顏色
+        Color original = BlackHead.color;
+        Sprite normalFace = BlackHead.sprite;
+        // 設為紅色
+        BlackHead.color = new Color32(255, 163, 163, 255); // 紅色
+        BlackHead.sprite = hurtFace;
+        yield return new WaitForSeconds(duration); // 閃一下時間
+        // 回復原色
+        BlackHead.color = original;
+        BlackHead.sprite = normalFace;
     }
 }
