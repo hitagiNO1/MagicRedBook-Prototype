@@ -8,10 +8,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Prologue.unity
     guid: 97056471c6d51bd46b78aeffcad28781
-  - enabled: 1
-    path: Assets/Scenes/2D_test.unity
-    guid: ca4edc954f9a4b34695faad12e070e1c
-  - enabled: 1
-    path: Assets/Scenes/CGTest.unity
-    guid: b29a00f5426039345b66a0352d769314
   m_configObjects: {}
