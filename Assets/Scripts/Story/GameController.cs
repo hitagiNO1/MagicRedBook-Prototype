@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public static GameController Instance { get; private set; } //單例
     private StoryScene currentScene;
     public BottomBarController bottomBar;
     public StoryScene FirstScene;
     public bool IsDone = false;     //劇情是否結束
-
-    GameObject[] TalkBox;
     private State state = State.IDLE;
     public Dictionary<GameScene, bool> ScenePlayedState = new Dictionary<GameScene, bool>(); //為已經播放過的故事存入字典紀錄
 
@@ -18,7 +17,17 @@ public class GameController : MonoBehaviour
     {
         IDLE, ANIMATE, CHOOSE, STORYING, PAUSED
     }
-
+    private void Awake()
+    {
+        //單例初始化
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // 場景裡如果有多個，砍掉多餘的
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // 切換場景不會摧毀
+    }
     void Start()
     {
         if (currentScene is StoryScene && state == State.STORYING)
