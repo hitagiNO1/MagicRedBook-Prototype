@@ -111,6 +111,8 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    //¦h©Çª«
+
     public void OnRunbutton()
     {
         if (state != BattleState.PLAYERTURN) return;
