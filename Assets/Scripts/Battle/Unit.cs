@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour
 
     public float critChance = 0.25f;
     public float critdmgplus = 1.5f;
+    public BuffDebuffManager buffManager;
 
     private void Start()
     {
@@ -28,6 +29,7 @@ public class Unit : MonoBehaviour
     public bool TakeDamage(int dmg)
     {
         Debug.Log($"TakeDamage 開始時敵方防禦力 = {defense}");
+        int reducedDamage = buffManager.ApplyReductionIfApplicable(this, dmg);
         bool isCritical = Random.value < critChance; // 判斷是否爆擊
         float reduction = defenseData.GetDamageReduction(defense); // 計算減傷
         int finalDMG;

@@ -21,6 +21,14 @@ public class SkillManager : MonoBehaviour
     private int skill4CooldownRemaining = 0;
     private int skill5CooldownTurns = 2;
     private int skill5CooldownRemaining = 0;
+    private int catskill2CooldownTurns = 2;
+    private int catskill2CooldownRemaining = 0;
+    private int catskill3CooldownTurns = 1;
+    private int catskill3CooldownRemaining = 0;
+    private int catskill4CooldownTurns = 2;
+    private int catskill4CooldownRemaining = 0;
+    private int catskill5CooldownTurns = 3;
+    private int catskill5CooldownRemaining = 0;
 
     public AudioSource audioSource;
     public GameObject skillIconPrefab;      // 技能圖示 Prefab
@@ -172,12 +180,143 @@ public class SkillManager : MonoBehaviour
         RemoveSkillIcon();
     }
 
+    public void catSkill_1()
+    {
+        if (selectedSkillNames.Contains("catSkill_1"))
+        {
+            // 移除技能
+            int index = selectedSkillNames.IndexOf("catSkill_1");
+            selectedSkillNames.RemoveAt(index);
+            skillQueue.RemoveAt(index);
+            dialogueText.text = "取消了技能 1";
+            AddSkillIcon();
+            return;
+        }
+        if (skillQueue.Count >= maxSkillPerTurn) return;
+        selectedSkillNames.Add("catSkill_1");
+        skillQueue.Add(() =>
+        {
+           // PlaySoundByName("skill1");
+            int buffedDamage = Mathf.RoundToInt(playerUnit.damage * 1f);
+            PerformBasicAttack(buffedDamage);
+
+            dialogueText.text = "萊菈撿起身邊的東西丟向敵人";
+        });
+        dialogueText.text = "選擇了技能 1";
+        RemoveSkillIcon();
+    }
+
+    public void catSkill_2()
+    {
+        if (selectedSkillNames.Contains("catSkill_2"))
+        {
+            int index = selectedSkillNames.IndexOf("catSkill_2");
+            selectedSkillNames.RemoveAt(index);
+            skillQueue.RemoveAt(index);
+            dialogueText.text = "取消了技能 2";
+            AddSkillIcon();
+            return;
+        }
+        if (skillQueue.Count >= maxSkillPerTurn || catskill2CooldownRemaining > 0) return;
+        selectedSkillNames.Add("catSkill_2");
+        skillQueue.Add(() =>
+        {
+            //PlaySoundByName("skill2");
+            buffDebuffManager.Heal(playerUnit, 0.75f);
+            catskill2CooldownRemaining = catskill2CooldownTurns;
+
+            dialogueText.text = "萊菈將傷口進行包紮";
+        });
+        dialogueText.text = "選擇了技能 2";
+        RemoveSkillIcon();
+    }
+
+    public void catSkill_3()
+    {
+        if (selectedSkillNames.Contains("catSkill_3"))
+        {
+            int index = selectedSkillNames.IndexOf("catSkill_3");
+            selectedSkillNames.RemoveAt(index);
+            skillQueue.RemoveAt(index);
+            dialogueText.text = "取消了技能 3";
+            AddSkillIcon();
+            return;
+        }
+        if (skillQueue.Count >= maxSkillPerTurn || catskill3CooldownRemaining > 0) return;
+        selectedSkillNames.Add("catSkill_3");
+        skillQueue.Add(() =>
+        {
+           // PlaySoundByName("skill3");
+            buffDebuffManager.ApplyDefenseBuff(playerUnit, 1.5f, 1);
+            catskill3CooldownRemaining = catskill3CooldownTurns;
+
+            dialogueText.text = "萊菈透過唱歌給全體敵人造成傷害";
+        });
+        dialogueText.text = "選擇了技能 3";
+        RemoveSkillIcon();
+    }
+
+    public void catSkill_4()
+    {
+        if (selectedSkillNames.Contains("catSkill_4"))
+        {
+            int index = selectedSkillNames.IndexOf("catSkill_4");
+            selectedSkillNames.RemoveAt(index);
+            skillQueue.RemoveAt(index);
+            dialogueText.text = "取消了技能 4";
+            AddSkillIcon();
+            return;
+        }
+        if (skillQueue.Count >= maxSkillPerTurn || catskill4CooldownRemaining > 0) return;
+        selectedSkillNames.Add("catSkill_4");
+        skillQueue.Add(() =>
+        {
+            //PlaySoundByName("catSkill_4");
+            buffDebuffManager.ApplyDefenseBuff(playerUnit, 2.0f, 2);  // 增加 200%，持續 2 回合
+            catskill5CooldownRemaining = catskill5CooldownTurns;
+
+            dialogueText.text = "萊菈施展魔法給予我方的攻擊加成";
+        });
+        dialogueText.text = "選擇了技能 4";
+        RemoveSkillIcon();
+    }
+
+    public void catSkill_5()
+    {
+        if (selectedSkillNames.Contains("catSkill_5"))
+        {
+            int index = selectedSkillNames.IndexOf("catSkill_5");
+            selectedSkillNames.RemoveAt(index);
+            skillQueue.RemoveAt(index);
+            dialogueText.text = "取消了技能 5";
+            AddSkillIcon();
+            return;
+        }
+        if (skillQueue.Count >= maxSkillPerTurn || catskill5CooldownRemaining > 0) return;
+        selectedSkillNames.Add("catSkill_5");
+        skillQueue.Add(() =>
+        {
+            //PlaySoundByName("skill4-1");
+            //PlaySoundByName("skill4-2");
+            buffDebuffManager.ApplyFixedDamageReduction(playerUnit, 0.7f, 1); // 減少 70% 傷害，觸發 1 次
+            catskill5CooldownRemaining = catskill5CooldownTurns;
+
+            dialogueText.text = "萊菈透過歌聲振奮士氣,使我方承受傷害降低";
+        });
+        dialogueText.text = "選擇了技能 5";
+        RemoveSkillIcon();
+    }
+
     public void ReduceCooldown()
     {
         if (skill2CooldownRemaining > 0) skill2CooldownRemaining--;
         if (skill3CooldownRemaining > 0) skill3CooldownRemaining--;
         if (skill4CooldownRemaining > 0) skill4CooldownRemaining--;
         if (skill5CooldownRemaining > 0) skill5CooldownRemaining--;
+        if (catskill2CooldownRemaining > 0) catskill2CooldownRemaining--;
+        if (catskill3CooldownRemaining > 0) catskill3CooldownRemaining--;
+        if (catskill4CooldownRemaining > 0) catskill4CooldownRemaining--;
+        if (catskill5CooldownRemaining > 0) catskill5CooldownRemaining--;
     }
 
     public void OnConfirmSkillQueue()

@@ -34,4 +34,19 @@ public class Enemyskill : MonoBehaviour
         dialogueText.text = "神魚擺尾！";
         EffectManager.Instance.PlayUIEffect("test2", new Vector2(-654, -61), 1f, 1f);
     }
+
+    public void Snakeskill_1()
+    {
+        int buffedDamage = Mathf.RoundToInt(enemyUnit.damage * 1f);
+        bool isDead = playerUnit.TakeDamage(buffedDamage);
+        playerHUD.SetHP(playerUnit.currentHP);
+        dialogueText.text = "咬咬咬！";
+    }
+
+    public void Snakeskill_2()
+    {
+        buffDebuffManager.ApplyPoison(playerUnit);
+        playerHUD.SetHP(playerUnit.currentHP);
+        dialogueText.text = "陳年老痰！";
+    }
 }

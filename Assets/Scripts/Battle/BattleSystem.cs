@@ -98,6 +98,7 @@ public class BattleSystem : MonoBehaviour
 
         buffDebuffManager.TickDefenseDebuffs();
         buffDebuffManager.TickDefenseBuffs();
+        buffDebuffManager.TickPoison();
         if (playerUnit.currentHP <= 0)
         {
             state = BattleState.LOST;
@@ -165,6 +166,11 @@ public class BattleSystem : MonoBehaviour
         {
             enemySkills.Add(() => enemyskill.Fishskill_1());
             enemySkills.Add(() => enemyskill.Fishskill_2());
+        }
+        else if(enemyName == "SNAKE")
+        {
+            enemySkills.Add(() => enemyskill.Snakeskill_1());
+            enemySkills.Add(() => enemyskill.Snakeskill_2());
         }
         /*else if (enemyName == "Slime")
         {
