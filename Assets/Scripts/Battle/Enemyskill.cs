@@ -22,7 +22,8 @@ public class Enemyskill : MonoBehaviour
         bool isDead = playerUnit.TakeDamage(buffedDamage);
         playerHUD.SetHP(playerUnit.currentHP);
         dialogueText.text = "³½¤e¬ð¨ë¡I";
-        EffectManager.Instance.PlayUIEffect("test1", new Vector2(-751, -279), 1f, 1f);
+        //EffectManager.Instance.PlayUIEffect("Fish1", new Vector2(-751, -279), 1f, 1f);
+        EffectManager.Instance.PlayUIEffect("Snake2", new Vector2(-800, -450), 1f, 1f);
     }
 
     public void Fishskill_2()
@@ -32,7 +33,8 @@ public class Enemyskill : MonoBehaviour
         bool isDead = playerUnit.TakeDamage(buffedDamage);
         playerHUD.SetHP(playerUnit.currentHP);
         dialogueText.text = "¯«³½Â\§À¡I";
-        EffectManager.Instance.PlayUIEffect("test2", new Vector2(-654, -61), 1f, 1f);
+        //EffectManager.Instance.PlayUIEffect("Fish2", new Vector2(-700, -185), 1f, 1f);
+        EffectManager.Instance.PlayUIEffect("Snake1", new Vector2(-677, -230), 1f, 1f);
     }
 
     public void Snakeskill_1()
