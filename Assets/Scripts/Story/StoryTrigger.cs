@@ -10,6 +10,7 @@ public class StoryTrigger : MonoBehaviour
     public GameScene currentScene;      //當前的劇情
     public GameController Gamescript;
     public List<GameScene> LimitScenes; //限制哪些故事沒播過就不能播此currentScene
+    public float sec = 2f;              //刪除時間
     void Update()
     {
         if (scope && !IfIDLE)
@@ -19,7 +20,7 @@ public class StoryTrigger : MonoBehaviour
             {
                 Gamescript.PlayScene(currentScene as StoryScene);
                 IfIDLE = true;
-                Destroy(gameObject);
+                StartCoroutine(Delet(sec));
             }
             else
             {
@@ -31,7 +32,7 @@ public class StoryTrigger : MonoBehaviour
                     {
                         Gamescript.PlayScene(currentScene as StoryScene);
                         IfIDLE = true;
-                        Destroy(gameObject);
+                        StartCoroutine(Delet(sec));
                     }
                 }
             }
@@ -39,8 +40,13 @@ public class StoryTrigger : MonoBehaviour
         }
         if (Gamescript.IsDone == false) IfIDLE = false;//檢查故事是否播完
     }
-    
-    void OnTriggerEnter(Collider other)//檢測角色是否進入對話功能範圍
+    private IEnumerator Delet(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        Destroy(gameObject);
+    }
+
+        void OnTriggerEnter(Collider other)//檢測角色是否進入對話功能範圍
     {
         if (other.gameObject.tag == "Player")
         {

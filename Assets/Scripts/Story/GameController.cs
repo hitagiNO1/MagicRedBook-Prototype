@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 切換場景不會摧毀
+        //DontDestroyOnLoad(gameObject); // 切換場景不會摧毀
     }
     void Start()
     {

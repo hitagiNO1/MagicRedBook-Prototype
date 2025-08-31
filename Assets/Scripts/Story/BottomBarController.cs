@@ -335,11 +335,21 @@ public class BottomBarController : MonoBehaviour
                 }
                 break;
 
-            case StoryScene.Sentence.Action.Type.SHOW:   //已生成過的腳色再出現，將隱藏的打開，不帶動畫
+            case StoryScene.Sentence.Action.Type.SHOW:   //已生成過的腳色再出現，將隱藏的打開，如果沒生成就生成，不帶動畫
                 if (sprites.ContainsKey(action.speaker))
                 {
                     controller = sprites[action.speaker];
                     controller.Show();
+                }
+                else
+                {
+                    controller = Instantiate(action.speaker.prefab.gameObject, spritesPrefab.transform)
+                        .GetComponent<SpriteController>();
+
+                    controller.Setup(action.speaker.sprites[action.spriteIndex]);
+
+                    sprites.Add(action.speaker, controller);
+                    controller.Appear(action.Right ? Rcoords : Lcoords);
                 }
                 break;
 
