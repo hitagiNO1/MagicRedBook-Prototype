@@ -8,26 +8,30 @@ public class usercontrol : MonoBehaviour
 {
     private List<mouseset> mouseset;
     public bool gameover = false;
-    public float timer = 60f; // 1分鐘倒數計時器 (秒)
-    private int mouseClickCount = 0; // 記錄點擊老鼠的次數
-    private const int requiredClicks = 15; // 需要點擊15次老鼠
-    private bool gameWon = false; // 記錄遊戲是否成功
+    public float timer = 60f;
+    private int mouseClickCount = 0;
+    private const int requiredClicks = 15;
+    private bool gameWon = false;
     public TextMeshProUGUI resault;
     public boxgameflow gameflow;
     public GameObject backbutton;
+    private mouseborn mouseborn; // 新增：引用 mouseborn 腳本
 
-    // Start 在第一幀之前調用
     void Start()
     {
-       
+        mouseset = new List<mouseset>();
+        mouseborn = FindObjectOfType<mouseborn>(); // 查找 mouseborn 組件
+        if (mouseborn == null)
+        {
+            Debug.LogError("未找到 mouseborn 組件！");
+        }
+        GetMouse();
     }
 
-    // Update 每幀調用一次
     void Update()
     {
         if (!gameover && !gameWon)
         {
-            // 更新計時器
             timer -= Time.deltaTime;
             if (timer <= 0)
             {
@@ -36,8 +40,6 @@ public class usercontrol : MonoBehaviour
                 gamelose();
                 gameflow.ShowResult();
             }
-
-            // 每幀檢查是否有新的老鼠物件需要加入列表
             GetMouse();
             userinput();
         }
@@ -56,6 +58,11 @@ public class usercontrol : MonoBehaviour
                 if (hit.collider.CompareTag("C4"))
                 {
                     Debug.Log("點擊到 C4，遊戲結束！");
+                    mouseset mouse = hit.collider.GetComponent<mouseset>();
+                    if (mouse != null && mouseborn != null)
+                    {
+                        mouseborn.OnObjectClicked(mouse.GetHole); // 通知切換圖片為 A
+                    }
                     gameover = true;
                     getC4();
                     gameflow.ShowResult();
@@ -66,14 +73,14 @@ public class usercontrol : MonoBehaviour
                     mouseset mouse = hit.collider.GetComponent<mouseset>();
                     if (mouse != null)
                     {
-                        // 點擊到老鼠物件
                         Debug.Log("點擊到老鼠：" + hit.collider.gameObject.name);
-                        // 從列表中移除並銷毀物件
+                        if (mouseborn != null)
+                        {
+                            mouseborn.OnObjectClicked(mouse.GetHole); // 通知切換圖片為 A
+                        }
                         mouseset.Remove(mouse);
                         Destroy(hit.collider.gameObject);
-                        // 增加點擊計數
                         mouseClickCount++;
-                        // 檢查是否達成15次點擊
                         if (mouseClickCount >= requiredClicks)
                         {
                             Debug.Log("成功點擊15次老鼠！遊戲勝利！");
@@ -98,13 +105,11 @@ public class usercontrol : MonoBehaviour
 
     public void GetMouse()
     {
-        // 如果遊戲結束或勝利，停止生成老鼠
         if (gameover || gameWon)
         {
             return;
         }
 
-        // 查找所有標籤為 "mouse" 的物件
         GameObject[] ms = GameObject.FindGameObjectsWithTag("mouse");
         foreach (var o in ms)
         {
@@ -116,13 +121,11 @@ public class usercontrol : MonoBehaviour
         }
     }
 
-    // 移除無效的老鼠物件（例如已被銷毀的）
     public void CleanUpMouseList()
     {
         mouseset.RemoveAll(mouse => mouse == null || mouse.gameObject == null);
     }
 
-    // 公開方法，供其他腳本檢查遊戲是否仍活躍
     public bool IsGameActive()
     {
         return !gameover && !gameWon;
@@ -145,19 +148,21 @@ public class usercontrol : MonoBehaviour
 
     public void RestartGame()
     {
-        // 重設變數
         gameover = false;
         mouseClickCount = 0;
         timer = 60f;
         gameWon = false;
         mouseset = new List<mouseset>();
-        // 初次收集場景中的老鼠物件
         GetMouse();
         backbutton.SetActive(false);
+        if (mouseborn != null)
+        {
+            mouseborn.Restart(); // 通知 mouseborn 重啟
+        }
     }
+
     public void BackGame()
     {
         SceneManager.LoadScene("Prologue");
     }
 }
-

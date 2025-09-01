@@ -7,36 +7,71 @@ public class mouseborn : MonoBehaviour
     public GameObject mouse;
     public GameObject C4;
     public Transform mouseRoot;
-    public List<Holenumber> occupiedHoles = new List<Holenumber>(); // 儲存當前占用的位置
-    public usercontrol usercontrol; // 引用 MouseClickHandler
+    public List<Holenumber> occupiedHoles = new List<Holenumber>();
+    public usercontrol usercontrol;
+    [SerializeField] private Sprite spriteA; // 預設圖片（例如地洞）
+    [SerializeField] private Sprite spriteB; // 生成時的圖片（例如高亮）
+    [SerializeField] private GameObject[] holeObjectArray; // 9 個生成點
+    private Dictionary<Holenumber, GameObject> holeObjects = new Dictionary<Holenumber, GameObject>();
+    private HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>(); // 新增：追蹤已點擊的位置
 
-    // Start 在第一幀之前調用
     void Start()
     {
+        occupiedHoles = new List<Holenumber>();
+        clickedHoles = new HashSet<Holenumber>();
         mouseRoot = transform.GetChild(1);
-        // 查找 MouseClickHandler 組件
         usercontrol = FindObjectOfType<usercontrol>();
         if (usercontrol == null)
         {
-            Debug.LogError("未找到 MouseClickHandler 組件！");
+            Debug.LogError("未找到 MouseClickHandler 組件！腳本將禁用。");
+            enabled = false;
+            return;
+        }
+        if (spriteA == null || spriteB == null)
+        {
+            Debug.LogError("圖片 A 或圖片 B 未設置！腳本將禁用。");
+            enabled = false;
+            return;
+        }
+        if (holeObjectArray.Length != 9)
+        {
+            Debug.LogError("必須設置 9 個生成點 GameObject！腳本將禁用。");
+            enabled = false;
+            return;
+        }
+        for (int i = 0; i < holeObjectArray.Length; i++)
+        {
+            if (holeObjectArray[i] == null)
+            {
+                Debug.LogError($"生成點 {i} 未設置！腳本將禁用。");
+                enabled = false;
+                return;
+            }
+            holeObjects[(Holenumber)i] = holeObjectArray[i];
+            SpriteRenderer sr = holeObjectArray[i].GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sprite = spriteA;
+            }
+            else
+            {
+                Debug.LogError($"生成點 {i} 缺少 SpriteRenderer 組件！");
+            }
         }
         InvokeRepeating("Create", 0, 1.5f);
         InvokeRepeating("boom", 3f, 3f);
     }
 
-    // Update 每幀調用一次
     void Update()
     {
-        // 如果遊戲結束或勝利，取消生成並禁用腳本
         if (usercontrol != null && !usercontrol.IsGameActive())
         {
             CancelInvoke("Create");
             CancelInvoke("boom");
-            enabled = false; // 禁用腳本以防止進一步更新
+            enabled = false;
         }
     }
 
-    // 當 GameObject 被停用時記錄日誌
     void OnDisable()
     {
         Debug.Log($"GameCanvas 在 {Time.time} 秒時被停用");
@@ -44,53 +79,117 @@ public class mouseborn : MonoBehaviour
 
     public void Create()
     {
-        // 檢查遊戲是否活躍以及 GameObject 是否在層級中活躍
         if (usercontrol == null || !usercontrol.IsGameActive() || !gameObject.activeInHierarchy)
-        {
             return;
-        }
 
-        Holenumber newHole = GetUniqueHole(); // 獲取不重複的位置
+        Holenumber newHole = GetUniqueHole();
+        if (holeObjects.ContainsKey(newHole))
+        {
+            SpriteRenderer sr = holeObjects[newHole].GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sprite = spriteB;
+            }
+            else
+            {
+                Debug.LogWarning($"Holenumber {newHole} 的生成點缺少 SpriteRenderer！");
+            }
+        }
         GameObject go = Instantiate(mouse);
         go.AddComponent<mouseset>().GetHole = newHole;
         go.GetComponent<mouseset>().GetParent = mouseRoot;
-        occupiedHoles.Add(newHole); // 將新位置加入占用列表
-        StartCoroutine(RemoveHoleAfterDelay(newHole, 2f)); // 在物件銷毀後移除位置
+        occupiedHoles.Add(newHole);
+        clickedHoles.Remove(newHole); // 確保新生成的位置未被標記為點擊
+        StartCoroutine(RemoveHoleAfterDelay(newHole, 2f));
         Destroy(go, 2f);
     }
 
     public void boom()
     {
-        // 檢查遊戲是否活躍以及 GameObject 是否在層級中活躍
         if (usercontrol == null || !usercontrol.IsGameActive() || !gameObject.activeInHierarchy)
-        {
             return;
-        }
 
-        Holenumber newHole = GetUniqueHole(); // 獲取不重複的位置
+        Holenumber newHole = GetUniqueHole();
+        if (holeObjects.ContainsKey(newHole))
+        {
+            SpriteRenderer sr = holeObjects[newHole].GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sprite = spriteB;
+            }
+            else
+            {
+                Debug.LogWarning($"Holenumber {newHole} 的生成點缺少 SpriteRenderer！");
+            }
+        }
         GameObject go = Instantiate(C4);
         go.AddComponent<mouseset>().GetHole = newHole;
         go.GetComponent<mouseset>().GetParent = mouseRoot;
-        occupiedHoles.Add(newHole); // 將新位置加入占用列表
-        StartCoroutine(RemoveHoleAfterDelay(newHole, 5f)); // 在物件銷毀後移除位置
+        occupiedHoles.Add(newHole);
+        clickedHoles.Remove(newHole); // 確保新生成的位置未被標記為點擊
+        StartCoroutine(RemoveHoleAfterDelay(newHole, 5f));
         Destroy(go, 5f);
     }
 
-    // 獲取一個不重複的 Holenumber
     public Holenumber GetUniqueHole()
     {
         Holenumber newHole;
         do
         {
             newHole = (Holenumber)Random.Range(0, 9);
-        } while (occupiedHoles.Contains(newHole)); // 如果位置已被占用，重新生成
+        } while (occupiedHoles.Contains(newHole));
         return newHole;
     }
 
-    // 在物件銷毀後從占用列表中移除位置
     public IEnumerator RemoveHoleAfterDelay(Holenumber hole, float delay)
     {
         yield return new WaitForSeconds(delay);
-        occupiedHoles.Remove(hole);
+        if (occupiedHoles.Contains(hole) && !clickedHoles.Contains(hole))
+        {
+            occupiedHoles.Remove(hole);
+            if (holeObjects.ContainsKey(hole))
+            {
+                SpriteRenderer sr = holeObjects[hole].GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sprite = spriteA;
+                }
+            }
+        }
+    }
+
+    // 新增：處理點擊時的圖片切換
+    public void OnObjectClicked(Holenumber hole)
+    {
+        if (holeObjects.ContainsKey(hole))
+        {
+            SpriteRenderer sr = holeObjects[hole].GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sprite = spriteA;
+            }
+            clickedHoles.Add(hole); // 標記為已點擊
+            occupiedHoles.Remove(hole); // 立即移除占用狀態
+        }
+    }
+
+    // 新增：重啟遊戲
+    public void Restart()
+    {
+        CancelInvoke("Create");
+        CancelInvoke("boom");
+        occupiedHoles.Clear();
+        clickedHoles.Clear();
+        foreach (var pair in holeObjects)
+        {
+            SpriteRenderer sr = pair.Value.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sprite = spriteA;
+            }
+        }
+        InvokeRepeating("Create", 0, 1.5f);
+        InvokeRepeating("boom", 3f, 3f);
+        enabled = true;
     }
 }
