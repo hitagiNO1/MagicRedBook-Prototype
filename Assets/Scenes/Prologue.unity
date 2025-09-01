@@ -498,8 +498,9 @@ GameObject:
   - component: {fileID: 4616180}
   - component: {fileID: 4616179}
   - component: {fileID: 4616178}
+  - component: {fileID: 4616182}
   m_Layer: 0
-  m_Name: snake1 (1)
+  m_Name: SNAKE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -605,15 +606,36 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4616177}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 489.68, y: 0.07, z: 1.95}
+  m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
+  m_LocalPosition: {x: 221.15091, y: -12.35114, z: 15.48025}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 277122094}
   - {fileID: 140434791}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1272615937}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!95 &4616182
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4616177}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cce1004a9253d9641b63719356b2121f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5226408
 GameObject:
   m_ObjectHideFlags: 0
@@ -180501,6 +180523,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2888560347897635515, guid: 80f248c3cc908554f98512dde62e2fe0, type: 3}
   m_PrefabInstance: {fileID: 907777158}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1157801488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1157801489}
+  m_Layer: 0
+  m_Name: FISH
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1157801489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157801488}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
+  m_LocalPosition: {x: 261.95, y: 0, z: -0.39999998}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1392063974}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1157887137
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -200259,6 +200313,38 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 647e5f6cbd3114b44b51638efedca2d8, type: 3}
+--- !u!1 &1272615936
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1272615937}
+  m_Layer: 0
+  m_Name: SNAKE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1272615937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272615936}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 268.52908, y: 12.421138, z: -13.530254}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4616181}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1272871343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2978112504727590662, guid: 18cc18c81d7b3fd48b867974dc985194, type: 3}
@@ -220686,6 +220772,7 @@ GameObject:
   - component: {fileID: 1392063971}
   - component: {fileID: 1392063970}
   - component: {fileID: 1392063969}
+  - component: {fileID: 1392063975}
   m_Layer: 0
   m_Name: FISH
   m_TagString: Untagged
@@ -220820,15 +220907,36 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1392063967}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 261.95, y: 0, z: -0.4}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 66686515}
   - {fileID: 2035879073}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1157801489}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!95 &1392063975
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392063967}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 711977dc5a36f7643bfd9cb1fe4e0ef7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1393111649 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6164887307798610068, guid: 154cec1c754df3948a8a4889be9be7b9, type: 3}
@@ -350225,7 +350333,7 @@ SceneRoots:
   - {fileID: 1213041805}
   - {fileID: 1922109489}
   - {fileID: 1095590413}
-  - {fileID: 1392063974}
+  - {fileID: 1157801489}
   - {fileID: 944650067}
   - {fileID: 1839165446}
   - {fileID: 149369875}
@@ -350252,4 +350360,4 @@ SceneRoots:
   - {fileID: 1918555696}
   - {fileID: 365683853}
   - {fileID: 988337843}
-  - {fileID: 4616181}
+  - {fileID: 1272615937}
