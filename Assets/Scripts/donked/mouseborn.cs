@@ -13,12 +13,19 @@ public class mouseborn : MonoBehaviour
     [SerializeField] private Sprite spriteB; // 生成時的圖片（例如高亮）
     [SerializeField] private GameObject[] holeObjectArray; // 9 個生成點
     private Dictionary<Holenumber, GameObject> holeObjects = new Dictionary<Holenumber, GameObject>();
-    private HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>(); // 新增：追蹤已點擊的位置
+    private Dictionary<Holenumber, GameObject> spawnedObjects = new Dictionary<Holenumber, GameObject>(); // 新增：追蹤生成的物件
+    private HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>(); // 追蹤已點擊的位置
+
+    // 搖晃動畫的參數
+    [SerializeField] private float shakeDuration = 0.5f; // 保持不變
+    [SerializeField] private float shakeMagnitude = 0.1f; // 增加幅度
+    [SerializeField] private float shakeSpeed = 15f; // 加快速度
 
     void Start()
     {
         occupiedHoles = new List<Holenumber>();
         clickedHoles = new HashSet<Holenumber>();
+        spawnedObjects = new Dictionary<Holenumber, GameObject>(); // 初始化
         mouseRoot = transform.GetChild(1);
         usercontrol = FindObjectOfType<usercontrol>();
         if (usercontrol == null)
@@ -85,23 +92,8 @@ public class mouseborn : MonoBehaviour
         Holenumber newHole = GetUniqueHole();
         if (holeObjects.ContainsKey(newHole))
         {
-            SpriteRenderer sr = holeObjects[newHole].GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.sprite = spriteB;
-            }
-            else
-            {
-                Debug.LogWarning($"Holenumber {newHole} 的生成點缺少 SpriteRenderer！");
-            }
+            StartCoroutine(ShakeAndSpawn(newHole, mouse, 2f)); // 啟動搖晃並生成 mouse
         }
-        GameObject go = Instantiate(mouse);
-        go.AddComponent<mouseset>().GetHole = newHole;
-        go.GetComponent<mouseset>().GetParent = mouseRoot;
-        occupiedHoles.Add(newHole);
-        clickedHoles.Remove(newHole); // 確保新生成的位置未被標記為點擊
-        StartCoroutine(RemoveHoleAfterDelay(newHole, 2f));
-        Destroy(go, 2f);
     }
 
     public void boom()
@@ -112,23 +104,51 @@ public class mouseborn : MonoBehaviour
         Holenumber newHole = GetUniqueHole();
         if (holeObjects.ContainsKey(newHole))
         {
-            SpriteRenderer sr = holeObjects[newHole].GetComponent<SpriteRenderer>();
+            StartCoroutine(ShakeAndSpawn(newHole, C4, 5f)); // 啟動搖晃並生成 C4
+        }
+    }
+
+    private IEnumerator ShakeAndSpawn(Holenumber hole, GameObject prefab, float destroyDelay)
+    {
+        if (holeObjects.ContainsKey(hole))
+        {
+            GameObject holeObject = holeObjects[hole];
+            SpriteRenderer sr = holeObject.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
+                yield return StartCoroutine(Shake(holeObject.transform));
                 sr.sprite = spriteB;
             }
             else
             {
-                Debug.LogWarning($"Holenumber {newHole} 的生成點缺少 SpriteRenderer！");
+                Debug.LogWarning($"Holenumber {hole} 的生成點缺少 SpriteRenderer！");
             }
+
+            GameObject go = Instantiate(prefab);
+            go.AddComponent<mouseset>().GetHole = hole;
+            go.GetComponent<mouseset>().GetParent = mouseRoot;
+            spawnedObjects[hole] = go; // 儲存生成的物件
+            occupiedHoles.Add(hole);
+            clickedHoles.Remove(hole);
+            StartCoroutine(RemoveHoleAfterDelay(hole, destroyDelay));
+            Destroy(go, destroyDelay);
         }
-        GameObject go = Instantiate(C4);
-        go.AddComponent<mouseset>().GetHole = newHole;
-        go.GetComponent<mouseset>().GetParent = mouseRoot;
-        occupiedHoles.Add(newHole);
-        clickedHoles.Remove(newHole); // 確保新生成的位置未被標記為點擊
-        StartCoroutine(RemoveHoleAfterDelay(newHole, 5f));
-        Destroy(go, 5f);
+    }
+
+    private IEnumerator Shake(Transform target)
+    {
+        Vector3 originalPosition = target.localPosition;
+        float elapsed = 0f;
+
+        while (elapsed < shakeDuration)
+        {
+            float xOffset = Mathf.Sin(Time.time * shakeSpeed) * shakeMagnitude;
+            target.localPosition = originalPosition + new Vector3(xOffset, 0f, 0f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.localPosition = originalPosition;
     }
 
     public Holenumber GetUniqueHole()
@@ -147,10 +167,15 @@ public class mouseborn : MonoBehaviour
         if (occupiedHoles.Contains(hole) && !clickedHoles.Contains(hole))
         {
             occupiedHoles.Remove(hole);
+            if (spawnedObjects.ContainsKey(hole))
+            {
+                Destroy(spawnedObjects[hole]); // 確保物件被銷毀
+                spawnedObjects.Remove(hole);
+            }
             if (holeObjects.ContainsKey(hole))
             {
                 SpriteRenderer sr = holeObjects[hole].GetComponent<SpriteRenderer>();
-                if (sr != null)
+                if (sr != null && sr.sprite != spriteA)
                 {
                     sr.sprite = spriteA;
                 }
@@ -158,28 +183,33 @@ public class mouseborn : MonoBehaviour
         }
     }
 
-    // 新增：處理點擊時的圖片切換
     public void OnObjectClicked(Holenumber hole)
     {
         if (holeObjects.ContainsKey(hole))
         {
+            if (spawnedObjects.ContainsKey(hole))
+            {
+                Destroy(spawnedObjects[hole]); // 立即銷毀物件
+                spawnedObjects.Remove(hole);
+            }
+
             SpriteRenderer sr = holeObjects[hole].GetComponent<SpriteRenderer>();
             if (sr != null)
             {
                 sr.sprite = spriteA;
             }
-            clickedHoles.Add(hole); // 標記為已點擊
-            occupiedHoles.Remove(hole); // 立即移除占用狀態
+            clickedHoles.Add(hole);
+            occupiedHoles.Remove(hole);
         }
     }
 
-    // 新增：重啟遊戲
     public void Restart()
     {
         CancelInvoke("Create");
         CancelInvoke("boom");
         occupiedHoles.Clear();
         clickedHoles.Clear();
+        spawnedObjects.Clear(); // 清空生成的物件
         foreach (var pair in holeObjects)
         {
             SpriteRenderer sr = pair.Value.GetComponent<SpriteRenderer>();
