@@ -1428,6 +1428,9 @@ MonoBehaviour:
   - {fileID: 1518877507}
   - {fileID: 1073257244}
   - {fileID: 2092192872}
+  shakeDuration: 0.7
+  shakeMagnitude: 1.5
+  shakeSpeed: 15
 --- !u!114 &1449510476
 MonoBehaviour:
   m_ObjectHideFlags: 0
