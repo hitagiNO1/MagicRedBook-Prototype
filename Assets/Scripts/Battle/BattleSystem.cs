@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
+
 public class BattleSystem : MonoBehaviour
 {
+    public List<GameObject> playerPrefabs; // 拖拉 player1 和 player2 的 prefab
+    public List<GameObject> enemyPrefabs;  // 拖拉 enemy1 和 enemy2 的 prefab
 
-    public GameObject playerPrefab;
-    public GameObject enemyPrefab;
-    public Unit playerUnit;
-    public Unit enemyUnit;
+    public List<Unit> playerUnits; // 儲存玩家單位
+    public List<Unit> enemyUnits;  // 儲存敵人單位
 
     public TextMeshProUGUI dialogueText;
-    public BattleHUD playerHUD;
-    public BattleHUD enemyHUD;
+    public List<BattleHUD> playerHUDs; // 拖拉 player1 和 player2 的 HUD
+    public List<BattleHUD> enemyHUDs;  // 拖拉 enemy1 和 enemy2 的 HUD
+
     public Animator animator;
 
     private bool isHidden = false;
@@ -22,24 +25,42 @@ public class BattleSystem : MonoBehaviour
 
     public SkillManager skillManager;
     public BuffDebuffManager buffDebuffManager;
-    public Enemyskill enemyskill;  // 指向技能腳本（拖拉或程式指派）
-    private List<System.Action> enemySkills;     // 儲存當前敵人的技能列表
+
+    private List<List<System.Action>> enemySkillsList; // 每個敵人的技能列表
     public int turnCounter = 0;
-    private GetBattle GetBattle;
-    public GameController Gamescript;
+    private GetBattle getBattle;
+    public GameController gameScript;
+
+    // 追蹤玩家是否完成行動
+    private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
+    private Dictionary<int, Unit> selectedTargets; // 每個玩家的目標敵人
+
     void Start()
     {
-        //SetupSkillsForEnemy(enemyUnit.unitName); // 假設 unitName 為 "Fish"
         state = BattleState.END;
-        animator = animator.GetComponent<Animator>();
-        skillManager = GetComponent<SkillManager>();
-        buffDebuffManager = GetComponent<BuffDebuffManager>();
-        /*
-        if (enemySkills == null || enemySkills.Count == 0)
+        animator = GetComponent<Animator>();
+        if (animator == null)
         {
-            Debug.LogError("enemySkills 尚未初始化或為空！");
+            Debug.LogError("Animator 未附加到 BattleSystem 的 GameObject 上！");
         }
-        */
+
+        skillManager = GetComponent<SkillManager>();
+        if (skillManager == null)
+        {
+            Debug.LogError("SkillManager 未附加到 BattleSystem 的 GameObject 上！");
+        }
+
+        buffDebuffManager = GetComponent<BuffDebuffManager>();
+        if (buffDebuffManager == null)
+        {
+            Debug.LogError("BuffDebuffManager 未附加到 BattleSystem 的 GameObject 上！");
+        }
+
+        playerUnits = new List<Unit>();
+        enemyUnits = new List<Unit>();
+        enemySkillsList = new List<List<System.Action>>();
+        playersActed = new List<bool>();
+        selectedTargets = new Dictionary<int, Unit>();
     }
 
     private void Update()
@@ -47,72 +68,216 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.START && !isHidden)
         {
             StartCoroutine(SetupBattle());
-            GameStateManager.Instance.SetState(GameState.Battle); //控制遊戲狀態
-            animator.SetTrigger("Show");
+            GameStateManager.Instance.SetState(GameState.Battle);
+            if (animator != null)
+            {
+                animator.SetTrigger("Show");
+            }
             isHidden = true;
         }
     }
 
-    IEnumerator SetupBattle()
+    public IEnumerator SetupBattle()
     {
-        playerUnit = playerPrefab.GetComponent<Unit>();
-        enemyUnit = enemyPrefab.GetComponent<Unit>();
-        enemyskill = enemyPrefab.GetComponent<Enemyskill>(); // 建立後才指派
-        GetBattle = enemyPrefab.GetComponentInChildren<GetBattle>();
-        if (enemyskill == null)
+        // 初始化玩家單位
+        for (int i = 0; i < playerPrefabs.Count; i++)
         {
-            Debug.LogError(" 無法在 enemyPrefab 上取得 Enemyskill 組件！");
-        }
-        else
-        {
-            Debug.Log(" 成功取得 Enemyskill 組件");
+            if (playerPrefabs[i] == null)
+            {
+                Debug.LogError($"playerPrefabs[{i}] 為空！");
+                yield break;
+            }
+            Unit playerUnit = playerPrefabs[i].GetComponent<Unit>();
+            if (playerUnit == null)
+            {
+                Debug.LogError($"playerPrefabs[{i}] 缺少 Unit 組件！");
+                yield break;
+            }
+            playerUnits.Add(playerUnit);
+            if (i < playerHUDs.Count && playerHUDs[i] != null)
+            {
+                playerHUDs[i].SetHUD(playerUnit);
+            }
+            else
+            {
+                Debug.LogError($"playerHUDs[{i}] 未設置或為空！");
+            }
+            playersActed.Add(false);
         }
 
-        SetupSkillsForEnemy(enemyUnit.unitName); // 這時候才呼叫
-        dialogueText.text = "野生的 " + enemyUnit.unitName + " 出現了..";
-        playerHUD.SetHUD(playerUnit);
-        enemyHUD.SetHUD(enemyUnit);
+        // 初始化敵人單位
+        for (int i = 0; i < enemyPrefabs.Count; i++)
+        {
+            if (enemyPrefabs[i] == null)
+            {
+                Debug.LogError($"enemyPrefabs[{i}] 為空！");
+                yield break;
+            }
+            Unit enemyUnit = enemyPrefabs[i].GetComponent<Unit>();
+            if (enemyUnit == null)
+            {
+                Debug.LogError($"enemyPrefabs[{i}] 缺少 Unit 組件！");
+                yield break;
+            }
+            enemyUnits.Add(enemyUnit);
+            if (i < enemyHUDs.Count && enemyHUDs[i] != null)
+            {
+                enemyHUDs[i].SetHUD(enemyUnit);
+            }
+            else
+            {
+                Debug.LogError($"enemyHUDs[{i}] 未設置或為空！");
+            }
+
+            Enemyskill enemySkillComponent = enemyPrefabs[i].GetComponent<Enemyskill>();
+            if (enemySkillComponent == null)
+            {
+                Debug.LogError($"無法在 enemyPrefab {i} 上取得 Enemyskill 組件！");
+                enemySkillsList.Add(new List<System.Action>());
+            }
+            else
+            {
+                // 傳遞必要數據給 Enemyskill
+                enemySkillComponent.playerUnits = playerUnits;
+                enemySkillComponent.enemyUnits = enemyUnits;
+                enemySkillComponent.buffDebuffManager = buffDebuffManager;
+                SetupSkillsForEnemy(enemyUnit.unitName, i, enemySkillComponent);
+            }
+        }
+
+        getBattle = enemyPrefabs.Count > 0 ? enemyPrefabs[0].GetComponentInChildren<GetBattle>() : null;
+        if (getBattle == null)
+        {
+            Debug.LogWarning("GetBattle 組件未找到，可能影響劇情觸發");
+        }
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = "野生的敵人們出現了..";
+        }
         yield return new WaitForSeconds(1f);
-        StartCoroutine(skillManager.DelayedInitSkillIcons(2f));
+
+        if (skillManager != null)
+        {
+            StartCoroutine(skillManager.DelayedInitSkillIcons(2f));
+        }
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }
 
-    void PlayerTurn()
+    public void PlayerTurn()
     {
+        state = BattleState.PLAYERTURN;
+        if (dialogueText != null)
+        {
+            dialogueText.text = "玩家回合: 選擇你們的行動和目標敵人";
+        }
 
-        
-        dialogueText.text = "選擇你的行動:";
+        // 重置玩家行動狀態
+        for (int i = 0; i < playersActed.Count; i++)
+        {
+            playersActed[i] = false;
+        }
+        selectedTargets.Clear();
+    }
+
+    public void OnPlayerConfirmSkillQueue(int playerIndex)
+    {
+        if (playerIndex < 0 || playerIndex >= playerUnits.Count)
+        {
+            Debug.LogError($"無效的 playerIndex: {playerIndex}");
+            return;
+        }
+
+        playersActed[playerIndex] = true;
+
+        if (AllPlayersActed())
+        {
+            if (AllEnemiesDead())
+            {
+                state = BattleState.WON;
+                EndBattle();
+                return;
+            }
+
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
     }
 
     public IEnumerator EnemyTurn()
     {
-
-        dialogueText.text = enemyUnit.unitName + " 正在思考要使用哪個技能...";
+        if (dialogueText != null)
+        {
+            dialogueText.text = "敵人們的回合...";
+        }
         yield return new WaitForSeconds(1f);
 
-        int index = Random.Range(0, enemySkills.Count);
-        enemySkills[index].Invoke();
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            if (enemyUnits[i].currentHP > 0)
+            {
+                List<System.Action> skills = enemySkillsList[i];
+                if (skills != null && skills.Count > 0)
+                {
+                    int skillIndex = Random.Range(0, skills.Count);
+                    skills[skillIndex].Invoke();
+                    yield return new WaitForSeconds(1.5f);
+                }
+            }
+        }
 
-        yield return new WaitForSeconds(1.5f);
+        if (buffDebuffManager != null)
+        {
+            buffDebuffManager.TickDefenseDebuffs();
+            buffDebuffManager.TickDefenseBuffs();
+            buffDebuffManager.TickDamageBuffs();
+            buffDebuffManager.TickPoison();
+        }
 
-        buffDebuffManager.TickDefenseDebuffs();
-        buffDebuffManager.TickDefenseBuffs();
-        buffDebuffManager.TickPoison();
-        if (playerUnit.currentHP <= 0)
+        if (AllPlayersDead())
         {
             state = BattleState.LOST;
             EndBattle();
         }
         else
         {
-            skillManager.InitSkillIcons();
+            if (skillManager != null)
+            {
+                skillManager.ReduceCooldown();
+                skillManager.InitSkillIcons();
+            }
             state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
     }
 
-    //多怪物
+    private bool AllPlayersActed()
+    {
+        foreach (bool acted in playersActed)
+        {
+            if (!acted) return false;
+        }
+        return true;
+    }
+
+    private bool AllEnemiesDead()
+    {
+        foreach (Unit enemy in enemyUnits)
+        {
+            if (enemy.currentHP > 0) return false;
+        }
+        return true;
+    }
+
+    private bool AllPlayersDead()
+    {
+        foreach (Unit player in playerUnits)
+        {
+            if (player.currentHP > 0) return false;
+        }
+        return true;
+    }
 
     public void OnRunbutton()
     {
@@ -131,53 +296,79 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.WON)
         {
-            dialogueText.text = "你贏得了戰鬥!";
-
-            if (GetBattle.IfScenes.Count == 1)
+            if (dialogueText != null)
             {
-                Gamescript.PlayScene(GetBattle.IfScenes[0] as StoryScene); //如果GetBattle有劇情就撥放
+                dialogueText.text = "你贏得了戰鬥!";
+            }
+            if (getBattle != null && getBattle.IfScenes.Count == 1 && gameScript != null)
+            {
+                gameScript.PlayScene(getBattle.IfScenes[0] as StoryScene);
             }
             else
             {
                 GameStateManager.Instance.SetState(GameState.Playing);
             }
-            Destroy(enemyPrefab);
+            foreach (GameObject enemy in enemyPrefabs)
+            {
+                if (enemy != null)
+                {
+                    Destroy(enemy);
+                }
+            }
         }
         else if (state == BattleState.LOST)
         {
-            dialogueText.text = "你輸了...";
+            if (dialogueText != null)
+            {
+                dialogueText.text = "你輸了...";
+            }
             GameStateManager.Instance.SetState(GameState.Playing);
         }
         else if (state == BattleState.RUN)
         {
-            dialogueText.text = "逃跑成功...";
+            if (dialogueText != null)
+            {
+                dialogueText.text = "逃跑成功...";
+            }
             GameStateManager.Instance.SetState(GameState.Playing);
         }
-        animator.SetTrigger("Hide");
-        skillManager.ClearSkillIcons();
+
+        if (buffDebuffManager != null)
+        {
+            buffDebuffManager.ClearAllEffects();
+        }
+        if (animator != null)
+        {
+            animator.SetTrigger("Hide");
+        }
+        if (skillManager != null)
+        {
+            skillManager.ClearSkillIcons();
+        }
         isHidden = false;
     }
 
-    public void SetupSkillsForEnemy(string enemyName)
+    public void SetupSkillsForEnemy(string enemyName, int enemyIndex, Enemyskill enemySkillComponent)
     {
-        enemySkills = new List<System.Action>();
-
-        if (enemyName == "FISH")
-        {
-            enemySkills.Add(() => enemyskill.Fishskill_1());
-            enemySkills.Add(() => enemyskill.Fishskill_2());
-        }
-        else if(enemyName == "SNAKE")
-        {
-            enemySkills.Add(() => enemyskill.Snakeskill_1());
-            enemySkills.Add(() => enemyskill.Snakeskill_2());
-        }
-        /*else if (enemyName == "Slime")
-        {
-            enemySkills.Add(() => enemySkillManager.SlimeSkill_1());
-            // 加入更多 slime 專屬技能
-        }*/
-
+        List<System.Action> enemySkills = enemySkillComponent.GetEnemySkills(enemyName);
+        enemySkillsList.Add(enemySkills);
     }
 
+    public void SetPlayerTarget(int playerIndex, Unit target)
+    {
+        if (playerIndex >= 0 && playerIndex < playerUnits.Count && enemyUnits.Contains(target))
+        {
+            selectedTargets[playerIndex] = target;
+        }
+        else
+        {
+            Debug.LogError($"無效的 playerIndex {playerIndex} 或 target {target?.unitName}");
+        }
+    }
+
+    public Unit GetPlayerTarget(int playerIndex)
+    {
+        selectedTargets.TryGetValue(playerIndex, out Unit target);
+        return target;
+    }
 }

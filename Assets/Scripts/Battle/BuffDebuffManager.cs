@@ -4,56 +4,96 @@ using UnityEngine;
 
 public class BuffDebuffManager : MonoBehaviour
 {
-    public Unit playerUnit;
-    public Unit enemyUnit;
-
-    private bool isBuffed = false;
-    private int originalDamage;
+    public List<Unit> enemyUnits; // 新增敵人單位列表
     private Dictionary<Unit, int> defenseBuffTurnsRemaining = new Dictionary<Unit, int>();
     private Dictionary<Unit, int> originalDefenseValues = new Dictionary<Unit, int>();
     private HashSet<Unit> isDefenseBuffed = new HashSet<Unit>();
     private Dictionary<Unit, int> originalDefenseValuesDebuff = new Dictionary<Unit, int>();
     private Dictionary<Unit, int> defenseDebuffTurns = new Dictionary<Unit, int>();
     private HashSet<Unit> isDefenseDebuffed = new HashSet<Unit>();
-    private Dictionary<Unit, float> fixedReductionPercentages = new Dictionary<Unit, float>(); // 每個單位的減傷百分比
-    private Dictionary<Unit, int> reductionTimesRemaining = new Dictionary<Unit, int>(); // 剩餘觸發次數
-    private HashSet<Unit> hasFixedReduction = new HashSet<Unit>(); // 是否有此效果
-    public int originalDefense;
-    private Dictionary<Unit, int> poisonTurnsRemaining = new Dictionary<Unit, int>(); // 中毒剩餘回合
-    private HashSet<Unit> isPoisoned = new HashSet<Unit>(); // 是否已有中毒效果
-    private float poisonDamagePercentage = 0.15f; // 中毒傷害百分比（15%）
+    private Dictionary<Unit, float> fixedReductionPercentages = new Dictionary<Unit, float>();
+    private Dictionary<Unit, int> reductionTimesRemaining = new Dictionary<Unit, int>();
+    private HashSet<Unit> hasFixedReduction = new HashSet<Unit>();
+    private Dictionary<Unit, int> poisonTurnsRemaining = new Dictionary<Unit, int>();
+    private HashSet<Unit> isPoisoned = new HashSet<Unit>();
+    private float poisonDamagePercentage = 0.15f;
+
+    // 新增：攻擊 buff 管理
+    private Dictionary<Unit, int> damageBuffTurnsRemaining = new Dictionary<Unit, int>();
+    private Dictionary<Unit, int> originalDamageValues = new Dictionary<Unit, int>();
+    private HashSet<Unit> isDamageBuffed = new HashSet<Unit>();
 
     void Start()
     {
-      
+        if (enemyUnits == null)
+        {
+            enemyUnits = new List<Unit>();
+        }
     }
 
     void Update()
     {
- 
+        // 無需 Update，若需實時檢查可添加
     }
 
-    public void ApplyDamageBuff(float multiplier)
+    public void ApplyDamageBuff(Unit targetUnit, float multiplier, int turns)
     {
-        if (!isBuffed)
+        if (targetUnit == null)
         {
-            originalDamage = playerUnit.damage;
-            playerUnit.damage = Mathf.RoundToInt(playerUnit.damage * multiplier);
-            isBuffed = true;
+            Debug.LogError("目標單位無效！");
+            return;
         }
+        if (isDamageBuffed.Contains(targetUnit))
+        {
+            Debug.Log($"{targetUnit.unitName} 已有攻擊 Buff，不重複套用。");
+            return;
+        }
+
+        originalDamageValues[targetUnit] = targetUnit.damage;
+        targetUnit.damage = Mathf.RoundToInt(targetUnit.damage * multiplier);
+        damageBuffTurnsRemaining[targetUnit] = turns;
+        isDamageBuffed.Add(targetUnit);
+
+        Debug.Log($"{targetUnit.unitName} 的攻擊力上升至 {targetUnit.damage}，持續 {turns} 回合");
     }
 
-    public void RemoveDamageBuff()
+    public void TickDamageBuffs()
     {
-        if (isBuffed)
+        List<Unit> unitsToRemove = new List<Unit>();
+        foreach (Unit unit in new List<Unit>(damageBuffTurnsRemaining.Keys))
         {
-            playerUnit.damage = originalDamage;
-            isBuffed = false;
+            if (unit == null || unit.currentHP <= 0) // 檢查單位是否有效
+            {
+                unitsToRemove.Add(unit);
+                continue;
+            }
+
+            damageBuffTurnsRemaining[unit]--;
+            Debug.Log($"{unit.unitName} 的攻擊 Buff 倒數：剩下 {damageBuffTurnsRemaining[unit]} 回合");
+
+            if (damageBuffTurnsRemaining[unit] <= 0)
+            {
+                unit.damage = originalDamageValues[unit];
+                unitsToRemove.Add(unit);
+                Debug.Log($"{unit.unitName} 的攻擊 Buff 結束，恢復為 {unit.damage}");
+            }
+        }
+
+        foreach (Unit unit in unitsToRemove)
+        {
+            damageBuffTurnsRemaining.Remove(unit);
+            originalDamageValues.Remove(unit);
+            isDamageBuffed.Remove(unit);
         }
     }
 
     public void ApplyDefenseDebuff(Unit targetUnit, float debuffMultiplier, int turns)
     {
+        if (targetUnit == null)
+        {
+            Debug.LogError("目標單位無效！");
+            return;
+        }
         if (isDefenseDebuffed.Contains(targetUnit))
         {
             Debug.Log($"{targetUnit.unitName} 已有防禦 Debuff，不重複套用。");
@@ -70,42 +110,38 @@ public class BuffDebuffManager : MonoBehaviour
 
     public void Heal(Unit targetUnit, float lostper)
     {
-        // 檢查目標單位是否有效
         if (targetUnit == null)
         {
-            Debug.Log("治療目標無效！");
+            Debug.LogError("治療目標無效！");
             return;
         }
-
-        // 檢查目標是否存活
         if (targetUnit.currentHP <= 0)
         {
             Debug.Log($"{targetUnit.unitName} 已死亡，無法治療！");
             return;
         }
-
-        // 檢查是否已滿血
         if (targetUnit.currentHP >= targetUnit.maxHP)
         {
             Debug.Log($"{targetUnit.unitName} 已滿血，無需治療！");
             return;
         }
 
-        // 計算失去的血量
         int lostHealth = targetUnit.maxHP - targetUnit.currentHP;
-        // 恢復失去血量的 75%
         int healAmount = Mathf.RoundToInt(lostHealth * lostper);
-        // 計算新血量，但不超過最大血量
         int newHealth = Mathf.Min(targetUnit.currentHP + healAmount, targetUnit.maxHP);
         int actualHealedAmount = newHealth - targetUnit.currentHP;
         targetUnit.currentHP = newHealth;
 
-        // 輸出治療訊息
-        Debug.Log($"{targetUnit.unitName} 恢復了 {actualHealedAmount} 點血量（失去血量的 75%），當前血量：{targetUnit.currentHP}/{targetUnit.maxHP}");
+        Debug.Log($"{targetUnit.unitName} 恢復了 {actualHealedAmount} 點血量（失去血量的 {lostper * 100}%），當前血量：{targetUnit.currentHP}/{targetUnit.maxHP}");
     }
 
     public void ApplyDefenseBuff(Unit targetUnit, float multiplier, int turns)
     {
+        if (targetUnit == null)
+        {
+            Debug.LogError("目標單位無效！");
+            return;
+        }
         if (isDefenseBuffed.Contains(targetUnit))
         {
             Debug.Log($"{targetUnit.unitName} 已有防禦 Buff，不重複套用。");
@@ -122,6 +158,11 @@ public class BuffDebuffManager : MonoBehaviour
 
     public void ApplyFixedDamageReduction(Unit targetUnit, float reductionPercentage, int times)
     {
+        if (targetUnit == null)
+        {
+            Debug.LogError("目標單位無效！");
+            return;
+        }
         if (hasFixedReduction.Contains(targetUnit))
         {
             Debug.Log($"{targetUnit.unitName} 已有固定減傷效果，不重複套用。");
@@ -135,7 +176,6 @@ public class BuffDebuffManager : MonoBehaviour
         Debug.Log($"{targetUnit.unitName} 獲得固定減傷效果，減少 {reductionPercentage * 100}% 傷害，剩餘 {times} 次");
     }
 
-    // 移除固定減傷效果（當次數用完時自動呼叫）
     private void RemoveFixedDamageReduction(Unit targetUnit)
     {
         if (hasFixedReduction.Contains(targetUnit))
@@ -147,41 +187,46 @@ public class BuffDebuffManager : MonoBehaviour
         }
     }
 
-    // 檢查並應用減傷（在單位受到傷害時呼叫，返回實際傷害量）
     public int ApplyReductionIfApplicable(Unit targetUnit, int incomingDamage)
     {
-        if (!hasFixedReduction.Contains(targetUnit))
+        if (targetUnit == null || !hasFixedReduction.Contains(targetUnit))
         {
-            return incomingDamage; // 沒有效果，直接返回原傷害
+            return incomingDamage;
         }
 
         float reductionPercentage = fixedReductionPercentages[targetUnit];
-        int reducedDamage = Mathf.RoundToInt(incomingDamage * (1f - reductionPercentage)); // 計算減傷後傷害
-        int actualReduction = incomingDamage - reducedDamage; // 實際減傷量
+        int reducedDamage = Mathf.RoundToInt(incomingDamage * (1f - reductionPercentage));
+        int actualReduction = incomingDamage - reducedDamage;
 
-        // 減少剩餘次數
         reductionTimesRemaining[targetUnit]--;
         Debug.Log($"{targetUnit.unitName} 觸發固定減傷，減傷 {actualReduction} 點（{reductionPercentage * 100}%），剩餘次數：{reductionTimesRemaining[targetUnit]}");
 
-        // 如果次數用完，移除效果
         if (reductionTimesRemaining[targetUnit] <= 0)
         {
             RemoveFixedDamageReduction(targetUnit);
         }
 
-        return reducedDamage; // 返回減傷後的傷害量
+        return reducedDamage;
     }
 
     public void ApplyPoison(Unit targetUnit, int turns = 3)
     {
-        // 移除原本的檢查邏輯，直接應用或更新中毒效果
-        poisonTurnsRemaining[targetUnit] = turns; // 重置或設置為 3 回合
-        if (!isPoisoned.Contains(targetUnit))
+        if (targetUnit == null)
         {
-            isPoisoned.Add(targetUnit); // 如果是新中毒，加入集合
+            Debug.LogError("目標單位無效！");
+            return;
         }
-
-        Debug.Log($"{targetUnit.unitName} {(isPoisoned.Contains(targetUnit) ? "重新中毒" : "中毒")}，每回合損失當前血量 {poisonDamagePercentage * 100}%，持續 {turns} 回合");
+        if (isPoisoned.Contains(targetUnit))
+        {
+            Debug.Log($"{targetUnit.unitName} 已有中毒效果，重置回合數");
+            poisonTurnsRemaining[targetUnit] = turns; // 重置回合數
+        }
+        else
+        {
+            poisonTurnsRemaining[targetUnit] = turns;
+            isPoisoned.Add(targetUnit);
+            Debug.Log($"{targetUnit.unitName} 中毒，每回合損失當前血量 {poisonDamagePercentage * 100}%，持續 {turns} 回合");
+        }
     }
 
     public void TickPoison()
@@ -189,20 +234,22 @@ public class BuffDebuffManager : MonoBehaviour
         List<Unit> unitsToRemove = new List<Unit>();
         foreach (Unit unit in new List<Unit>(poisonTurnsRemaining.Keys))
         {
-            // 計算傷害：當前血量的 15%
+            if (unit == null || unit.currentHP <= 0)
+            {
+                unitsToRemove.Add(unit);
+                continue;
+            }
+
             int poisonDamage = Mathf.RoundToInt(unit.currentHP * poisonDamagePercentage);
-            unit.currentHP = Mathf.Max(0, unit.currentHP - poisonDamage); // 扣除傷害，最低為 0
+            unit.currentHP = Mathf.Max(0, unit.currentHP - poisonDamage);
 
             Debug.Log($"{unit.unitName} 受到中毒傷害 {poisonDamage} 點，當前血量：{unit.currentHP}/{unit.maxHP}");
 
-            // 檢查是否死亡
             if (unit.currentHP <= 0)
             {
                 Debug.Log($"{unit.unitName} 被中毒致死！");
-                // 可以這裡觸發死亡邏輯，如果有相關事件
             }
 
-            // 減少剩餘回合
             poisonTurnsRemaining[unit]--;
             Debug.Log($"{unit.unitName} 的中毒倒數：剩下 {poisonTurnsRemaining[unit]} 回合");
 
@@ -213,7 +260,6 @@ public class BuffDebuffManager : MonoBehaviour
             }
         }
 
-        // 統一移除已結束的效果
         foreach (Unit unit in unitsToRemove)
         {
             poisonTurnsRemaining.Remove(unit);
@@ -223,29 +269,26 @@ public class BuffDebuffManager : MonoBehaviour
 
     public void TickDefenseBuffs()
     {
-        // 先抓出目前有 Buff 的單位清單
-        List<Unit> buffedUnits = new List<Unit>(defenseBuffTurnsRemaining.Keys);
         List<Unit> unitsToRemove = new List<Unit>();
-
-        foreach (Unit unit in buffedUnits)
+        foreach (Unit unit in new List<Unit>(defenseBuffTurnsRemaining.Keys))
         {
-            if (defenseBuffTurnsRemaining.ContainsKey(unit))
+            if (unit == null || unit.currentHP <= 0)
             {
-                defenseBuffTurnsRemaining[unit]--;
+                unitsToRemove.Add(unit);
+                continue;
+            }
 
-                int remaining = defenseBuffTurnsRemaining[unit];
-                Debug.Log($"{unit.unitName} 的防禦 Buff 倒數：剩下 {remaining} 回合");
+            defenseBuffTurnsRemaining[unit]--;
+            Debug.Log($"{unit.unitName} 的防禦 Buff 倒數：剩下 {defenseBuffTurnsRemaining[unit]} 回合");
 
-                if (remaining <= 0)
-                {
-                    unit.defense = originalDefenseValues[unit];
-                    unitsToRemove.Add(unit);
-                    Debug.Log($"{unit.unitName} 的防禦 Buff 結束，恢復為 {unit.defense}");
-                }
+            if (defenseBuffTurnsRemaining[unit] <= 0)
+            {
+                unit.defense = originalDefenseValues[unit];
+                unitsToRemove.Add(unit);
+                Debug.Log($"{unit.unitName} 的防禦 Buff 結束，恢復為 {unit.defense}");
             }
         }
 
-        // 統一處理移除，避免在迴圈中修改集合
         foreach (Unit unit in unitsToRemove)
         {
             defenseBuffTurnsRemaining.Remove(unit);
@@ -254,15 +297,18 @@ public class BuffDebuffManager : MonoBehaviour
         }
     }
 
-
-
     public void TickDefenseDebuffs()
     {
         List<Unit> unitsToRemove = new List<Unit>();
         foreach (Unit unit in new List<Unit>(defenseDebuffTurns.Keys))
         {
-            defenseDebuffTurns[unit]--;
+            if (unit == null || unit.currentHP <= 0)
+            {
+                unitsToRemove.Add(unit);
+                continue;
+            }
 
+            defenseDebuffTurns[unit]--;
             Debug.Log($"{unit.unitName} 的防禦 Debuff 倒數：剩下 {defenseDebuffTurns[unit]} 回合");
 
             if (defenseDebuffTurns[unit] <= 0)
@@ -281,5 +327,68 @@ public class BuffDebuffManager : MonoBehaviour
         }
     }
 
+    // 新增：清理所有狀態（戰鬥結束時呼叫）
+    public void ClearAllEffects()
+    {
+        foreach (Unit unit in new List<Unit>(isDefenseBuffed))
+        {
+            if (unit != null)
+            {
+                unit.defense = originalDefenseValues[unit];
+            }
+            defenseBuffTurnsRemaining.Remove(unit);
+            originalDefenseValues.Remove(unit);
+            isDefenseBuffed.Remove(unit);
+        }
 
+        foreach (Unit unit in new List<Unit>(isDefenseDebuffed))
+        {
+            if (unit != null)
+            {
+                unit.defense = originalDefenseValuesDebuff[unit];
+            }
+            defenseDebuffTurns.Remove(unit);
+            originalDefenseValuesDebuff.Remove(unit);
+            isDefenseDebuffed.Remove(unit);
+        }
+
+        foreach (Unit unit in new List<Unit>(hasFixedReduction))
+        {
+            fixedReductionPercentages.Remove(unit);
+            reductionTimesRemaining.Remove(unit);
+            hasFixedReduction.Remove(unit);
+        }
+
+        foreach (Unit unit in new List<Unit>(isPoisoned))
+        {
+            poisonTurnsRemaining.Remove(unit);
+            isPoisoned.Remove(unit);
+        }
+
+        foreach (Unit unit in new List<Unit>(isDamageBuffed))
+        {
+            if (unit != null)
+            {
+                unit.damage = originalDamageValues[unit];
+            }
+            damageBuffTurnsRemaining.Remove(unit);
+            originalDamageValues.Remove(unit);
+            isDamageBuffed.Remove(unit);
+        }
+
+
+        Debug.Log("所有 Buff/Debuff 效果已清除");
+    }
+
+    public void ApplyEffectToAllEnemies(System.Action<Unit> effect)
+    {
+        if (enemyUnits == null) return;
+        foreach (Unit enemy in enemyUnits)
+        {
+            if (enemy != null && enemy.currentHP > 0)
+            {
+                effect(enemy);
+            }
+        }
+    }
 }

@@ -521,11 +521,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 4616179}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &4616179
 MonoBehaviour:
@@ -44592,11 +44589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 290101556}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &290101558
 MonoBehaviour:
@@ -162023,11 +162017,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 1018057260}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1018057260
 MonoBehaviour:
@@ -179366,11 +179357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 1132619229}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1132619229
 MonoBehaviour:
@@ -221786,11 +221774,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 1392063970}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1392063970
 MonoBehaviour:
@@ -251709,11 +251694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 1600112438}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!210 &1600112441
 SortingGroup:
@@ -259033,11 +259015,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 1649820919}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1649820921
 MonoBehaviour:
@@ -269486,6 +269465,60 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1706194608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1706194610}
+  - component: {fileID: 1706194609}
+  m_Layer: 0
+  m_Name: lyla test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1706194609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706194608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e901abda54227343afcb94ef87d58ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitName: Lyla
+  unitLevel: 1
+  damage: 25
+  defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
+  defense: 10
+  maxHP: 100
+  currentHP: 100
+  critChance: 0.25
+  critdmgplus: 1.5
+  buffManager: {fileID: 3720424681303388705}
+--- !u!4 &1706194610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706194608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 710.4924, y: 1.5691073, z: 0.13613504}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1707392263
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -337711,20 +337744,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfe80aac45062a4698c7813651a21f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1929828331}
-  enemyPrefab: {fileID: 0}
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 0}
+  playerPrefabs: []
+  enemyPrefabs: []
+  playerUnits: []
+  enemyUnits: []
   dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  enemyHUD: {fileID: 340659713228366844}
+  playerHUDs: []
+  enemyHUDs: []
   animator: {fileID: 3721955857226714691}
   state: 6
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
-  enemyskill: {fileID: 0}
   turnCounter: 0
-  Gamescript: {fileID: 4336947258115202937}
+  gameScript: {fileID: 0}
 --- !u!114 &549341177394799278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342602,9 +342634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f00b2b227d31c248a87435c214b07b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 0}
-  originalDefense: 0
+  enemyUnits: []
 --- !u!114 &3720424681303388706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342617,10 +342647,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d962df936807694439930b42af2c81c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 0}
+  playerUnits: []
+  enemyUnits: []
   dialogueText: {fileID: 1124883917}
-  enemyHUD: {fileID: 340659713228366844}
+  enemyHUDs: []
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
   audioSource: {fileID: 0}
@@ -352108,3 +352138,4 @@ SceneRoots:
   - {fileID: 1918555696}
   - {fileID: 365683853}
   - {fileID: 988337843}
+  - {fileID: 1706194610}
