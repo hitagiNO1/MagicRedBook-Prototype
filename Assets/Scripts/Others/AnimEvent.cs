@@ -2,6 +2,12 @@ using Cinemachine;
 using UnityEngine;
 public class AnimEvent : MonoBehaviour
 {
+    public ParticleSystem DustVFX;
+
+    public void Play_DustVFX()
+    {
+        DustVFX.Play();
+    }
     public void DeleteObject()
     {
         Destroy(this.gameObject);
