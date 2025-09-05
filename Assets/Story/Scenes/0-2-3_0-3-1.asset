@@ -253,7 +253,9 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 93187fd040886eb4a88340a6e228a8f4, type: 2}
   - text: "\u6B38......\uFF1F"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions:

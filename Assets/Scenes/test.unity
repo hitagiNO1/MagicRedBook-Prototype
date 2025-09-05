@@ -19636,6 +19636,7 @@ MonoBehaviour:
   Gamescript: {fileID: 4336947258115202937}
   LimitScenes:
   - {fileID: 11400000, guid: ec8a3608efbecd348b17f487c663ff81, type: 2}
+  sec: 2
 --- !u!1001 &845265623
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54401,20 +54402,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfe80aac45062a4698c7813651a21f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1929828331}
-  enemyPrefab: {fileID: 0}
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 0}
+  playerPrefabs: []
+  enemyPrefabs: []
+  playerUnits: []
+  enemyUnits: []
   dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  enemyHUD: {fileID: 340659713228366844}
+  playerHUDs: []
+  enemyHUDs: []
   animator: {fileID: 3721955857226714691}
   state: 6
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
-  enemyskill: {fileID: 0}
   turnCounter: 0
-  Gamescript: {fileID: 0}
+  gameScript: {fileID: 0}
 --- !u!114 &540789456958554580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58393,7 +58393,7 @@ SpriteRenderer:
   m_Size: {x: 22.26, y: 23.893333}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!212 &1139122656384369138
@@ -75404,9 +75404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f00b2b227d31c248a87435c214b07b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 0}
-  originalDefense: 0
+  enemyUnits: []
 --- !u!114 &3720424681303388706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75419,10 +75417,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d962df936807694439930b42af2c81c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 0}
+  playerUnits: []
+  enemyUnits: []
   dialogueText: {fileID: 1124883917}
-  enemyHUD: {fileID: 340659713228366844}
+  enemyHUDs: []
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
   audioSource: {fileID: 0}
@@ -110721,11 +110719,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ea68b69316eea44987939fbd61d135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnit: {fileID: 1929828337}
-  enemyUnit: {fileID: 8963592478681553701}
-  dialogueText: {fileID: 1124883917}
-  playerHUD: {fileID: 4477255336795696411}
-  battlesystem: {fileID: 537444389665327204}
+  enemyUnits: []
+  playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!4 &8964495085470126554
 Transform:
