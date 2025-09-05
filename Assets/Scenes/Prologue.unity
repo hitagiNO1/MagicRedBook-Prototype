@@ -18910,7 +18910,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: catSkill_2
+        m_MethodName: TriggerCatSkill2ForPlayer1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -124378,7 +124378,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: catSkill_3
+        m_MethodName: TriggerCatSkill3ForPlayer1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -209030,7 +209030,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: catSkill_1
+        m_MethodName: TriggerCatSkill1ForPlayer1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -223333,7 +223333,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 405.39, y: 30.070007, z: -51.20152}
+  m_LocalPosition: {x: 683.9, y: 30.070005, z: -92.661514}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -261906,7 +261906,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: catSkill_5
+        m_MethodName: TriggerCatSkill5ForPlayer1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -303872,7 +303872,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 405.39, y: 0.07, z: 0.76}
+  m_LocalPosition: {x: 683.9, y: 0.07, z: -40.7}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -307042,7 +307042,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: catSkill_4
+        m_MethodName: TriggerCatSkill4ForPlayer1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -332015,7 +332015,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 3
-  m_SortingOrder: -8
+  m_SortingOrder: 406
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -337704,7 +337704,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: Skill_4
+        m_MethodName: TriggerSkill4ForPlayer0
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -337808,7 +337808,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: Skill_3
+        m_MethodName: TriggerSkill3ForPlayer0
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -338421,7 +338421,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: OnConfirmSkillQueue
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -338474,13 +338474,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfe80aac45062a4698c7813651a21f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefabs: []
+  playerPrefabs:
+  - {fileID: 1929828331}
+  - {fileID: 1706194608}
   enemyPrefabs: []
-  playerUnits: []
+  playerUnits:
+  - {fileID: 1929828337}
+  - {fileID: 1706194609}
   enemyUnits: []
   dialogueText: {fileID: 1124883917}
-  playerHUDs: []
-  enemyHUDs: []
+  playerHUDs:
+  - {fileID: 4477255336795696411}
+  - {fileID: 4477255336795696411}
+  enemyHUDs:
+  - {fileID: 340659713228366844}
   animator: {fileID: 3721955857226714691}
   state: 6
   skillManager: {fileID: 3720424681303388706}
@@ -338548,7 +338555,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: Skill_5
+        m_MethodName: TriggerSkill5ForPlayer0
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -340604,7 +340611,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: Skill_2
+        m_MethodName: TriggerSkill2ForPlayer0
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -343459,15 +343466,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d962df936807694439930b42af2c81c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUnits: []
+  playerUnits:
+  - {fileID: 1929828337}
+  - {fileID: 1706194609}
   enemyUnits: []
   dialogueText: {fileID: 1124883917}
-  enemyHUDs: []
+  enemyHUDs:
+  - {fileID: 340659713228366844}
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
   audioSource: {fileID: 0}
   skillIconPrefab: {fileID: 7392400310071351197, guid: 73240bd9a52a4dc418392145b9507b3c, type: 3}
   skillIconParent: {fileID: 416347393}
+  targetDropdown: {fileID: 0}
 --- !u!114 &3720424681303388707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344212,7 +344223,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
-        m_MethodName: Skill_1
+        m_MethodName: TriggerSkill1ForPlayer0
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

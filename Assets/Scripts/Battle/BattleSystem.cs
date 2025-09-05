@@ -38,7 +38,7 @@ public class BattleSystem : MonoBehaviour
     void Start()
     {
         state = BattleState.END;
-        animator = GetComponent<Animator>();
+       // animator = GetComponent<Animator>();
         if (animator == null)
         {
             Debug.LogError("Animator 未附加到 BattleSystem 的 GameObject 上！");
@@ -151,12 +151,17 @@ public class BattleSystem : MonoBehaviour
             Debug.LogWarning("GetBattle 組件未找到，可能影響劇情觸發");
         }
 
+        // 同步 SkillManager 的數據
+       
         if (dialogueText != null)
         {
             dialogueText.text = "野生的敵人們出現了..";
         }
         yield return new WaitForSeconds(1f);
-
+        skillManager.playerUnits = playerUnits;
+        skillManager.enemyUnits = enemyUnits;
+        skillManager.buffDebuffManager = buffDebuffManager;
+       
         if (skillManager != null)
         {
             StartCoroutine(skillManager.DelayedInitSkillIcons(2f));
@@ -190,16 +195,17 @@ public class BattleSystem : MonoBehaviour
         }
 
         playersActed[playerIndex] = true;
+        Debug.Log($"Player {playerIndex} acted: {playersActed[playerIndex]}, Total Skills = {skillManager.GetTotalSelectedSkills()}");
 
-        if (AllPlayersActed())
+        if (skillManager != null && skillManager.GetTotalSelectedSkills() == 0)
         {
+            Debug.Log("No skills left after this confirmation, proceeding to enemy turn");
             if (AllEnemiesDead())
             {
                 state = BattleState.WON;
                 EndBattle();
                 return;
             }
-
             state = BattleState.ENEMYTURN;
             StartCoroutine(EnemyTurn());
         }
