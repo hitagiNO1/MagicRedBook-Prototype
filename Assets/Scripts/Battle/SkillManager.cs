@@ -213,12 +213,12 @@ public class SkillManager : MonoBehaviour
 
     public void catSkill_1(int playerIndex, Unit target)
     {
-        Debug.Log($"Attempting catSkill_1 for player {playerIndex}, target: {target?.unitName}");
-        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_1")) return;
+        Debug.Log($"Attempting catSkill_1 for player {playerIndex}, target: {target?.unitName}, target HP: {target?.currentHP}");
+        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_1") || target == null || target.currentHP <= 0) return;
         selectedSkillNames[playerIndex].Add("catSkill_1");
         skillQueues[playerIndex].Add(() =>
         {
-            Debug.Log($"Executing catSkill_1 for player {playerIndex}");
+            Debug.Log($"Executing catSkill_1 for player {playerIndex}, target: {target.unitName}");
             int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
             PerformBasicAttack(playerIndex, target, buffedDamage);
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
@@ -227,12 +227,14 @@ public class SkillManager : MonoBehaviour
         RemoveSkillIcon();
     }
 
-    public void catSkill_2(int playerIndex, Unit target)
+    public void catSkill_2(int playerIndex)
     {
-        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_2") || skillCooldowns["catSkill_2_" + playerIndex] > 0) return; // 僅限 player1
+        Debug.Log($"Attempting catSkill_2 for player {playerIndex}");
+        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_2") || skillCooldowns["catSkill_2_" + playerIndex] > 0) return;
         selectedSkillNames[playerIndex].Add("catSkill_2");
         skillQueues[playerIndex].Add(() =>
         {
+            Debug.Log($"Executing catSkill_2 for player {playerIndex}");
             buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
             skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將傷口進行包紮";
@@ -241,12 +243,14 @@ public class SkillManager : MonoBehaviour
         RemoveSkillIcon();
     }
 
-    public void catSkill_3(int playerIndex) // 全體敵人傷害
+    public void catSkill_3(int playerIndex)
     {
-        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_3") || skillCooldowns["catSkill_3_" + playerIndex] > 0) return; // 僅限 player1
+        Debug.Log($"Attempting catSkill_3 for player {playerIndex}");
+        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_3") || skillCooldowns["catSkill_3_" + playerIndex] > 0) return;
         selectedSkillNames[playerIndex].Add("catSkill_3");
         skillQueues[playerIndex].Add(() =>
         {
+            Debug.Log($"Executing catSkill_3 for player {playerIndex}");
             int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
             PerformMultiTargetAttack(playerIndex, buffedDamage);
             skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
@@ -256,13 +260,15 @@ public class SkillManager : MonoBehaviour
         RemoveSkillIcon();
     }
 
-    public void catSkill_4(int playerIndex, Unit target)
+    public void catSkill_4(int playerIndex)
     {
-        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_4") || skillCooldowns["catSkill_4_" + playerIndex] > 0) return; // 僅限 player1
+        Debug.Log($"Attempting catSkill_4 for player {playerIndex}");
+        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_4") || skillCooldowns["catSkill_4_" + playerIndex] > 0) return;
         selectedSkillNames[playerIndex].Add("catSkill_4");
         skillQueues[playerIndex].Add(() =>
         {
-            buffDebuffManager.ApplyDamageBuff(playerUnits[playerIndex], 2.0f, 2); // 攻擊力 * 2，持續 2 回合
+            Debug.Log($"Executing catSkill_4 for player {playerIndex}");
+            buffDebuffManager.ApplyDamageBuff(playerUnits[playerIndex], 2.0f, 2);
             skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 施展魔法給予我方攻擊加成";
         });
@@ -270,15 +276,17 @@ public class SkillManager : MonoBehaviour
         RemoveSkillIcon();
     }
 
-    public void catSkill_5(int playerIndex) // 對我方全體應用效果
+    public void catSkill_5(int playerIndex)
     {
-        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_5") || skillCooldowns["catSkill_5_" + playerIndex] > 0) return; // 僅限 player1
+        Debug.Log($"Attempting catSkill_5 for player {playerIndex}");
+        if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_5") || skillCooldowns["catSkill_5_" + playerIndex] > 0) return;
         selectedSkillNames[playerIndex].Add("catSkill_5");
         skillQueues[playerIndex].Add(() =>
         {
+            Debug.Log($"Executing catSkill_5 for player {playerIndex}");
             foreach (Unit player in playerUnits)
             {
-                buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1); // 對全體玩家應用
+                buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1);
             }
             skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過歌聲振奮士氣，使我方全體承受傷害降低";
@@ -340,7 +348,7 @@ public class SkillManager : MonoBehaviour
             if (enemyUnits.Count > 0) selectedTarget = enemyUnits.Find(u => u.currentHP > 0);
             else { Debug.LogWarning("No target available for Player 1!"); return; }
         }
-        catSkill_2(1, selectedTarget);
+        catSkill_2(1);
     }
 
     public void TriggerCatSkill3ForPlayer1()
@@ -355,7 +363,7 @@ public class SkillManager : MonoBehaviour
             if (enemyUnits.Count > 0) selectedTarget = enemyUnits.Find(u => u.currentHP > 0);
             else { Debug.LogWarning("No target available for Player 1!"); return; }
         }
-        catSkill_4(1, selectedTarget);
+        catSkill_4(1);
     }
 
     public void TriggerCatSkill5ForPlayer1()
@@ -388,33 +396,62 @@ public class SkillManager : MonoBehaviour
         return total;
     }
 
-    public void OnConfirmSkillQueue(int playerIndex)
+    public void OnConfirmSkillQueue()
     {
-        Debug.Log($"OnConfirmSkillQueue called for player {playerIndex}, Queue Count = {skillQueues[playerIndex].Count}, Total Skills = {GetTotalSelectedSkills()}");
-        if (skillQueues[playerIndex].Count == 0 && GetTotalSelectedSkills() == 0)
+        Debug.Log($"OnConfirmSkillQueue called, Total Skills = {GetTotalSelectedSkills()}");
+        bool hasExecuted = false;
+
+        // 遍歷所有玩家 (0 和 1)
+        for (int playerIndex = 0; playerIndex < playerUnits.Count; playerIndex++)
         {
-            Debug.LogWarning("No skills selected for this player, skipping to enemy turn");
-            if (battlesystem != null) battlesystem.OnPlayerConfirmSkillQueue(playerIndex);
-            return;
+            if (skillQueues[playerIndex].Count > 0)
+            {
+                Debug.Log($"Executing skills for player {playerIndex}, Queue Count = {skillQueues[playerIndex].Count}");
+                StartCoroutine(ExecuteSkillQueueWithCallback(playerIndex));
+                hasExecuted = true;
+            }
         }
-        if (skillQueues[playerIndex].Count > 0)
+
+        // 如果沒有技能執行，強制推進
+        if (!hasExecuted && GetTotalSelectedSkills() == 0)
         {
-            StartCoroutine(ExecuteSkillQueueWithCallback(playerIndex)); // 使用新協程確保結束後呼叫
+            Debug.LogWarning("No skills in any queue, skipping to enemy turn");
+            if (battlesystem != null) battlesystem.OnPlayerConfirmSkillQueue(0); // 使用 0 作為預設
+            return;
         }
     }
 
     // 新協程：執行後呼叫確認
     IEnumerator ExecuteSkillQueueWithCallback(int playerIndex)
     {
+        Debug.Log($"Starting ExecuteSkillQueueWithCallback for player {playerIndex}");
         yield return StartCoroutine(ExecuteSkillQueue(playerIndex));
-        if (battlesystem != null) battlesystem.OnPlayerConfirmSkillQueue(playerIndex);
+        Debug.Log($"Finished ExecuteSkillQueueWithCallback for player {playerIndex}, Total Skills = {GetTotalSelectedSkills()}");
+
+        // 檢查所有佇列是否清空
+        bool allQueuesEmpty = true;
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            if (skillQueues[i].Count > 0)
+            {
+                allQueuesEmpty = false;
+                break;
+            }
+        }
+
+        if (allQueuesEmpty && battlesystem != null)
+        {
+            Debug.Log("All skill queues empty, proceeding to enemy turn");
+            battlesystem.OnPlayerConfirmSkillQueue(playerIndex); // 使用當前玩家索引
+        }
     }
 
     private void ExecuteSkillAction(System.Action skillAction, int playerIndex)
     {
         try
         {
-            skillAction.Invoke();
+            if (skillAction == null) Debug.LogError($"Null skill action for player {playerIndex}");
+            else skillAction.Invoke();
         }
         catch (System.Exception e)
         {
@@ -429,6 +466,7 @@ public class SkillManager : MonoBehaviour
         {
             ExecuteSkillAction(skillAction, playerIndex);
             yield return new WaitForSeconds(1f);
+            Debug.Log($"Completed one action for player {playerIndex}, remaining count = {skillQueues[playerIndex].Count}");
         }
         Debug.Log($"Finished ExecuteSkillQueue for player {playerIndex}, Clearing queue");
         skillQueues[playerIndex].Clear();
@@ -437,6 +475,11 @@ public class SkillManager : MonoBehaviour
 
     void PerformBasicAttack(int playerIndex, Unit target, int damageOverride = -1)
     {
+        if (target == null || target.currentHP <= 0)
+        {
+            Debug.LogWarning($"Invalid target for player {playerIndex}");
+            return;
+        }
         int actualDamage = damageOverride > 0 ? damageOverride : playerUnits[playerIndex].damage;
         bool isDead = target.TakeDamage(actualDamage);
         int targetIndex = enemyUnits.IndexOf(target);
@@ -446,7 +489,7 @@ public class SkillManager : MonoBehaviour
         }
         if (isDead)
         {
-            UpdateTargetSelectionUI(); // 敵人死亡後更新目標選擇
+            UpdateTargetSelectionUI();
             if (AllEnemiesDead())
             {
                 battlesystem.state = BattleState.WON;

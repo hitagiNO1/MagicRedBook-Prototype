@@ -199,7 +199,11 @@ public class BattleSystem : MonoBehaviour
 
         if (skillManager != null && skillManager.GetTotalSelectedSkills() == 0)
         {
-            Debug.Log("No skills left after this confirmation, proceeding to enemy turn");
+            for (int i = 0; i < playersActed.Count; i++)
+            {
+                playersActed[i] = true; // 強制標記所有玩家為已行動
+            }
+            Debug.Log("No skills left, proceeding to enemy turn");
             if (AllEnemiesDead())
             {
                 state = BattleState.WON;
