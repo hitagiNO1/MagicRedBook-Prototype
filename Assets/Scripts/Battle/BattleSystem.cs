@@ -97,6 +97,7 @@ public class BattleSystem : MonoBehaviour
             if (i < playerHUDs.Count && playerHUDs[i] != null)
             {
                 playerHUDs[i].SetHUD(playerUnit);
+                playerUnit.battleHUD = playerHUDs[i]; // 設置 Unit 的 battleHUD
             }
             else
             {
@@ -123,6 +124,7 @@ public class BattleSystem : MonoBehaviour
             if (i < enemyHUDs.Count && enemyHUDs[i] != null)
             {
                 enemyHUDs[i].SetHUD(enemyUnit);
+                enemyUnit.battleHUD = enemyHUDs[i]; // 設置 Unit 的 battleHUD
             }
             else
             {
@@ -137,7 +139,6 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                // 傳遞必要數據給 Enemyskill
                 enemySkillComponent.playerUnits = playerUnits;
                 enemySkillComponent.enemyUnits = enemyUnits;
                 enemySkillComponent.buffDebuffManager = buffDebuffManager;
@@ -151,8 +152,6 @@ public class BattleSystem : MonoBehaviour
             Debug.LogWarning("GetBattle 組件未找到，可能影響劇情觸發");
         }
 
-        // 同步 SkillManager 的數據
-       
         if (dialogueText != null)
         {
             dialogueText.text = "野生的敵人們出現了..";
@@ -161,7 +160,7 @@ public class BattleSystem : MonoBehaviour
         skillManager.playerUnits = playerUnits;
         skillManager.enemyUnits = enemyUnits;
         skillManager.buffDebuffManager = buffDebuffManager;
-       
+
         if (skillManager != null)
         {
             StartCoroutine(skillManager.DelayedInitSkillIcons(2f));
