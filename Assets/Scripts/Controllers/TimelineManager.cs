@@ -6,11 +6,13 @@ public class TimelineManager : MonoBehaviour
 {
     // 單例模式：讓其他腳本能隨時取得 TimelineManager 實例
     public static TimelineManager Instance { get; private set; }
-
-    [Header("Timeline 資產清單（請在 Inspector 指派）")]
-    public List<PlayableAsset> timelineList;
     public PlayableDirector director;
 
+
+    [Header("Signal控制")]
+    public ParticleSystem Magic1;
+    public ParticleSystem Magic2;
+    public ParticleSystem Magic3;
     // 紀錄目前是否正在播放動畫
     public bool IsPlaying { get; private set; }
     private bool isWaitingForInput = false;
@@ -54,17 +56,6 @@ public class TimelineManager : MonoBehaviour
         }
     }
 
-    //根據 List 的索引來播放 Timeline
-    public void PlayTimelineByIndex(int index)
-    {
-        if (index < 0 || index >= timelineList.Count)
-        {
-            Debug.LogWarning($"Timeline index {index} 不存在");
-            return;
-        }
-        PlayTimeline(timelineList[index]);
-    }
-
     //播放指定的 Timeline 資產
     public void PlayTimeline(PlayableAsset asset)
     {
@@ -88,6 +79,9 @@ public class TimelineManager : MonoBehaviour
     {
         return playedTimelines.Contains(timelineName);
     }
+
+
+
     public void WaitForInputToContinue()
     {
         if (director != null && director.state == PlayState.Playing)
@@ -102,6 +96,55 @@ public class TimelineManager : MonoBehaviour
         {
             isWaitingForInput = false;
             director.Play();              // 繼續播放 Timeline
+        }
+    }
+
+    /// <summary>
+    /// 播放粒子效果（Timeline Signal 呼叫）
+    /// </summary>
+    public void PlayMagic1()
+    {
+        if (Magic1 != null)
+        {
+            Magic1.Play();
+        }
+    }
+
+    public void PlayMagic2()
+    {
+        if (Magic2 != null)
+        {
+            Magic2.Play();
+        }
+    }
+    public void PlayMagic3()
+    {
+        if (Magic3 != null)
+        {
+            Magic3.Play();
+        }
+    }
+
+
+    /// <summary>
+    /// 停止粒子效果（Timeline Signal 呼叫）
+    /// </summary>
+    public void StopParticle()
+    {
+        if (Magic1 != null)
+        {
+            Magic1.Stop();
+        }
+    }
+
+    /// <summary>
+    /// 粒子完全清除（可選：有時候需要瞬間消掉）
+    /// </summary>
+    public void ClearParticle()
+    {
+        if (Magic1 != null)
+        {
+            Magic1.Clear();
         }
     }
 }
