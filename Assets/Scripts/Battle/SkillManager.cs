@@ -173,6 +173,33 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    // 新增：清除所有高光效果的方法
+    public void ClearAllHighlights()
+    {
+        // 先收集所有要處理的鍵，避免迭代時修改集合
+        List<int> keysToClear = new List<int>(selectedTargets.Keys);
+
+        foreach (int playerIndex in keysToClear)
+        {
+            if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] != null)
+            {
+                Unit target = selectedTargets[playerIndex];
+                HighlightTarget(target, false); // 移除高光
+                selectedTargets[playerIndex] = null; // 清空目標
+                Debug.Log($"Cleared highlight from player {playerIndex}'s target: {target?.unitName}");
+            }
+        }
+
+        // 可選：完全清空 Dictionary（如果不需要保留空值）
+        selectedTargets.Clear();
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = ""; // 清空對話文字，或設為適當提示
+        }
+        Debug.Log("All highlights cleared successfully");
+    }
+
     private void CancelSkill(int playerIndex, string skillName)
     {
         if (selectedSkillNames[playerIndex].Contains(skillName))

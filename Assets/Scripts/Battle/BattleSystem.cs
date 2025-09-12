@@ -38,7 +38,7 @@ public class BattleSystem : MonoBehaviour
     void Start()
     {
         state = BattleState.END;
-       // animator = GetComponent<Animator>();
+        // animator = GetComponent<Animator>();
         if (animator == null)
         {
             Debug.LogError("Animator 未附加到 BattleSystem 的 GameObject 上！");
@@ -256,8 +256,22 @@ public class BattleSystem : MonoBehaviour
                 skillManager.ReduceCooldown();
                 skillManager.InitSkillIcons();
             }
+
+            // 新增：敵人回合結束時清除所有高光效果
+            if (skillManager != null)
+            {
+                skillManager.ClearAllHighlights();
+            }
+
             state = BattleState.PLAYERTURN;
             PlayerTurn();
+        }
+
+        if (skillManager != null)
+        {
+            skillManager.ReduceCooldown();
+            skillManager.InitSkillIcons();
+            skillManager.ClearAllHighlights(); // 已存在
         }
     }
 
