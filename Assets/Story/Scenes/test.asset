@@ -21,7 +21,9 @@ MonoBehaviour:
   - text: 222222222222222222222222
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 93187fd040886eb4a88340a6e228a8f4, type: 2}
   - text: 333333333333333333333
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions: []
@@ -29,9 +31,19 @@ MonoBehaviour:
   - text: 44444444444444444444444444
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions: []
-    timline: []
-  - text: 555555555555555555555555555
-    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 5e3dcbd7564b67d4e9daa28ba791bb0a, type: 2}
+  - text: 5555555555
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 5e3dcbd7564b67d4e9daa28ba791bb0a, type: 2}
+  - text: 44444444444444444444444444
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 8fc3c307f9212c54299f36b29be9cb55, type: 2}
   nextScene: {fileID: 0}
