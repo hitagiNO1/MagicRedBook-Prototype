@@ -58,10 +58,11 @@ public class GetBattle : MonoBehaviour
             buffDebuffManager.enemyUnits = enemyUnitsList; // 設置敵人單位列表
             enemyskill.enemyUnits = enemyUnitsList;
             targetScript.buffDebuffManager = buffDebuffManager;
+            targetScript.enemySkill = enemyskill; // 將 enemyskill 指派給 BattleSystem 的 enemySkill
             targetScript.state = BattleState.START;
             Addmonster.AddMonster(monster);
 
-            Debug.Log("已新增敵人到 targetScript，並啟動戰鬥！");
+            Debug.Log("已新增敵人到 targetScript，並啟動戰鬥！已設置 enemySkill。");
         }
     }
 

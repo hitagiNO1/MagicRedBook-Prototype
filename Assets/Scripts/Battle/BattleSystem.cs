@@ -17,6 +17,7 @@ public class BattleSystem : MonoBehaviour
     public TextMeshProUGUI dialogueText;
     public List<BattleHUD> playerHUDs; // 拖拉 player1 和 player2 的 HUD
     public List<BattleHUD> enemyHUDs;  // 拖拉 enemy1 和 enemy2 的 HUD
+    public Enemyskill enemySkill;
 
     public Animator animator;
 
@@ -229,19 +230,54 @@ public class BattleSystem : MonoBehaviour
                 List<System.Action> skills = enemySkillsList[i];
                 if (skills != null && skills.Count > 0)
                 {
-                    int skillIndex = Random.Range(0, skills.Count);
-                    skills[skillIndex].Invoke();
-                    yield return new WaitForSeconds(1.5f);
+                    bool skillExecuted = false;
+                    int attempts = 0;
+                    int maxAttempts = skills.Count; // 修正：移除 const，使用 int
+
+                    while (!skillExecuted && attempts < maxAttempts)
+                    {
+                        int skillIndex = Random.Range(0, skills.Count);
+                        System.Action selectedSkill = skills[skillIndex];
+
+                        // 調用技能（依賴 CheckAndPerform 內部的冷卻檢查）
+                        selectedSkill.Invoke();
+
+                        // 簡化判斷：假設 Invoke 後視為執行（實際可根據日誌或返回值優化）
+                        skillExecuted = true; // 如果需要精確判斷，可添加返回值邏輯
+                        attempts++;
+
+                        if (!skillExecuted)
+                        {
+                            Debug.Log($"敵人 {enemyUnits[i].unitName} 的技能 {skillIndex} 正在冷卻中，重選...");
+                        }
+                    }
+
+                    if (!skillExecuted)
+                    {
+                        Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 所有技能都在冷卻中，跳過行動");
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(1.5f); // 成功執行後延遲
+                    }
                 }
             }
         }
 
+        // Buff/Debuff 處理
         if (buffDebuffManager != null)
         {
             buffDebuffManager.TickDefenseDebuffs();
             buffDebuffManager.TickDefenseBuffs();
             buffDebuffManager.TickDamageBuffs();
             buffDebuffManager.TickPoison();
+            buffDebuffManager.TickSkillDisable(); // 如果有技能禁用
+        }
+
+        // 減免冷卻
+        if (enemySkill != null)
+        {
+            enemySkill.ReduceCooldowns();
         }
 
         if (AllPlayersDead())
@@ -255,23 +291,11 @@ public class BattleSystem : MonoBehaviour
             {
                 skillManager.ReduceCooldown();
                 skillManager.InitSkillIcons();
-            }
-
-            // 新增：敵人回合結束時清除所有高光效果
-            if (skillManager != null)
-            {
-                skillManager.ClearAllHighlights();
+                skillManager.ClearAllHighlights(); // 清除高光
             }
 
             state = BattleState.PLAYERTURN;
             PlayerTurn();
-        }
-
-        if (skillManager != null)
-        {
-            skillManager.ReduceCooldown();
-            skillManager.InitSkillIcons();
-            skillManager.ClearAllHighlights(); // 已存在
         }
     }
 

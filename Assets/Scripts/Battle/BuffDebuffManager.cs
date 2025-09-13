@@ -22,6 +22,14 @@ public class BuffDebuffManager : MonoBehaviour
     private Dictionary<Unit, int> damageBuffTurnsRemaining = new Dictionary<Unit, int>();
     private Dictionary<Unit, int> originalDamageValues = new Dictionary<Unit, int>();
     private HashSet<Unit> isDamageBuffed = new HashSet<Unit>();
+    // 新增：回血 Debuff 管理
+    private Dictionary<Unit, int> healDebuffTurns = new Dictionary<Unit, int>();
+    private Dictionary<Unit, float> originalHealMultiplier = new Dictionary<Unit, float>();
+    private HashSet<Unit> isHealDebuffed = new HashSet<Unit>();
+    private float healDebuffPercentage = 0.3f; // 預設降低 30% 回血效果
+    // 新增：技能禁用管理
+    private Dictionary<Unit, int> skillDisabledTurns = new Dictionary<Unit, int>();
+    private HashSet<Unit> isSkillDisabled = new HashSet<Unit>();
 
     void Start()
     {
@@ -128,7 +136,8 @@ public class BuffDebuffManager : MonoBehaviour
 
         int lostHealth = targetUnit.maxHP - targetUnit.currentHP;
         int healAmount = Mathf.RoundToInt(lostHealth * lostper);
-        int newHealth = Mathf.Min(targetUnit.currentHP + healAmount, targetUnit.maxHP);
+        int reducedHeal = Mathf.RoundToInt(ApplyHealReduction(targetUnit, healAmount)); // 應用減益
+        int newHealth = Mathf.Min(targetUnit.currentHP + reducedHeal, targetUnit.maxHP);
         int actualHealedAmount = newHealth - targetUnit.currentHP;
         targetUnit.currentHP = newHealth;
 
@@ -375,7 +384,17 @@ public class BuffDebuffManager : MonoBehaviour
             originalDamageValues.Remove(unit);
             isDamageBuffed.Remove(unit);
         }
-
+        foreach (Unit unit in new List<Unit>(isHealDebuffed))
+        {
+            healDebuffTurns.Remove(unit);
+            originalHealMultiplier.Remove(unit);
+            isHealDebuffed.Remove(unit);
+        }
+        foreach (Unit unit in new List<Unit>(isSkillDisabled))
+        {
+            skillDisabledTurns.Remove(unit);
+            isSkillDisabled.Remove(unit);
+        }
 
         Debug.Log("所有 Buff/Debuff 效果已清除");
     }
@@ -389,6 +408,110 @@ public class BuffDebuffManager : MonoBehaviour
             {
                 effect(enemy);
             }
+        }
+    }
+
+    public void ApplyHealDebuff(Unit targetUnit, int turns)
+    {
+        if (targetUnit == null)
+        {
+            Debug.LogError("目標單位無效！");
+            return;
+        }
+        if (isHealDebuffed.Contains(targetUnit))
+        {
+            Debug.Log($"{targetUnit.unitName} 已有回血 Debuff，重置回合數");
+            healDebuffTurns[targetUnit] = turns; // 重置回合數
+            return;
+        }
+
+        originalHealMultiplier[targetUnit] = 1.0f; // 假設初始回血倍率為 1.0，根據需求調整
+        healDebuffTurns[targetUnit] = turns;
+        isHealDebuffed.Add(targetUnit);
+
+        Debug.Log($"{targetUnit.unitName} 的回血效果被削弱 {healDebuffPercentage * 100}%，持續 {turns} 回合");
+    }
+
+    public float ApplyHealReduction(Unit targetUnit, float healAmount)
+    {
+        if (targetUnit == null || !isHealDebuffed.Contains(targetUnit))
+        {
+            return healAmount; // 無減益，直接返回
+        }
+
+        float reducedHeal = healAmount * (1f - healDebuffPercentage);
+        healDebuffTurns[targetUnit]--;
+        Debug.Log($"{targetUnit.unitName} 觸發回血減益，減少 {healAmount - reducedHeal} 點治療，剩餘次數：{healDebuffTurns[targetUnit]}");
+
+        if (healDebuffTurns[targetUnit] <= 0)
+        {
+            RemoveHealDebuff(targetUnit);
+        }
+
+        return reducedHeal;
+    }
+
+    private void RemoveHealDebuff(Unit targetUnit)
+    {
+        if (isHealDebuffed.Contains(targetUnit))
+        {
+            healDebuffTurns.Remove(targetUnit);
+            originalHealMultiplier.Remove(targetUnit);
+            isHealDebuffed.Remove(targetUnit);
+            Debug.Log($"{targetUnit.unitName} 的回血 Debuff 結束");
+        }
+    }
+
+    public void ApplySkillDisable(Unit targetUnit, int turns)
+    {
+        if (targetUnit == null)
+        {
+            Debug.LogError("目標單位無效！");
+            return;
+        }
+        if (isSkillDisabled.Contains(targetUnit))
+        {
+            Debug.Log($"{targetUnit.unitName} 已有技能禁用效果，重置回合數");
+            skillDisabledTurns[targetUnit] = turns; // 重置回合數
+            return;
+        }
+
+        skillDisabledTurns[targetUnit] = turns;
+        isSkillDisabled.Add(targetUnit);
+
+        Debug.Log($"{targetUnit.unitName} 的技能被禁用，持續 {turns} 回合");
+    }
+
+    public bool IsSkillDisabled(Unit targetUnit)
+    {
+        return isSkillDisabled.Contains(targetUnit);
+    }
+
+    public void TickSkillDisable()
+    {
+        List<Unit> unitsToRemove = new List<Unit>();
+        foreach (Unit unit in new List<Unit>(skillDisabledTurns.Keys))
+        {
+            if (unit == null || unit.currentHP <= 0)
+            {
+                unitsToRemove.Add(unit);
+                continue;
+            }
+
+            skillDisabledTurns[unit]--;
+            Debug.Log($"{unit.unitName} 的技能禁用倒數：剩下 {skillDisabledTurns[unit]} 回合");
+
+            if (skillDisabledTurns[unit] <= 0)
+            {
+                unitsToRemove.Add(unit);
+                Debug.Log($"{unit.unitName} 的技能禁用效果結束");
+            }
+        }
+
+        foreach (Unit unit in unitsToRemove)
+        {
+            skillDisabledTurns.Remove(unit);
+            isSkillDisabled.Remove(unit);
         }
     }
 }

@@ -167,9 +167,14 @@ public class SkillManager : MonoBehaviour
     private void HighlightTarget(Unit target, bool isHighlighted)
     {
         SpriteRenderer renderer = target.GetComponent<SpriteRenderer>();
+        Image image = target.GetComponent<Image>(); // 支援 UI Image 用於頭像高亮
         if (renderer != null)
         {
             renderer.color = isHighlighted ? Color.yellow : Color.white;
+        }
+        else if (image != null)
+        {
+            image.color = isHighlighted ? Color.yellow : Color.white;
         }
     }
 
@@ -198,6 +203,24 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = ""; // 清空對話文字，或設為適當提示
         }
         Debug.Log("All highlights cleared successfully");
+    }
+
+    // 新增：處理玩家頭像點擊（用於 UI Event Trigger）
+    public void OnPlayerHeadClick(int playerIndex)
+    {
+        if (!isWaitingForTarget || pendingSkill != "catSkill_4" || pendingPlayerIndex != 1) return; // 只在等待 catSkill_4 時回應
+
+        Unit target = playerUnits[playerIndex];
+        if (target != null && target.currentHP > 0)
+        {
+            SelectTarget(pendingPlayerIndex, target);
+            ExecutePendingSkill();
+        }
+        else
+        {
+            dialogueText.text = "請選擇一個存活的玩家目標！";
+            Debug.LogWarning($"Invalid player target: {playerIndex}");
+        }
     }
 
     private void CancelSkill(int playerIndex, string skillName)
