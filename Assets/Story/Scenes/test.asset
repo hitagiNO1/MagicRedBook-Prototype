@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: test
   m_EditorClassIdentifier: 
-  StopMove: 0
+  StopMove: 1
   sentences:
   - text: 1111111111111111111
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -37,9 +37,7 @@ MonoBehaviour:
   - text: 5555555555
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions: []
-    timline:
-    - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: 5e3dcbd7564b67d4e9daa28ba791bb0a, type: 2}
+    timline: []
   - text: 44444444444444444444444444
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions: []
