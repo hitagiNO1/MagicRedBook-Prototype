@@ -16,10 +16,6 @@ public class CharControlles : MonoBehaviour
     public AnimationReferenceAsset idle, walking, RedBook;
     private string currentAnimation;
 
-    [Header("劇情設定")]
-    public GameScene Scene;
-    public GameObject Lyla;
-
     private void Start()
     {
         SetCharState("Idle");
@@ -104,12 +100,5 @@ public class CharControlles : MonoBehaviour
             meshRenderer.enabled = false;
         else
             meshRenderer.enabled = true;
-    }
-    public void LylaShow()
-    {
-        if (GameController.Instance.ScenePlayedState.ContainsKey(Scene))
-        {
-            Lyla.SetActive(true); // 如果劇情已經播過，則顯示 Lyla
-        }
     }
 }
