@@ -628,19 +628,31 @@ public class SkillManager : MonoBehaviour
     {
         try
         {
-            if (skillAction == null) Debug.LogError($"Null skill action for player {playerIndex}");
-            else skillAction.Invoke();
+            if (skillAction == null)
+            {
+                Debug.LogError($"Null skill action for player {playerIndex}");
+                return;
+            }
+            skillAction.Invoke();
         }
         catch (System.Exception e)
         {
             Debug.LogError($"Error executing skill for player {playerIndex}: {e.Message}");
+            // 嘗試清除無效的技能隊列
+            if (skillQueues.ContainsKey(playerIndex))
+            {
+                skillQueues[playerIndex].Clear();
+                selectedSkillNames[playerIndex].Clear();
+                Debug.LogWarning($"Cleared invalid skill queue for player {playerIndex} due to error.");
+            }
         }
     }
 
     IEnumerator ExecuteSkillQueue(int playerIndex)
     {
         Debug.Log($"Starting ExecuteSkillQueue for player {playerIndex}, Queue Count = {skillQueues[playerIndex].Count}");
-        foreach (var skillAction in new List<System.Action>(skillQueues[playerIndex]))
+        var actions = new List<System.Action>(skillQueues[playerIndex]); // 創建副本避免修改原列表
+        foreach (var skillAction in actions)
         {
             ExecuteSkillAction(skillAction, playerIndex);
             yield return new WaitForSeconds(1f);
@@ -653,7 +665,7 @@ public class SkillManager : MonoBehaviour
 
     void PerformBasicAttack(int playerIndex, Unit target, int damageOverride = -1)
     {
-        if (target == null || target.currentHP <= 0)
+        if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target))
         {
             Debug.LogWarning($"Invalid target for player {playerIndex}");
             return;
@@ -669,9 +681,16 @@ public class SkillManager : MonoBehaviour
         {
             if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == target)
             {
-                selectedTargets[playerIndex] = null; // 清空該玩家的選擇目標
+                selectedTargets[playerIndex] = null;
             }
-            HighlightTarget(target, false); // 移除高亮
+            HighlightTarget(target, false);
+            // 立即銷毀敵人
+            if (battlesystem != null)
+            {
+                battlesystem.DestroyEnemy(targetIndex);
+                // 清除無效的技能隊列
+                CleanSkillQueue(playerIndex, target);
+            }
             if (AllEnemiesDead())
             {
                 battlesystem.state = BattleState.WON;
@@ -682,7 +701,8 @@ public class SkillManager : MonoBehaviour
 
     void PerformMultiTargetAttack(int playerIndex, int damage)
     {
-        foreach (Unit enemy in enemyUnits)
+        bool anyDead = false;
+        foreach (Unit enemy in enemyUnits.ToArray()) // 使用 ToArray 避免修改集合同時迭代
         {
             if (enemy.currentHP > 0)
             {
@@ -694,19 +714,54 @@ public class SkillManager : MonoBehaviour
                 }
                 if (isDead)
                 {
+                    anyDead = true;
                     if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == enemy)
                     {
-                        selectedTargets[playerIndex] = null; // 清空該玩家的選擇目標
+                        selectedTargets[playerIndex] = null;
                     }
-                    HighlightTarget(enemy, false); // 移除高亮
-                    if (AllEnemiesDead())
+                    HighlightTarget(enemy, false);
+                    // 立即銷毀敵人
+                    if (battlesystem != null)
                     {
-                        battlesystem.state = BattleState.WON;
-                        battlesystem.EndBattle();
+                        battlesystem.DestroyEnemy(targetIndex);
+                        // 清除無效的技能隊列
+                        CleanSkillQueue(playerIndex, enemy);
                     }
                 }
             }
         }
+        if (AllEnemiesDead())
+        {
+            battlesystem.state = BattleState.WON;
+            battlesystem.EndBattle();
+        }
+    }
+
+    private void CleanSkillQueue(int playerIndex, Unit deadEnemy)
+    {
+        if (skillQueues.ContainsKey(playerIndex))
+        {
+            var newActions = new List<System.Action>();
+            var newSkillNames = new List<string>();
+            for (int i = 0; i < skillQueues[playerIndex].Count; i++)
+            {
+                // 檢查動作是否依賴已死亡的敵人（需要根據具體實現調整）
+                // 這裡假設動作中包含目標，需根據您的 Action 實現修改
+                if (!IsActionTargeting(deadEnemy, skillQueues[playerIndex][i]))
+                {
+                    newActions.Add(skillQueues[playerIndex][i]);
+                    newSkillNames.Add(selectedSkillNames[playerIndex][i]);
+                }
+            }
+            skillQueues[playerIndex] = newActions;
+            selectedSkillNames[playerIndex] = newSkillNames;
+            Debug.Log($"Cleaned skill queue for player {playerIndex} after enemy {deadEnemy.unitName} died.");
+        }
+    }
+
+    private bool IsActionTargeting(Unit target, System.Action action)
+    {
+        return false; // 預設返回 false，需自行實現
     }
 
     private bool AllEnemiesDead()

@@ -26,10 +26,7 @@ public class Unit : MonoBehaviour
     {
         Debug.Log($"TakeDamage 開始時敵方防禦力 = {defense}");
 
-        // Step 1: 應用固定減傷效果
         int reducedDamage = buffManager != null ? buffManager.ApplyReductionIfApplicable(this, dmg) : dmg;
-
-        // Step 2: 計算爆擊
         bool isCritical = Random.value < critChance;
         float reduction = defenseData.GetDamageReduction(defense);
         int finalDMG;
@@ -46,10 +43,8 @@ public class Unit : MonoBehaviour
             finalDMG = Mathf.RoundToInt(reducedDMG);
         }
 
-        // Step 3: 扣除血量
         currentHP -= finalDMG;
 
-        // Step 4: 更新 HUD
         if (battleHUD != null)
         {
             battleHUD.SetHP(currentHP);
@@ -58,8 +53,15 @@ public class Unit : MonoBehaviour
         Debug.Log($"最終傷害：{finalDMG}，爆擊：{isCritical}，現在血量:{currentHP}");
 
         if (currentHP <= 0)
+        {
+            BattleSystem battleSystem = FindObjectOfType<BattleSystem>();
+            if (battleSystem != null && battleSystem.enemyUnits.Contains(this))
+            {
+                int index = battleSystem.enemyUnits.IndexOf(this);
+                battleSystem.DestroyEnemy(index); // 立即銷毀
+            }
             return true;
-        else
-            return false;
+        }
+        return false;
     }
 }
