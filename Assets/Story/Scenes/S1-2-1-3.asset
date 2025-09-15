@@ -197,5 +197,7 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 1
-    timline: []
+    timline:
+    - animation: 0
+      myPlayableAsset: {fileID: 0}
   nextScene: {fileID: 0}

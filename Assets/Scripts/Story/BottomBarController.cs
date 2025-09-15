@@ -171,29 +171,17 @@ public class BottomBarController : MonoBehaviour
         var sentence = currentScene.sentences[sentenceIndex];
         //播放 Timeline 動畫（如果有）
         bool hasTimeline = false;
+        // 處理 BeforeText 的 Timeline
         foreach (var timeline in sentence.timline)
         {
-            if (timeline.animation && timeline.myPlayableAsset != null)
+            if (timeline.animation && timeline.myPlayableAsset != null &&
+                timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.BeforeText)
             {
-                hasTimeline = true;
-
-                /* 對話框暫時隱藏
-                if (!isHidden)
-                {
-                    Hide();
-                }
-                */
                 TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
                 yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
-
-                /* Timeline 播完再顯示
-                if (sentenceIndex == 0 || sentence.text != "")
-                {
-                    Show(); //若該句是有內容的，播完動畫再顯示回來
-                }
-                */
             }
         }
+
         //只在第一句動畫播完後顯示對話框
         if (sentenceIndex == 0)
         {
@@ -224,6 +212,33 @@ public class BottomBarController : MonoBehaviour
         ActSpeakers();
         // 顯示文字動畫
         yield return TypeText(sentence.text);
+
+        // 文字播完立即觸發 AfterText 的 Timeline
+        foreach (var timeline in sentence.timline)
+        {
+            if (timeline.animation && timeline.myPlayableAsset != null &&
+                timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterText)
+            {
+                TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
+                yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+            }
+        }
+
+        //等待玩家按下 Space，才觸發 AfterClick 的 Timeline
+        if (sentence.timline.Exists(t => t.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick))
+        {
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+
+            foreach (var timeline in sentence.timline)
+            {
+                if (timeline.animation && timeline.myPlayableAsset != null &&
+                    timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick)
+                {
+                    TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
+                    yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+                }
+            }
+        }
     }
 
 

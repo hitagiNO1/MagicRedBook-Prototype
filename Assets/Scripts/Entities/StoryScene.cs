@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -39,6 +39,15 @@ public class StoryScene : GameScene
         {
             public bool animation;
             public PlayableAsset myPlayableAsset;
+
+            public TriggerTiming timing; //新增欄位
+
+            public enum TriggerTiming
+            {
+                BeforeText,  // 文字前播放
+                AfterText,   // 文字播完立即播放
+                AfterClick   // 玩家按下下一步後播放
+            }
         }
     }
 }
