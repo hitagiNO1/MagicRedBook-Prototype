@@ -12,6 +12,9 @@ public class ScenePortal : MonoBehaviour
     private bool isLoading = false;
     private bool playerInRange = false;
 
+    private Transform playerTransform; // 儲存玩家 Transform
+    public locationstore locationstore;
+
     void Start()
     {
         if (InteractiveUI != null)
@@ -34,8 +37,8 @@ public class ScenePortal : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            if (InteractiveUI != null)
-                InteractiveUI.SetActive(true);
+            InteractiveUI.SetActive(true);
+            playerTransform = other.transform; // 儲存玩家位置
         }
     }
     void OnTriggerExit(Collider other)
@@ -43,8 +46,8 @@ public class ScenePortal : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            if (InteractiveUI != null)
-                InteractiveUI.SetActive(false);
+            InteractiveUI.SetActive(false);
+            playerTransform = null;
         }
     }
     // 淡出再切場景
@@ -67,6 +70,8 @@ public class ScenePortal : MonoBehaviour
                 yield return null;
             }
         }
+
+        locationstore.Instance.SavePlayerPosition(playerTransform.position); // 儲存位置
         SceneManager.LoadScene(targetSceneName);
     }
 }

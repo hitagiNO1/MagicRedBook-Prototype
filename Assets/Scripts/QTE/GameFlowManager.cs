@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class GameFlowManager : MonoBehaviour
 {
@@ -10,12 +11,13 @@ public class GameFlowManager : MonoBehaviour
     public GameObject startbutton;
     public canclick canclick;
     public GameObject track;
-   
-  
+
+    public PlayableAsset OPening;
 
     void Start()
     {
         ShowMainMenu();
+        TimelineManager.Instance.PlayTimeline(OPening);
     }
 
     public void ShowMainMenu()

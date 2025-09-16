@@ -5,10 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Interactable : MonoBehaviour
 {
-    public ItemData can;
-    public ItemData tuna;
-    public ItemData grass;
-    public ItemData drying;
     public GameObject promptUI; // 提示UI（例如Canvas上的Text或Image）
     private bool isPlayerInRange = false;
     private Transform playerTransform; // 儲存玩家 Transform
