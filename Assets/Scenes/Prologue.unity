@@ -136017,7 +136017,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b387d3408968a1408e7591ab4da662e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyBattleHUDPrefab: {fileID: 8860732587894333836, guid: 92af8db507b08c545b6d0a035fd83949, type: 3}
   virtualCamera: {fileID: 1475370263}
   targetScript: {fileID: 537444389665327204}
   skillmanager: {fileID: 3720424681303388706}
@@ -136034,6 +136033,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2337e68b9967bd4cab47c1c1e7757ea, type: 2}
   - {fileID: 11400000, guid: f2337e68b9967bd4cab47c1c1e7757ea, type: 2}
   IfScenes: []
+  enemyBattleHUDPrefab: {fileID: 7600166811978819099, guid: 4e533792e08c11b448a74e83a1bdb17e, type: 3}
 --- !u!136 &807246483
 CapsuleCollider:
   m_ObjectHideFlags: 0

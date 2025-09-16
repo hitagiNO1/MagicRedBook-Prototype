@@ -5,10 +5,6 @@ using System.Collections.Generic;
 public class mutiplebattle : MonoBehaviour
 {
     [SerializeField]
-    private GameObject enemyBattleHUDPrefab; // EnemyBattleHUD 預製件的引用
-
-    private List<BattleHUD> instantiatedEnemyHUDs = new List<BattleHUD>(); // 追蹤實例化的 HUD
-    [SerializeField]
     private CinemachineVirtualCamera virtualCamera = null;
     public BattleSystem targetScript; // BattleSystem 的引用
     public SkillManager skillmanager;
@@ -19,7 +15,11 @@ public class mutiplebattle : MonoBehaviour
     public MonsterEntryUI Addmonster;
     public List<MonsterData> monsters; // 怪物資料列表
     public List<StoryScene> IfScenes; // BattleSystem 的劇情場景
-   
+    [SerializeField]
+    private GameObject enemyBattleHUDPrefab; // EnemyBattleHUD 預製件的引用
+
+    private List<BattleHUD> instantiatedEnemyHUDs = new List<BattleHUD>(); // 追蹤實例化的 HUD
+    private Dictionary<GameObject, BattleHUD> enemyToHUDMap = new Dictionary<GameObject, BattleHUD>(); // 映射敵人到 HUD
 
     private void Start()
     {
@@ -48,6 +48,7 @@ public class mutiplebattle : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("玩家進入觸發區域");
             // 驗證所有必要的組件
             if (virtualCamera == null || targetScript == null || skillmanager == null ||
                 buffDebuffManager == null || enemyskill == null || newEnemies == null || newEnemies.Count == 0 ||
@@ -67,21 +68,12 @@ public class mutiplebattle : MonoBehaviour
             Transform battleUI = GameObject.Find("BattleUI")?.transform;
             if (battleUI == null)
             {
-                Debug.LogError("battleUI 未找到，請確保 Canvas 下有一個名為 'battleUI' 的空物件！");
-                return;
-            }
-
-            // 獲取 battleUI 的 Animator
-            Animator battleUIAnimator = battleUI.GetComponent<Animator>();
-            if (battleUIAnimator == null)
-            {
-                Debug.LogError("battleUI 缺少 Animator 組件！");
+                Debug.LogError("battleUI 未找到，請確保 Canvas 下有一個名為 'BattleUI' 的空物件！");
                 return;
             }
 
             // 根據敵人數量實例化 EnemyBattleHUD
             instantiatedEnemyHUDs = new List<BattleHUD>();
-            int enemyCount = enemyUnits.Count;
             float baseY = -160f; // 固定 y 座標
 
             for (int i = 0; i < enemyUnits.Count; i++)
@@ -91,20 +83,27 @@ public class mutiplebattle : MonoBehaviour
                 if (hud != null)
                 {
                     hud.SetHUD(enemyUnits[i]); // 將對應敵人的 Unit 設置到 HUD
-                    enemyUnits[i].battleHUD = hud; // 將 HUD 關聯到 Unit
+                    enemyUnits[i].battleHUD = hud;
                     instantiatedEnemyHUDs.Add(hud);
+                    Debug.Log($"實例化 HUD 為敵人: {newEnemies[i].name}");
 
-                    // 動態計算位置根據敵人數量
+                    // 初始隱藏 HUD
+                    hudInstance.SetActive(false);
+
+                    // 映射敵人到 HUD
+                    enemyToHUDMap[newEnemies[i]] = hud;
+
+                    // 設置 HUD 位置
                     float xPosition = 0f;
-                    if (enemyCount == 1)
+                    if (enemyUnits.Count == 1)
                     {
                         xPosition = 0f; // 位置: (0, -160)
                     }
-                    else if (enemyCount == 2)
+                    else if (enemyUnits.Count == 2)
                     {
                         xPosition = (i == 0 ? -400f : 400f); // 位置: (-400, -160), (400, -160)
                     }
-                    else if (enemyCount == 3)
+                    else if (enemyUnits.Count == 3)
                     {
                         xPosition = (i == 0 ? -550f : i == 1 ? 0f : 550f); // 位置: (-550, -160), (0, -160), (550, -160)
                     }
@@ -113,10 +112,6 @@ public class mutiplebattle : MonoBehaviour
                     {
                         hudRectTransform.anchoredPosition = new Vector2(xPosition, baseY);
                     }
-
-                    // 確保新生成的主體受到 battleUI 的動畫影響
-                    // 可選：如果需要立即顯示，觸發 SHOW 狀態
-                    battleUIAnimator.SetBool("Show", true); // 替換為你的參數名稱
                 }
                 else
                 {
@@ -142,6 +137,38 @@ public class mutiplebattle : MonoBehaviour
             }
 
             Debug.Log("已新增多個敵人到 targetScript，並啟動戰鬥！");
+        }
+    }
+
+    private void Update()
+    {
+        // 僅在戰鬥開始後檢查滑鼠
+        if (targetScript != null && targetScript.state != BattleState.END)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, LayerMask.GetMask("Enemy"));
+
+            if (hit.collider != null)
+            {
+                Debug.Log($"Raycast2D 擊中: {hit.collider.gameObject.name}，位置: {hit.point}");
+                GameObject hitObject = hit.collider.gameObject;
+                if (newEnemies.Contains(hitObject) && enemyToHUDMap.ContainsKey(hitObject))
+                {
+                    Debug.Log($"顯示 HUD 為敵人: {hitObject.name}");
+                    enemyToHUDMap[hitObject].gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                Debug.Log($"Raycast2D 未擊中任何物件，滑鼠螢幕座標: {Input.mousePosition}, 世界座標: {Camera.main.ScreenToWorldPoint(Input.mousePosition)}");
+                foreach (var hud in instantiatedEnemyHUDs)
+                {
+                    if (hud != null && hud.gameObject.activeSelf)
+                    {
+                        hud.gameObject.SetActive(false);
+                    }
+                }
+            }
         }
     }
 
@@ -189,18 +216,19 @@ public class mutiplebattle : MonoBehaviour
             }
         }
         instantiatedEnemyHUDs.Clear();
+        enemyToHUDMap.Clear();
     }
 
     private void OnValidate()
     {
-        Collider collider = GetComponent<Collider>();
+        Collider2D collider = GetComponent<Collider2D>();
         if (collider != null)
         {
             collider.isTrigger = true;
         }
         else
         {
-            Debug.LogError("GetBattle 缺少 Collider 組件！");
+            Debug.LogError("GetBattle 缺少 Collider2D 組件！");
         }
     }
 }
