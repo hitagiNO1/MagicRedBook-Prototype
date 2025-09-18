@@ -23,7 +23,7 @@ public class BattleSystem : MonoBehaviour
     public BuffDebuffManager buffDebuffManager;
     private List<List<System.Action>> enemySkillsList; // 每個敵人的技能列表
     public int turnCounter = 0;
-    private GetBattle getBattle;
+    private mutiplebattle getBattle;
     public GameController gameScript;
     private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
     private Dictionary<int, Unit> selectedTargets; // 每個玩家的目標敵人
@@ -139,7 +139,7 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-        getBattle = enemyPrefabs.Count > 0 ? enemyPrefabs[0].GetComponentInChildren<GetBattle>() : null;
+        getBattle = enemyPrefabs.Count > 0 ? enemyPrefabs[0].GetComponentInChildren<mutiplebattle>() : null;
         if (getBattle == null)
         {
             Debug.LogWarning("GetBattle 組件未找到，可能影響劇情觸發");

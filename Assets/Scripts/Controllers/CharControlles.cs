@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using Spine.Unity;
+using System.Collections;
 using UnityEngine;
-using Spine.Unity;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CharControlles : MonoBehaviour
 {
@@ -72,15 +73,17 @@ public class CharControlles : MonoBehaviour
     }
     public void AnimateState()
     {
+
         if (h != 0 || v != 0)
         {
             SetCharState("Walking");
 
             //角色朝向
             if (h > 0)
-                transform.localScale = new Vector3(-0.1f, 0.1f, 0.1f);
+                transform.GetChild(0).localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                
             else if (h < 0)
-                transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                transform.GetChild(0).localScale = new Vector3(-1.2f, 1.2f, 1.2f);
         }
         else if (GameStateManager.Instance.IsState(GameState.Redbook))
         {

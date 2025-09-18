@@ -160,7 +160,7 @@ public class mutiplebattle : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Raycast2D 未擊中任何物件，滑鼠螢幕座標: {Input.mousePosition}, 世界座標: {Camera.main.ScreenToWorldPoint(Input.mousePosition)}");
+                //Debug.Log($"Raycast2D 未擊中任何物件，滑鼠螢幕座標: {Input.mousePosition}, 世界座標: {Camera.main.ScreenToWorldPoint(Input.mousePosition)}");
                 foreach (var hud in instantiatedEnemyHUDs)
                 {
                     if (hud != null && hud.gameObject.activeSelf)
@@ -217,18 +217,5 @@ public class mutiplebattle : MonoBehaviour
         }
         instantiatedEnemyHUDs.Clear();
         enemyToHUDMap.Clear();
-    }
-
-    private void OnValidate()
-    {
-        Collider2D collider = GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.isTrigger = true;
-        }
-        else
-        {
-            Debug.LogError("GetBattle 缺少 Collider2D 組件！");
-        }
     }
 }

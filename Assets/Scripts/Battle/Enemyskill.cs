@@ -151,6 +151,7 @@ public class Enemyskill : MonoBehaviour
         }
         Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
         PerformBasicAttack(self, target, self.damage * 2);
+        EffectManager.Instance.PlayUIEffect("Clock1", new Vector2(-696, -100));
     }
 
     private void PerformClockskill_2(Unit self)

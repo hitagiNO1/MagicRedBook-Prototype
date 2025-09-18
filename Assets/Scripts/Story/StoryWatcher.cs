@@ -24,7 +24,7 @@ public class StoryWatcher : MonoBehaviour
         {
             if (played) // 如果故事已經播完
             {
-                RedBookFollow.SetFollow(false);
+                RedBookFollow.SetFollow(true);
                 LylaFollow.enabled = true; // 啟用 FollowAI
                 alreadyEnabled = true; // 防止重複觸發
             }

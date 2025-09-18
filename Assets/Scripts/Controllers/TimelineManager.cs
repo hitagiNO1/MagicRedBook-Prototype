@@ -147,4 +147,9 @@ public class TimelineManager : MonoBehaviour
             Magic1.Clear();
         }
     }
+
+    public void SetGameState()
+    {
+        GameStateManager.Instance.SetState(GameState.Mangaing);
+    }
 }
