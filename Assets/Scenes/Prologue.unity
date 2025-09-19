@@ -380700,6 +380700,7 @@ GameObject:
   - component: {fileID: 3720424681303388707}
   - component: {fileID: 3720424681303388708}
   - component: {fileID: 3720424681303388709}
+  - component: {fileID: 3720424681303388710}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -384675,6 +384676,11 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   skillIconPrefab: {fileID: 7392400310071351197, guid: 73240bd9a52a4dc418392145b9507b3c, type: 3}
   skillIconParent: {fileID: 416347393}
+  skillIcons: []
+  maxSkillPerTurn: 3
+  isWaitingForTarget: 0
+  pendingSkill: 
+  pendingPlayerIndex: -1
 --- !u!114 &3720424681303388707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384802,6 +384808,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastPlayerPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &3720424681303388710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052940225863114260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3181c7e482e4a18449418408547436b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillManager: {fileID: 0}
+  buffDebuffManager: {fileID: 0}
+  dialogueText: {fileID: 0}
+  can: {fileID: 0}
+  tuna: {fileID: 0}
+  grass: {fileID: 0}
+  drying: {fileID: 0}
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5

@@ -12,6 +12,7 @@ public class SkillManager : MonoBehaviour
     public List<BattleHUD> enemyHUDs;
     public BattleSystem battlesystem;
     public BuffDebuffManager buffDebuffManager;
+    public Itemuse itemuse;
 
     // 新增：LayerMask 用於區分敵人和玩家
     public LayerMask enemyLayer;
@@ -30,15 +31,15 @@ public class SkillManager : MonoBehaviour
     public AudioSource audioSource;
     public GameObject skillIconPrefab;
     public Transform skillIconParent;
-    private List<GameObject> skillIcons = new List<GameObject>();
-    private Dictionary<int, List<System.Action>> skillQueues = new Dictionary<int, List<System.Action>>();
-    private Dictionary<int, List<string>> selectedSkillNames = new Dictionary<int, List<string>>();
-    private int maxSkillPerTurn = 3;
+    public List<GameObject> skillIcons = new List<GameObject>();
+    public Dictionary<int, List<System.Action>> skillQueues = new Dictionary<int, List<System.Action>>();
+    public Dictionary<int, List<string>> selectedSkillNames = new Dictionary<int, List<string>>();
+    public int maxSkillPerTurn = 3;
 
-    private Dictionary<int, Unit> selectedTargets = new Dictionary<int, Unit>(); // 每個玩家的選中目標
-    private bool isWaitingForTarget = false; // 標記是否在等待點擊目標
-    private string pendingSkill = null; // 儲存當前等待目標的技能
-    private int pendingPlayerIndex = -1; // 儲存當前等待目標的玩家索引
+    public Dictionary<int, Unit> selectedTargets = new Dictionary<int, Unit>(); // 每個玩家的選中目標
+    public bool isWaitingForTarget = false; // 標記是否在等待點擊目標
+    public string pendingSkill = null; // 儲存當前等待目標的技能
+    public int pendingPlayerIndex = -1; // 儲存當前等待目標的玩家索引
 
     void Start()
     {
@@ -74,8 +75,9 @@ public class SkillManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Unit targetUnit = null;
 
-            // 根據技能類型選擇適當的 LayerMask
-            LayerMask targetLayer = pendingSkill == "catSkill_4" ? playerLayer : enemyLayer;
+            // 根據技能/物品類型選擇適當的 LayerMask
+            bool isPlayerTarget = pendingSkill == "catSkill_4" || pendingSkill == "Can" || pendingSkill == "Grass" || pendingSkill == "Drying";
+            LayerMask targetLayer = isPlayerTarget ? playerLayer : enemyLayer;
 
             // 2D 射線檢測
             RaycastHit2D hit2D = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, targetLayer);
@@ -95,15 +97,15 @@ public class SkillManager : MonoBehaviour
 
             if (targetUnit != null && (enemyUnits.Contains(targetUnit) || playerUnits.Contains(targetUnit)) && targetUnit.currentHP > 0)
             {
-                // 確保 catSkill_4 僅選擇玩家單位
-                if (pendingSkill == "catSkill_4" && !playerUnits.Contains(targetUnit))
+                // 確保玩家目標物品僅選擇玩家單位
+                if (isPlayerTarget && !playerUnits.Contains(targetUnit))
                 {
                     dialogueText.text = "請點擊一個玩家頭像！";
-                    Debug.LogWarning("catSkill_4 can only target player units!");
+                    Debug.LogWarning("Player target item can only target player units!");
                     return;
                 }
                 // 確保其他技能僅選擇敵人單位
-                if (pendingSkill != "catSkill_4" && !enemyUnits.Contains(targetUnit))
+                if (!isPlayerTarget && !enemyUnits.Contains(targetUnit))
                 {
                     dialogueText.text = "請點擊一個敵人目標！";
                     Debug.LogWarning("Skill can only target enemy units!");
@@ -115,7 +117,8 @@ public class SkillManager : MonoBehaviour
             }
             else
             {
-                dialogueText.text = pendingSkill == "catSkill_4" ? "請點擊一個有效的玩家頭像！" : "請點擊一個有效的敵人目標！";
+                string targetType = isPlayerTarget ? "玩家頭像" : "敵人目標";
+                dialogueText.text = $"請點擊一個有效的{targetType}！";
                 Debug.LogWarning("Invalid or dead target clicked!");
             }
         }
@@ -164,7 +167,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private void HighlightTarget(Unit target, bool isHighlighted)
+    public void HighlightTarget(Unit target, bool isHighlighted)
     {
         SpriteRenderer renderer = target.GetComponent<SpriteRenderer>();
         Image image = target.GetComponent<Image>(); // 支援 UI Image 用於頭像高亮
@@ -223,7 +226,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private void CancelSkill(int playerIndex, string skillName)
+    public void CancelSkill(int playerIndex, string skillName)
     {
         if (selectedSkillNames[playerIndex].Contains(skillName))
         {
@@ -241,7 +244,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private bool ValidateTarget(int playerIndex, Unit target)
+    public bool ValidateTarget(int playerIndex, Unit target)
     {
         if (target == null || target.currentHP <= 0)
         {
@@ -273,8 +276,18 @@ public class SkillManager : MonoBehaviour
             case "catSkill_4":
                 catSkill_4(pendingPlayerIndex, target);
                 break;
+            // 添加物品案例
+            case "Can":
+                itemuse.UseCan(pendingPlayerIndex, target);
+                break;
+            case "Grass":
+                itemuse.UseGrass(pendingPlayerIndex, target);
+                break;
+            case "Drying":
+                itemuse.UseDrying(pendingPlayerIndex, target);
+                break;
             default:
-                Debug.LogError($"Unknown pending skill: {pendingSkill}");
+                Debug.LogError($"Unknown pending skill/item: {pendingSkill}");
                 break;
         }
 
@@ -773,7 +786,7 @@ public class SkillManager : MonoBehaviour
         return true;
     }
 
-    void RemoveSkillIcon()
+    public void RemoveSkillIcon()
     {
         if (skillIcons.Count > 0)
         {
@@ -783,7 +796,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    void AddSkillIcon()
+    public void AddSkillIcon()
     {
         if (GetTotalSelectedSkills() < maxSkillPerTurn)
         {
@@ -797,6 +810,12 @@ public class SkillManager : MonoBehaviour
         foreach (var key in new List<string>(skillCooldowns.Keys))
         {
             if (skillCooldowns[key] > 0) skillCooldowns[key]--;
+        }
+
+        // 添加物品冷卻減少
+        if (itemuse != null)
+        {
+            itemuse.ReduceItemCooldowns();
         }
     }
 
@@ -847,4 +866,25 @@ public class SkillManager : MonoBehaviour
             Debug.LogWarning("音效找不到: " + soundName);
         }
     }
+
+    public void OnCanButtonClick()
+    {
+        itemuse.TriggerCanForPlayer(0); // 或者根據當前玩家索引
+    }
+
+    public void OnTunaButtonClick()
+    {
+        itemuse.TriggerTunaForPlayer(0);
+    }
+
+    public void OnGrassButtonClick()
+    {
+        itemuse.TriggerGrassForPlayer(0);
+    }
+
+    public void OnDryingButtonClick()
+    {
+        itemuse.TriggerDryingForPlayer(0);
+    }
+
 }

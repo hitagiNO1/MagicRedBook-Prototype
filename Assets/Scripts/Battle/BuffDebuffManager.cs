@@ -30,6 +30,10 @@ public class BuffDebuffManager : MonoBehaviour
     // 新增：技能禁用管理
     private Dictionary<Unit, int> skillDisabledTurns = new Dictionary<Unit, int>();
     private HashSet<Unit> isSkillDisabled = new HashSet<Unit>();
+    private Dictionary<Unit, float> originalCritChance = new Dictionary<Unit, float>();
+    private Dictionary<Unit, float> critChanceBuffMultiplier = new Dictionary<Unit, float>();
+    private Dictionary<Unit, int> critChanceBuffTurns = new Dictionary<Unit, int>();
+    private HashSet<Unit> isCritChanceBuffed = new HashSet<Unit>();
 
     void Start()
     {
@@ -41,7 +45,7 @@ public class BuffDebuffManager : MonoBehaviour
 
     void Update()
     {
-        // 無需 Update，若需實時檢查可添加
+        TickCritChanceBuffs();
     }
 
     public void ApplyDamageBuff(Unit targetUnit, float multiplier, int turns)
@@ -396,6 +400,18 @@ public class BuffDebuffManager : MonoBehaviour
             isSkillDisabled.Remove(unit);
         }
 
+        foreach (Unit unit in new List<Unit>(isCritChanceBuffed))
+        {
+            if (unit != null)
+            {
+                unit.critChance = originalCritChance[unit];
+            }
+            critChanceBuffTurns.Remove(unit);
+            originalCritChance.Remove(unit);
+            critChanceBuffMultiplier.Remove(unit);
+            isCritChanceBuffed.Remove(unit);
+        }
+
         Debug.Log("所有 Buff/Debuff 效果已清除");
     }
 
@@ -512,6 +528,59 @@ public class BuffDebuffManager : MonoBehaviour
         {
             skillDisabledTurns.Remove(unit);
             isSkillDisabled.Remove(unit);
+        }
+    }
+
+    public void ApplyCritChanceBuff(Unit targetUnit, float multiplier, int turns)
+    {
+        if (targetUnit == null)
+        {
+            Debug.LogError("目標單位無效！");
+            return;
+        }
+        if (isCritChanceBuffed.Contains(targetUnit))
+        {
+            Debug.Log($"{targetUnit.unitName} 已有爆擊率 Buff，不重複套用。");
+            return;
+        }
+
+        originalCritChance[targetUnit] = targetUnit.critChance;
+        targetUnit.critChance = Mathf.Min(1.0f, targetUnit.critChance + (targetUnit.critChance * multiplier)); // 提升 50% 爆擊率
+        critChanceBuffMultiplier[targetUnit] = multiplier;
+        critChanceBuffTurns[targetUnit] = turns;
+        isCritChanceBuffed.Add(targetUnit);
+
+        Debug.Log($"{targetUnit.unitName} 的爆擊率提升至 {targetUnit.critChance * 100:F1}%，持續 {turns} 回合");
+    }
+
+    public void TickCritChanceBuffs()
+    {
+        List<Unit> unitsToRemove = new List<Unit>();
+        foreach (Unit unit in new List<Unit>(critChanceBuffTurns.Keys))
+        {
+            if (unit == null || unit.currentHP <= 0)
+            {
+                unitsToRemove.Add(unit);
+                continue;
+            }
+
+            critChanceBuffTurns[unit]--;
+            Debug.Log($"{unit.unitName} 的爆擊率 Buff 倒數：剩下 {critChanceBuffTurns[unit]} 回合");
+
+            if (critChanceBuffTurns[unit] <= 0)
+            {
+                unit.critChance = originalCritChance[unit];
+                unitsToRemove.Add(unit);
+                Debug.Log($"{unit.unitName} 的爆擊率 Buff 結束，恢復為 {unit.critChance * 100:F1}%");
+            }
+        }
+
+        foreach (Unit unit in unitsToRemove)
+        {
+            critChanceBuffTurns.Remove(unit);
+            originalCritChance.Remove(unit);
+            critChanceBuffMultiplier.Remove(unit);
+            isCritChanceBuffed.Remove(unit);
         }
     }
 }
