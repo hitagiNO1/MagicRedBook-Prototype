@@ -815,7 +815,7 @@ public class SkillManager : MonoBehaviour
         // 添加物品冷卻減少
         if (itemuse != null)
         {
-            itemuse.ReduceItemCooldowns();
+           // itemuse.ReduceItemCooldowns();
         }
     }
 

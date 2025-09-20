@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class TimelineManager : MonoBehaviour
 {
@@ -148,8 +150,17 @@ public class TimelineManager : MonoBehaviour
         }
     }
 
-    public void SetGameState()
+    public void SetGameStateManga()
     {
         GameStateManager.Instance.SetState(GameState.Mangaing);
+    }
+    public void SetGameStatePlay()
+    {
+        GameStateManager.Instance.SetState(GameState.Playing);
+    }
+
+    public void SwitchScene()
+    {
+        SceneManager.LoadScene("CH1");
     }
 }
