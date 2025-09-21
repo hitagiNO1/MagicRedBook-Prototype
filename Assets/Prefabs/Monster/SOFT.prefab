@@ -212,7 +212,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 26
+  m_SortingOrder: -487
   m_SortAtRoot: 0
 --- !u!114 &6717994313117739987
 MonoBehaviour:
@@ -415,7 +415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8531651564849451461}
   - component: {fileID: 7813338397979647880}
-  - component: {fileID: 848019138134926253}
+  - component: {fileID: 8541065314828887876}
   m_Layer: 8
   m_Name: CamMonsZone
   m_TagString: Untagged
@@ -461,7 +461,7 @@ CapsuleCollider:
   m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &848019138134926253
+--- !u!114 &8541065314828887876
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -470,17 +470,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8036868957462780750}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61848dd9266310c4598fec1d6b11129c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b387d3408968a1408e7591ab4da662e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamera: {fileID: 1390429301556131448}
+  virtualCamera: {fileID: 0}
   targetScript: {fileID: 0}
   skillmanager: {fileID: 0}
   buffDebuffManager: {fileID: 0}
-  enemyskill: {fileID: 6307776405075789953}
-  newEnemy: {fileID: 6415140477279468505}
-  enemyUnit: {fileID: 6717994313117739987}
+  enemyskill: {fileID: 0}
+  newEnemies: []
+  enemyUnits: []
   Addmonster: {fileID: 0}
-  monster: {fileID: 11400000, guid: 0dc774c1ec3821343be4e7db1a6b066e, type: 2}
-  IfScenes:
-  - {fileID: 11400000, guid: 2449c1cd655ea9d44a9d19c3e6eda81f, type: 2}
+  monsters: []
+  IfScenes: []
+  enemyBattleHUDPrefab: {fileID: 0}

@@ -97,6 +97,7 @@ public class Enemyskill : MonoBehaviour
         }
         Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
         PerformBasicAttack(self, target, self.damage);
+        EffectManager.Instance.PlayUIEffect("Fish1", new Vector2(-805, -352));
     }
 
     private void PerformFishskill_2(Unit self)
@@ -113,6 +114,7 @@ public class Enemyskill : MonoBehaviour
         }
         Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
         buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
+        EffectManager.Instance.PlayUIEffect("Fish2", new Vector2(-708, -206));
     }
 
     private void PerformSnakeskill_1(Unit self)
@@ -124,6 +126,7 @@ public class Enemyskill : MonoBehaviour
         }
         Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
         PerformBasicAttack(self, target, self.damage * 2);
+        EffectManager.Instance.PlayUIEffect("Snake1", new Vector2(-677, -230));
     }
 
     private void PerformSnakeskill_2(Unit self)
@@ -139,6 +142,7 @@ public class Enemyskill : MonoBehaviour
             return;
         }
         Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
+        EffectManager.Instance.PlayUIEffect("Snake2", new Vector2(-800, -450));
         buffDebuffManager.ApplyPoison(target);
     }
 
@@ -173,6 +177,7 @@ public class Enemyskill : MonoBehaviour
         buffDebuffManager.ApplyHealDebuff(target, 2);
         int damage = Mathf.RoundToInt(self.damage * 1.5f);
         PerformBasicAttack(self, target, damage);
+        EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
 
         Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Clockskill_2：降低攻擊 30%、回血 30%，造成 {damage} 傷害");
     }
@@ -216,6 +221,7 @@ public class Enemyskill : MonoBehaviour
         // 造成 0.5 倍攻擊力的傷害
         int damage = Mathf.RoundToInt(self.damage * 0.5f);
         PerformBasicAttack(self, target, damage);
+        EffectManager.Instance.PlayUIEffect("Blanket2", new Vector2(0f, 571.11f));
 
         Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Softskill_3：禁用技能 1 回合，造成 {damage} 傷害");
     }
@@ -237,7 +243,7 @@ public class Enemyskill : MonoBehaviour
                 PerformBasicAttack(self, target, damage);
             }
         }
-
+        EffectManager.Instance.PlayUIEffect("Blanket3", new Vector2(0f, 0f));
         Debug.Log($"{self.unitName} 使用 Softskill_2 對所有玩家造成 {Mathf.RoundToInt(self.damage * 3f)} 傷害！");
     }
 
