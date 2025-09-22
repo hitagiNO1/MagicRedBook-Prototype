@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tape
   m_EditorClassIdentifier: 
   speakerName: "\u81A0\u5E36\u53F0\u5148\u751F"
-  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textColor: {r: 1, g: 1, b: 1, a: 0}
   BackColor: {fileID: 21300000, guid: e02ac628c227ea14ab6b99aaa3495629, type: 3}
   sprites:
   - {fileID: 21300000, guid: 5cea3125b2344f445841cd6cca95b000, type: 3}
@@ -23,4 +23,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0f281186eaf2b26428f8674b16138dc5, type: 3}
   - {fileID: 21300000, guid: f2e08c2bc64b253498f03fe4ab4a33c6, type: 3}
   - {fileID: 21300000, guid: 13fb2db6cf0bd1b468d98648df7cc8d9, type: 3}
-  prefab: {fileID: 181739033971714129, guid: 3899ca7c49a7e054aaed89b0756d698f, type: 3}
+  prefab: {fileID: 3135664854981117607, guid: 3899ca7c49a7e054aaed89b0756d698f, type: 3}

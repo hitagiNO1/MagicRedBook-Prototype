@@ -12,9 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/CGTest.unity
     guid: b29a00f5426039345b66a0352d769314
   - enabled: 1
-    path: Assets/Scenes/2D_test.unity
+    path: Assets/Scenes/ItemGame.unity
     guid: ca4edc954f9a4b34695faad12e070e1c
   - enabled: 1
     path: Assets/Scenes/CH1.unity
     guid: 418012f10a7c7d544b6a19da05bc6e91
+  - enabled: 1
+    path: Assets/Scenes/TapeGame.unity
+    guid: 78a0578e62a4b994aa2ec7d6806b1611
   m_configObjects: {}

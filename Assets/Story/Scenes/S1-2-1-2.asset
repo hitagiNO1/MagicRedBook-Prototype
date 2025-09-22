@@ -22,7 +22,10 @@ MonoBehaviour:
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 3b1caf42374e3e14e9926a01985c97b9, type: 2}
+      timing: 0
   - text: "\u5443\u55EF\u55EF\u55EF\u2026\u2026\u6211\u4EE5\u70BA\u6211\u8981\u6B7B\u6389\u4E86\u2026\u2026"
     speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
     actions:
@@ -442,5 +445,8 @@ MonoBehaviour:
       actionType: 5
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 5612844fe0fc1734297224a4ff3e192b, type: 2}
+      timing: 2
   nextScene: {fileID: 0}

@@ -15,33 +15,30 @@ MonoBehaviour:
   StopMove: 1
   sentences:
   - text: 1111111111111111111
-    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+      spriteIndex: 0
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 1
     timline: []
-  - text: 222222222222222222222222
-    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
-    timline:
-    - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: 93187fd040886eb4a88340a6e228a8f4, type: 2}
-  - text: 333333333333333333333
-    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+  - text: 2222222222222222222222
+    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+      spriteIndex: 1
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
     timline: []
-  - text: 44444444444444444444444444
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions: []
-    timline:
-    - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: 5e3dcbd7564b67d4e9daa28ba791bb0a, type: 2}
-  - text: 5555555555
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions: []
+  - text: 3333333333333333333
+    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+      spriteIndex: 3
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
-  - text: 44444444444444444444444444
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-    actions: []
-    timline:
-    - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: 8fc3c307f9212c54299f36b29be9cb55, type: 2}
   nextScene: {fileID: 0}

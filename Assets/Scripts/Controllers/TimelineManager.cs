@@ -163,4 +163,9 @@ public class TimelineManager : MonoBehaviour
     {
         SceneManager.LoadScene("CH1");
     }
+
+    public void GoTapeGame()
+    {
+        SceneManager.LoadScene("TapeGame");
+    }
 }

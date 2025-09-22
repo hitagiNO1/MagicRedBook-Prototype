@@ -14,7 +14,6 @@ public class mutiplebattle : MonoBehaviour
     public List<Unit> enemyUnits; // 敵人 Unit 組件列表
     public MonsterEntryUI Addmonster;
     public List<MonsterData> monsters; // 怪物資料列表
-    public List<StoryScene> IfScenes; // BattleSystem 的劇情場景
     [SerializeField]
     private GameObject enemyBattleHUDPrefab; // EnemyBattleHUD 預製件的引用
 
@@ -150,11 +149,11 @@ public class mutiplebattle : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log($"Raycast2D 擊中: {hit.collider.gameObject.name}，位置: {hit.point}");
+                //Debug.Log($"Raycast2D 擊中: {hit.collider.gameObject.name}，位置: {hit.point}");
                 GameObject hitObject = hit.collider.gameObject;
                 if (newEnemies.Contains(hitObject) && enemyToHUDMap.ContainsKey(hitObject))
                 {
-                    Debug.Log($"顯示 HUD 為敵人: {hitObject.name}");
+                    //Debug.Log($"顯示 HUD 為敵人: {hitObject.name}");
                     enemyToHUDMap[hitObject].gameObject.SetActive(true);
                 }
             }

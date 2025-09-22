@@ -67,6 +67,7 @@ public class FollowAI : MonoBehaviour
         {
             Debug.LogWarning("Agent not on NavMesh or missing target!");
         }
+        HandleVisibility();
     }
 
     /// <summary>
@@ -86,5 +87,16 @@ public class FollowAI : MonoBehaviour
 
         // 記錄目前播放中的動畫名稱
         currentAnimation = animation.name;
+    }
+
+    private void HandleVisibility() //處理角色在戰鬥狀態下隱藏
+    {
+        var meshRenderer = GetComponentInChildren<MeshRenderer>();
+        if (meshRenderer == null) return;
+
+        if (GameStateManager.Instance.IsState(GameState.Battle))
+            meshRenderer.enabled = false;
+        else
+            meshRenderer.enabled = true;
     }
 }

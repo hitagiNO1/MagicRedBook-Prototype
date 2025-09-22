@@ -23,7 +23,6 @@ public class BattleSystem : MonoBehaviour
     public BuffDebuffManager buffDebuffManager;
     private List<List<System.Action>> enemySkillsList; // 每個敵人的技能列表
     public int turnCounter = 0;
-    private mutiplebattle getBattle;
     public GameController gameScript;
     private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
     private Dictionary<int, Unit> selectedTargets; // 每個玩家的目標敵人
@@ -137,12 +136,6 @@ public class BattleSystem : MonoBehaviour
                 enemySkillComponent.buffDebuffManager = buffDebuffManager;
                 SetupSkillsForEnemy(enemyUnit.unitName, i, enemySkillComponent);
             }
-        }
-
-        getBattle = enemyPrefabs.Count > 0 ? enemyPrefabs[0].GetComponentInChildren<mutiplebattle>() : null;
-        if (getBattle == null)
-        {
-            Debug.LogWarning("GetBattle 組件未找到，可能影響劇情觸發");
         }
 
         if (dialogueText != null)
@@ -366,20 +359,14 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "你贏得了戰鬥!";
             }
-            if (getBattle != null && getBattle.IfScenes.Count == 1 && gameScript != null)
-            {
-                gameScript.PlayScene(getBattle.IfScenes[0] as StoryScene);
-            }
-            else
-            {
-                GameStateManager.Instance.SetState(GameState.Playing);
-            }
+            GameStateManager.Instance.SetState(GameState.Playing);
             // 戰鬥勝利時銷毀所有剩餘敵人
             foreach (GameObject enemy in enemyPrefabs)
             {
                 if (enemy != null)
                 {
-                    Destroy(enemy);
+                    Debug.Log("Parent: " + enemy.transform.parent.name);
+                    Destroy(enemy.transform.parent.gameObject);
                 }
             }
             enemyPrefabs.Clear();
@@ -400,7 +387,7 @@ public class BattleSystem : MonoBehaviour
                 dialogueText.text = state == BattleState.LOST ? "你輸了..." : "逃跑成功...";
             }
             GameStateManager.Instance.SetState(GameState.Playing);
-            // 銷毀所有剩餘敵人和 HUD
+            // 銷毀所有剩餘敵人和 HUD 修改
             foreach (GameObject enemy in enemyPrefabs)
             {
                 if (enemy != null)
@@ -408,6 +395,7 @@ public class BattleSystem : MonoBehaviour
                     Destroy(enemy);
                 }
             }
+            
             enemyPrefabs.Clear();
             foreach (var hud in enemyHUDs)
             {

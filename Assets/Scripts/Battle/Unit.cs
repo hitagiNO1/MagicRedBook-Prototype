@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         float reduction = defenseData.GetDamageReduction(defense);
-        Debug.Log($"¨¾¿m {defense}¡A´î¶Ë¤ñ¨Ò¡G{reduction}");
+        //Debug.Log($"¨¾¿m {defense}¡A´î¶Ë¤ñ¨Ò¡G{reduction}");
     }
 
     public bool TakeDamage(int dmg)
