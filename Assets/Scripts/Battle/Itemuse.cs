@@ -5,6 +5,7 @@ using TMPro;
 
 public class Itemuse : MonoBehaviour
 {
+    public RedBook redbook;
     public SkillManager skillManager; // 引用 SkillManager
     public BuffDebuffManager buffDebuffManager; // 引用 BuffDebuffManager 以執行效果
     public TextMeshProUGUI dialogueText; // 用於顯示訊息
@@ -337,6 +338,19 @@ public class Itemuse : MonoBehaviour
         {
             itemInventory[itemName] = Mathf.Max(0, itemInventory[itemName] - amount);
             Debug.Log($"移除 {amount} 個 {itemName}，剩餘數量：{itemInventory[itemName]}");
+        }
+    }
+
+    public void redbookuse()
+    {
+        if (GameStateManager.Instance.IsState(GameState.Battle))
+        {
+            // 打開紅書 
+            GameStateManager.Instance.SetState(GameState.Redbook);
+            StartCoroutine(redbook.OpenBook());
+            // 更新道具UI
+            if (redbook.inventoryUI != null)
+                redbook.inventoryUI.GetComponent<InventoryUI>().RefreshUI();
         }
     }
 }

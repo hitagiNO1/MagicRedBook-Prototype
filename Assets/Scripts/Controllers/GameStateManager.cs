@@ -13,7 +13,7 @@ public class GameStateManager : MonoBehaviour
     public static GameStateManager Instance;
     //可以被任何程式碼讀取」（get 是 public），但「只能在這個類別（GameStateManager）裡面修改」
     public GameState currentState { get; private set; } = GameState.Playing;
-    private GameState previousState;
+    public GameState previousState;
 
     private void Awake()
     {
