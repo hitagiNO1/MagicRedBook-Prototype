@@ -14,8 +14,8 @@ public class RedBook : MonoBehaviour
     public CharStateUI LylaState;
     public GoalController Goal;
     private int currentPage = 0;
-    private bool isOpen = false;
-    private Animator animator;
+    public bool isOpen = false;
+    public Animator animator;
     public GameObject inventoryUI;
 
     //public CinemachineVirtualCamera BookCamera = null;
@@ -26,49 +26,94 @@ public class RedBook : MonoBehaviour
     }
     private void Update()
     {
+        HandleInput();
+        UpdateHUD();
+    }
+
+    private void HandleInput()
+    {
+        // Tab 切換紅書
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (GameStateManager.Instance.IsState(GameState.Playing))
             {
-                // 打開紅書 
-                GameStateManager.Instance.SetState(GameState.Redbook);
-                StartCoroutine(OpenBook());
-                // 更新道具UI
-                inventoryUI.GetComponent<InventoryUI>().RefreshUI();
+                OpenRedBook(GameState.Playing);
             }
-            else if (isOpen == true)
+            else if (isOpen && GameStateManager.Instance.IsState(GameState.Redbook))
             {
-                // 關閉紅書
-                isOpen = false;
-                animator.SetTrigger("DOWN");
-                //BookCamera.enabled = false;
-                // 等動畫播完後再執行關閉
-                StartCoroutine(CloseBook());
-                GameStateManager.Instance.SetState(GameState.Playing);
+                CloseRedBook();
             }
         }
+
+       
+    }
+
+    private void UpdateHUD()
+    {
         if (isOpen)
         {
             BlackState.SetHUD();
             LylaState.SetHUD();
         }
     }
-    private IEnumerator CloseBook()
+
+    public void OpenRedBook(GameState previousState)
+    {
+        GameStateManager.Instance.SetState(GameState.Redbook);
+        StartCoroutine(OpenBookCoroutine(previousState));
+    }
+
+    public void CloseRedBook()
+    {
+        isOpen = false;
+        animator.SetTrigger("DOWN");
+        StartCoroutine(CloseBookCoroutine());
+    }
+
+    private IEnumerator OpenBookCoroutine(GameState previousState)
+    {
+        yield return new WaitForSeconds(0.5f);
+        isOpen = true;
+        animator.SetTrigger("UP");
+        menuUI.SetActive(true);
+        ShowPage(0);
+        Goal.UpdateObjective();
+
+        if (inventoryUI != null)
+            inventoryUI.GetComponent<InventoryUI>().RefreshUI();
+    }
+
+    private IEnumerator CloseBookCoroutine()
+    {
+        yield return new WaitForSeconds(0.7f);
+        menuUI.SetActive(false);
+
+        // 恢復到之前的狀態
+        if (GameStateManager.Instance.previousState == GameState.Battle)
+        {
+            GameStateManager.Instance.SetState(GameState.Battle);
+        }
+        else
+        {
+            GameStateManager.Instance.SetState(GameState.Playing);
+        }
+    }
+    public IEnumerator CloseBook()
     {
         // 等待 Animator 進入 DOWN 狀態
         yield return new WaitForSeconds(0.7f);
         // 動畫播放完畢，才關閉 UI 與切換狀態
         menuUI.SetActive(false);
     }
-    private IEnumerator OpenBook()
+    public IEnumerator OpenBook()
     {
         //延遲紅書上升動畫攝影機抬頭
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         isOpen = true;
         //BookCamera.enabled = true;
         animator.SetTrigger("UP");
         menuUI.SetActive(true);
-        ShowPage(0);                // 預設顯示 Party
+        ShowPage(3);                // 預設顯示 Party
         Goal.UpdateObjective();
     }
     public void ShowPage(int index)
