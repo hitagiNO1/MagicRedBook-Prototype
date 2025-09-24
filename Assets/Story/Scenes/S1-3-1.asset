@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
+  m_Name: S1-3-1
+  m_EditorClassIdentifier: 
+  StopMove: 0
+  sentences:
+  - text: "(\u68EE\u6797\u6DF1\u8655\u50B3\u4F86\u4E0D\u5C0B\u5E38\u7684\u8072\u97F3\u3002)"
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    timline: []
+  - text: "\u5E03\u840A\u514B......\u4F60\u6709\u807D\u5230\u55CE\uFF1F"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 26
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u6709\uFF0C\u5F88\u5947\u602A\u7684\u8072\u97F3\u2026\u2026\u50CF\u4EC0\u9EBC\u5DE8\u5927\u7684\u6771\u897F\u5728\u52D5\u4E00\u6A23\u3002"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 6
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u8981\u904E\u53BB\u770B\u770B\u55CE\uFF1F"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 2
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u55EF\u2026\u2026\u8D70\u5427\uFF0C\u8AAA\u4E0D\u5B9A\u6709\u4EC0\u9EBC\u7DDA\u7D22\u3002"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 25
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  nextScene: {fileID: 0}

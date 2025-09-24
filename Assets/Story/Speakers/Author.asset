@@ -15,6 +15,5 @@ MonoBehaviour:
   speakerName: "\u65C1\u767D"
   textColor: {r: 1, g: 1, b: 1, a: 0}
   BackColor: {fileID: 0}
-  sprites:
-  - {fileID: 21300000, guid: be2552954da1dd843b0605006dbe793f, type: 3}
+  sprites: []
   prefab: {fileID: 0}

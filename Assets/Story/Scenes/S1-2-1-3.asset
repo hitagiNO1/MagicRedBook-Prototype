@@ -41,7 +41,7 @@ MonoBehaviour:
       coords: {x: 0, y: 0}
       Right: 0
     - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 14
+      spriteIndex: 17
       actionType: 5
       coords: {x: 0, y: 0}
       Right: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
       coords: {x: 0, y: 0}
       Right: 0
     - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
-      spriteIndex: 14
+      spriteIndex: 17
       actionType: 5
       coords: {x: 0, y: 0}
       Right: 0
@@ -200,4 +200,5 @@ MonoBehaviour:
     timline:
     - animation: 0
       myPlayableAsset: {fileID: 0}
+      timing: 0
   nextScene: {fileID: 0}
