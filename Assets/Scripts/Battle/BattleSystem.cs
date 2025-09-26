@@ -181,13 +181,10 @@ public class BattleSystem : MonoBehaviour
         playersActed[playerIndex] = true;
         Debug.Log($"Player {playerIndex} acted: {playersActed[playerIndex]}, Total Skills = {skillManager.GetTotalSelectedSkills()}");
 
-        if (skillManager != null && skillManager.GetTotalSelectedSkills() == 0)
+        // 移除原有的 if (skillManager != null && skillManager.GetTotalSelectedSkills() == 0) 塊
+        // 只檢查所有玩家是否acted
+        if (AllPlayersActed())
         {
-            for (int i = 0; i < playersActed.Count; i++)
-            {
-                playersActed[i] = true;
-            }
-            Debug.Log("No skills left, proceeding to enemy turn");
             if (AllEnemiesDead())
             {
                 state = BattleState.WON;
@@ -219,7 +216,7 @@ public class BattleSystem : MonoBehaviour
                     int attempts = 0;
                     int maxAttempts = skills.Count;
 
-                    while (!skillExecuted && attempts < maxAttempts)
+                    while (!skillExecuted && attempts < maxAttempts && skills.Count > 0)
                     {
                         int skillIndex = Random.Range(0, skills.Count);
                         System.Action selectedSkill = skills[skillIndex];
@@ -298,6 +295,10 @@ public class BattleSystem : MonoBehaviour
     {
         if (index >= 0 && index < enemyPrefabs.Count && enemyPrefabs[index] != null)
         {
+            Collider2D collider2D = enemyPrefabs[index].GetComponent<Collider2D>();
+            if (collider2D != null) collider2D.enabled = false;
+            Collider collider3D = enemyPrefabs[index].GetComponent<Collider>();
+            if (collider3D != null) collider3D.enabled = false;
             Destroy(enemyPrefabs[index]);
             enemyUnits.RemoveAt(index);
             if (index < enemyHUDs.Count && enemyHUDs[index] != null)

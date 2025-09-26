@@ -468,15 +468,33 @@ public class SkillManager : MonoBehaviour
     public void TriggerSkill1ForPlayer0()
     {
         if (battlesystem.state != BattleState.PLAYERTURN) return;
-        if (selectedSkillNames[0].Contains("Skill_1"))
+
+        string skillName = "Skill_1";
+        int playerIndex = 0;
+
+        // 新增：檢查是否正在等待此技能的目標
+        if (isWaitingForTarget && pendingSkill == skillName && pendingPlayerIndex == playerIndex)
         {
-            CancelSkill(0, "Skill_1");
+            // 取消等待目標
+            isWaitingForTarget = false;
+            pendingSkill = null;
+            pendingPlayerIndex = -1;
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} 取消了 {skillName} 的目標選擇";
+            Debug.Log($"Cancelled waiting for {skillName} by re-click");
+            return;
+        }
+
+        // 原有邏輯：檢查是否已加入隊列
+        if (selectedSkillNames[playerIndex].Contains(skillName))
+        {
+            CancelSkill(playerIndex, skillName);
         }
         else
         {
+            // 進入等待目標模式
             isWaitingForTarget = true;
-            pendingSkill = "Skill_1";
-            pendingPlayerIndex = 0;
+            pendingSkill = skillName;
+            pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個敵人目標以使用技能 1！";
         }
     }
@@ -502,15 +520,33 @@ public class SkillManager : MonoBehaviour
     public void TriggerSkill5ForPlayer0()
     {
         if (battlesystem.state != BattleState.PLAYERTURN) return;
-        if (selectedSkillNames[0].Contains("Skill_5"))
+
+        string skillName = "Skill_5";
+        int playerIndex = 0;
+
+        // 新增：檢查是否正在等待此技能的目標
+        if (isWaitingForTarget && pendingSkill == skillName && pendingPlayerIndex == playerIndex)
         {
-            CancelSkill(0, "Skill_5");
+            // 取消等待目標
+            isWaitingForTarget = false;
+            pendingSkill = null;
+            pendingPlayerIndex = -1;
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} 取消了 {skillName} 的目標選擇";
+            Debug.Log($"Cancelled waiting for {skillName} by re-click");
+            return;
+        }
+
+        // 原有邏輯：檢查是否已加入隊列
+        if (selectedSkillNames[playerIndex].Contains(skillName))
+        {
+            CancelSkill(playerIndex, skillName);
         }
         else
         {
+            // 進入等待目標模式
             isWaitingForTarget = true;
-            pendingSkill = "Skill_5";
-            pendingPlayerIndex = 0;
+            pendingSkill = skillName;
+            pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個敵人目標以使用技能 5！";
         }
     }
@@ -518,15 +554,33 @@ public class SkillManager : MonoBehaviour
     public void TriggerCatSkill1ForPlayer1()
     {
         if (battlesystem.state != BattleState.PLAYERTURN) return;
-        if (selectedSkillNames[1].Contains("catSkill_1"))
+
+        string skillName = "catSkill_1";
+        int playerIndex = 1;
+
+        // 新增：檢查是否正在等待此技能的目標
+        if (isWaitingForTarget && pendingSkill == skillName && pendingPlayerIndex == playerIndex)
         {
-            CancelSkill(1, "catSkill_1");
+            // 取消等待目標
+            isWaitingForTarget = false;
+            pendingSkill = null;
+            pendingPlayerIndex = -1;
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} 取消了 {skillName} 的目標選擇";
+            Debug.Log($"Cancelled waiting for {skillName} by re-click");
+            return;
+        }
+
+        // 原有邏輯：檢查是否已加入隊列
+        if (selectedSkillNames[playerIndex].Contains(skillName))
+        {
+            CancelSkill(playerIndex, skillName);
         }
         else
         {
+            // 進入等待目標模式
             isWaitingForTarget = true;
-            pendingSkill = "catSkill_1";
-            pendingPlayerIndex = 1;
+            pendingSkill = skillName;
+            pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個敵人目標以使用貓技能 1！";
         }
     }
@@ -546,15 +600,33 @@ public class SkillManager : MonoBehaviour
     public void TriggerCatSkill4ForPlayer1()
     {
         if (battlesystem.state != BattleState.PLAYERTURN) return;
-        if (selectedSkillNames[1].Contains("catSkill_4"))
+
+        string skillName = "catSkill_4";
+        int playerIndex = 1;
+
+        // 新增：檢查是否正在等待此技能的目標
+        if (isWaitingForTarget && pendingSkill == skillName && pendingPlayerIndex == playerIndex)
         {
-            CancelSkill(1, "catSkill_4");
+            // 取消等待目標
+            isWaitingForTarget = false;
+            pendingSkill = null;
+            pendingPlayerIndex = -1;
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} 取消了 {skillName} 的目標選擇";
+            Debug.Log($"Cancelled waiting for {skillName} by re-click");
+            return;
+        }
+
+        // 原有邏輯：檢查是否已加入隊列
+        if (selectedSkillNames[playerIndex].Contains(skillName))
+        {
+            CancelSkill(playerIndex, skillName);
         }
         else
         {
+            // 進入等待目標模式
             isWaitingForTarget = true;
-            pendingSkill = "catSkill_4";
-            pendingPlayerIndex = 1;
+            pendingSkill = skillName;
+            pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個玩家頭像以使用貓技能 4！";
         }
     }
@@ -815,7 +887,7 @@ public class SkillManager : MonoBehaviour
         // 添加物品冷卻減少
         if (itemuse != null)
         {
-           // itemuse.ReduceItemCooldowns();
+            // itemuse.ReduceItemCooldowns();
         }
     }
 

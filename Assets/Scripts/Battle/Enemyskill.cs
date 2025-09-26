@@ -113,7 +113,10 @@ public class Enemyskill : MonoBehaviour
             return;
         }
         Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-        buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
+
+        int damage = Mathf.RoundToInt(self.damage * 1.2f);
+        PerformBasicAttack(self, target, damage);
+
         EffectManager.Instance.PlayUIEffect("Fish2", new Vector2(-708, -206));
     }
 
