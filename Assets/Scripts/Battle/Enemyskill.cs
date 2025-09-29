@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random; // 添加別名，解決模擬兩可問題
 
 public class Enemyskill : MonoBehaviour
 {
@@ -9,9 +11,9 @@ public class Enemyskill : MonoBehaviour
     // 新增：技能冷卻字典，假設每個敵人技能有獨立冷卻
     private Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
 
-    public List<System.Action> GetEnemySkills(string enemyName)
+    public List<Func<bool>> GetEnemySkills(string enemyName)  // 修改為 Func<bool>
     {
-        List<System.Action> skills = new List<System.Action>();
+        List<Func<bool>> skills = new List<Func<bool>>();
         Unit self = GetComponent<Unit>();
         if (self == null)
         {
@@ -21,24 +23,24 @@ public class Enemyskill : MonoBehaviour
 
         if (enemyName == "FISH")
         {
-            skills.Add(() => PerformFishskill_1(self));
-            skills.Add(() => PerformFishskill_2(self));
+            skills.Add(() => { PerformFishskill_1(self); return true; });
+            skills.Add(() => { PerformFishskill_2(self); return true; });
         }
         else if (enemyName == "SNAKE")
         {
-            skills.Add(() => PerformSnakeskill_1(self));
-            skills.Add(() => PerformSnakeskill_2(self));
+            skills.Add(() => { PerformSnakeskill_1(self); return true; });
+            skills.Add(() => { PerformSnakeskill_2(self); return true; });
         }
-        else if (enemyName == "CLOCK") // 新增 CLOCK 敵人
+        else if (enemyName == "CLOCK")
         {
-            skills.Add(() => PerformClockskill_1(self));
-            skills.Add(() => PerformClockskill_2(self));
+            skills.Add(() => { PerformClockskill_1(self); return true; });
+            skills.Add(() => { PerformClockskill_2(self); return true; });
         }
         else if (enemyName == "SOFT")
         {
-            skills.Add(() => PerformSoftskill_1(self));
-            skills.Add(() => CheckAndPerformSoftskill_2(self)); // 全體傷害，2 回合 CD
-            skills.Add(() => CheckAndPerformSoftskill_3(self)); // 技能禁用，2 回合 CD
+            skills.Add(() => { PerformSoftskill_1(self); return true; });
+            skills.Add(() => CheckAndPerformSoftskill_2(self));  // 返回 bool
+            skills.Add(() => CheckAndPerformSoftskill_3(self));  // 返回 bool
         }
         else
         {
@@ -47,8 +49,6 @@ public class Enemyskill : MonoBehaviour
 
         return skills;
     }
-
-
 
     private bool CheckAndPerformSoftskill_2(Unit self)
     {
@@ -95,9 +95,12 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-        PerformBasicAttack(self, target, self.damage);
-        EffectManager.Instance.PlayUIEffect("Fish1", new Vector2(-805, -352));
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            PerformBasicAttack(self, target, self.damage);
+            EffectManager.Instance.PlayUIEffect("Fish1", new Vector2(-805, -352));
+        }
     }
 
     private void PerformFishskill_2(Unit self)
@@ -112,12 +115,13 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("buffDebuffManager 未初始化！");
             return;
         }
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-
-        int damage = Mathf.RoundToInt(self.damage * 1.2f);
-        PerformBasicAttack(self, target, damage);
-
-        EffectManager.Instance.PlayUIEffect("Fish2", new Vector2(-708, -206));
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            int damage = Mathf.RoundToInt(self.damage * 1.2f);
+            PerformBasicAttack(self, target, damage);
+            EffectManager.Instance.PlayUIEffect("Fish2", new Vector2(-708, -206));
+        }
     }
 
     private void PerformSnakeskill_1(Unit self)
@@ -127,9 +131,12 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-        PerformBasicAttack(self, target, self.damage * 2);
-        EffectManager.Instance.PlayUIEffect("Snake1", new Vector2(-677, -230));
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            PerformBasicAttack(self, target, self.damage * 2);
+            EffectManager.Instance.PlayUIEffect("Snake1", new Vector2(-677, -230));
+        }
     }
 
     private void PerformSnakeskill_2(Unit self)
@@ -144,9 +151,12 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("buffDebuffManager 未初始化！");
             return;
         }
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-        EffectManager.Instance.PlayUIEffect("Snake2", new Vector2(-800, -450));
-        buffDebuffManager.ApplyPoison(target);
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            EffectManager.Instance.PlayUIEffect("Snake2", new Vector2(-800, -450));
+            buffDebuffManager.ApplyPoison(target);
+        }
     }
 
     private void PerformClockskill_1(Unit self)
@@ -156,9 +166,12 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-        PerformBasicAttack(self, target, self.damage * 2);
-        EffectManager.Instance.PlayUIEffect("Clock1", new Vector2(-696, -100));
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            PerformBasicAttack(self, target, self.damage * 2);
+            EffectManager.Instance.PlayUIEffect("Clock1", new Vector2(-696, -100));
+        }
     }
 
     private void PerformClockskill_2(Unit self)
@@ -173,16 +186,16 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("buffDebuffManager 未初始化！");
             return;
         }
-
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-
-        buffDebuffManager.ApplyDamageBuff(target, 0.7f, 2);
-        buffDebuffManager.ApplyHealDebuff(target, 2);
-        int damage = Mathf.RoundToInt(self.damage * 1.5f);
-        PerformBasicAttack(self, target, damage);
-        EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
-
-        Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Clockskill_2：降低攻擊 30%、回血 30%，造成 {damage} 傷害");
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            buffDebuffManager.ApplyDamageBuff(target, 0.7f, 2);
+            buffDebuffManager.ApplyHealDebuff(target, 2);
+            int damage = Mathf.RoundToInt(self.damage * 1.5f);
+            PerformBasicAttack(self, target, damage);
+            EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
+            Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Clockskill_2：降低攻擊 30%、回血 30%，造成 {damage} 傷害");
+        }
     }
 
     private void PerformSoftskill_1(Unit self)
@@ -192,8 +205,11 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
-        Unit target = playerUnits[Random.Range(0, playerUnits.Count)];
-        PerformBasicAttack(self, target, self.damage * 2);
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target != null)
+        {
+            PerformBasicAttack(self, target, self.damage * 2);
+        }
     }
 
     private void PerformSoftskill_2(Unit self)
@@ -209,7 +225,6 @@ public class Enemyskill : MonoBehaviour
             return;
         }
 
-        // 隨機選擇一個存活的目標
         List<Unit> validTargets = playerUnits.FindAll(unit => unit != null && unit.currentHP > 0);
         if (validTargets.Count == 0)
         {
@@ -218,14 +233,10 @@ public class Enemyskill : MonoBehaviour
         }
         Unit target = validTargets[Random.Range(0, validTargets.Count)];
 
-        // 應用技能禁用效果，持續 1 回合
         buffDebuffManager.ApplySkillDisable(target, 1);
-
-        // 造成 0.5 倍攻擊力的傷害
         int damage = Mathf.RoundToInt(self.damage * 0.5f);
         PerformBasicAttack(self, target, damage);
         EffectManager.Instance.PlayUIEffect("Blanket2", new Vector2(0f, 571.11f));
-
         Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Softskill_3：禁用技能 1 回合，造成 {damage} 傷害");
     }
 
@@ -237,7 +248,6 @@ public class Enemyskill : MonoBehaviour
             return;
         }
 
-        // 對所有玩家單位造成三倍傷害
         foreach (Unit target in playerUnits)
         {
             if (target != null && target.currentHP > 0)
@@ -248,6 +258,17 @@ public class Enemyskill : MonoBehaviour
         }
         EffectManager.Instance.PlayUIEffect("Blanket3", new Vector2(0f, 0f));
         Debug.Log($"{self.unitName} 使用 Softskill_2 對所有玩家造成 {Mathf.RoundToInt(self.damage * 3f)} 傷害！");
+    }
+
+    private Unit GetRandomValidTarget(List<Unit> units)
+    {
+        List<Unit> validTargets = units.FindAll(unit => unit != null && unit.currentHP > 0);
+        if (validTargets == null || validTargets.Count == 0)
+        {
+            return null;
+        }
+        int randomIndex = Random.Range(0, validTargets.Count);
+        return validTargets[randomIndex];
     }
 
     private void PerformBasicAttack(Unit attacker, Unit target, int damage)

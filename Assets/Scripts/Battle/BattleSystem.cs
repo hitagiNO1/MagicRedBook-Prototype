@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using Random = UnityEngine.Random; // 添加別名，解決模擬兩可問題
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
 
@@ -21,7 +23,7 @@ public class BattleSystem : MonoBehaviour
     public BattleState state;
     public SkillManager skillManager;
     public BuffDebuffManager buffDebuffManager;
-    private List<List<System.Action>> enemySkillsList; // 每個敵人的技能列表
+    private List<List<Func<bool>>> enemySkillsList; // 每個敵人的技能列表
     public int turnCounter = 0;
     public GameController gameScript;
     private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
@@ -49,7 +51,7 @@ public class BattleSystem : MonoBehaviour
 
         playerUnits = new List<Unit>();
         enemyUnits = new List<Unit>();
-        enemySkillsList = new List<List<System.Action>>();
+        enemySkillsList = new List<List<Func<bool>>>();
         playersActed = new List<bool>();
         selectedTargets = new Dictionary<int, Unit>();
     }
@@ -127,7 +129,7 @@ public class BattleSystem : MonoBehaviour
             if (enemySkillComponent == null)
             {
                 Debug.LogError($"無法在 enemyPrefab {i} 上取得 Enemyskill 組件！");
-                enemySkillsList.Add(new List<System.Action>());
+                enemySkillsList.Add(new List<Func<bool>>());
             }
             else
             {
@@ -181,9 +183,8 @@ public class BattleSystem : MonoBehaviour
         playersActed[playerIndex] = true;
         Debug.Log($"Player {playerIndex} acted: {playersActed[playerIndex]}, Total Skills = {skillManager.GetTotalSelectedSkills()}");
 
-        // 移除原有的 if (skillManager != null && skillManager.GetTotalSelectedSkills() == 0) 塊
-        // 只檢查所有玩家是否acted
-        if (AllPlayersActed())
+        // 修改：只要有任一玩家acted，就進入 ENEMYTURN
+        if (HasAnyPlayerActed())
         {
             if (AllEnemiesDead())
             {
@@ -209,44 +210,49 @@ public class BattleSystem : MonoBehaviour
         {
             if (enemyUnits[i].currentHP > 0)
             {
-                List<System.Action> skills = enemySkillsList[i];
-                if (skills != null && skills.Count > 0)
+                List<Func<bool>> skills = enemySkillsList[i];
+                if (skills == null)
                 {
-                    bool skillExecuted = false;
-                    int attempts = 0;
-                    int maxAttempts = skills.Count;
+                    Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 的技能列表為 null，跳過行動");
+                    continue;
+                }
 
-                    while (!skillExecuted && attempts < maxAttempts && skills.Count > 0)
-                    {
-                        int skillIndex = Random.Range(0, skills.Count);
-                        System.Action selectedSkill = skills[skillIndex];
+                if (skills.Count == 0)
+                {
+                    Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 的技能列表為空，跳過行動");
+                    continue;
+                }
 
-                        selectedSkill.Invoke();
+                bool skillExecuted = false;
+                int attempts = 0;
+                int maxAttempts = skills.Count;
 
-                        skillExecuted = true;
-                        attempts++;
-
-                        if (!skillExecuted)
-                        {
-                            Debug.Log($"敵人 {enemyUnits[i].unitName} 的技能 {skillIndex} 正在冷卻中，重選...");
-                        }
-                    }
-
+                while (!skillExecuted && attempts < maxAttempts)
+                {
+                    int skillIndex = Random.Range(0, skills.Count); // 已確保 skills.Count > 0
+                    Func<bool> selectedSkill = skills[skillIndex];
+                    skillExecuted = selectedSkill.Invoke();
+                    attempts++;
                     if (!skillExecuted)
                     {
-                        Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 所有技能都在冷卻中，跳過行動");
-                    }
-                    else
-                    {
-                        yield return new WaitForSeconds(1.5f);
+                        Debug.Log($"敵人 {enemyUnits[i].unitName} 的技能 {skillIndex} 正在冷卻中，重選...");
                     }
                 }
 
-                // 檢查血量是否為 0，並即時銷毀
-                if (enemyUnits[i].currentHP <= 0 && i < enemyPrefabs.Count && enemyPrefabs[i] != null)
+                if (!skillExecuted)
                 {
-                    DestroyEnemy(i);
+                    Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 所有技能都在冷卻中，跳過行動");
                 }
+                else
+                {
+                    yield return new WaitForSeconds(1.5f);
+                }
+            }
+
+            // 檢查血量是否為 0，並即時銷毀
+            if (enemyUnits[i].currentHP <= 0 && i < enemyPrefabs.Count && enemyPrefabs[i] != null)
+            {
+                DestroyEnemy(i);
             }
         }
 
@@ -307,9 +313,21 @@ public class BattleSystem : MonoBehaviour
                 Destroy(enemyHUDs[index].gameObject); // 銷毀 HUD
                 enemyHUDs.RemoveAt(index);
             }
-            enemySkillsList.RemoveAt(index);
+            if (index < enemySkillsList.Count)
+            {
+                enemySkillsList.RemoveAt(index); // 同步移除技能列表
+            }
             Debug.Log($"敵人 {enemyUnits[index].unitName} 血量歸零，立即銷毀（剩餘敵人數：{enemyUnits.Count}）");
         }
+    }
+
+    private bool HasAnyPlayerActed()
+    {
+        foreach (bool acted in playersActed)
+        {
+            if (acted) return true;
+        }
+        return false;
     }
 
     private bool AllPlayersActed()
@@ -396,7 +414,7 @@ public class BattleSystem : MonoBehaviour
                     Destroy(enemy);
                 }
             }
-            
+
             enemyPrefabs.Clear();
             foreach (var hud in enemyHUDs)
             {
@@ -425,7 +443,12 @@ public class BattleSystem : MonoBehaviour
 
     public void SetupSkillsForEnemy(string enemyName, int enemyIndex, Enemyskill enemySkillComponent)
     {
-        List<System.Action> enemySkills = enemySkillComponent.GetEnemySkills(enemyName);
+        List<Func<bool>> enemySkills = enemySkillComponent.GetEnemySkills(enemyName);
+        if (enemySkills == null)
+        {
+            Debug.LogError($"敵人 {enemyName} 的技能列表為 null，初始化為空列表");
+            enemySkills = new List<Func<bool>>();
+        }
         enemySkillsList.Add(enemySkills);
     }
 
