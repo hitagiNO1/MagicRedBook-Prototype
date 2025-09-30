@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: S1-2-3-3
   m_EditorClassIdentifier: 
-  StopMove: 0
+  StopMove: 1
   sentences:
   - text: "\u563F\uFF01\u9019\u88E1\u6709\u500B\u4EAE\u4EAE\u7684\u602A\u6771\u897F......\u93E1\u5B50\uFF1F\u76E4\u5B50\uFF1F"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
@@ -22,7 +22,10 @@ MonoBehaviour:
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: fd818477ea32ba740876cbee3766e767, type: 2}
+      timing: 0
   - text: "\u4EC0\u9EBC\u554A......\u662F\u5783\u573E\u554A......"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
