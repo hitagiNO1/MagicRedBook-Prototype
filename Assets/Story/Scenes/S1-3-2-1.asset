@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: S1-3-2-1
   m_EditorClassIdentifier: 
-  StopMove: 0
+  StopMove: 1
   sentences:
   - text: "\u9019\u88E1\u2026\u2026\u611F\u89BA\u4E0D\u592A\u4E00\u6A23\uFF0C\u7A7A\u6C23\u90FD\u8B8A\u91CD\u4E86\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}

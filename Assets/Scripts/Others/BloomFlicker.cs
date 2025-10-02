@@ -34,6 +34,6 @@ public class BloomFlicker : MonoBehaviour
 
         mat.SetColor("_GlowColor", Color.white * intensity);
 
-        Debug.Log($"Dist={distance:F2}, t={t:F2}, speed={speed:F2}, intensity={intensity:F2}");
+        //Debug.Log($"Dist={distance:F2}, t={t:F2}, speed={speed:F2}, intensity={intensity:F2}");
     }
 }
