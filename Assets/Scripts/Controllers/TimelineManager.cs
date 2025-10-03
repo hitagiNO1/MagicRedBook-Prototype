@@ -15,6 +15,7 @@ public class TimelineManager : MonoBehaviour
     public ParticleSystem Magic1;
     public ParticleSystem Magic2;
     public ParticleSystem Magic3;
+    public ParticleSystem BookMagic;
     // 紀錄目前是否正在播放動畫
     public bool IsPlaying { get; private set; }
     private bool isWaitingForInput = false;
@@ -126,8 +127,20 @@ public class TimelineManager : MonoBehaviour
             Magic3.Play();
         }
     }
-
-
+    public void PlayBookMagic()
+    {
+        if (BookMagic != null)
+        {
+            BookMagic.Play();
+        }
+    }
+    public void ClearBookMagic()
+    {
+        if (BookMagic != null)
+        {
+            BookMagic.Clear();
+        }
+    }
     /// <summary>
     /// 停止粒子效果（Timeline Signal 呼叫）
     /// </summary>
