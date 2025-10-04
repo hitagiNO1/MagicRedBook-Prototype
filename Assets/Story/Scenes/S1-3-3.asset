@@ -102,7 +102,10 @@ MonoBehaviour:
   - text: "(\u7D05\u66F8\u5F9E\u6D6E\u8D77\u5FAE\u5F31\u7684\u767D\u5149\uFF0C\u5230\u5FEB\u901F\u9583\u720D\uFF0C\u4EE3\u8868\u8457\u4EC0\u9EBC\u6771\u897F\u5FEB\u901F\u9760\u8FD1\u3002)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 02861c9db17848d4b8c70abfa5d2fc55, type: 2}
+      timing: 0
   - text: "\u5C0F\u5FC3\uFF01\u5730\u9762\u5728\u9707\u52D5\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:

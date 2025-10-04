@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
+  m_Name: S1-2-3-3
+  m_EditorClassIdentifier: 
+  StopMove: 1
+  sentences:
+  - text: "\u563F\uFF01\u9019\u88E1\u6709\u500B\u4EAE\u4EAE\u7684\u602A\u6771\u897F......\u93E1\u5B50\uFF1F\u76E4\u5B50\uFF1F"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 12
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: fd818477ea32ba740876cbee3766e767, type: 2}
+      timing: 0
+  - text: "\u4EC0\u9EBC\u554A......\u662F\u5783\u573E\u554A......"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 10
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u7B49\u7B49\uFF01\uFF01\u90A3\u5C31\u662FCD\uFF01"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 10
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 13
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "(\u5E03\u840A\u514B\u5C07CD\u9084\u7D66\u96A8\u8EAB\u807D\uFF0C\u96A8\u8EAB\u807D\u5C07\u5B83\u7684\u5BF6\u8C9DCD\u6536\u5165\u56CA\u4E2D)"
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
+    actions: []
+    timline: []
+  - text: "\u6ECB\uFF0D\u6ECB\u6ECB\uFF0D\u6279\u54E9\u556A\u5566\uFF5E\u561F\u5695\u5695\u5695\u5695\u5695"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 0
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "HELLO EVERYONE\uFF5ELet\u2019s practice English together!"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 4
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u6B38\u6B38\u6B38\uFF01\uFF1F\u4F60\u5728\u8AAA\u4E9B\u4EC0\u9EBC\u554A\uFF0C\u5916\u661F\u8A9E\u55CE\uFF1F"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 13
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 4
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u9019\u5F35\u662F\u6559\u5C0F\u670B\u53CB\u7F8E\u8A9E\u6642\u7528\u7684\u9304\u97F3\u789F\uFF0C\u80FD\u8B93\u6211\u8AAA\u5F97\u4E00\u53E3\u6D41\u5229\u82F1\u6587\uFF5E"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 6
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u597D\u5F37\u2026\u2026\u5982\u679C\u6211\u6BCF\u5929\u807D\u7684\u8A71\uFF0C\u8AAA\u4E0D\u5B9A\u82F1\u6587\u5C31\u4E0D\u6703\u9019\u9EBC\u721B\u4E86......"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 4
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 3
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  nextScene: {fileID: 0}

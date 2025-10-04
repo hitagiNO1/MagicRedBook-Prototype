@@ -1,0 +1,151 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
+  m_Name: S1-2-3-2
+  m_EditorClassIdentifier: 
+  StopMove: 1
+  sentences:
+  - text: "\u5728\u54EA\u88E1\u2026\u2026\u6211\u7684\u5C0F\u789F\u789F\u5011\u2026\u2026"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 2
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 32888684716cf6842985ddbacd7d44d6, type: 2}
+      timing: 0
+  - text: "\u90A3\u500B\u2026\u2026\u6253\u64FE\u4E00\u4E0B\u3002"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 7
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u54C7\u554A\u554A\uFF01\u4F60\u5011\u662F\u8AB0\u5440\uFF01\uFF01\uFF01"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 3
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u5225\u7DCA\u5F35\u5566\uFF0C\u6211\u5011\u4E0D\u662F\u602A\u7269\uFF0C\u53EA\u662F\u807D\u5230\u4F60\u7684\u558A\u53EB\u8072\u2026\u2026\u6240\u4EE5\u904E\u4F86\u770B\u770B\u60C5\u6CC1\u3002"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 7
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 16
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u6211\u2026\u2026\u6211\u628A\u6211\u7684\u5BF6\u8C9D\u5011\u5F04\u4E1F\u4E86\uFF0C\u6211\u7684CD\u5011\u2026\u2026\u4ED6\u5011\u90FD\u4E0D\u898B\u4E86\u2026\u2026\uFF01"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 1
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "CD\u2026\u2026\uFF1F"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 5
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u4F60\u662F\u8AAA\u2026\u2026\u4F60\u653E\u97F3\u6A02\u7528\u7684CD\u55CE\uFF1F"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 5
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 15
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u662F\u7684......\u5B83\u5011\u662F\u6211\u7684\u4E00\u90E8\u5206\uFF0C\u4E5F\u662F\u6211\u5B58\u5728\u7684\u610F\u7FA9\u2026\u2026"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 2
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u90FD\u602A\u6211\u2026\u2026\u6211\u592A\u5927\u610F\u4E86\uFF0C\u624D\u6703\u2026\u2026"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 1
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u653E\u5FC3\uFF0C\u6211\u5011\u53EF\u4EE5\u5E6B\u4F60\u627E\u627E\u770B\u3002"
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 15
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 0
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "\u771F\u7684\u55CE\uFF01\uFF1F\u4F60\u5011\u9858\u610F\u5E6B\u6211\u2026\u2026\uFF1F"
+    speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 6d65ca3567e5ffb4d8c65f1f12eb00da, type: 2}
+      spriteIndex: 2
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
+    timline: []
+  - text: "\u7576\u7136\u6C92\u554F\u984C\u7684\uFF0C\u5305\u5728\u6211\u5011\u8EAB\u4E0A\uFF01"
+    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 0
+      actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 2
+      actionType: 5
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 19bd7a18b56fad748860185e9affd242, type: 2}
+      timing: 2
+  nextScene: {fileID: 0}
