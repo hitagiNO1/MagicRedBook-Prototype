@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: S1-3-4
   m_EditorClassIdentifier: 
-  StopMove: 0
+  StopMove: 1
   sentences:
   - text: "\u547C\u2026\u2026\u7D50\u675F\u4E86\u2026\u2026\u55CE\uFF1F"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -22,7 +22,10 @@ MonoBehaviour:
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 124ee26021ebf2346ae80ba2ce246c88, type: 2}
+      timing: 0
   - text: "\u7D50\u675F\u4E86\u2026\u2026\u5927\u6982\u5427\u3002"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
@@ -62,7 +65,10 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 1
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 0f63a7880250a6947bf1446bcefdc511, type: 2}
+      timing: 0
   - text: "\u54C8\u54C8\u54C8\uFF01\u8667\u4F60\u525B\u525B\u624D\u8DDF\u7260\u6253\u6210\u90A3\u6A23\uFF0C\u9084\u9019\u9EBC\u6709\u7CBE\u795E\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions:
@@ -112,8 +118,8 @@ MonoBehaviour:
       coords: {x: 0, y: 0}
       Right: 1
     timline:
-    - animation: 0
-      myPlayableAsset: {fileID: 0}
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 57742dba7bf80ef4ea353155fb907856, type: 2}
       timing: 0
   - text: "\u5443\u554A\u554A\u554A\u554A\uFF01\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
