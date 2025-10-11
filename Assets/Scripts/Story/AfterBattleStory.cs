@@ -7,7 +7,7 @@ public class AfterBattleStory : MonoBehaviour
     [Header("怪物死亡")]
     public GameObject[] targetObjects;
 
-    [Header("要播放的劇情")]
+    [Header("soft死亡要播放的劇情")]
     public StoryScene storyToPlay;
 
     private bool hasTriggered = false;
@@ -27,6 +27,10 @@ public class AfterBattleStory : MonoBehaviour
                 allDestroyed = false;
                 break;
             }
+        }
+        if (BattleSystem.Instance.state == BattleState.START)
+        {
+            
         }
 
         if (allDestroyed)

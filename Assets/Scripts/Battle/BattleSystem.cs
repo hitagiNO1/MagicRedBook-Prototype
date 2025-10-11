@@ -1,52 +1,63 @@
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
-using Random = UnityEngine.Random; // ²K¥[§O¦W¡A¸Ñ¨M¼ÒÀÀ¨â¥i°İÃD
+using static UnityEngine.EventSystems.EventTrigger;
+using Random = UnityEngine.Random; // æ·»åŠ åˆ¥åï¼Œè§£æ±ºæ¨¡æ“¬å…©å¯å•é¡Œ
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
 
 public class BattleSystem : MonoBehaviour
 {
-    public List<GameObject> playerPrefabs; // ©ì©Ô player1 ©M player2 ªº prefab
-    public List<GameObject> enemyPrefabs;  // ¼Ä¤H¹w»s¥ó¦Cªí
-    public List<Unit> playerUnits; // Àx¦sª±®a³æ¦ì
-    public List<Unit> enemyUnits;  // Àx¦s¼Ä¤H³æ¦ì
+    public List<GameObject> playerPrefabs; // æ‹–æ‹‰ player1 å’Œ player2 çš„ prefab
+    public List<GameObject> enemyPrefabs;  // æ•µäººé è£½ä»¶åˆ—è¡¨
+    public List<Unit> playerUnits; // å„²å­˜ç©å®¶å–®ä½
+    public List<Unit> enemyUnits;  // å„²å­˜æ•µäººå–®ä½
     public TextMeshProUGUI dialogueText;
-    public List<BattleHUD> playerHUDs; // ©ì©Ô player1 ©M player2 ªº HUD
-    public List<BattleHUD> enemyHUDs;  // °ÊºA³]¸mªº¼Ä¤H HUD
+    public List<BattleHUD> playerHUDs; // æ‹–æ‹‰ player1 å’Œ player2 çš„ HUD
+    public List<BattleHUD> enemyHUDs;  // å‹•æ…‹è¨­ç½®çš„æ•µäºº HUD
     public Enemyskill enemySkill;
     public Animator animator;
     private bool isHidden = false;
     public BattleState state;
     public SkillManager skillManager;
     public BuffDebuffManager buffDebuffManager;
-    private List<List<Func<bool>>> enemySkillsList; // ¨C­Ó¼Ä¤Hªº§Ş¯à¦Cªí
+    private List<List<Func<bool>>> enemySkillsList; // æ¯å€‹æ•µäººçš„æŠ€èƒ½åˆ—è¡¨
     public int turnCounter = 0;
     public GameController gameScript;
-    private List<bool> playersActed; // °O¿ı¨C­Óª±®a¬O§_¤w½T»{§Ş¯à¶¤¦C
-    private Dictionary<int, Unit> selectedTargets; // ¨C­Óª±®aªº¥Ø¼Ğ¼Ä¤H
+    private List<bool> playersActed; // è¨˜éŒ„æ¯å€‹ç©å®¶æ˜¯å¦å·²ç¢ºèªæŠ€èƒ½éšŠåˆ—
+    private Dictionary<int, Unit> selectedTargets; // æ¯å€‹ç©å®¶çš„ç›®æ¨™æ•µäºº
 
+    private string lastDefeatedEnemyName;
+
+    [Header("ç‰¹æ®Šæ’­æ”¾çš„åŠ‡æƒ…")]
+    public StoryScene SoftTL;
+    public StoryScene DeathTL;
+    public static BattleSystem Instance { get; private set; }
     void Start()
     {
+        // è¨­å®š Instanceï¼ˆå–®ä¾‹æ¨¡å¼ï¼‰
+        if (Instance == null)
+            Instance = this;
+
         state = BattleState.END;
         if (animator == null)
         {
-            Debug.LogError("Animator ¥¼ªş¥[¨ì BattleSystem ªº GameObject ¤W¡I");
+            Debug.LogError("Animator æœªé™„åŠ åˆ° BattleSystem çš„ GameObject ä¸Šï¼");
         }
 
         skillManager = GetComponent<SkillManager>();
         if (skillManager == null)
         {
-            Debug.LogError("SkillManager ¥¼ªş¥[¨ì BattleSystem ªº GameObject ¤W¡I");
+            Debug.LogError("SkillManager æœªé™„åŠ åˆ° BattleSystem çš„ GameObject ä¸Šï¼");
         }
 
         buffDebuffManager = GetComponent<BuffDebuffManager>();
         if (buffDebuffManager == null)
         {
-            Debug.LogError("BuffDebuffManager ¥¼ªş¥[¨ì BattleSystem ªº GameObject ¤W¡I");
+            Debug.LogError("BuffDebuffManager æœªé™„åŠ åˆ° BattleSystem çš„ GameObject ä¸Šï¼");
         }
 
         playerUnits = new List<Unit>();
@@ -54,6 +65,7 @@ public class BattleSystem : MonoBehaviour
         enemySkillsList = new List<List<Func<bool>>>();
         playersActed = new List<bool>();
         selectedTargets = new Dictionary<int, Unit>();
+        GameObject[] enemiesSnapshot = enemyPrefabs == null ? new GameObject[0] : enemyPrefabs.ToArray();
     }
 
     private void Update()
@@ -72,18 +84,18 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator SetupBattle()
     {
-        // ªì©l¤Æª±®a³æ¦ì©M HUD
+        // åˆå§‹åŒ–ç©å®¶å–®ä½å’Œ HUD
         for (int i = 0; i < playerPrefabs.Count; i++)
         {
             if (playerPrefabs[i] == null)
             {
-                Debug.LogError($"playerPrefabs[{i}] ¬°ªÅ¡I");
+                Debug.LogError($"playerPrefabs[{i}] ç‚ºç©ºï¼");
                 yield break;
             }
             Unit playerUnit = playerPrefabs[i].GetComponent<Unit>();
             if (playerUnit == null)
             {
-                Debug.LogError($"playerPrefabs[{i}] ¯Ê¤Ö Unit ²Õ¥ó¡I");
+                Debug.LogError($"playerPrefabs[{i}] ç¼ºå°‘ Unit çµ„ä»¶ï¼");
                 yield break;
             }
             playerUnits.Add(playerUnit);
@@ -94,27 +106,27 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"playerHUDs[{i}] ¥¼³]¸m©Î¬°ªÅ¡I");
+                Debug.LogError($"playerHUDs[{i}] æœªè¨­ç½®æˆ–ç‚ºç©ºï¼");
             }
             playersActed.Add(false);
         }
 
-        // ªì©l¤Æ¼Ä¤H³æ¦ì©M HUD
+        // åˆå§‹åŒ–æ•µäººå–®ä½å’Œ HUD
         for (int i = 0; i < enemyPrefabs.Count; i++)
         {
             if (enemyPrefabs[i] == null)
             {
-                Debug.LogError($"enemyPrefabs[{i}] ¬°ªÅ¡I");
+                Debug.LogError($"enemyPrefabs[{i}] ç‚ºç©ºï¼");
                 yield break;
             }
             Unit enemyUnit = enemyPrefabs[i].GetComponent<Unit>();
             if (enemyUnit == null)
             {
-                Debug.LogError($"enemyPrefabs[{i}] ¯Ê¤Ö Unit ²Õ¥ó¡I");
+                Debug.LogError($"enemyPrefabs[{i}] ç¼ºå°‘ Unit çµ„ä»¶ï¼");
                 yield break;
             }
             enemyUnits.Add(enemyUnit);
-            // ¨Ï¥Î mutiplebattle ¶Ç»¼ªº enemyHUDs
+            // ä½¿ç”¨ mutiplebattle å‚³éçš„ enemyHUDs
             if (i < enemyHUDs.Count && enemyHUDs[i] != null)
             {
                 enemyHUDs[i].SetHUD(enemyUnit);
@@ -122,13 +134,13 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"enemyHUDs[{i}] ¥¼³]¸m©Î¬°ªÅ¡I");
+                Debug.LogError($"enemyHUDs[{i}] æœªè¨­ç½®æˆ–ç‚ºç©ºï¼");
             }
 
             Enemyskill enemySkillComponent = enemyPrefabs[i].GetComponent<Enemyskill>();
             if (enemySkillComponent == null)
             {
-                Debug.LogError($"µLªk¦b enemyPrefab {i} ¤W¨ú±o Enemyskill ²Õ¥ó¡I");
+                Debug.LogError($"ç„¡æ³•åœ¨ enemyPrefab {i} ä¸Šå–å¾— Enemyskill çµ„ä»¶ï¼");
                 enemySkillsList.Add(new List<Func<bool>>());
             }
             else
@@ -142,7 +154,7 @@ public class BattleSystem : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = "³¥¥Íªº¼Ä¤H­Ì¥X²{¤F..";
+            dialogueText.text = "é‡ç”Ÿçš„æ•µäººå€‘å‡ºç¾äº†..";
         }
         yield return new WaitForSeconds(1f);
         skillManager.playerUnits = playerUnits;
@@ -162,7 +174,7 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PLAYERTURN;
         if (dialogueText != null)
         {
-            dialogueText.text = "ª±®a¦^¦X: ¿ï¾Ü§A­Ìªº¦æ°Ê©M¥Ø¼Ğ¼Ä¤H";
+            dialogueText.text = "ç©å®¶å›åˆ: é¸æ“‡ä½ å€‘çš„è¡Œå‹•å’Œç›®æ¨™æ•µäºº";
         }
 
         for (int i = 0; i < playersActed.Count; i++)
@@ -176,14 +188,14 @@ public class BattleSystem : MonoBehaviour
     {
         if (playerIndex < 0 || playerIndex >= playerUnits.Count)
         {
-            Debug.LogError($"µL®Äªº playerIndex: {playerIndex}");
+            Debug.LogError($"ç„¡æ•ˆçš„ playerIndex: {playerIndex}");
             return;
         }
 
         playersActed[playerIndex] = true;
         Debug.Log($"Player {playerIndex} acted: {playersActed[playerIndex]}, Total Skills = {skillManager.GetTotalSelectedSkills()}");
 
-        // ­×§ï¡G¥u­n¦³¥ô¤@ª±®aacted¡A´N¶i¤J ENEMYTURN
+        // ä¿®æ”¹ï¼šåªè¦æœ‰ä»»ä¸€ç©å®¶actedï¼Œå°±é€²å…¥ ENEMYTURN
         if (HasAnyPlayerActed())
         {
             if (AllEnemiesDead())
@@ -201,11 +213,18 @@ public class BattleSystem : MonoBehaviour
     {
         if (dialogueText != null)
         {
-            dialogueText.text = "¼Ä¤H­Ìªº¦^¦X...";
+            dialogueText.text = "æ•µäººå€‘çš„å›åˆ...";
+        }
+        foreach (GameObject enemy in enemyPrefabs)
+        {
+            if (enemy != null)
+            {
+                lastDefeatedEnemyName = enemy.name;
+            }
         }
         yield return new WaitForSeconds(1f);
 
-        // ¨Ï¥Î¤Ï¦V°j°é¥H¦w¥ş²¾°£¼Ä¤H
+        // ä½¿ç”¨åå‘è¿´åœˆä»¥å®‰å…¨ç§»é™¤æ•µäºº
         for (int i = enemyUnits.Count - 1; i >= 0; i--)
         {
             if (enemyUnits[i].currentHP > 0)
@@ -213,13 +232,13 @@ public class BattleSystem : MonoBehaviour
                 List<Func<bool>> skills = enemySkillsList[i];
                 if (skills == null)
                 {
-                    Debug.LogWarning($"¼Ä¤H {enemyUnits[i].unitName} ªº§Ş¯à¦Cªí¬° null¡A¸õ¹L¦æ°Ê");
+                    Debug.LogWarning($"æ•µäºº {enemyUnits[i].unitName} çš„æŠ€èƒ½åˆ—è¡¨ç‚º nullï¼Œè·³éè¡Œå‹•");
                     continue;
                 }
 
                 if (skills.Count == 0)
                 {
-                    Debug.LogWarning($"¼Ä¤H {enemyUnits[i].unitName} ªº§Ş¯à¦Cªí¬°ªÅ¡A¸õ¹L¦æ°Ê");
+                    Debug.LogWarning($"æ•µäºº {enemyUnits[i].unitName} çš„æŠ€èƒ½åˆ—è¡¨ç‚ºç©ºï¼Œè·³éè¡Œå‹•");
                     continue;
                 }
 
@@ -229,19 +248,19 @@ public class BattleSystem : MonoBehaviour
 
                 while (!skillExecuted && attempts < maxAttempts)
                 {
-                    int skillIndex = Random.Range(0, skills.Count); // ¤w½T«O skills.Count > 0
+                    int skillIndex = Random.Range(0, skills.Count); // å·²ç¢ºä¿ skills.Count > 0
                     Func<bool> selectedSkill = skills[skillIndex];
                     skillExecuted = selectedSkill.Invoke();
                     attempts++;
                     if (!skillExecuted)
                     {
-                        Debug.Log($"¼Ä¤H {enemyUnits[i].unitName} ªº§Ş¯à {skillIndex} ¥¿¦b§N«o¤¤¡A­«¿ï...");
+                        Debug.Log($"æ•µäºº {enemyUnits[i].unitName} çš„æŠ€èƒ½ {skillIndex} æ­£åœ¨å†·å»ä¸­ï¼Œé‡é¸...");
                     }
                 }
 
                 if (!skillExecuted)
                 {
-                    Debug.LogWarning($"¼Ä¤H {enemyUnits[i].unitName} ©Ò¦³§Ş¯à³£¦b§N«o¤¤¡A¸õ¹L¦æ°Ê");
+                    Debug.LogWarning($"æ•µäºº {enemyUnits[i].unitName} æ‰€æœ‰æŠ€èƒ½éƒ½åœ¨å†·å»ä¸­ï¼Œè·³éè¡Œå‹•");
                 }
                 else
                 {
@@ -249,14 +268,14 @@ public class BattleSystem : MonoBehaviour
                 }
             }
 
-            // ÀË¬d¦å¶q¬O§_¬° 0¡A¨Ã§Y®É¾P·´
+            // æª¢æŸ¥è¡€é‡æ˜¯å¦ç‚º 0ï¼Œä¸¦å³æ™‚éŠ·æ¯€
             if (enemyUnits[i].currentHP <= 0 && i < enemyPrefabs.Count && enemyPrefabs[i] != null)
             {
                 DestroyEnemy(i);
             }
         }
 
-        // Buff/Debuff ³B²z
+        // Buff/Debuff è™•ç†
         if (buffDebuffManager != null)
         {
             buffDebuffManager.TickDefenseDebuffs();
@@ -266,7 +285,7 @@ public class BattleSystem : MonoBehaviour
             buffDebuffManager.TickSkillDisable();
         }
 
-        // ´î§K§N«o
+        // æ¸›å…å†·å»
         if (enemySkill != null)
         {
             enemySkill.ReduceCooldowns();
@@ -296,7 +315,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    // ·s¼W¡G¿W¥ß³B²z¼Ä¤H¦º¤`ªº¾P·´¤èªk
+    // æ–°å¢ï¼šç¨ç«‹è™•ç†æ•µäººæ­»äº¡çš„éŠ·æ¯€æ–¹æ³•
     public void DestroyEnemy(int index)
     {
         if (index >= 0 && index < enemyPrefabs.Count && enemyPrefabs[index] != null)
@@ -310,14 +329,14 @@ public class BattleSystem : MonoBehaviour
             if (index < enemyHUDs.Count && enemyHUDs[index] != null)
             {
                 enemyHUDs[index].gameObject.SetActive(false);
-                Destroy(enemyHUDs[index].gameObject); // ¾P·´ HUD
+                Destroy(enemyHUDs[index].gameObject); // éŠ·æ¯€ HUD
                 enemyHUDs.RemoveAt(index);
             }
             if (index < enemySkillsList.Count)
             {
-                enemySkillsList.RemoveAt(index); // ¦P¨B²¾°£§Ş¯à¦Cªí
+                enemySkillsList.RemoveAt(index); // åŒæ­¥ç§»é™¤æŠ€èƒ½åˆ—è¡¨
             }
-            Debug.Log($"¼Ä¤H {enemyUnits[index].unitName} ¦å¶qÂk¹s¡A¥ß§Y¾P·´¡]³Ñ¾l¼Ä¤H¼Æ¡G{enemyUnits.Count}¡^");
+            Debug.Log($"æ•µäºº {enemyUnits[index].unitName} è¡€é‡æ­¸é›¶ï¼Œç«‹å³éŠ·æ¯€ï¼ˆå‰©é¤˜æ•µäººæ•¸ï¼š{enemyUnits.Count}ï¼‰");
         }
     }
 
@@ -369,75 +388,83 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         EndBattle();
     }
-
     public void EndBattle()
     {
+        ///TODO é€²å…¥ç‰¹æ®ŠçµæŸå¾Œä¸ç”¨åˆ°åº•ä¸‹çš„åˆªé™¤æ€ªç‰© è¦ç›´æ¥é€²åŠ‡æƒ…
         if (state == BattleState.WON)
         {
             if (dialogueText != null)
+                dialogueText.text = "ä½ è´å¾—äº†æˆ°é¬¥!";
+
+            // æ‰¾å‡ºæ˜¯å¦æœ‰ç‰¹æ®Šæ€ªç‰©ï¼ˆå…ˆæŠ“åƒè€ƒï¼Œä¹‹å¾Œå†è§¸ç™¼äº‹ä»¶ï¼‰
+            Debug.Log("æœ€å¾Œè¢«æ‰“å€’çš„æ•µäººï¼š" + lastDefeatedEnemyName);
+
+            if (!string.IsNullOrEmpty(lastDefeatedEnemyName) &&
+                lastDefeatedEnemyName.StartsWith("SOFT"))
             {
-                dialogueText.text = "§AÄ¹±o¤F¾Ô°«!";
+                Debug.Log("è§¸ç™¼ç‰¹æ®Šæ•µäººå‹åˆ©äº‹ä»¶: " + SoftTL);
+                //æ’­æ”¾éå ´åŠ‡æƒ…
+                GameController.Instance.PlayScene(SoftTL);
             }
             GameStateManager.Instance.SetState(GameState.Playing);
-            // ¾Ô°«³Ó§Q®É¾P·´©Ò¦³³Ñ¾l¼Ä¤H
-            foreach (GameObject enemy in enemyPrefabs)
+
+            // éŠ·æ¯€æ•µäººï¼ˆè‹¥æœ‰ parent å‰‡éŠ·æ¯€ parentï¼‰
+            foreach (var enemy in enemyPrefabs)
             {
-                if (enemy != null)
-                {
-                    Debug.Log("Parent: " + enemy.transform.parent.name);
-                    Destroy(enemy.transform.parent.gameObject);
-                }
+                if (enemy == null) continue;
+                Transform parent = enemy.transform.parent;
+                GameObject toDestroy = parent != null ? parent.gameObject : enemy;
+                Debug.Log("Destroying enemy root: " + (toDestroy != null ? toDestroy.name : "null"));
+                Destroy(toDestroy);
             }
             enemyPrefabs.Clear();
-            // ¾P·´©Ò¦³¼Ä¤H HUD
+            // éŠ·æ¯€ HUD
             foreach (var hud in enemyHUDs)
             {
-                if (hud != null)
-                {
-                    Destroy(hud.gameObject);
-                }
+                if (hud != null) Destroy(hud.gameObject);
             }
             enemyHUDs.Clear();
         }
+
         else if (state == BattleState.LOST || state == BattleState.RUN)
         {
             if (dialogueText != null)
-            {
-                dialogueText.text = state == BattleState.LOST ? "§A¿é¤F..." : "°k¶]¦¨¥\...";
-            }
+                dialogueText.text = state == BattleState.LOST ? "ä½ è¼¸äº†..." : "é€ƒè·‘æˆåŠŸ...";
+
             GameStateManager.Instance.SetState(GameState.Playing);
-            // ¾P·´©Ò¦³³Ñ¾l¼Ä¤H©M HUD ­×§ï
-            foreach (GameObject enemy in enemyPrefabs)
+            // æ‰¾å‡ºç‰¹æ®Šæ€ªç‰©ï¼ˆè‹¥å­˜åœ¨ï¼‰ä»¥ä¾¿è§¸ç™¼å¤±æ•—å°ˆå±¬è™•ç†
+            GameObject specialEnemy = null;
+            foreach (var enemy in enemyPrefabs)
             {
-                if (enemy != null)
+                if (enemy == null) continue;
+                if (enemy.name.StartsWith("Death"))
                 {
-                    Destroy(enemy);
+                    specialEnemy = enemy;
+                    break;
                 }
             }
-
             enemyPrefabs.Clear();
             foreach (var hud in enemyHUDs)
             {
-                if (hud != null)
-                {
-                    Destroy(hud.gameObject);
-                }
+                if (hud != null) Destroy(hud.gameObject);
             }
             enemyHUDs.Clear();
+
+            // è‹¥æœ‰ç‰¹æ®Šæ€ªç‰©ï¼Œè§¸ç™¼å¤±æ•—/é€ƒè·‘å°ˆå±¬è™•ç†
+            if (specialEnemy != null)
+            {
+                GameController.Instance.PlayScene(DeathTL);
+            }
         }
 
+        // å…¶ä»–æ”¶å°¾
         if (buffDebuffManager != null)
-        {
             buffDebuffManager.ClearAllEffects();
-        }
         if (animator != null)
-        {
             animator.SetTrigger("Hide");
-        }
         if (skillManager != null)
-        {
             skillManager.ClearSkillIcons();
-        }
+
         isHidden = false;
     }
 
@@ -446,7 +473,7 @@ public class BattleSystem : MonoBehaviour
         List<Func<bool>> enemySkills = enemySkillComponent.GetEnemySkills(enemyName);
         if (enemySkills == null)
         {
-            Debug.LogError($"¼Ä¤H {enemyName} ªº§Ş¯à¦Cªí¬° null¡Aªì©l¤Æ¬°ªÅ¦Cªí");
+            Debug.LogError($"æ•µäºº {enemyName} çš„æŠ€èƒ½åˆ—è¡¨ç‚º nullï¼Œåˆå§‹åŒ–ç‚ºç©ºåˆ—è¡¨");
             enemySkills = new List<Func<bool>>();
         }
         enemySkillsList.Add(enemySkills);
@@ -460,7 +487,7 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"µL®Äªº playerIndex {playerIndex} ©Î target {target?.unitName}");
+            Debug.LogError($"ç„¡æ•ˆçš„ playerIndex {playerIndex} æˆ– target {target?.unitName}");
         }
     }
 

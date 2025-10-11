@@ -6,8 +6,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 public class CharControlles : MonoBehaviour
 {
     [Header("角色移動設定")]
-    public float walkSpeed = 3f;    // 走路速度
-    public float runSpeed = 6f;     // 奔跑速度
+    public float walkSpeed = 6f;    // 走路速度
+    public float runSpeed = 10f;     // 奔跑速度
     private float h;
     private float v;
     private float damping = 2.5f;
@@ -42,8 +42,14 @@ public class CharControlles : MonoBehaviour
             v = Mathf.MoveTowards(v, 0f, damping * Time.deltaTime);
         }
 
-        //Shift 奔跑
-        float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        // 設定移動速度
+        float moveSpeed = walkSpeed; // 預設走路速度
+        if (GameStateManager.Instance.IsState(GameState.Playing))
+        {
+            //Shift 奔跑
+            if (Input.GetKey(KeyCode.LeftShift))
+                moveSpeed = runSpeed;
+        }
 
         Vector3 movement = new Vector3(h * moveSpeed, 0, v * moveSpeed) * Time.deltaTime;
         transform.Translate(movement, Space.World);

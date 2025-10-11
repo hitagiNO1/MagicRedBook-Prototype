@@ -14,7 +14,7 @@ public class SmoothFollow : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
 
     [Header("是否啟用跟隨")]
-    public bool isFollowing = true; // 預設開啟
+    public bool isFollowing = false;
     void LateUpdate()
     {
         if (!isFollowing || target == null) return;
