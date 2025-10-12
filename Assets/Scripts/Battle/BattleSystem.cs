@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
+using TMPro;
+using System;
 using Random = UnityEngine.Random; // 添加別名，解決模擬兩可問題
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
@@ -30,17 +29,14 @@ public class BattleSystem : MonoBehaviour
     private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
     private Dictionary<int, Unit> selectedTargets; // 每個玩家的目標敵人
 
-    private string lastDefeatedEnemyName;
-
-    [Header("特殊播放的劇情")]
-    public StoryScene SoftTL;
-    public StoryScene DeathTL;
     public static BattleSystem Instance { get; private set; }
     void Start()
     {
         // 設定 Instance（單例模式）
         if (Instance == null)
             Instance = this;
+        else
+            Destroy(gameObject);
 
         state = BattleState.END;
         if (animator == null)
@@ -65,7 +61,6 @@ public class BattleSystem : MonoBehaviour
         enemySkillsList = new List<List<Func<bool>>>();
         playersActed = new List<bool>();
         selectedTargets = new Dictionary<int, Unit>();
-        GameObject[] enemiesSnapshot = enemyPrefabs == null ? new GameObject[0] : enemyPrefabs.ToArray();
     }
 
     private void Update()
@@ -214,13 +209,6 @@ public class BattleSystem : MonoBehaviour
         if (dialogueText != null)
         {
             dialogueText.text = "敵人們的回合...";
-        }
-        foreach (GameObject enemy in enemyPrefabs)
-        {
-            if (enemy != null)
-            {
-                lastDefeatedEnemyName = enemy.name;
-            }
         }
         yield return new WaitForSeconds(1f);
 
@@ -388,83 +376,75 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         EndBattle();
     }
+
     public void EndBattle()
     {
-        ///TODO 進入特殊結束後不用到底下的刪除怪物 要直接進劇情
         if (state == BattleState.WON)
         {
             if (dialogueText != null)
+            {
                 dialogueText.text = "你贏得了戰鬥!";
-
-            // 找出是否有特殊怪物（先抓參考，之後再觸發事件）
-            Debug.Log("最後被打倒的敵人：" + lastDefeatedEnemyName);
-
-            if (!string.IsNullOrEmpty(lastDefeatedEnemyName) &&
-                lastDefeatedEnemyName.StartsWith("SOFT"))
-            {
-                Debug.Log("觸發特殊敵人勝利事件: " + SoftTL);
-                //播放過場劇情
-                GameController.Instance.PlayScene(SoftTL);
             }
             GameStateManager.Instance.SetState(GameState.Playing);
-
-            // 銷毀敵人（若有 parent 則銷毀 parent）
-            foreach (var enemy in enemyPrefabs)
+            // 戰鬥勝利時銷毀所有剩餘敵人
+            foreach (GameObject enemy in enemyPrefabs)
             {
-                if (enemy == null) continue;
-                Transform parent = enemy.transform.parent;
-                GameObject toDestroy = parent != null ? parent.gameObject : enemy;
-                Debug.Log("Destroying enemy root: " + (toDestroy != null ? toDestroy.name : "null"));
-                Destroy(toDestroy);
-            }
-            enemyPrefabs.Clear();
-            // 銷毀 HUD
-            foreach (var hud in enemyHUDs)
-            {
-                if (hud != null) Destroy(hud.gameObject);
-            }
-            enemyHUDs.Clear();
-        }
-
-        else if (state == BattleState.LOST || state == BattleState.RUN)
-        {
-            if (dialogueText != null)
-                dialogueText.text = state == BattleState.LOST ? "你輸了..." : "逃跑成功...";
-
-            GameStateManager.Instance.SetState(GameState.Playing);
-            // 找出特殊怪物（若存在）以便觸發失敗專屬處理
-            GameObject specialEnemy = null;
-            foreach (var enemy in enemyPrefabs)
-            {
-                if (enemy == null) continue;
-                if (enemy.name.StartsWith("Death"))
+                if (enemy != null)
                 {
-                    specialEnemy = enemy;
-                    break;
+                    Debug.Log("Parent: " + enemy.transform.parent.name);
+                    Destroy(enemy.transform.parent.gameObject);
                 }
             }
             enemyPrefabs.Clear();
+            // 銷毀所有敵人 HUD
             foreach (var hud in enemyHUDs)
             {
-                if (hud != null) Destroy(hud.gameObject);
+                if (hud != null)
+                {
+                    Destroy(hud.gameObject);
+                }
             }
             enemyHUDs.Clear();
-
-            // 若有特殊怪物，觸發失敗/逃跑專屬處理
-            if (specialEnemy != null)
+        }
+        else if (state == BattleState.LOST || state == BattleState.RUN)
+        {
+            if (dialogueText != null)
             {
-                GameController.Instance.PlayScene(DeathTL);
+                dialogueText.text = state == BattleState.LOST ? "你輸了..." : "逃跑成功...";
             }
+            GameStateManager.Instance.SetState(GameState.Playing);
+            // 銷毀所有剩餘敵人和 HUD 修改
+            foreach (GameObject enemy in enemyPrefabs)
+            {
+                if (enemy != null)
+                {
+                    Destroy(enemy);
+                }
+            }
+
+            enemyPrefabs.Clear();
+            foreach (var hud in enemyHUDs)
+            {
+                if (hud != null)
+                {
+                    Destroy(hud.gameObject);
+                }
+            }
+            enemyHUDs.Clear();
         }
 
-        // 其他收尾
         if (buffDebuffManager != null)
+        {
             buffDebuffManager.ClearAllEffects();
+        }
         if (animator != null)
+        {
             animator.SetTrigger("Hide");
+        }
         if (skillManager != null)
+        {
             skillManager.ClearSkillIcons();
-
+        }
         isHidden = false;
     }
 

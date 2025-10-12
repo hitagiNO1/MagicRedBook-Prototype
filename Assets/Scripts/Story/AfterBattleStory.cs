@@ -28,10 +28,6 @@ public class AfterBattleStory : MonoBehaviour
                 break;
             }
         }
-        if (BattleSystem.Instance.state == BattleState.START)
-        {
-            
-        }
 
         if (allDestroyed)
         {
