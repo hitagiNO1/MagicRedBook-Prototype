@@ -24,6 +24,7 @@ public class RedBook : MonoBehaviour
         animator = GetComponent<Animator>();
         //BookCamera.enabled = false;
     }
+
     private void Update()
     {
         HandleInput();
@@ -45,7 +46,12 @@ public class RedBook : MonoBehaviour
             }
         }
 
-       
+        // ESC 關閉紅書
+        if (Input.GetKeyDown(KeyCode.Escape) && isOpen && GameStateManager.Instance.IsState(GameState.Redbook))
+        {
+            Debug.Log("Escape key pressed, closing Red Book");
+            CloseRedBook();
+        }
     }
 
     private void UpdateHUD()
@@ -98,6 +104,7 @@ public class RedBook : MonoBehaviour
             GameStateManager.Instance.SetState(GameState.Playing);
         }
     }
+
     public IEnumerator CloseBook()
     {
         // 等待 Animator 進入 DOWN 狀態
@@ -105,6 +112,7 @@ public class RedBook : MonoBehaviour
         // 動畫播放完畢，才關閉 UI 與切換狀態
         menuUI.SetActive(false);
     }
+
     public IEnumerator OpenBook()
     {
         //延遲紅書上升動畫攝影機抬頭
@@ -113,9 +121,10 @@ public class RedBook : MonoBehaviour
         //BookCamera.enabled = true;
         animator.SetTrigger("UP");
         menuUI.SetActive(true);
-        ShowPage(3);                // 預設顯示 Party
+        ShowPage(3); // 預設顯示 Monster
         Goal.UpdateObjective();
     }
+
     public void ShowPage(int index)
     {
         currentPage = index;

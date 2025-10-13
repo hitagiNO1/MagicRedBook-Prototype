@@ -15775,7 +15775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 0
+  - eventID: 4
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -76436,7 +76436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 0
+  - eventID: 4
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -83873,7 +83873,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -53.56152}
+  m_LocalPosition: {x: 0, y: 0, z: -106.961525}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -83881,7 +83881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 405.3, y: 30.070007}
+  m_AnchoredPosition: {x: 697, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -250264,7 +250264,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 405.3, y: 30.070007, z: -53.56152}
+  m_LocalPosition: {x: 697, y: 30.07001, z: -106.961525}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -348420,7 +348420,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 405.3, y: 0.07, z: -1.6}
+  m_LocalPosition: {x: 697, y: 0.07, z: -55}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -379523,7 +379523,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 15
+  m_SortingOrder: 549
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -390934,8 +390934,6 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
-  SoftTL: {fileID: 0}
-  DeathTL: {fileID: 0}
 --- !u!114 &549341177394799278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428495,6 +428493,7 @@ MonoBehaviour:
   Rcoords: {x: 765, y: -45}
   LBar: {fileID: 21300000, guid: c66ceaa73da023743a32f016fdd31082, type: 3}
   RBar: {fileID: 21300000, guid: 92381ef972f884f4ca9cd07a41809239, type: 3}
+  MidBar: {fileID: 0}
   LBack: {fileID: 443640531}
   RBack: {fileID: 1441902982}
   spritesPrefab: {fileID: 6486962572236652023}

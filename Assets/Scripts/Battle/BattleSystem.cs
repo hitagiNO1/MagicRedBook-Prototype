@@ -29,15 +29,8 @@ public class BattleSystem : MonoBehaviour
     private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
     private Dictionary<int, Unit> selectedTargets; // 每個玩家的目標敵人
 
-    public static BattleSystem Instance { get; private set; }
     void Start()
     {
-        // 設定 Instance（單例模式）
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-
         state = BattleState.END;
         if (animator == null)
         {

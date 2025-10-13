@@ -1,8 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class SkillManager : MonoBehaviour
 {
@@ -14,7 +15,6 @@ public class SkillManager : MonoBehaviour
     public BuffDebuffManager buffDebuffManager;
     public Itemuse itemuse;
 
-    // ·s¼W¡GLayerMask ¥Î©ó°Ï¤À¼Ä¤H©Mª±®a
     public LayerMask enemyLayer;
     public LayerMask playerLayer;
 
@@ -25,7 +25,7 @@ public class SkillManager : MonoBehaviour
     private int skill5CooldownTurns = 2;
     private int catskill2CooldownTurns = 2;
     private int catskill3CooldownTurns = 1;
-    private int catskill4CooldownTurns = 2; // ­×§ï¬° 2 ¦^¦X
+    private int catskill4CooldownTurns = 2;
     private int catskill5CooldownTurns = 3;
 
     public AudioSource audioSource;
@@ -36,10 +36,10 @@ public class SkillManager : MonoBehaviour
     public Dictionary<int, List<string>> selectedSkillNames = new Dictionary<int, List<string>>();
     public int maxSkillPerTurn = 3;
 
-    public Dictionary<int, Unit> selectedTargets = new Dictionary<int, Unit>(); // ¨C­Óª±®aªº¿ï¤¤¥Ø¼Ğ
-    public bool isWaitingForTarget = false; // ¼Ğ°O¬O§_¦bµ¥«İÂIÀ»¥Ø¼Ğ
-    public string pendingSkill = null; // Àx¦s·í«eµ¥«İ¥Ø¼Ğªº§Ş¯à
-    public int pendingPlayerIndex = -1; // Àx¦s·í«eµ¥«İ¥Ø¼Ğªºª±®a¯Á¤Ş
+    public Dictionary<int, Unit> selectedTargets = new Dictionary<int, Unit>();
+    public bool isWaitingForTarget = false;
+    public string pendingSkill = null;
+    public int pendingPlayerIndex = -1;
 
     void Start()
     {
@@ -50,7 +50,7 @@ public class SkillManager : MonoBehaviour
             Debug.Log($"Initializing player {i}: {playerUnits[i]?.unitName}");
             skillQueues[i] = new List<System.Action>();
             selectedSkillNames[i] = new List<string>();
-            selectedTargets[i] = null; // ªì©l¤Æ¨C­Óª±®aªº¥Ø¼Ğ¬° null
+            selectedTargets[i] = null;
             if (i == 0)
             {
                 skillCooldowns["Skill_2_0"] = 0;
@@ -72,78 +72,90 @@ public class SkillManager : MonoBehaviour
     {
         if (isWaitingForTarget && Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                Debug.Log("Click detected on UI, ignoring raycast for non-UI targets");
+                return;
+            }
+
+            if (pendingSkill == "catSkill_4")
+            {
+                Debug.Log("Ignoring raycast for catSkill_4, please click a player portrait via UI");
+                dialogueText.text = "è«‹é»æ“Šä¸€å€‹ç©å®¶é ­åƒä»¥ä½¿ç”¨è²“æŠ€èƒ½ 4ï¼";
+                return;
+            }
+
+            Debug.Log("Left mouse button clicked, processing raycast for target selection");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Unit targetUnit = null;
 
-            // ®Ú¾Ú§Ş¯à/ª««~Ãş«¬¿ï¾Ü¾A·íªº LayerMask
-            bool isPlayerTarget = pendingSkill == "catSkill_4" || pendingSkill == "Can" || pendingSkill == "Grass" || pendingSkill == "Drying";
+            bool isPlayerTarget = pendingSkill == "Can" || pendingSkill == "Grass" || pendingSkill == "Drying";
             LayerMask targetLayer = isPlayerTarget ? playerLayer : enemyLayer;
 
-            // 2D ®g½uÀË´ú
             RaycastHit2D hit2D = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, targetLayer);
             if (hit2D.collider != null)
             {
                 targetUnit = hit2D.collider.GetComponent<Unit>();
+                Debug.Log($"2D Raycast hit: {hit2D.collider.name}, Unit: {targetUnit?.unitName}");
             }
             else
             {
-                // 3D ®g½uÀË´ú¡]³Æ¥Î¡^
                 RaycastHit hit3D;
                 if (Physics.Raycast(ray, out hit3D, Mathf.Infinity, targetLayer))
                 {
                     targetUnit = hit3D.collider.GetComponent<Unit>();
+                    Debug.Log($"3D Raycast hit: {hit3D.collider.name}, Unit: {targetUnit?.unitName}");
                 }
             }
 
             if (targetUnit != null && (enemyUnits.Contains(targetUnit) || playerUnits.Contains(targetUnit)) && targetUnit.currentHP > 0)
             {
-                // ½T«Oª±®a¥Ø¼Ğª««~¶È¿ï¾Üª±®a³æ¦ì
                 if (isPlayerTarget && !playerUnits.Contains(targetUnit))
                 {
-                    dialogueText.text = "½ĞÂIÀ»¤@­Óª±®aÀY¹³¡I";
+                    dialogueText.text = "è«‹é»æ“Šä¸€å€‹ç©å®¶é ­åƒï¼";
                     Debug.LogWarning("Player target item can only target player units!");
                     return;
                 }
-                // ½T«O¨ä¥L§Ş¯à¶È¿ï¾Ü¼Ä¤H³æ¦ì
                 if (!isPlayerTarget && !enemyUnits.Contains(targetUnit))
                 {
-                    dialogueText.text = "½ĞÂIÀ»¤@­Ó¼Ä¤H¥Ø¼Ğ¡I";
+                    dialogueText.text = "è«‹é»æ“Šä¸€å€‹æ•µäººç›®æ¨™ï¼";
                     Debug.LogWarning("Skill can only target enemy units!");
                     return;
                 }
 
+                Debug.Log($"Valid target selected: {targetUnit.unitName} for skill {pendingSkill}");
                 SelectTarget(pendingPlayerIndex, targetUnit);
                 ExecutePendingSkill();
             }
             else
             {
-                string targetType = isPlayerTarget ? "ª±®aÀY¹³" : "¼Ä¤H¥Ø¼Ğ";
-                dialogueText.text = $"½ĞÂIÀ»¤@­Ó¦³®Äªº{targetType}¡I";
+                string targetType = isPlayerTarget ? "ç©å®¶é ­åƒ" : "æ•µäººç›®æ¨™";
+                dialogueText.text = $"è«‹é»æ“Šä¸€å€‹æœ‰æ•ˆçš„{targetType}ï¼";
                 Debug.LogWarning("Invalid or dead target clicked!");
             }
         }
 
-        // ¥kÁä¨ú®ø§Ş¯à¿ï¾Ü
         if (isWaitingForTarget && Input.GetMouseButtonDown(1))
         {
             isWaitingForTarget = false;
             pendingSkill = null;
             pendingPlayerIndex = -1;
-            dialogueText.text = "¤w¨ú®ø§Ş¯à¿ï¾Ü";
+            dialogueText.text = "å·²å–æ¶ˆæŠ€èƒ½é¸æ“‡";
             Debug.Log("Skill selection cancelled by right-click");
         }
     }
 
     public void SelectTarget(int playerIndex, Unit target)
     {
+        Debug.Log($"SelectTarget called for playerIndex: {playerIndex}, target: {target?.unitName}, caller: {new System.Diagnostics.StackTrace().ToString()}");
         if (target != null && (enemyUnits.Contains(target) || playerUnits.Contains(target)) && target.currentHP > 0)
         {
             selectedTargets[playerIndex] = target;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ¤w¿ï¾Ü¥Ø¼Ğ¡G{target.unitName}";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} å·²é¸æ“‡ç›®æ¨™ï¼š{target.unitName}";
             Debug.Log($"Player {playerIndex} selected target: {target.unitName}");
-            // °ª«G¿ï¤¤ªº¥Ø¼Ğ
+
             HighlightTarget(target, true);
-            // ¨ú®ø¨ä¥L¥Ø¼Ğªº°ª«G
+
             foreach (var unit in enemyUnits)
             {
                 if (unit != target && unit.currentHP > 0)
@@ -162,7 +174,7 @@ public class SkillManager : MonoBehaviour
         else
         {
             selectedTargets[playerIndex] = null;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName}¡GµL®Äªº¥Ø¼Ğ¡A½ĞÂIÀ»¤@­Ó¦s¬¡ªº¥Ø¼Ğ¡I";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName}ï¼šç„¡æ•ˆçš„ç›®æ¨™ï¼Œè«‹é»æ“Šä¸€å€‹å­˜æ´»çš„ç›®æ¨™ï¼";
             Debug.LogWarning($"Player {playerIndex}: Invalid or dead target!");
         }
     }
@@ -170,7 +182,7 @@ public class SkillManager : MonoBehaviour
     public void HighlightTarget(Unit target, bool isHighlighted)
     {
         SpriteRenderer renderer = target.GetComponent<SpriteRenderer>();
-        Image image = target.GetComponent<Image>(); // ¤ä´© UI Image ¥Î©óÀY¹³°ª«G
+        Image image = target.GetComponent<Image>();
         if (renderer != null)
         {
             renderer.color = isHighlighted ? Color.yellow : Color.white;
@@ -181,48 +193,57 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    // ·s¼W¡G²M°£©Ò¦³°ª¥ú®ÄªGªº¤èªk
     public void ClearAllHighlights()
     {
-        // ¥ı¦¬¶°©Ò¦³­n³B²zªºÁä¡AÁ×§K­¡¥N®É­×§ï¶°¦X
         List<int> keysToClear = new List<int>(selectedTargets.Keys);
-
         foreach (int playerIndex in keysToClear)
         {
             if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] != null)
             {
                 Unit target = selectedTargets[playerIndex];
-                HighlightTarget(target, false); // ²¾°£°ª¥ú
-                selectedTargets[playerIndex] = null; // ²MªÅ¥Ø¼Ğ
+                HighlightTarget(target, false);
+                selectedTargets[playerIndex] = null;
                 Debug.Log($"Cleared highlight from player {playerIndex}'s target: {target?.unitName}");
             }
         }
-
-        // ¥i¿ï¡G§¹¥ş²MªÅ Dictionary¡]¦pªG¤£»İ­n«O¯dªÅ­È¡^
         selectedTargets.Clear();
-
         if (dialogueText != null)
         {
-            dialogueText.text = ""; // ²MªÅ¹ï¸Ü¤å¦r¡A©Î³]¬°¾A·í´£¥Ü
+            dialogueText.text = "";
         }
         Debug.Log("All highlights cleared successfully");
     }
 
-    // ·s¼W¡G³B²zª±®aÀY¹³ÂIÀ»¡]¥Î©ó UI Event Trigger¡^
     public void OnPlayerHeadClick(int playerIndex)
     {
-        if (!isWaitingForTarget || pendingSkill != "catSkill_4" || pendingPlayerIndex != 1) return; // ¥u¦bµ¥«İ catSkill_4 ®É¦^À³
+        Debug.Log($"OnPlayerHeadClick called for playerIndex: {playerIndex}, pendingSkill: {pendingSkill}, isWaitingForTarget: {isWaitingForTarget}, caller: {new System.Diagnostics.StackTrace().ToString()}");
+
+        // æª¢æŸ¥ playerUnits æ˜¯å¦æœ‰æ•ˆ
+        if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count)
+        {
+            Debug.LogError($"Invalid playerUnits or playerIndex: {playerIndex}, playerUnits count: {playerUnits?.Count}");
+            dialogueText.text = "éŒ¯èª¤ï¼šç„¡æ•ˆçš„ç©å®¶ç´¢å¼•ï¼";
+            return;
+        }
+
+        // æª¢æŸ¥ç‹€æ…‹æ˜¯å¦æ­£ç¢º
+        if (!isWaitingForTarget || pendingSkill != "catSkill_4" || pendingPlayerIndex != 1)
+        {
+            Debug.LogWarning($"OnPlayerHeadClick ignored: Invalid state (isWaitingForTarget: {isWaitingForTarget}, pendingSkill: {pendingSkill}, pendingPlayerIndex: {pendingPlayerIndex})");
+            return;
+        }
 
         Unit target = playerUnits[playerIndex];
         if (target != null && target.currentHP > 0)
         {
+            Debug.Log($"Player head click: Selecting target {target.unitName} for catSkill_4");
             SelectTarget(pendingPlayerIndex, target);
             ExecutePendingSkill();
         }
         else
         {
-            dialogueText.text = "½Ğ¿ï¾Ü¤@­Ó¦s¬¡ªºª±®a¥Ø¼Ğ¡I";
-            Debug.LogWarning($"Invalid player target: {playerIndex}");
+            dialogueText.text = "è«‹é¸æ“‡ä¸€å€‹å­˜æ´»çš„ç©å®¶ç›®æ¨™ï¼";
+            Debug.LogWarning($"Invalid player target: {playerIndex}, target: {(target != null ? target.unitName : "null")}, HP: {(target != null ? target.currentHP : -1)}");
         }
     }
 
@@ -235,10 +256,10 @@ public class SkillManager : MonoBehaviour
             skillQueues[playerIndex].RemoveAt(index);
             if (selectedTargets[playerIndex] != null)
             {
-                HighlightTarget(selectedTargets[playerIndex], false); // ²¾°£°ª«G
-                selectedTargets[playerIndex] = null; // ²MªÅ¥Ø¼Ğ
+                HighlightTarget(selectedTargets[playerIndex], false);
+                selectedTargets[playerIndex] = null;
             }
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ¨ú®ø¤F {skillName}";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} å–æ¶ˆäº† {skillName}";
             AddSkillIcon();
             Debug.Log($"Player {playerIndex} cancelled skill: {skillName}");
         }
@@ -248,7 +269,7 @@ public class SkillManager : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0)
         {
-            dialogueText.text = $"{playerUnits[playerIndex].unitName}¡G½ĞÂIÀ»¤@­Ó¦³®Äªº¥Ø¼Ğ¡I";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName}ï¼šè«‹é»æ“Šä¸€å€‹æœ‰æ•ˆçš„ç›®æ¨™ï¼";
             Debug.LogWarning($"Player {playerIndex}: Invalid or dead target!");
             return false;
         }
@@ -276,7 +297,6 @@ public class SkillManager : MonoBehaviour
             case "catSkill_4":
                 catSkill_4(pendingPlayerIndex, target);
                 break;
-            // ²K¥[ª««~®×¨Ò
             case "Can":
                 itemuse.UseCan(pendingPlayerIndex, target);
                 break;
@@ -307,10 +327,10 @@ public class SkillManager : MonoBehaviour
                 PlaySoundByName("skill1");
                 int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
                 PerformBasicAttack(playerIndex, target, buffedDamage);
-                dialogueText.text = $"{playerUnits[playerIndex].unitName} ¥Ï¥X¤â¤Wªº²y§ğÀ» {target.unitName}";
+                dialogueText.text = $"{playerUnits[playerIndex].unitName} ç”©å‡ºæ‰‹ä¸Šçš„çƒæ”»æ“Š {target.unitName}";
             }
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 1 ¹ï {target.unitName}";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 1 å° {target.unitName}";
         RemoveSkillIcon();
     }
 
@@ -324,9 +344,9 @@ public class SkillManager : MonoBehaviour
             int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.5f);
             PerformMultiTargetAttack(playerIndex, buffedDamage);
             skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ±N¤â¤Wªº²y¤À´²¥Ï¥X§ğÀ»¥ş³¡¼Ä¤H";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} å°‡æ‰‹ä¸Šçš„çƒåˆ†æ•£ç”©å‡ºæ”»æ“Šå…¨éƒ¨æ•µäºº";
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 2";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 2";
         RemoveSkillIcon();
     }
 
@@ -339,9 +359,9 @@ public class SkillManager : MonoBehaviour
             PlaySoundByName("skill3");
             buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
             skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ±N¨­¤Wªº¤ò¾ã²z¦n¡A¨Ï¨¾¿m¤O¤W¤É";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} å°‡èº«ä¸Šçš„æ¯›æ•´ç†å¥½ï¼Œä½¿é˜²ç¦¦åŠ›ä¸Šå‡";
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 3";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 3";
         RemoveSkillIcon();
     }
 
@@ -354,9 +374,9 @@ public class SkillManager : MonoBehaviour
             PlaySoundByName("Skill_4");
             buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
             skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ºòÁY¦¨¤@¹Î¡A¨Ï¼Ä¤H§ä¤£¨ìÁ_»Ø§ğÀ»";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} ç·Šç¸®æˆä¸€åœ˜ï¼Œä½¿æ•µäººæ‰¾ä¸åˆ°ç¸«éš™æ”»æ“Š";
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 4";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 4";
         RemoveSkillIcon();
     }
 
@@ -373,10 +393,10 @@ public class SkillManager : MonoBehaviour
                 buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
                 int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.3f);
                 PerformBasicAttack(playerIndex, target, buffedDamage);
-                dialogueText.text = $"{playerUnits[playerIndex].unitName} ©ê¦í¼Ä¤è¡A¨Ï¥X³Ì±j§ğÀ»¨ß¤l¿å¡I";
+                dialogueText.text = $"{playerUnits[playerIndex].unitName} æŠ±ä½æ•µæ–¹ï¼Œä½¿å‡ºæœ€å¼·æ”»æ“Šå…”å­è¸¹ï¼";
             }
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 5 ¹ï {target.unitName}";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 5 å° {target.unitName}";
         RemoveSkillIcon();
     }
 
@@ -391,10 +411,10 @@ public class SkillManager : MonoBehaviour
                 Debug.Log($"Executing catSkill_1 for player {playerIndex}, target: {target.unitName}");
                 int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
                 PerformBasicAttack(playerIndex, target, buffedDamage);
-                dialogueText.text = $"{playerUnits[playerIndex].unitName} ¾ß°_¨­ÃäªºªF¦è¥á¦V {target.unitName}";
+                dialogueText.text = $"{playerUnits[playerIndex].unitName} æ’¿èµ·èº«é‚Šçš„æ±è¥¿ä¸Ÿå‘ {target.unitName}";
             }
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 1 ¹ï {target.unitName}";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 1 å° {target.unitName}";
         RemoveSkillIcon();
     }
 
@@ -407,9 +427,9 @@ public class SkillManager : MonoBehaviour
             Debug.Log($"Executing catSkill_2 for player {playerIndex}");
             buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
             skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ±N¶Ë¤f¶i¦æ¥]²Ï";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} å°‡å‚·å£é€²è¡ŒåŒ…ç´®";
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 2";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 2";
         RemoveSkillIcon();
     }
 
@@ -423,9 +443,9 @@ public class SkillManager : MonoBehaviour
             int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
             PerformMultiTargetAttack(playerIndex, buffedDamage);
             skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ³z¹L°Ûºqµ¹¥şÅé¼Ä¤H³y¦¨¶Ë®`";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} é€éå”±æ­Œçµ¦å…¨é«”æ•µäººé€ æˆå‚·å®³";
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 3";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 3";
         RemoveSkillIcon();
     }
 
@@ -438,12 +458,12 @@ public class SkillManager : MonoBehaviour
             if (target.currentHP > 0)
             {
                 Debug.Log($"Executing catSkill_4 for player {playerIndex}, target: {target.unitName}");
-                buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2); // ´£¤É¥Ø¼Ğ§ğÀ»¤O 200%¡A«ùÄò 2 ¦^¦X
+                buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2);
                 skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
-                dialogueText.text = $"{playerUnits[playerIndex].unitName} ¹ï {target.unitName} ¬I®iÅ]ªk¡A´£¤É¨ä§ğÀ»¤O";
+                dialogueText.text = $"{playerUnits[playerIndex].unitName} å° {target.unitName} æ–½å±•é­”æ³•ï¼Œæå‡å…¶æ”»æ“ŠåŠ›";
             }
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 4 ¹ï {target.unitName}";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 4 å° {target.unitName}";
         RemoveSkillIcon();
     }
 
@@ -459,9 +479,9 @@ public class SkillManager : MonoBehaviour
                 buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1);
             }
             skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} ³z¹LºqÁn®¶¾Ä¤h®ğ¡A¨Ï§Ú¤è¥şÅé©Ó¨ü¶Ë®`­°§C";
+            dialogueText.text = $"{playerUnits[playerIndex].unitName} é€éæ­Œè²æŒ¯å¥®å£«æ°£ï¼Œä½¿æˆ‘æ–¹å…¨é«”æ‰¿å—å‚·å®³é™ä½";
         });
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} ¿ï¾Ü¤F§Ş¯à 5";
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} é¸æ“‡äº†æŠ€èƒ½ 5";
         RemoveSkillIcon();
     }
 
@@ -477,7 +497,7 @@ public class SkillManager : MonoBehaviour
             isWaitingForTarget = true;
             pendingSkill = "Skill_1";
             pendingPlayerIndex = 0;
-            dialogueText.text = "½ĞÂIÀ»¤@­Ó¼Ä¤H¥Ø¼Ğ¥H¨Ï¥Î§Ş¯à 1¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹æ•µäººç›®æ¨™ä»¥ä½¿ç”¨æŠ€èƒ½ 1ï¼";
         }
     }
 
@@ -511,7 +531,7 @@ public class SkillManager : MonoBehaviour
             isWaitingForTarget = true;
             pendingSkill = "Skill_5";
             pendingPlayerIndex = 0;
-            dialogueText.text = "½ĞÂIÀ»¤@­Ó¼Ä¤H¥Ø¼Ğ¥H¨Ï¥Î§Ş¯à 5¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹æ•µäººç›®æ¨™ä»¥ä½¿ç”¨æŠ€èƒ½ 5ï¼";
         }
     }
 
@@ -527,7 +547,7 @@ public class SkillManager : MonoBehaviour
             isWaitingForTarget = true;
             pendingSkill = "catSkill_1";
             pendingPlayerIndex = 1;
-            dialogueText.text = "½ĞÂIÀ»¤@­Ó¼Ä¤H¥Ø¼Ğ¥H¨Ï¥Î¿ß§Ş¯à 1¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹æ•µäººç›®æ¨™ä»¥ä½¿ç”¨è²“æŠ€èƒ½ 1ï¼";
         }
     }
 
@@ -545,7 +565,11 @@ public class SkillManager : MonoBehaviour
 
     public void TriggerCatSkill4ForPlayer1()
     {
-        if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (battlesystem.state != BattleState.PLAYERTURN)
+        {
+            Debug.LogWarning("Cannot trigger catSkill_4: Not in player turn");
+            return;
+        }
         if (selectedSkillNames[1].Contains("catSkill_4"))
         {
             CancelSkill(1, "catSkill_4");
@@ -555,7 +579,8 @@ public class SkillManager : MonoBehaviour
             isWaitingForTarget = true;
             pendingSkill = "catSkill_4";
             pendingPlayerIndex = 1;
-            dialogueText.text = "½ĞÂIÀ»¤@­Óª±®aÀY¹³¥H¨Ï¥Î¿ß§Ş¯à 4¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹ç©å®¶é ­åƒä»¥ä½¿ç”¨è²“æŠ€èƒ½ 4ï¼";
+            Debug.Log("Waiting for player to select a target for catSkill_4");
         }
     }
 
@@ -590,9 +615,10 @@ public class SkillManager : MonoBehaviour
     {
         if (isWaitingForTarget)
         {
-            dialogueText.text = "½Ğ¥ıÂIÀ»¤@­Ó¥Ø¼Ğ§¹¦¨§Ş¯à¿ï¾Ü¡I";
+            dialogueText.text = "è«‹å…ˆé»æ“Šä¸€å€‹ç›®æ¨™å®ŒæˆæŠ€èƒ½é¸æ“‡ï¼";
             return;
         }
+
         Debug.Log($"OnConfirmSkillQueue called, Total Skills = {GetTotalSelectedSkills()}");
         bool hasExecuted = false;
 
@@ -651,7 +677,6 @@ public class SkillManager : MonoBehaviour
         catch (System.Exception e)
         {
             Debug.LogError($"Error executing skill for player {playerIndex}: {e.Message}");
-            // ¹Á¸Õ²M°£µL®Äªº§Ş¯à¶¤¦C
             if (skillQueues.ContainsKey(playerIndex))
             {
                 skillQueues[playerIndex].Clear();
@@ -664,7 +689,7 @@ public class SkillManager : MonoBehaviour
     IEnumerator ExecuteSkillQueue(int playerIndex)
     {
         Debug.Log($"Starting ExecuteSkillQueue for player {playerIndex}, Queue Count = {skillQueues[playerIndex].Count}");
-        var actions = new List<System.Action>(skillQueues[playerIndex]); // ³Ğ«Ø°Æ¥»Á×§K­×§ï­ì¦Cªí
+        var actions = new List<System.Action>(skillQueues[playerIndex]);
         foreach (var skillAction in actions)
         {
             ExecuteSkillAction(skillAction, playerIndex);
@@ -697,11 +722,9 @@ public class SkillManager : MonoBehaviour
                 selectedTargets[playerIndex] = null;
             }
             HighlightTarget(target, false);
-            // ¥ß§Y¾P·´¼Ä¤H
             if (battlesystem != null)
             {
                 battlesystem.DestroyEnemy(targetIndex);
-                // ²M°£µL®Äªº§Ş¯à¶¤¦C
                 CleanSkillQueue(playerIndex, target);
             }
             if (AllEnemiesDead())
@@ -715,7 +738,7 @@ public class SkillManager : MonoBehaviour
     void PerformMultiTargetAttack(int playerIndex, int damage)
     {
         bool anyDead = false;
-        foreach (Unit enemy in enemyUnits.ToArray()) // ¨Ï¥Î ToArray Á×§K­×§ï¶°¦X¦P®É­¡¥N
+        foreach (Unit enemy in enemyUnits.ToArray())
         {
             if (enemy.currentHP > 0)
             {
@@ -733,11 +756,9 @@ public class SkillManager : MonoBehaviour
                         selectedTargets[playerIndex] = null;
                     }
                     HighlightTarget(enemy, false);
-                    // ¥ß§Y¾P·´¼Ä¤H
                     if (battlesystem != null)
                     {
                         battlesystem.DestroyEnemy(targetIndex);
-                        // ²M°£µL®Äªº§Ş¯à¶¤¦C
                         CleanSkillQueue(playerIndex, enemy);
                     }
                 }
@@ -758,8 +779,6 @@ public class SkillManager : MonoBehaviour
             var newSkillNames = new List<string>();
             for (int i = 0; i < skillQueues[playerIndex].Count; i++)
             {
-                // ÀË¬d°Ê§@¬O§_¨Ì¿à¤w¦º¤`ªº¼Ä¤H¡]»İ­n®Ú¾Ú¨ãÅé¹ê²{½Õ¾ã¡^
-                // ³o¸Ì°²³]°Ê§@¤¤¥]§t¥Ø¼Ğ¡A»İ®Ú¾Ú±zªº Action ¹ê²{­×§ï
                 if (!IsActionTargeting(deadEnemy, skillQueues[playerIndex][i]))
                 {
                     newActions.Add(skillQueues[playerIndex][i]);
@@ -774,7 +793,7 @@ public class SkillManager : MonoBehaviour
 
     private bool IsActionTargeting(Unit target, System.Action action)
     {
-        return false; // ¹w³]ªğ¦^ false¡A»İ¦Û¦æ¹ê²{
+        return false;
     }
 
     private bool AllEnemiesDead()
@@ -810,12 +829,6 @@ public class SkillManager : MonoBehaviour
         foreach (var key in new List<string>(skillCooldowns.Keys))
         {
             if (skillCooldowns[key] > 0) skillCooldowns[key]--;
-        }
-
-        // ²K¥[ª««~§N«o´î¤Ö
-        if (itemuse != null)
-        {
-            // itemuse.ReduceItemCooldowns();
         }
     }
 
@@ -863,13 +876,13 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("­µ®Ä§ä¤£¨ì: " + soundName);
+            Debug.LogWarning("éŸ³æ•ˆæ‰¾ä¸åˆ°: " + soundName);
         }
     }
 
     public void OnCanButtonClick()
     {
-        itemuse.TriggerCanForPlayer(0); // ©ÎªÌ®Ú¾Ú·í«eª±®a¯Á¤Ş
+        itemuse.TriggerCanForPlayer(0);
     }
 
     public void OnTunaButtonClick()
@@ -886,5 +899,4 @@ public class SkillManager : MonoBehaviour
     {
         itemuse.TriggerDryingForPlayer(0);
     }
-
 }
