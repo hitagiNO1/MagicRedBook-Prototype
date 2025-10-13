@@ -14,31 +14,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StopMove: 1
   sentences:
-  - text: 1111111111111111111
-    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+  - text: 1111111111111111111111
+    speaker: {fileID: 11400000, guid: 782db9cfa2b21e64e83db65b0f0a00ae, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
-      spriteIndex: 0
+    - speaker: {fileID: 11400000, guid: 782db9cfa2b21e64e83db65b0f0a00ae, type: 2}
+      spriteIndex: 1
+      actionType: 1
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: 2222222222222222222222
+    speaker: {fileID: 11400000, guid: 782db9cfa2b21e64e83db65b0f0a00ae, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: 782db9cfa2b21e64e83db65b0f0a00ae, type: 2}
+      spriteIndex: 1
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 1
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 1
     timline: []
-  - text: 2222222222222222222222
-    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+  - text: 333333333333333333333333333
+    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+    - speaker: {fileID: 11400000, guid: 782db9cfa2b21e64e83db65b0f0a00ae, type: 2}
       spriteIndex: 1
+      actionType: 2
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: 44444444444444
+    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 2
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 1
-    timline: []
-  - text: 3333333333333333333
-    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
-      spriteIndex: 3
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
     timline: []
   nextScene: {fileID: 0}

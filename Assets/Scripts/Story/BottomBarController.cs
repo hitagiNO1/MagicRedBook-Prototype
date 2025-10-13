@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 public class BottomBarController : MonoBehaviour
 {
     // 對話文字與人物名字 UI 元件
@@ -21,6 +22,8 @@ public class BottomBarController : MonoBehaviour
     // 左右對話框
     public Sprite LBar;
     public Sprite RBar;
+    public Sprite MidBar;
+
     private Image image;
     public Image LBack;
     public Image RBack;
@@ -70,12 +73,13 @@ public class BottomBarController : MonoBehaviour
             isHidden = true;
             bool hasLeft = false;
             bool hasRight = false;
-            // 檢查之前的角色位置
+            /* 檢查之前的角色位置
             foreach (var position in previousSpeakerPositions)
             {
                 if (!position) hasLeft = true; // 有左側角色
                 if (position) hasRight = true; // 有右側角色
             }
+            */
             // 檢查當前句子的角色位置
             if (currentScene.sentences[sentenceIndex].actions.Count > 0)
             {
@@ -193,7 +197,10 @@ public class BottomBarController : MonoBehaviour
         // 顯示講話者資訊
         personNameText.text = sentence.speaker.speakerName;
         personNameText.color = sentence.speaker.textColor;
-
+        if (sentence.speaker.speakerName == "旁白")
+        {
+            image.sprite = MidBar;
+        }
         // 切換對話框左右與背景
         foreach (var action in sentence.actions)
         {
@@ -204,7 +211,7 @@ public class BottomBarController : MonoBehaviour
             }
             else
             {
-                image.sprite = RBar;
+                image.sprite = RBar; 
                 RBack.sprite = action.speaker.BackColor;
             }
         }
@@ -340,12 +347,12 @@ public class BottomBarController : MonoBehaviour
                     if (action.Right == false)
                     {
                         leftCharacters--;
-                        if (leftCharacters == 0) animator.SetTrigger("LheadHide");
+                        animator.SetTrigger("LheadHide");
                     }
                     else
                     {
                         rightCharacters--;
-                        if (rightCharacters == 0) animator.SetTrigger("RheadHide");
+                        animator.SetTrigger("RheadHide");
                     }
                 }
                 break;
