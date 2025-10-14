@@ -11037,7 +11037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 0
+  - eventID: 4
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -51689,7 +51689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 0
+  - eventID: 4
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -56559,7 +56559,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -27.16152}
+  m_LocalPosition: {x: 0, y: 0, z: -17.961521}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56567,7 +56567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 980.5, y: 30.070007}
+  m_AnchoredPosition: {x: 600, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -130414,7 +130414,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1167546914}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3720424681303388710}
+        m_TargetAssemblyTypeName: Itemuse, Assembly-CSharp
+        m_MethodName: redbookuse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1167546914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157788,7 +157800,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 980.5, y: 30.070007, z: -27.16152}
+  m_LocalPosition: {x: 600, y: 30.070007, z: -17.961521}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -214951,7 +214963,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 980.5, y: 0.07, z: 24.8}
+  m_LocalPosition: {x: 600, y: 0.07, z: 34}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -236608,7 +236620,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -249
+  m_SortingOrder: -341
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -243447,14 +243459,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3181c7e482e4a18449418408547436b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redbook: {fileID: 0}
-  skillManager: {fileID: 0}
-  buffDebuffManager: {fileID: 0}
-  dialogueText: {fileID: 0}
-  can: {fileID: 0}
-  tuna: {fileID: 0}
-  grass: {fileID: 0}
-  drying: {fileID: 0}
+  redbook: {fileID: 1736902325}
+  skillManager: {fileID: 3720424681303388706}
+  buffDebuffManager: {fileID: 3720424681303388705}
+  dialogueText: {fileID: 1124883917}
+  can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
+  tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
+  grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
+  drying: {fileID: 11400000, guid: ad1f8d38b1a34a242982e60d76ec66a3, type: 2}
 --- !u!114 &3720424681303388711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253474,7 +253486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottomBar: {fileID: 8165284785212235176}
-  FirstScene: {fileID: 11400000, guid: 643b9db835a11bc488ec19e3d890e7e0, type: 2}
+  FirstScene: {fileID: 0}
   IsDone: 0
 --- !u!1 &4409157104174844077
 GameObject:
