@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public class BottomBarController : MonoBehaviour
@@ -73,14 +72,14 @@ public class BottomBarController : MonoBehaviour
             isHidden = true;
             bool hasLeft = false;
             bool hasRight = false;
-            /* 檢查之前的角色位置
+            // 檢查之前的角色位置
             foreach (var position in previousSpeakerPositions)
             {
                 if (!position) hasLeft = true; // 有左側角色
                 if (position) hasRight = true; // 有右側角色
+                Debug.Log(position);
             }
-            */
-            // 檢查當前句子的角色位置
+            /* 檢查當前句子的角色位置
             if (currentScene.sentences[sentenceIndex].actions.Count > 0)
             {
                 var action = currentScene.sentences[sentenceIndex].actions[0];
@@ -93,8 +92,8 @@ public class BottomBarController : MonoBehaviour
                     hasRight = true; // 當前句子有右側角色
                 }
             }
-
-            //Debug.Log($"Hide: hasLeft={hasLeft}, hasRight={hasRight}");
+            */
+            
             // 根據角色的存在情況觸發動畫
             if (hasLeft && !hasRight)
             {
@@ -344,6 +343,7 @@ public class BottomBarController : MonoBehaviour
                 {
                     controller = sprites[action.speaker];
                     controller.Disappear();
+                    previousSpeakerPositions.Clear();
                     if (action.Right == false)
                     {
                         leftCharacters--;

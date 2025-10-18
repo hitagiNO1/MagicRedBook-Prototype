@@ -9,6 +9,7 @@ public class MonsterUIDisplay
     public Sprite monsterImage;
     public Image MosterIcon;
     public Button button;
+    public Image buttonimg;
 }
 
 public class MonsterEntryUI : MonoBehaviour
@@ -19,7 +20,6 @@ public class MonsterEntryUI : MonoBehaviour
     public TextMeshProUGUI descriptionText;  // ´y­z
 
     public GameObject page1;
-    public GameObject page2;
     
     public List<MonsterUIDisplay> monsterUIList;
 
@@ -38,6 +38,28 @@ public class MonsterEntryUI : MonoBehaviour
                 ui = monsterUIList[1];
                 ui.MosterIcon.sprite = ui.monsterImage;
                 ui.button.interactable = true;
+                ui.buttonimg.enabled = true;
+                break;
+
+            case "Clock":
+                ui = monsterUIList[2];
+                ui.MosterIcon.sprite = ui.monsterImage;
+                ui.button.interactable = true;
+                ui.buttonimg.enabled = true;
+                break;
+
+            case "Soft":
+                ui = monsterUIList[3];
+                ui.MosterIcon.sprite = ui.monsterImage;
+                ui.button.interactable = true;
+                ui.buttonimg.enabled = true;
+                break;
+
+            case "Death":
+                ui = monsterUIList[4];
+                ui.MosterIcon.sprite = ui.monsterImage;
+                ui.button.interactable = true;
+                ui.buttonimg.enabled = true;
                 break;
         }
     }
@@ -48,15 +70,5 @@ public class MonsterEntryUI : MonoBehaviour
         SkillImage.sprite = data.monsterskill;
         nameText.text = data.monsterName;
         descriptionText.text = data.description;
-    }
-    public void Next()
-    {
-        page1.SetActive(false);
-        page2.SetActive(true);
-    }
-    public void Previous()
-    {
-        page1.SetActive(true);
-        page2.SetActive(false);
     }
 }

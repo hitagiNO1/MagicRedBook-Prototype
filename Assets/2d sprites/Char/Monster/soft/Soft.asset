@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: feedced6afd451e4daf659c70e7a9e38, type: 3}
-  m_Name: CLOCK
+  m_Name: Soft
   m_EditorClassIdentifier: 
   monsterName: "\u8EDF\u7DBF\u7DBF"
-  description: "\u6563\u767C\u8457\u53E3\u6C34\u8207\u8C93\u8349\u6DF7\u548C\u7684\u7368\u7279\u6C23\u5473\uFF0C\u9084\u662F\u7DCA\u7DCA\u63E1\u8457\u4E00\u628A\u4E0D\u77E5\u9053\u54EA\u4F86\u7684\u86CB\u7CD5\u53C9\u5B50\u2026\u2026\uFF1F\u770B\u8D77\u4F86\u8A6D\u7570\u53C8\u53EF\u6190\u7684"
+  description: "\u8DDF\u4ED6\u5C0D\u6230\u6642\uFF0C\u7E3D\u662F\u80FD\u807D\u5230\u4E00\u4E9B\u547B\u541F\u5F98\u5F8A\u5728\u8033\u908A\uFF0C\u8AAA\u8457\u300C\u5443\u5443\u2026\u2026\u55DA\u55DA\u54C7\u554A\u554A\u554A\uFF01\u4E0D\u60F3\u8D77\u5E8A\u554A\uFF01\uFF01\uFF01\u300D"
   monsterPic: {fileID: 21300000, guid: fb79ccc1b732d644f87ecf85201cac43, type: 3}
-  monsterskill: {fileID: 21300000, guid: 51b276cfd9735664d9310a0a5d72caa2, type: 3}
+  monsterskill: {fileID: 21300000, guid: 5f8b701ac55002d4296731d542db8ff1, type: 3}

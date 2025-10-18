@@ -63,21 +63,21 @@ MonoBehaviour:
   - text: "\u5E03\u840A\u514B\uFF0C\u5FEB\u770B\u524D\u9762\uFF01\uFF01\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-      spriteIndex: 13
-      actionType: 5
-      coords: {x: 0, y: 0}
-      Right: 0
     - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
       spriteIndex: 4
       actionType: 4
+      coords: {x: 0, y: 0}
+      Right: 0
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 13
+      actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
     timline: []
   - text: "\u600E\u9EBC\u53C8\u51FA\u73FE\u4E86\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
       spriteIndex: 6
       actionType: 0
       coords: {x: 0, y: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   - text: "\u840A\u83C8\uFF0C\u4F60\u5148\u5728\u5F8C\u9762\u7B49\u7B49\uFF0C\u4EA4\u7D66\u6211\u5427\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
-    - speaker: {fileID: 11400000, guid: 709183c23759f8c4b92ce15d294564e9, type: 2}
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
       spriteIndex: 2
       actionType: 0
       coords: {x: 0, y: 0}
