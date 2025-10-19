@@ -21446,7 +21446,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0747935487241ee4cbb754367d40239a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2c0586c71ff07d429eec25e13854541, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -82825,14 +82825,15 @@ MonoBehaviour:
   nameText: {fileID: 1822208177}
   descriptionText: {fileID: 499309216}
   page1: {fileID: 562240196}
-  page2: {fileID: 1685463541}
   monsterUIList:
   - monsterImage: {fileID: 21300000, guid: e108af543d2dd5543bf55de3c8f5e299, type: 3}
     MosterIcon: {fileID: 344647488}
     button: {fileID: 379225620}
+    buttonimg: {fileID: 0}
   - monsterImage: {fileID: 21300000, guid: 0c2b133985a251142afa27779f33bf01, type: 3}
     MosterIcon: {fileID: 1916734499}
     button: {fileID: 1521205655}
+    buttonimg: {fileID: 0}
 --- !u!1 &477656931
 GameObject:
   m_ObjectHideFlags: 0
@@ -234111,7 +234112,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 70303c66cc63e24479ec7ee1a89199eb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0747935487241ee4cbb754367d40239a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -351566,7 +351567,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0747935487241ee4cbb754367d40239a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2c0586c71ff07d429eec25e13854541, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

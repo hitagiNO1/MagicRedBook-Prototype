@@ -199,6 +199,7 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator EnemyTurn()
     {
+        skillManager.ClearAllHighlights();
         if (dialogueText != null)
         {
             dialogueText.text = "敵人們的回合...";
@@ -288,7 +289,7 @@ public class BattleSystem : MonoBehaviour
             {
                 skillManager.ReduceCooldown();
                 skillManager.InitSkillIcons();
-                skillManager.ClearAllHighlights();
+                
             }
 
             state = BattleState.PLAYERTURN;
@@ -306,16 +307,17 @@ public class BattleSystem : MonoBehaviour
             Collider collider3D = enemyPrefabs[index].GetComponent<Collider>();
             if (collider3D != null) collider3D.enabled = false;
             Destroy(enemyPrefabs[index]);
+            enemyPrefabs.RemoveAt(index); // 同步移除 prefab
             enemyUnits.RemoveAt(index);
             if (index < enemyHUDs.Count && enemyHUDs[index] != null)
             {
                 enemyHUDs[index].gameObject.SetActive(false);
-                Destroy(enemyHUDs[index].gameObject); // 銷毀 HUD
+                Destroy(enemyHUDs[index].gameObject);
                 enemyHUDs.RemoveAt(index);
             }
             if (index < enemySkillsList.Count)
             {
-                enemySkillsList.RemoveAt(index); // 同步移除技能列表
+                enemySkillsList.RemoveAt(index);
             }
             Debug.Log($"敵人 {enemyUnits[index].unitName} 血量歸零，立即銷毀（剩餘敵人數：{enemyUnits.Count}）");
         }
@@ -401,26 +403,22 @@ public class BattleSystem : MonoBehaviour
         }
         else if (state == BattleState.LOST || state == BattleState.RUN)
         {
+            skillManager.ClearAllHighlights();
             if (dialogueText != null)
             {
                 dialogueText.text = state == BattleState.LOST ? "你輸了..." : "逃跑成功...";
             }
             GameStateManager.Instance.SetState(GameState.Playing);
-            // 銷毀所有剩餘敵人和 HUD 修改
-            foreach (GameObject enemy in enemyPrefabs)
+            // 保留敵人並回滿血量
+            foreach (Unit enemy in enemyUnits)
             {
                 if (enemy != null)
                 {
-                    Destroy(enemy);
-                }
-            }
-
-            enemyPrefabs.Clear();
-            foreach (var hud in enemyHUDs)
-            {
-                if (hud != null)
-                {
-                    Destroy(hud.gameObject);
+                    enemy.currentHP = enemy.maxHP; // 回滿敵人血量
+                    if (enemy.battleHUD != null)
+                    {
+                        enemy.battleHUD.SetHUD(enemy); // 更新 HUD 顯示
+                    }
                 }
             }
             enemyHUDs.Clear();
