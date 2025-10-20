@@ -176,6 +176,10 @@ public class TimelineManager : MonoBehaviour
     {
         SceneManager.LoadScene("CH1");
     }
+    public void GoCH2()
+    {
+        SceneManager.LoadScene("CH2");
+    }
 
     public void GoTapeGame()
     {

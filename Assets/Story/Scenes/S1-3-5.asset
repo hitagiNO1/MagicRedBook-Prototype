@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: S1-3-5
   m_EditorClassIdentifier: 
-  StopMove: 0
+  StopMove: 1
   sentences:
   - text: "\u4F60\u8981\u5C0D\u5E03\u840A\u514B\u505A\u4EC0\u9EBC\uFF01\uFF1F"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -140,7 +140,10 @@ MonoBehaviour:
   - text: "(\u539F\u672C\u8C93\u6B7B\u795E\u6240\u5728\u7684\u4F4D\u7F6E\uFF0C\u907A\u7559\u8457\u4E00\u672C\u719F\u6089\u7684\u7D05\u8272\u9B54\u6CD5\u66F8\uFF0C\u975C\u975C\u5730\u8EBA\u5728\u5730\u4E0A\u3002)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 5f7c18f23f1bedf41bc5ac4a91ca69ce, type: 2}
+      timing: 0
   - text: "(\u65C1\u908A\u5247\u88C2\u958B\u4E00\u9053\u7570\u6A23\u7684\u901A\u9053\uFF0C\u6DF1\u4E0D\u898B\u5E95\uFF0C\u5F77\u5F7F\u901A\u5F80\u672A\u77E5\u7684\u4E16\u754C\u3002)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
@@ -188,5 +191,8 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 8b9bc522c5182854ab32d0932786c36a, type: 2}
+      timing: 2
   nextScene: {fileID: 0}

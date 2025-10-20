@@ -18,7 +18,7 @@ public class TextureSwitcher : MonoBehaviour
         sr.GetPropertyBlock(mpb);
 
         // ªì©l¶K¹Ï
-        mpb.SetTexture("_Sprite", textureA);
+        mpb.SetTexture("_MainTex", textureA);
         sr.SetPropertyBlock(mpb);
     }
 
@@ -31,7 +31,7 @@ public class TextureSwitcher : MonoBehaviour
             showingA = !showingA;
 
             sr.GetPropertyBlock(mpb);
-            mpb.SetTexture("_Sprite", showingA ? textureA : textureB);
+            mpb.SetTexture("_MainTex", showingA ? textureA : textureB);
             sr.SetPropertyBlock(mpb);
         }
     }
