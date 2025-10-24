@@ -23,7 +23,6 @@ public class BattleSystem : MonoBehaviour
     public BattleState state;
     public SkillManager skillManager;
     public BuffDebuffManager buffDebuffManager;
-    private List<List<Func<bool>>> enemySkillsList; // 每個敵人的技能列表
     public int turnCounter = 0;
     public GameController gameScript;
     private List<bool> playersActed; // 記錄每個玩家是否已確認技能隊列
@@ -51,7 +50,6 @@ public class BattleSystem : MonoBehaviour
 
         playerUnits = new List<Unit>();
         enemyUnits = new List<Unit>();
-        enemySkillsList = new List<List<Func<bool>>>();
         playersActed = new List<bool>();
         selectedTargets = new Dictionary<int, Unit>();
     }
@@ -80,12 +78,14 @@ public class BattleSystem : MonoBehaviour
                 Debug.LogError($"playerPrefabs[{i}] 為空！");
                 yield break;
             }
+
             Unit playerUnit = playerPrefabs[i].GetComponent<Unit>();
             if (playerUnit == null)
             {
                 Debug.LogError($"playerPrefabs[{i}] 缺少 Unit 組件！");
                 yield break;
             }
+
             playerUnits.Add(playerUnit);
             if (i < playerHUDs.Count && playerHUDs[i] != null)
             {
@@ -96,6 +96,7 @@ public class BattleSystem : MonoBehaviour
             {
                 Debug.LogError($"playerHUDs[{i}] 未設置或為空！");
             }
+
             playersActed.Add(false);
         }
 
@@ -107,13 +108,16 @@ public class BattleSystem : MonoBehaviour
                 Debug.LogError($"enemyPrefabs[{i}] 為空！");
                 yield break;
             }
+
             Unit enemyUnit = enemyPrefabs[i].GetComponent<Unit>();
             if (enemyUnit == null)
             {
                 Debug.LogError($"enemyPrefabs[{i}] 缺少 Unit 組件！");
                 yield break;
             }
+
             enemyUnits.Add(enemyUnit);
+
             // 使用 mutiplebattle 傳遞的 enemyHUDs
             if (i < enemyHUDs.Count && enemyHUDs[i] != null)
             {
@@ -125,18 +129,18 @@ public class BattleSystem : MonoBehaviour
                 Debug.LogError($"enemyHUDs[{i}] 未設置或為空！");
             }
 
+            // 設置敵人技能組件
             Enemyskill enemySkillComponent = enemyPrefabs[i].GetComponent<Enemyskill>();
             if (enemySkillComponent == null)
             {
                 Debug.LogError($"無法在 enemyPrefab {i} 上取得 Enemyskill 組件！");
-                enemySkillsList.Add(new List<Func<bool>>());
             }
             else
             {
                 enemySkillComponent.playerUnits = playerUnits;
                 enemySkillComponent.enemyUnits = enemyUnits;
                 enemySkillComponent.buffDebuffManager = buffDebuffManager;
-                SetupSkillsForEnemy(enemyUnit.unitName, i, enemySkillComponent);
+                Debug.Log($"敵人 {enemyUnit.unitName} 的技能組件已設置完成");
             }
         }
 
@@ -144,7 +148,9 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = "野生的敵人們出現了..";
         }
+
         yield return new WaitForSeconds(1f);
+
         skillManager.playerUnits = playerUnits;
         skillManager.enemyUnits = enemyUnits;
         skillManager.buffDebuffManager = buffDebuffManager;
@@ -153,6 +159,7 @@ public class BattleSystem : MonoBehaviour
         {
             StartCoroutine(skillManager.DelayedInitSkillIcons(2f));
         }
+
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }
@@ -169,6 +176,7 @@ public class BattleSystem : MonoBehaviour
         {
             playersActed[i] = false;
         }
+
         selectedTargets.Clear();
     }
 
@@ -192,6 +200,7 @@ public class BattleSystem : MonoBehaviour
                 EndBattle();
                 return;
             }
+
             state = BattleState.ENEMYTURN;
             StartCoroutine(EnemyTurn());
         }
@@ -200,10 +209,12 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator EnemyTurn()
     {
         skillManager.ClearAllHighlights();
+
         if (dialogueText != null)
         {
             dialogueText.text = "敵人們的回合...";
         }
+
         yield return new WaitForSeconds(1f);
 
         // 使用反向迴圈以安全移除敵人
@@ -211,42 +222,26 @@ public class BattleSystem : MonoBehaviour
         {
             if (enemyUnits[i].currentHP > 0)
             {
-                List<Func<bool>> skills = enemySkillsList[i];
-                if (skills == null)
-                {
-                    Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 的技能列表為 null，跳過行動");
-                    continue;
-                }
+                // 獲取敵人的 Enemyskill 組件
+                Enemyskill enemySkillComponent = enemyPrefabs[i].GetComponent<Enemyskill>();
 
-                if (skills.Count == 0)
+                if (enemySkillComponent != null)
                 {
-                    Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 的技能列表為空，跳過行動");
-                    continue;
-                }
+                    // 使用新的技能執行方法
+                    bool skillExecuted = enemySkillComponent.ExecuteEnemySkill(enemyUnits[i]);
 
-                bool skillExecuted = false;
-                int attempts = 0;
-                int maxAttempts = skills.Count;
-
-                while (!skillExecuted && attempts < maxAttempts)
-                {
-                    int skillIndex = Random.Range(0, skills.Count); // 已確保 skills.Count > 0
-                    Func<bool> selectedSkill = skills[skillIndex];
-                    skillExecuted = selectedSkill.Invoke();
-                    attempts++;
-                    if (!skillExecuted)
+                    if (skillExecuted)
                     {
-                        Debug.Log($"敵人 {enemyUnits[i].unitName} 的技能 {skillIndex} 正在冷卻中，重選...");
+                        yield return new WaitForSeconds(1.5f);
                     }
-                }
-
-                if (!skillExecuted)
-                {
-                    Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 所有技能都在冷卻中，跳過行動");
+                    else
+                    {
+                        Debug.LogWarning($"敵人 {enemyUnits[i].unitName} 無法執行任何技能");
+                    }
                 }
                 else
                 {
-                    yield return new WaitForSeconds(1.5f);
+                    Debug.LogError($"敵人 {enemyUnits[i].unitName} 缺少 Enemyskill 組件");
                 }
             }
 
@@ -267,10 +262,17 @@ public class BattleSystem : MonoBehaviour
             buffDebuffManager.TickSkillDisable();
         }
 
-        // 減免冷卻
-        if (enemySkill != null)
+        // 減免冷卻 - 對所有敵人的技能組件調用
+        for (int i = 0; i < enemyPrefabs.Count; i++)
         {
-            enemySkill.ReduceCooldowns();
+            if (enemyPrefabs[i] != null)
+            {
+                Enemyskill enemySkillComponent = enemyPrefabs[i].GetComponent<Enemyskill>();
+                if (enemySkillComponent != null)
+                {
+                    enemySkillComponent.ReduceCooldowns();
+                }
+            }
         }
 
         if (AllPlayersDead())
@@ -289,9 +291,7 @@ public class BattleSystem : MonoBehaviour
             {
                 skillManager.ReduceCooldown();
                 skillManager.InitSkillIcons();
-                
             }
-
             state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
@@ -304,22 +304,22 @@ public class BattleSystem : MonoBehaviour
         {
             Collider2D collider2D = enemyPrefabs[index].GetComponent<Collider2D>();
             if (collider2D != null) collider2D.enabled = false;
+
             Collider collider3D = enemyPrefabs[index].GetComponent<Collider>();
             if (collider3D != null) collider3D.enabled = false;
+
+            Debug.Log($"敵人 {enemyUnits[index].unitName} 血量歸零，立即銷毀（剩餘敵人數：{enemyUnits.Count - 1}）");
+
             Destroy(enemyPrefabs[index]);
             enemyPrefabs.RemoveAt(index); // 同步移除 prefab
             enemyUnits.RemoveAt(index);
+
             if (index < enemyHUDs.Count && enemyHUDs[index] != null)
             {
                 enemyHUDs[index].gameObject.SetActive(false);
                 Destroy(enemyHUDs[index].gameObject);
                 enemyHUDs.RemoveAt(index);
             }
-            if (index < enemySkillsList.Count)
-            {
-                enemySkillsList.RemoveAt(index);
-            }
-            Debug.Log($"敵人 {enemyUnits[index].unitName} 血量歸零，立即銷毀（剩餘敵人數：{enemyUnits.Count}）");
         }
     }
 
@@ -381,6 +381,7 @@ public class BattleSystem : MonoBehaviour
                 dialogueText.text = "你贏得了戰鬥!";
             }
             GameStateManager.Instance.SetState(GameState.Playing);
+
             // 戰鬥勝利時銷毀所有剩餘敵人
             foreach (GameObject enemy in enemyPrefabs)
             {
@@ -391,6 +392,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
             enemyPrefabs.Clear();
+
             // 銷毀所有敵人 HUD
             foreach (var hud in enemyHUDs)
             {
@@ -409,6 +411,7 @@ public class BattleSystem : MonoBehaviour
                 dialogueText.text = state == BattleState.LOST ? "你輸了..." : "逃跑成功...";
             }
             GameStateManager.Instance.SetState(GameState.Playing);
+
             // 保留敵人並回滿血量
             foreach (Unit enemy in enemyUnits)
             {
@@ -428,26 +431,18 @@ public class BattleSystem : MonoBehaviour
         {
             buffDebuffManager.ClearAllEffects();
         }
+
         if (animator != null)
         {
             animator.SetTrigger("Hide");
         }
+
         if (skillManager != null)
         {
             skillManager.ClearSkillIcons();
         }
-        isHidden = false;
-    }
 
-    public void SetupSkillsForEnemy(string enemyName, int enemyIndex, Enemyskill enemySkillComponent)
-    {
-        List<Func<bool>> enemySkills = enemySkillComponent.GetEnemySkills(enemyName);
-        if (enemySkills == null)
-        {
-            Debug.LogError($"敵人 {enemyName} 的技能列表為 null，初始化為空列表");
-            enemySkills = new List<Func<bool>>();
-        }
-        enemySkillsList.Add(enemySkills);
+        isHidden = false;
     }
 
     public void SetPlayerTarget(int playerIndex, Unit target)

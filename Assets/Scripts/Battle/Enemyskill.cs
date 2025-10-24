@@ -8,13 +8,78 @@ public class Enemyskill : MonoBehaviour
     public List<Unit> enemyUnits;
     public List<Unit> playerUnits;
     public BuffDebuffManager buffDebuffManager;
+
     // 新增：技能冷卻字典，假設每個敵人技能有獨立冷卻
     private Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
+
+    // 新增：執行敵人技能的主要方法
+    public bool ExecuteEnemySkill(Unit enemyUnit)
+    {
+        if (enemyUnit == null)
+        {
+            Debug.LogError("敵人單位無效！");
+            return false;
+        }
+
+        string enemyName = enemyUnit.unitName;
+
+        if (enemyName == "SOFT")
+        {
+            return ExecuteSoftSkills(enemyUnit);
+        }
+        else
+        {
+            // 對於其他敵人，隨機選擇一個技能執行
+            List<Func<bool>> skills = GetEnemySkills(enemyName);
+            if (skills.Count > 0)
+            {
+                int randomIndex = Random.Range(0, skills.Count);
+                return skills[randomIndex]();
+            }
+        }
+
+        return false;
+    }
+
+    // 新增：專門處理 SOFT 敵人的技能選擇邏輯
+    private bool ExecuteSoftSkills(Unit self)
+    {
+        // 創建有冷卻的技能列表（優先技能）
+        List<Func<bool>> prioritySkills = new List<Func<bool>>
+        {
+            () => CheckAndPerformSoftskill_2(self),
+            () => CheckAndPerformSoftskill_3(self)
+        };
+
+        // 隨機打亂優先技能順序
+        for (int i = 0; i < prioritySkills.Count; i++)
+        {
+            int randomIndex = Random.Range(0, prioritySkills.Count);
+            var temp = prioritySkills[i];
+            prioritySkills[i] = prioritySkills[randomIndex];
+            prioritySkills[randomIndex] = temp;
+        }
+
+        // 嘗試執行優先技能
+        foreach (var skill in prioritySkills)
+        {
+            if (skill()) // 如果技能執行成功
+            {
+                return true;
+            }
+        }
+
+        // 如果所有優先技能都在冷卻中，執行備用技能 Softskill_1
+        Debug.Log($"{self.unitName} 的所有特殊技能都在冷卻中，使用備用技能 Softskill_1");
+        PerformSoftskill_1(self);
+        return true;
+    }
 
     public List<Func<bool>> GetEnemySkills(string enemyName)  // 修改為 Func<bool>
     {
         List<Func<bool>> skills = new List<Func<bool>>();
         Unit self = GetComponent<Unit>();
+
         if (self == null)
         {
             Debug.LogError("Enemyskill 缺少 Unit 組件！");
@@ -95,6 +160,7 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
@@ -110,11 +176,13 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
@@ -131,6 +199,7 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
@@ -146,11 +215,13 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
@@ -166,6 +237,7 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
@@ -181,11 +253,13 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
@@ -205,10 +279,12 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         Unit target = GetRandomValidTarget(playerUnits);
         if (target != null)
         {
             PerformBasicAttack(self, target, self.damage * 2);
+            Debug.Log($"{self.unitName} 使用 Softskill_1：對 {target.unitName} 造成 {self.damage * 2} 傷害");
         }
     }
 
@@ -219,6 +295,7 @@ public class Enemyskill : MonoBehaviour
             Debug.LogError("playerUnits 未初始化或為空！");
             return;
         }
+
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
@@ -231,13 +308,13 @@ public class Enemyskill : MonoBehaviour
             Debug.LogWarning("無有效的玩家目標！");
             return;
         }
-        Unit target = validTargets[Random.Range(0, validTargets.Count)];
 
+        Unit target = validTargets[Random.Range(0, validTargets.Count)];
         buffDebuffManager.ApplySkillDisable(target, 1);
         int damage = Mathf.RoundToInt(self.damage * 0.5f);
         PerformBasicAttack(self, target, damage);
         EffectManager.Instance.PlayUIEffect("Blanket2", new Vector2(0f, 571.11f));
-        Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Softskill_3：禁用技能 1 回合，造成 {damage} 傷害");
+        Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Softskill_2：禁用技能 1 回合，造成 {damage} 傷害");
     }
 
     private void PerformSoftskill_3(Unit self)
@@ -256,8 +333,9 @@ public class Enemyskill : MonoBehaviour
                 PerformBasicAttack(self, target, damage);
             }
         }
+
         EffectManager.Instance.PlayUIEffect("Blanket3", new Vector2(0f, 0f));
-        Debug.Log($"{self.unitName} 使用 Softskill_2 對所有玩家造成 {Mathf.RoundToInt(self.damage * 3f)} 傷害！");
+        Debug.Log($"{self.unitName} 使用 Softskill_3 對所有玩家造成 {Mathf.RoundToInt(self.damage * 3f)} 傷害！");
     }
 
     private Unit GetRandomValidTarget(List<Unit> units)
@@ -267,6 +345,7 @@ public class Enemyskill : MonoBehaviour
         {
             return null;
         }
+
         int randomIndex = Random.Range(0, validTargets.Count);
         return validTargets[randomIndex];
     }
