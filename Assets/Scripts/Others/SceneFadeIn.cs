@@ -7,17 +7,11 @@ public class SceneFadeIn : MonoBehaviour
 {
     public Image fadeImage;
     public float fadeDuration = 1f;
-    public PlayableDirector timelineToPlay; // 指定 Timeline（可空）
-    public CGText scriptsToEnableAfterFade; // 要延後啟動的腳本們
+    //public PlayableDirector timelineToPlay; // 指定 Timeline（可空）
+    //public CGText scriptsToEnableAfterFade; // 要延後啟動的腳本們
     void Start()
     {
         StartCoroutine(FadeIn());
-
-        if (scriptsToEnableAfterFade)
-            scriptsToEnableAfterFade.enabled = false;
-
-        if (timelineToPlay)
-            timelineToPlay.enabled = false;
     }
     IEnumerator FadeIn()
     {
@@ -25,6 +19,7 @@ public class SceneFadeIn : MonoBehaviour
         Color color = fadeImage.color;
         color.a = 1;
         fadeImage.color = color;
+        yield return new WaitForSeconds(1f);
         for (float t = 0; t < fadeDuration; t += Time.deltaTime)
         {
             color.a = 1 - (t / fadeDuration);
@@ -35,7 +30,7 @@ public class SceneFadeIn : MonoBehaviour
         fadeImage.color = color;
         fadeImage.gameObject.SetActive(false);
 
-        // 啟用腳本
+        /* 啟用腳本
         if (timelineToPlay)
             scriptsToEnableAfterFade.enabled = true;
         // 播 Timeline
@@ -44,5 +39,6 @@ public class SceneFadeIn : MonoBehaviour
             timelineToPlay.enabled = true;
             timelineToPlay.Play();
         }
+        */
     }
 }

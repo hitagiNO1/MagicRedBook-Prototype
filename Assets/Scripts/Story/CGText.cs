@@ -1,121 +1,148 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using System.Collections;
 using TMPro;
+using UnityEngine;
+using static StoryScene;
 
 public class CGText : MonoBehaviour
 {
-    // ¹ï¸Ü¤º®e¤å¦r¡]Åã¥Ü¦b¹ï¸Ü®Ø¤¤¡^
     public TextMeshProUGUI barText;
-    // »¡¸ÜªÌ¦WºÙ¤å¦r¡]Åã¥Ü¦b¦WºÙ®Ø¤¤¡^
     public TextMeshProUGUI personNameText;
-    // ¥Ø«e¹ï¸Ü¥y¤lªº¯Á¤Þ
-    private int sentenceIndex = -1;
-    // ·í«e¼½©ñªº¹ï¸Ü³õ´º¡]¥~³¡«ü¬£¡^
     public StoryScene currentScene;
-    // ª¬ºA¦CÁ|¡A¥Î¨Ó¼Ð¥Ü¥Ø«e¬O§_¥¿¦b¼½©ñ¤å¦r
+
+    private int sentenceIndex = -1;
+    private Animator animator;
+    private StoryScene.Sentence currentSentence;
+
     private enum State { PLAYING, COMPLETED }
     private State state = State.COMPLETED;
-    private Animator animator; // ¹ï¸Ü®Ø°Êµe±±¨î¾¹
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         StartCoroutine(PlayScene());
     }
+
     private void Update()
     {
-        // ¨C¦¸«ö¤UªÅ¥ÕÁä¨Ã¥B·í«e¥y¤l¼½©ñ§¹²¦¡A¤~¤¹³\¼½©ñ¤U¤@¥y
-        if (Input.GetKeyDown(KeyCode.Space) && IsCompleted() && currentScene != null)
+        // çŽ©å®¶é»žæ“Šï¼šä¸‹ä¸€å¥æˆ–è·³éŽ
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            if (!IsLastSentence())
+            if (!IsCompleted()) return;
+
+            if (IsCompleted() && currentScene != null)
             {
-                // ¼½©ñ¤U¤@¥y¹ï¸Ü
-                PlayNextSentence();
-            }
-            else
-            {
-                animator.SetTrigger("Hide");
-                // ¼@±¡¼½©ñµ²§ô¡A±ø¥ó³o¥[
-                Debug.Log("¹ï¸Ü¤wµ²§ô¡C");
-                ClearText();
+                if (!IsLastSentence())
+                {
+                    PlayNextSentence();
+                }
+                else
+                {
+                    animator.SetTrigger("Hide");
+                    Debug.Log("å°è©±å·²çµæŸã€‚");
+                    ClearText();
+                }
             }
         }
     }
 
-    // ¼½©ñ¾ã­Ó¹ï¸Ü³õ´º
     private IEnumerator PlayScene()
     {
-        yield return new WaitForSeconds(2f);
+        // é¡¯ç¤ºå°è©±æ¡†å‹•ç•«
         animator.SetTrigger("Show");
-        sentenceIndex = -1; // ±q²Ä¤@¥y¶}©l
+        yield return new WaitForSeconds(0.5f);
+
+        sentenceIndex = -1;
         PlayNextSentence();
     }
 
-    // ¼½©ñ¤U¤@¥y
     public void PlayNextSentence()
     {
         StartCoroutine(PlaySentenceCoroutine());
     }
 
-    // ¨óµ{¡G¼½©ñ¥y¤l¨Ã³v¦rÅã¥Ü
     private IEnumerator PlaySentenceCoroutine()
     {
-        // ÀË¬d³õ´º©Î¥y¤l¬O§_¬°ªÅ
         if (currentScene == null || currentScene.sentences.Count == 0)
         {
-            Debug.LogError("¥Ø«e³õ´º©Î¥y¤l¬°ªÅ¡I");
+            Debug.LogError("ç›®å‰å ´æ™¯æˆ–å¥å­ç‚ºç©ºï¼");
             yield break;
         }
 
-        sentenceIndex++; // ²¾¦Ü¤U¤@¥y
+        sentenceIndex++;
         if (sentenceIndex >= currentScene.sentences.Count)
+            yield break;
+
+        currentSentence = currentScene.sentences[sentenceIndex];
+
+        // âœ… å…ˆæ’­æ”¾ BeforeText Timelineï¼Œä¸¦ã€Œç­‰å¾…å®ƒçµæŸã€å†é–‹å§‹æ‰“å­—
+        if (currentSentence.timline != null)
         {
-            yield break; // ¶W¥X¥y¤l¼Æ¡Aµ²§ô¼½©ñ
+            foreach (var timeline in currentSentence.timline)
+            {
+                if (timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.BeforeText)
+                {
+                    TimelineManager.Instance.PlayCG(timeline.myPlayableAsset);
+                    // ç­‰å¾… Timeline æ’­æ”¾å®Œç•¢
+                    yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+                }
+            }
         }
 
-        // ¨ú±o¥Ø«e­nÅã¥Üªº¥y¤l
-        var sentence = currentScene.sentences[sentenceIndex];
+        // é¡¯ç¤ºèªªè©±è€…
+        personNameText.text = currentSentence.speaker.speakerName;
+        personNameText.color = currentSentence.speaker.textColor;
 
-        // Åã¥Ü¨¤¦â¦WºÙ»PÃC¦â
-        personNameText.text = sentence.speaker.speakerName;
-        personNameText.color = sentence.speaker.textColor;
+        // âœ… æ’­æ”¾ AfterText Timelineï¼ˆèˆ‡æ‰“å­—åŒæ™‚é€²è¡Œï¼Œä¸ç­‰å¾…ï¼‰
+        if (currentSentence.timline != null)
+        {
+            foreach (var timeline in currentSentence.timline)
+            {
+                if (timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterText)
+                {
+                    TimelineManager.Instance.PlayCG(timeline.myPlayableAsset);
+                }
+            }
+        }
 
-        // ¼½©ñ¤å¦r¥´¦r°Êµe
-        yield return TypeText(sentence.text);
+        // âœ… é–‹å§‹æ‰“å­—
+        yield return TypeText(currentSentence.text);
+
+        if (currentSentence.timline.Exists(t => t.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick))
+        {
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+
+            foreach (var timeline in currentSentence.timline)
+            {
+                if (timeline.animation && timeline.myPlayableAsset != null &&
+                    timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick)
+                {
+                    TimelineManager.Instance.PlayCG(timeline.myPlayableAsset);
+                    yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+                }
+            }
+        }
     }
 
-    // ¨óµ{¡G³v¦rÅã¥Ü¤å¦r
     private IEnumerator TypeText(string text)
     {
-        barText.text = ""; // ²MªÅ²{¦³¤å¦r
-        state = State.PLAYING; // ¼Ð°O¬°¼½©ñ¤¤
+        barText.text = "";
+        state = State.PLAYING;
 
         for (int i = 0; i < text.Length; i++)
         {
-            barText.text += text[i]; // ¤@¦¸¥[¤@­Ó¦r
-            yield return new WaitForSeconds(0.05f); // ¨C¦r©µ¿ð
+            barText.text += text[i];
+            yield return new WaitForSeconds(0.07f);
         }
 
-        state = State.COMPLETED; // ¼½©ñ§¹¦¨
+        state = State.COMPLETED;
     }
 
-    // ²M°£¤å¦rÅã¥Ü
     private void ClearText()
     {
         barText.text = "";
         personNameText.text = "";
     }
 
-    // ¦^¶Ç¥Ø«e¬O§_¼½©ñ§¹¦¨
-    private bool IsCompleted()
-    {
-        return state == State.COMPLETED;
-    }
-
-    // ÀË¬d¬O§_¤w¸g¬O³Ì«á¤@¥y
-    private bool IsLastSentence()
-    {
-        return sentenceIndex + 1 >= currentScene.sentences.Count;
-    }
+    private bool IsCompleted() => state == State.COMPLETED;
+    private bool IsLastSentence() => sentenceIndex + 1 >= currentScene.sentences.Count;
 }

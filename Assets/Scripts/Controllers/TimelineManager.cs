@@ -76,7 +76,21 @@ public class TimelineManager : MonoBehaviour
             IsPlaying = true;
             director.Play();
     }
+    public void PlayCG(PlayableAsset asset)
+    {
 
+        if (asset == null || director == null)
+        {
+            Debug.LogWarning("PlayableAsset 或 Director 為 null");
+            return;
+        }
+
+        Debug.Log("開始播放 Timeline：" + asset.name);
+        director.playableAsset = asset;
+        director.time = 0;
+        IsPlaying = true;
+        director.Play();
+    }
     //查詢某個 Timeline 名稱是否已經播放過
     public bool HasPlayed(string timelineName)
     {
