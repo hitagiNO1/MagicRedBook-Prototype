@@ -10,7 +10,6 @@ public class ToCGScene : MonoBehaviour
     private bool isLoading = false;
     private bool playerInRange = false;
     public PlayableAsset timeline; // Timeline戈方把σ
-    private Transform playerTransform; // 纗產 Transform
 
     void Start()
     {
@@ -34,7 +33,6 @@ public class ToCGScene : MonoBehaviour
         {
             playerInRange = true;
             InteractiveUI.SetActive(true);
-            playerTransform = other.transform; // 纗產竚
         }
     }
     void OnTriggerExit(Collider other)
@@ -43,16 +41,30 @@ public class ToCGScene : MonoBehaviour
         {
             playerInRange = false;
             InteractiveUI.SetActive(false);
-            playerTransform = null;
         }
     }
     // 睭ち初春
-     IEnumerator LoadScene()
+    IEnumerator LoadScene()
     {
         isLoading = true;
+        GetComponent<Collider>().enabled = false;
+
         TimelineManager.Instance.PlayCG(timeline);
+
         yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
-        locationstore.Instance.SavePlayerPosition(playerTransform.position); // 纗竚
-        SceneManager.LoadScene(targetSceneName);
+
+        // эΘ Additive 家Α更 CG
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Additive);
+        yield return loadOp;
+
+        // 冀 CG 更
+        yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+
+        AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(targetSceneName);
+        yield return unloadOp;
+
+        isLoading = false;
+        this.enabled = false;
     }
+
 }

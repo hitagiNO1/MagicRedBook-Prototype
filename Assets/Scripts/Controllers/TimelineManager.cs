@@ -199,4 +199,12 @@ public class TimelineManager : MonoBehaviour
     {
         SceneManager.LoadScene("TapeGame");
     }
+    public  void Page1Pick()
+    {
+        PageCGUI.Instance.AddPage(1);
+    }
+    public void Page3Pick()
+    {
+        PageCGUI.Instance.AddPage(3);
+    }
 }

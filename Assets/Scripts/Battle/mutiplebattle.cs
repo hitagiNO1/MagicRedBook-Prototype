@@ -149,7 +149,7 @@ public class mutiplebattle : MonoBehaviour
 
             if (hit.collider != null)
             {
-                //Debug.Log($"Raycast2D 擊中: {hit.collider.gameObject.name}，位置: {hit.point}");
+                //Debug.Log($"7777777777777777777777擊中: {hit.collider.gameObject}，位置: {hit.point}");
                 GameObject hitObject = hit.collider.gameObject;
                 if (newEnemies.Contains(hitObject) && enemyToHUDMap.ContainsKey(hitObject))
                 {

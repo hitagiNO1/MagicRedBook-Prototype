@@ -1,28 +1,62 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class PageCGUI : MonoBehaviour
 {
-    public GameObject[] pages; // 頁面物件（五個 Panel）
+    [Header("頁面 Panels (五個)")]
+    [SerializeField] private GameObject[] pages;
+
+    [Header("頁面 Prefabs 對應 panels")]
+    [SerializeField] private GameObject[] pagesPrefabs;
+
     public static PageCGUI Instance;
-    
+
     private int currentPage = 0;
-    void Start()
+
+    void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
 
+    void Start()
+    {
         ShowPage(currentPage); // 初始化顯示第一頁
     }
 
-    public void AddPage(GameObject NewPage, int Num)
+    /// <summary>
+    /// 在指定頁面替換內容
+    /// </summary>
+    /// <param name="pageIndex">頁面索引</param>
+    public void AddPage(int pageIndex)
     {
-        Destroy(pages[Num].transform.GetChild(0).gameObject);
-        Instantiate(NewPage, pages[Num].GetComponent<Transform>());
-    }
+        if (pageIndex < 0 || pageIndex >= pages.Length)
+        {
+            Debug.LogWarning("AddPage: pageIndex 超出範圍");
+            return;
+        }
 
+        Transform pageTransform = pages[pageIndex].transform;
+
+        // 如果有子物件，先刪掉
+        if (pageTransform.childCount > 0)
+        {
+            Destroy(pageTransform.GetChild(0).gameObject);
+        }
+
+        // Instantiate Prefab
+        if (pageIndex < pagesPrefabs.Length && pagesPrefabs[pageIndex] != null)
+        {
+            GameObject newPage = Instantiate(pagesPrefabs[pageIndex], pageTransform);
+            newPage.transform.localPosition = Vector3.zero;
+            newPage.transform.localRotation = Quaternion.identity;
+            newPage.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Debug.LogWarning("AddPage: Prefab 未設定或索引超出範圍");
+        }
+    }
 
     public void GoToPreviousPage()
     {
@@ -32,6 +66,7 @@ public class PageCGUI : MonoBehaviour
             ShowPage(currentPage);
         }
     }
+
     public void GoToNextPage()
     {
         if (currentPage < pages.Length - 1)
@@ -40,7 +75,8 @@ public class PageCGUI : MonoBehaviour
             ShowPage(currentPage);
         }
     }
-    void ShowPage(int pageIndex)
+
+    private void ShowPage(int pageIndex)
     {
         for (int i = 0; i < pages.Length; i++)
         {
@@ -48,4 +84,3 @@ public class PageCGUI : MonoBehaviour
         }
     }
 }
-

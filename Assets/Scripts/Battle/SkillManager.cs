@@ -77,11 +77,6 @@ public class SkillManager : MonoBehaviour
     {
         if (isWaitingForTarget && Input.GetMouseButtonDown(0))
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                Debug.Log("Click detected on UI, ignoring raycast for non-UI targets");
-                return;
-            }
 
             if (pendingSkill == "catSkill_4")
             {
@@ -97,11 +92,12 @@ public class SkillManager : MonoBehaviour
             bool isPlayerTarget = pendingSkill == "Can" || pendingSkill == "Grass" || pendingSkill == "Drying";
             LayerMask targetLayer = isPlayerTarget ? playerLayer : enemyLayer;
 
-            RaycastHit2D hit2D = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, targetLayer);
-            if (hit2D.collider != null)
+            //RaycastHit2D hit2D = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, targetLayer);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, LayerMask.GetMask("Enemy"));
+            if (hit.collider != null)
             {
-                targetUnit = hit2D.collider.GetComponent<Unit>();
-                Debug.Log($"2D Raycast hit: {hit2D.collider.name}, Unit: {targetUnit?.unitName}");
+                targetUnit = hit.collider.GetComponent<Unit>();
+                Debug.Log($"6666666666666666666666 hit: {hit.collider}, Unit: {targetUnit?.unitName}");
             }
             else
             {

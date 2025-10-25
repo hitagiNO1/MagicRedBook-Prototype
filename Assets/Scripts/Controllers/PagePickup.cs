@@ -11,7 +11,7 @@ public class PagePickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PageCGUI.Instance.AddPage(Page, PageNum);
+            PageCGUI.Instance.AddPage(PageNum);
         }
     }
 }

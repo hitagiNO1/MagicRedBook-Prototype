@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 391.94998, y: 34.810078}
+  m_AnchoredPosition: {x: -401, y: 34.810078}
   m_SizeDelta: {x: 723.63, y: 548}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &513874978609801175
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d4d7a0a2c5c4d6f4e976b6f4f551193d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2982b54850c1da145b344de03330f9e5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -109,7 +109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -395.35, y: 41.75008}
+  m_AnchoredPosition: {x: 397, y: 13}
   m_SizeDelta: {x: -947.69995, y: -366.83984}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8741203944868377656
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01\u5E03\u840A\u514B\u58DE\u6389\u4E86\uFF01"
+  m_text: "\u4ECA\u5929\u53C8\u8DD1\u53BB\u516C\u5712\u65C1\u7684\u5DF7\u5B50\u88E1\u9935\u8C93\u54AA\uFF01\u9084\u770B\u5230\u4E00\u96BB\u5C0F\u8C93\n\u4ED6\u597D\u7626\u5594......\n\u5982\u679C\u518D\u770B\u5230\u4ED6\u7684\u8A71......\n\u6211\u5C31\u8981\u5E36\u56DE\u5BB6\u7167\u9867\uFF01\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 553aefb120a1df6409d501c89b1b8f21, type: 2}
   m_sharedMaterial: {fileID: -8360284473955268642, guid: 553aefb120a1df6409d501c89b1b8f21, type: 2}
@@ -167,15 +167,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 5.09
   m_wordSpacing: 0
