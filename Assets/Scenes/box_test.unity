@@ -1411,13 +1411,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b2455fdbc25b7046ac54097c21a2883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouse: {fileID: 5540902841809149530, guid: 99c4b3c7e709dce48b3754b3530f9c6e, type: 3}
-  C4: {fileID: 3929063213701342200, guid: 4a5ae61aa01dfc848909d8fd32525124, type: 3}
   mouseRoot: {fileID: 1145681015}
-  occupiedHoles: 
   usercontrol: {fileID: 1517387923}
-  spriteA: {fileID: 21300000, guid: e3229c4bc5081b8429ad7e7149c501d6, type: 3}
-  spriteB: {fileID: 21300000, guid: 8ceb84df008c87145aeef6423ca2769e, type: 3}
+  spriteA: {fileID: 21300000, guid: f38537bcffd50314fa7a8575de77935e, type: 3}
+  spriteB: {fileID: 21300000, guid: 16338bfe8c98ae845823c0248041c648, type: 3}
+  spriteC4_1: {fileID: 21300000, guid: 7a9ef5c3414c1df48ab6782bc52cf5b6, type: 3}
+  spriteC4_2: {fileID: 21300000, guid: fd89db5dfc06bac42a533ea06e743295, type: 3}
+  spriteB_hover: {fileID: 21300000, guid: 2f041038671dd8a42b13dc4cd69a62a1, type: 3}
+  spriteC4_1_hover: {fileID: 21300000, guid: 01fcca44bbd584e4c9747bb45107007b, type: 3}
+  spriteC4_2_hover: {fileID: 21300000, guid: ce4fea90152e65e4687bae272cc4834f, type: 3}
   holeObjectArray:
   - {fileID: 1296198702}
   - {fileID: 2079046105}

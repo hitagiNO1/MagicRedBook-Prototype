@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class usercontrol : MonoBehaviour
 {
-    private List<mouseset> mouseset;
+    private List<HoleState> holeStates; // 改用 HoleState
     public bool gameover = false;
     public float timer = 60f;
     private int mouseClickCount = 0;
@@ -15,17 +15,17 @@ public class usercontrol : MonoBehaviour
     public TextMeshProUGUI resault;
     public boxgameflow gameflow;
     public GameObject backbutton;
-    private mouseborn mouseborn; // 新增：引用 mouseborn 腳本
+    private mouseborn mouseborn;
 
     void Start()
     {
-        mouseset = new List<mouseset>();
-        mouseborn = FindObjectOfType<mouseborn>(); // 查找 mouseborn 組件
+        holeStates = new List<HoleState>();
+        mouseborn = FindObjectOfType<mouseborn>();
         if (mouseborn == null)
         {
             Debug.LogError("未找到 mouseborn 組件！");
         }
-        GetMouse();
+        GetHoles();
     }
 
     void Update()
@@ -40,7 +40,7 @@ public class usercontrol : MonoBehaviour
                 gamelose();
                 gameflow.ShowResult();
             }
-            GetMouse();
+            GetHoles();
             userinput();
         }
     }
@@ -51,35 +51,31 @@ public class usercontrol : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-
             if (hit.collider != null)
             {
-                // 檢查是否點擊到標籤為 "C4" 的物件
                 if (hit.collider.CompareTag("C4"))
                 {
                     Debug.Log("點擊到 C4，遊戲結束！");
-                    mouseset mouse = hit.collider.GetComponent<mouseset>();
-                    if (mouse != null && mouseborn != null)
+                    HoleState holeState = hit.collider.GetComponent<HoleState>();
+                    if (holeState != null && mouseborn != null)
                     {
-                        mouseborn.OnObjectClicked(mouse.GetHole); // 通知切換圖片為 A
+                        mouseborn.OnObjectClicked(holeState.Hole);
                     }
                     gameover = true;
                     getC4();
                     gameflow.ShowResult();
                 }
-                // 檢查點擊的物件是否有 mouseset 組件
                 else if (hit.collider.CompareTag("mouse"))
                 {
-                    mouseset mouse = hit.collider.GetComponent<mouseset>();
-                    if (mouse != null)
+                    HoleState holeState = hit.collider.GetComponent<HoleState>();
+                    if (holeState != null)
                     {
                         Debug.Log("點擊到老鼠：" + hit.collider.gameObject.name);
                         if (mouseborn != null)
                         {
-                            mouseborn.OnObjectClicked(mouse.GetHole); // 通知切換圖片為 A
+                            mouseborn.OnObjectClicked(holeState.Hole);
                         }
-                        mouseset.Remove(mouse);
-                        Destroy(hit.collider.gameObject);
+                        holeStates.Remove(holeState);
                         mouseClickCount++;
                         if (mouseClickCount >= requiredClicks)
                         {
@@ -103,27 +99,35 @@ public class usercontrol : MonoBehaviour
         }
     }
 
-    public void GetMouse()
+    public void GetHoles()
     {
         if (gameover || gameWon)
         {
             return;
         }
-
-        GameObject[] ms = GameObject.FindGameObjectsWithTag("mouse");
-        foreach (var o in ms)
+        GameObject[] holes = GameObject.FindGameObjectsWithTag("mouse");
+        foreach (var o in holes)
         {
-            mouseset mouse = o.GetComponent<mouseset>();
-            if (mouse != null && !mouseset.Contains(mouse))
+            HoleState holeState = o.GetComponent<HoleState>();
+            if (holeState != null && !holeStates.Contains(holeState))
             {
-                mouseset.Add(mouse);
+                holeStates.Add(holeState);
+            }
+        }
+        holes = GameObject.FindGameObjectsWithTag("C4");
+        foreach (var o in holes)
+        {
+            HoleState holeState = o.GetComponent<HoleState>();
+            if (holeState != null && !holeStates.Contains(holeState))
+            {
+                holeStates.Add(holeState);
             }
         }
     }
 
-    public void CleanUpMouseList()
+    public void CleanUpHoleList()
     {
-        mouseset.RemoveAll(mouse => mouse == null || mouse.gameObject == null);
+        holeStates.RemoveAll(hole => hole == null || hole.gameObject == null);
     }
 
     public bool IsGameActive()
@@ -152,12 +156,12 @@ public class usercontrol : MonoBehaviour
         mouseClickCount = 0;
         timer = 60f;
         gameWon = false;
-        mouseset = new List<mouseset>();
-        GetMouse();
+        holeStates = new List<HoleState>();
+        GetHoles();
         backbutton.SetActive(false);
         if (mouseborn != null)
         {
-            mouseborn.Restart(); // 通知 mouseborn 重啟
+            mouseborn.Restart();
         }
     }
 

@@ -4,39 +4,46 @@ using UnityEngine;
 
 public class mouseborn : MonoBehaviour
 {
-    public GameObject mouse;
-    public GameObject C4;
     public Transform mouseRoot;
-    public List<Holenumber> occupiedHoles = new List<Holenumber>();
     public usercontrol usercontrol;
-    [SerializeField] private Sprite spriteA; // 預設圖片（例如地洞）
-    [SerializeField] private Sprite spriteB; // 生成時的圖片（例如高亮）
+    [SerializeField] private Sprite spriteA; // 預設圖片（地洞）
+    [SerializeField] private Sprite spriteB; // 老鼠圖片
+    [SerializeField] private Sprite spriteC4_1; // C4 第一種圖片
+    [SerializeField] private Sprite spriteC4_2; // C4 第二種圖片
+    [SerializeField] private Sprite spriteB_hover; // 老鼠 Hover 圖片
+    [SerializeField] private Sprite spriteC4_1_hover; // C4_1 Hover 圖片
+    [SerializeField] private Sprite spriteC4_2_hover; // C4_2 Hover 圖片
     [SerializeField] private GameObject[] holeObjectArray; // 9 個生成點
     private Dictionary<Holenumber, GameObject> holeObjects = new Dictionary<Holenumber, GameObject>();
-    private Dictionary<Holenumber, GameObject> spawnedObjects = new Dictionary<Holenumber, GameObject>(); // 新增：追蹤生成的物件
+    private Dictionary<Holenumber, Sprite> spawnedSprites = new Dictionary<Holenumber, Sprite>(); // 追蹤生成的 Sprite
+    private Dictionary<Holenumber, Sprite> hoverSprites = new Dictionary<Holenumber, Sprite>(); // 追蹤 Hover Sprite
+    private List<Holenumber> occupiedHoles = new List<Holenumber>();
     private HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>(); // 追蹤已點擊的位置
 
     // 搖晃動畫的參數
-    [SerializeField] private float shakeDuration = 0.5f; // 保持不變
-    [SerializeField] private float shakeMagnitude = 0.1f; // 增加幅度
-    [SerializeField] private float shakeSpeed = 15f; // 加快速度
+    [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float shakeMagnitude = 0.1f;
+    [SerializeField] private float shakeSpeed = 15f;
 
     void Start()
     {
         occupiedHoles = new List<Holenumber>();
         clickedHoles = new HashSet<Holenumber>();
-        spawnedObjects = new Dictionary<Holenumber, GameObject>(); // 初始化
+        spawnedSprites = new Dictionary<Holenumber, Sprite>();
+        hoverSprites = new Dictionary<Holenumber, Sprite>();
         mouseRoot = transform.GetChild(1);
         usercontrol = FindObjectOfType<usercontrol>();
+
         if (usercontrol == null)
         {
-            Debug.LogError("未找到 MouseClickHandler 組件！腳本將禁用。");
+            Debug.LogError("未找到 usercontrol 組件！腳本將禁用。");
             enabled = false;
             return;
         }
-        if (spriteA == null || spriteB == null)
+        if (spriteA == null || spriteB == null || spriteC4_1 == null || spriteC4_2 == null ||
+            spriteB_hover == null || spriteC4_1_hover == null || spriteC4_2_hover == null)
         {
-            Debug.LogError("圖片 A 或圖片 B 未設置！腳本將禁用。");
+            Debug.LogError("圖片 spriteA, spriteB, spriteC4_1, spriteC4_2, spriteB_hover, spriteC4_1_hover 或 spriteC4_2_hover 未設置！腳本將禁用。");
             enabled = false;
             return;
         }
@@ -46,6 +53,7 @@ public class mouseborn : MonoBehaviour
             enabled = false;
             return;
         }
+
         for (int i = 0; i < holeObjectArray.Length; i++)
         {
             if (holeObjectArray[i] == null)
@@ -64,9 +72,17 @@ public class mouseborn : MonoBehaviour
             {
                 Debug.LogError($"生成點 {i} 缺少 SpriteRenderer 組件！");
             }
+            // 確保每個地洞有 BoxCollider2D，但預設禁用
+            BoxCollider2D collider = holeObjectArray[i].GetComponent<BoxCollider2D>();
+            if (collider == null)
+            {
+                collider = holeObjectArray[i].AddComponent<BoxCollider2D>();
+            }
+            collider.enabled = false;
         }
+
         InvokeRepeating("Create", 0, 1.5f);
-        InvokeRepeating("boom", 3f, 3f);
+        InvokeRepeating("Boom", 3f, 3f);
     }
 
     void Update()
@@ -74,7 +90,7 @@ public class mouseborn : MonoBehaviour
         if (usercontrol != null && !usercontrol.IsGameActive())
         {
             CancelInvoke("Create");
-            CancelInvoke("boom");
+            CancelInvoke("Boom");
             enabled = false;
         }
     }
@@ -92,11 +108,11 @@ public class mouseborn : MonoBehaviour
         Holenumber newHole = GetUniqueHole();
         if (holeObjects.ContainsKey(newHole))
         {
-            StartCoroutine(ShakeAndSpawn(newHole, mouse, 2f)); // 啟動搖晃並生成 mouse
+            StartCoroutine(ShakeAndSpawn(newHole, spriteB, true, 2f)); // 生成老鼠
         }
     }
 
-    public void boom()
+    public void Boom()
     {
         if (usercontrol == null || !usercontrol.IsGameActive() || !gameObject.activeInHierarchy)
             return;
@@ -104,34 +120,44 @@ public class mouseborn : MonoBehaviour
         Holenumber newHole = GetUniqueHole();
         if (holeObjects.ContainsKey(newHole))
         {
-            StartCoroutine(ShakeAndSpawn(newHole, C4, 5f)); // 啟動搖晃並生成 C4
+            Sprite c4Sprite = Random.value > 0.5f ? spriteC4_1 : spriteC4_2;
+            StartCoroutine(ShakeAndSpawn(newHole, c4Sprite, false, 5f)); // 生成 C4
         }
     }
 
-    private IEnumerator ShakeAndSpawn(Holenumber hole, GameObject prefab, float destroyDelay)
+    private IEnumerator ShakeAndSpawn(Holenumber hole, Sprite targetSprite, bool isMouse, float destroyDelay)
     {
         if (holeObjects.ContainsKey(hole))
         {
             GameObject holeObject = holeObjects[hole];
             SpriteRenderer sr = holeObject.GetComponent<SpriteRenderer>();
-            if (sr != null)
+            BoxCollider2D collider = holeObject.GetComponent<BoxCollider2D>();
+            if (sr != null && collider != null)
             {
                 yield return StartCoroutine(Shake(holeObject.transform));
-                sr.sprite = spriteB;
+                sr.sprite = targetSprite;
+                spawnedSprites[hole] = targetSprite;
+
+                // 設置 Hover Sprite
+                Sprite hoverSprite = isMouse ? spriteB_hover : (targetSprite == spriteC4_1 ? spriteC4_1_hover : spriteC4_2_hover);
+                hoverSprites[hole] = hoverSprite;
+
+                collider.enabled = true; // 啟用碰撞器
+                holeObject.tag = isMouse ? "mouse" : "C4"; // 設置標籤
+                HoleState state = holeObject.GetComponent<HoleState>();
+                if (state == null)
+                {
+                    state = holeObject.AddComponent<HoleState>();
+                }
+                state.Initialize(hole, mouseRoot, isMouse, this);
+                occupiedHoles.Add(hole);
+                clickedHoles.Remove(hole);
+                StartCoroutine(RemoveHoleAfterDelay(hole, destroyDelay));
             }
             else
             {
-                Debug.LogWarning($"Holenumber {hole} 的生成點缺少 SpriteRenderer！");
+                Debug.LogWarning($"Holenumber {hole} 的生成點缺少 SpriteRenderer 或 BoxCollider2D！");
             }
-
-            GameObject go = Instantiate(prefab);
-            go.AddComponent<mouseset>().GetHole = hole;
-            go.GetComponent<mouseset>().GetParent = mouseRoot;
-            spawnedObjects[hole] = go; // 儲存生成的物件
-            occupiedHoles.Add(hole);
-            clickedHoles.Remove(hole);
-            StartCoroutine(RemoveHoleAfterDelay(hole, destroyDelay));
-            Destroy(go, destroyDelay);
         }
     }
 
@@ -139,7 +165,6 @@ public class mouseborn : MonoBehaviour
     {
         Vector3 originalPosition = target.localPosition;
         float elapsed = 0f;
-
         while (elapsed < shakeDuration)
         {
             float xOffset = Mathf.Sin(Time.time * shakeSpeed) * shakeMagnitude;
@@ -147,7 +172,6 @@ public class mouseborn : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-
         target.localPosition = originalPosition;
     }
 
@@ -166,20 +190,7 @@ public class mouseborn : MonoBehaviour
         yield return new WaitForSeconds(delay);
         if (occupiedHoles.Contains(hole) && !clickedHoles.Contains(hole))
         {
-            occupiedHoles.Remove(hole);
-            if (spawnedObjects.ContainsKey(hole))
-            {
-                Destroy(spawnedObjects[hole]); // 確保物件被銷毀
-                spawnedObjects.Remove(hole);
-            }
-            if (holeObjects.ContainsKey(hole))
-            {
-                SpriteRenderer sr = holeObjects[hole].GetComponent<SpriteRenderer>();
-                if (sr != null && sr.sprite != spriteA)
-                {
-                    sr.sprite = spriteA;
-                }
-            }
+            ResetHole(hole);
         }
     }
 
@@ -187,39 +198,57 @@ public class mouseborn : MonoBehaviour
     {
         if (holeObjects.ContainsKey(hole))
         {
-            if (spawnedObjects.ContainsKey(hole))
-            {
-                Destroy(spawnedObjects[hole]); // 立即銷毀物件
-                spawnedObjects.Remove(hole);
-            }
-
-            SpriteRenderer sr = holeObjects[hole].GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.sprite = spriteA;
-            }
+            ResetHole(hole);
             clickedHoles.Add(hole);
             occupiedHoles.Remove(hole);
         }
     }
 
-    public void Restart()
+    private void ResetHole(Holenumber hole)
     {
-        CancelInvoke("Create");
-        CancelInvoke("boom");
-        occupiedHoles.Clear();
-        clickedHoles.Clear();
-        spawnedObjects.Clear(); // 清空生成的物件
-        foreach (var pair in holeObjects)
+        if (holeObjects.ContainsKey(hole))
         {
-            SpriteRenderer sr = pair.Value.GetComponent<SpriteRenderer>();
+            GameObject holeObject = holeObjects[hole];
+            SpriteRenderer sr = holeObject.GetComponent<SpriteRenderer>();
+            BoxCollider2D collider = holeObject.GetComponent<BoxCollider2D>();
+            HoleState state = holeObject.GetComponent<HoleState>();
             if (sr != null)
             {
                 sr.sprite = spriteA;
             }
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+            if (state != null)
+            {
+                Destroy(state);
+            }
+            holeObject.tag = "Untagged"; // 移除標籤
+            spawnedSprites.Remove(hole);
+            hoverSprites.Remove(hole); // 清除 Hover 記錄
+        }
+    }
+
+    public Sprite GetHoverSprite(Holenumber hole)
+    {
+        return hoverSprites.ContainsKey(hole) ? hoverSprites[hole] : null;
+    }
+
+    public void Restart()
+    {
+        CancelInvoke("Create");
+        CancelInvoke("Boom");
+        occupiedHoles.Clear();
+        clickedHoles.Clear();
+        spawnedSprites.Clear();
+        hoverSprites.Clear();
+        foreach (var pair in holeObjects)
+        {
+            ResetHole(pair.Key);
         }
         InvokeRepeating("Create", 0, 1.5f);
-        InvokeRepeating("boom", 3f, 3f);
+        InvokeRepeating("Boom", 3f, 3f);
         enabled = true;
     }
 }
