@@ -196,7 +196,7 @@ public class BottomBarController : MonoBehaviour
         // 顯示講話者資訊
         personNameText.text = sentence.speaker.speakerName;
         personNameText.color = sentence.speaker.textColor;
-        if (sentence.speaker.speakerName == "旁白")
+        if (sentence.speaker.speakerName == "旁白" || sentence.speaker.speakerName == "？？？")
         {
             image.sprite = MidBar;
         }

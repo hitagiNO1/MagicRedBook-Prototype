@@ -1,35 +1,41 @@
-using Cinemachine;
+ï»¿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class EffectManager : MonoBehaviour
 {
-    public static EffectManager Instance; // ³æ¨ÒÀRºA
+    public static EffectManager Instance; // å–®ä¾‹éœæ…‹
 
     [System.Serializable]
     public class EffectEntry
     {
-        public string effectName; // ¯S®Ä¦WºÙ¡]¥Î¨Ó¬d§ä¡^
-        public GameObject prefab; // ¯S®ÄªºPrefab
+        public string effectName; // ç‰¹æ•ˆåç¨±ï¼ˆç”¨ä¾†æŸ¥æ‰¾ï¼‰
+        public GameObject prefab; // ç‰¹æ•ˆçš„Prefab
+        public Vector2 leftPosition;
+        public Vector2 rightPosition;
     }
-    public List<EffectEntry> effects = new List<EffectEntry>(); // Inspector ¤W³]©wªº¯S®Ä¦Cªí
+    public List<EffectEntry> effects = new List<EffectEntry>(); // Inspector ä¸Šè¨­å®šçš„ç‰¹æ•ˆåˆ—è¡¨
 
-    private Dictionary<string, GameObject> effectDict; // ¥Î¨Ó§Ö³t¬d§ä¯S®Äªº¦r¨å
+    private Dictionary<string, GameObject> effectDict; // ç”¨ä¾†å¿«é€ŸæŸ¥æ‰¾ç‰¹æ•ˆçš„å­—å…¸
     public GameObject targetCanvas;
+    private bool lastEffectOnLeft = true; // è¨˜éŒ„æœ€å¾Œä¸€å€‹ç‰¹æ•ˆç”Ÿæˆåœ¨å“ªé‚Š
 
-    [Header("¨ü¶Ëªí±¡Sprites¡BImage")]
-    public Image BlackHead;   //¸}¦âÅÜ¬õ
+    [Header("å—å‚·è¡¨æƒ…Spritesã€Image")]
+    public Image BlackHead;   //è…³è‰²è®Šç´…
     public Sprite hurtFace;
+    public Image LylaHead;   //è…³è‰²è®Šç´…
+    public Sprite LylahurtFace;
+
 
     void Awake()
     {
-        // ³æ¨Ò EffectManager
+        // å–®ä¾‹ EffectManager
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitDictionary(); // ªì©l¤Æ¦r¨å
+            InitDictionary(); // åˆå§‹åŒ–å­—å…¸
         }
         else
         {
@@ -38,7 +44,7 @@ public class EffectManager : MonoBehaviour
     }
     void InitDictionary()
     {
-        // ±N Inspector ¤W³]©wªº¯S®Ä¦CªíÂà¦¨¦r¨å¡A¤è«K§Ö³t¬d§ä
+        // å°‡ Inspector ä¸Šè¨­å®šçš„ç‰¹æ•ˆåˆ—è¡¨è½‰æˆå­—å…¸ï¼Œæ–¹ä¾¿å¿«é€ŸæŸ¥æ‰¾
         effectDict = new Dictionary<string, GameObject>();
         foreach (var e in effects)
         {
@@ -48,24 +54,24 @@ public class EffectManager : MonoBehaviour
     }
 
     /*
-    // ¥ß§Y¼½©ñ¯S®Ä¡]µL©µ¿ğ¡BµLÁY©ñ¡^
-    public void PlayEffect(string effectName, Vector3 position) //¦WºÙ ¦ì¸m
+    // ç«‹å³æ’­æ”¾ç‰¹æ•ˆï¼ˆç„¡å»¶é²ã€ç„¡ç¸®æ”¾ï¼‰
+    public void PlayEffect(string effectName, Vector3 position) //åç¨± ä½ç½®
     {
-        PlayEffect(effectName, position, 0f, 1f); // ©I¥s¦³©µ¿ğ»PÁY©ñ°Ñ¼Æªºª©¥»
+        PlayEffect(effectName, position, 0f, 1f); // å‘¼å«æœ‰å»¶é²èˆ‡ç¸®æ”¾åƒæ•¸çš„ç‰ˆæœ¬
     }
 
-    // ¼½©ñ¯S®Ä¡]³]©w©µ¿ğ»PÁY©ñ¡^
-    public void PlayEffect(string effectName, Vector3 position, float delay, float scale) //¦WºÙ ¦ì¸m ©µ¿ğ¬í¼Æ ÁY©ñ­¿²v
+    // æ’­æ”¾ç‰¹æ•ˆï¼ˆè¨­å®šå»¶é²èˆ‡ç¸®æ”¾ï¼‰
+    public void PlayEffect(string effectName, Vector3 position, float delay, float scale) //åç¨± ä½ç½® å»¶é²ç§’æ•¸ ç¸®æ”¾å€ç‡
     {
-        // ½T»{¯S®Ä¦s¦b¦r¨å¤¤
+        // ç¢ºèªç‰¹æ•ˆå­˜åœ¨å­—å…¸ä¸­
         if (effectDict.TryGetValue(effectName, out GameObject prefab))
         {
-            // ±Ò°Ê¨óµ{¨Ó³B²z©µ¿ğ¼½©ñ
+            // å•Ÿå‹•å”ç¨‹ä¾†è™•ç†å»¶é²æ’­æ”¾
             StartCoroutine(PlayEffectCoroutine(prefab, position, delay, scale));
         }
         else
         {
-            Debug.LogWarning($"Effect '{effectName}' not found!"); // §ä¤£¨ì¯S®ÄÄµ§i
+            Debug.LogWarning($"Effect '{effectName}' not found!"); // æ‰¾ä¸åˆ°ç‰¹æ•ˆè­¦å‘Š
         }
     }
     
@@ -73,17 +79,17 @@ public class EffectManager : MonoBehaviour
     {
         if (delay > 0f)
             yield return new WaitForSeconds(delay);
-        GameObject fx = Instantiate(prefab, position, Quaternion.identity); // ¦b«ü©w¦ì¸m¥Í¦¨¯S®Ä
-        fx.transform.localScale *= scale; // ¡]µ¥¤ñÁY©ñ X/Y/Z¡^
+        GameObject fx = Instantiate(prefab, position, Quaternion.identity); // åœ¨æŒ‡å®šä½ç½®ç”Ÿæˆç‰¹æ•ˆ
+        fx.transform.localScale *= scale; // ï¼ˆç­‰æ¯”ç¸®æ”¾ X/Y/Zï¼‰
     }
     */
 
-    // ¼½©ñ UI ¯S®Ä¡]¥Í¦¨¦b Canvas¡^
+    // æ’­æ”¾ UI ç‰¹æ•ˆï¼ˆç”Ÿæˆåœ¨ Canvasï¼‰
     public void PlayUIEffect(string effectName, Vector2 uiPosition)
     {
         PlayUIEffect(effectName, uiPosition, 0f, 1f);
     }
-    // ¼½©ñ UI ¯S®Ä¡]©µ¿ğ+ÁY©ñ¡^
+    // æ’­æ”¾ UI ç‰¹æ•ˆï¼ˆå»¶é²+ç¸®æ”¾ï¼‰
     public void PlayUIEffect(string effectName, Vector2 uiPosition, float delay, float scale)
     {
         if (effectDict.TryGetValue(effectName, out GameObject prefab))
@@ -95,21 +101,55 @@ public class EffectManager : MonoBehaviour
             Debug.LogWarning($"UI Effect '{effectName}' not found!");
         }
     }
-    // ¥Í¦¨ UI ¯S®Ä
+    // ç”Ÿæˆ UI ç‰¹æ•ˆ
     private IEnumerator PlayUIEffectCoroutine(GameObject prefab, Vector2 uiPosition, float delay, float scale)
     {
         if (delay > 0f)
             yield return new WaitForSeconds(delay);
-        GameObject fx = Instantiate(prefab, targetCanvas.transform);       // ¦b Canvas ¤º¥Í¦¨¯S®Ä
-        fx.GetComponent<RectTransform>().anchoredPosition = uiPosition;    // ³]©w¯S®Äªº UI ®y¼Ğ
-        fx.transform.localScale *= scale;    // ÁY©ñ
+        GameObject fx = Instantiate(prefab, targetCanvas.transform);       // åœ¨ Canvas å…§ç”Ÿæˆç‰¹æ•ˆ
+        fx.GetComponent<RectTransform>().anchoredPosition = uiPosition;    // è¨­å®šç‰¹æ•ˆçš„ UI åº§æ¨™
+        fx.transform.localScale *= scale;    // ç¸®æ”¾
+    }
+
+    public void PlayUIEffectOneSide(string effectName, bool playLeft = true)
+    {
+        // æ‰¾åˆ°å°æ‡‰ç‰¹æ•ˆè³‡æ–™
+        EffectEntry entry = effects.Find(e => e.effectName == effectName);
+        if (entry == null)
+        {
+            Debug.LogWarning($"æœªæ‰¾åˆ°ç‰¹æ•ˆ {effectName} çš„ä½ç½®è¨­å®šï¼");
+            return;
+        }
+
+        // æŸ¥æ‰¾ prefab
+        if (!effectDict.TryGetValue(effectName, out GameObject prefab))
+        {
+            Debug.LogWarning($"ç‰¹æ•ˆ {effectName} æœªåœ¨å­—å…¸ä¸­è¨»å†Šï¼");
+            return;
+        }
+
+        // æ±ºå®šæ’­æ”¾ä½ç½®
+        Vector2 pos = playLeft ? entry.leftPosition : entry.rightPosition;
+
+        // ç”Ÿæˆç‰¹æ•ˆ
+        GameObject fx = Instantiate(prefab, targetCanvas.transform);
+        fx.GetComponent<RectTransform>().anchoredPosition = pos;
+
+        // è¨­å®šç¸®æ”¾æ–¹å‘ï¼ˆå·¦é‚Šçš„ç‰¹æ•ˆè¦æ°´å¹³åè½‰ï¼‰
+        Vector3 scale = Vector3.one;
+        if (playLeft)
+            scale.x = -1f;  // å·¦é‚Šç¿»è½‰
+        fx.transform.localScale = scale;
+        // è¨˜éŒ„æœ€å¾Œä¸€å€‹ç‰¹æ•ˆæ–¹å‘
+        lastEffectOnLeft = playLeft;
+        Debug.Log($"æ’­æ”¾ç‰¹æ•ˆ {effectName} ({(playLeft ? "å·¦" : "å³")}) at {pos}, scale={scale}");
     }
 
 
-    // Â²³æªº®Ì°Ê¡G¨Ï¥Î Noise Profile
+    // ç°¡å–®çš„æ™ƒå‹•ï¼šä½¿ç”¨ Noise Profile
     public void ShakeCamera(float amplitude, float frequency, float duration)
     {
-        // ¨ú±o¥Ø«e±Ò¥Îªº VCam
+        // å–å¾—ç›®å‰å•Ÿç”¨çš„ VCam
         CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
         var vcam = brain.ActiveVirtualCamera as CinemachineVirtualCamera;
 
@@ -126,35 +166,68 @@ public class EffectManager : MonoBehaviour
         CinemachineBasicMultiChannelPerlin noise,
         float amplitude, float frequency, float duration)
     {
-        // ³]©w®Ì°Ê±j«×
+        // è¨­å®šæ™ƒå‹•å¼·åº¦
         noise.m_AmplitudeGain = amplitude;
         noise.m_FrequencyGain = frequency;
 
         yield return new WaitForSeconds(duration);
 
-        // «ì´_¦¨ 0
+        // æ¢å¾©æˆ 0
         noise.m_AmplitudeGain = 0;
         noise.m_FrequencyGain = 0;
     }
 
 
-    //°{¬õ
+    //é–ƒç´…
     public void FlashRed(float duration)
     {
-        StartCoroutine(DoFlashRed(duration));
+        bool leftSide = lastEffectOnLeft;
+        Image targetImage = leftSide ? LylaHead : BlackHead;
+        Sprite hurtSprite = leftSide ? LylahurtFace : hurtFace;
+        StartCoroutine(DoFlashRedSide(targetImage, hurtSprite, duration));
     }
 
-    private IEnumerator DoFlashRed(float duration)
+    private IEnumerator DoFlashRedSide(Image targetImage, Sprite hurtSprite, float duration)
     {
-        // «O¦s­ì©lÃC¦â
-        Color original = BlackHead.color;
-        Sprite normalFace = BlackHead.sprite;
-        // ³]¬°¬õ¦â
-        BlackHead.color = new Color32(255, 163, 163, 255); // ¬õ¦â
-        BlackHead.sprite = hurtFace;
-        yield return new WaitForSeconds(duration); // °{¤@¤U®É¶¡
-        // ¦^´_­ì¦â
-        BlackHead.color = original;
-        BlackHead.sprite = normalFace;
+        if (targetImage == null || hurtSprite == null) yield break;
+
+        Color originalColor = targetImage.color;
+        Sprite originalSprite = targetImage.sprite;
+
+        targetImage.color = new Color32(255, 163, 163, 255);
+        targetImage.sprite = hurtSprite;
+
+        yield return new WaitForSeconds(duration);
+
+        targetImage.color = originalColor;
+        targetImage.sprite = originalSprite;
     }
+    public void FlashRedAll(float duration)
+    {
+        // å·¦å³è§’è‰²éƒ½é–ƒç´…
+        if (BlackHead != null && hurtFace != null)
+            StartCoroutine(DoFlashRed(BlackHead, hurtFace, duration));
+
+        if (LylaHead != null && LylahurtFace != null)
+            StartCoroutine(DoFlashRed(LylaHead, LylahurtFace, duration));
+    }
+
+    private IEnumerator DoFlashRed(Image targetImage, Sprite hurtSprite, float duration)
+    {
+        if (targetImage == null || hurtSprite == null) yield break;
+
+        Color originalColor = targetImage.color;
+        Sprite originalSprite = targetImage.sprite;
+
+        // é–ƒç´…
+        targetImage.color = new Color32(255, 163, 163, 255);
+        targetImage.sprite = hurtSprite;
+
+        yield return new WaitForSeconds(duration);
+
+        // å›å¾©åŸç‹€
+        targetImage.color = originalColor;
+        targetImage.sprite = originalSprite;
+    }
+
 }

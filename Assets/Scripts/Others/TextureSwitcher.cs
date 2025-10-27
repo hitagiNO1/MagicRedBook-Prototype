@@ -2,24 +2,18 @@ using UnityEngine;
 
 public class TextureSwitcher : MonoBehaviour
 {
-    public Texture2D textureA;    // 第一張圖
-    public Texture2D textureB;    // 第二張圖
+    public Sprite imgA;    // 第一張圖
+    public Sprite imgB;    // 第二張圖
     public float switchInterval = 0.5f; // 切換間隔 (秒)
 
     private SpriteRenderer sr;
-    private MaterialPropertyBlock mpb;
     private float timer;
     private bool showingA = true;
 
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        mpb = new MaterialPropertyBlock();
-        sr.GetPropertyBlock(mpb);
-
-        // 初始貼圖
-        mpb.SetTexture("_MainTex", textureA);
-        sr.SetPropertyBlock(mpb);
+        sr.sprite = imgA;
     }
 
     void Update()
@@ -29,10 +23,13 @@ public class TextureSwitcher : MonoBehaviour
         {
             timer -= switchInterval;
             showingA = !showingA;
+            Sprite nextSprite = showingA ? imgA : imgB;
 
-            sr.GetPropertyBlock(mpb);
-            mpb.SetTexture("_MainTex", showingA ? textureA : textureB);
-            sr.SetPropertyBlock(mpb);
+            if (nextSprite == null)
+            {
+                Debug.LogError($"{name}: Sprite 為 NULL，可能沒指定！");
+            }
+            sr.sprite = nextSprite;
         }
     }
 }

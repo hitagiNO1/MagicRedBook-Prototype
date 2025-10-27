@@ -138,7 +138,10 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 0f63a7880250a6947bf1446bcefdc511, type: 2}
+      timing: 2
   - text: "\u5C45\u7136\u6703\u5728\u9019\u88E1\u627E\u5230\u2026\u2026\u771F\u662F\u610F\u5916\u7684\u6536\u7A6B\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions:

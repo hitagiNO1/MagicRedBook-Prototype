@@ -46,7 +46,7 @@ MonoBehaviour:
       Right: 1
     timline:
     - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: 5612844fe0fc1734297224a4ff3e192b, type: 2}
+      myPlayableAsset: {fileID: 11400000, guid: 58c3dd818c38dfb4aaf2ee01f5642d06, type: 2}
       timing: 0
   - text: "\u90A3\u500B\u662F......"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}

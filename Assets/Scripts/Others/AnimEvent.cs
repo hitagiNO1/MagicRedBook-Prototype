@@ -57,4 +57,8 @@ public class AnimEvent : MonoBehaviour
     {
         EffectManager.Instance.FlashRed(0.5f);
     }
+    public void FlashRedAll()
+    {
+        EffectManager.Instance.FlashRedAll(1f);
+    }
 }
