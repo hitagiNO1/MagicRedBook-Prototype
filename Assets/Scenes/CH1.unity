@@ -61367,7 +61367,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 12.338483}
+  m_LocalPosition: {x: 0, y: 0, z: -55.56152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -61375,7 +61375,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 597.5, y: 30.07001}
+  m_AnchoredPosition: {x: 538, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -171415,7 +171415,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 597.5, y: 30.07001, z: 12.338483}
+  m_LocalPosition: {x: 538, y: 30.070007, z: -55.56152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -232440,7 +232440,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 597.5, y: 0.07, z: 64.3}
+  m_LocalPosition: {x: 538, y: 0.07, z: -3.6}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -255605,7 +255605,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -644
+  m_SortingOrder: 35
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -262680,7 +262680,7 @@ Transform:
   m_GameObject: {fileID: 4409157104174844077}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6427876, y: 0, z: -0, w: 0.76604444}
-  m_LocalPosition: {x: -18.163376, y: 14.230441, z: -0.006252289}
+  m_LocalPosition: {x: 17.87, y: 21.08, z: -0.01}
   m_LocalScale: {x: 0.1125, y: 0.11249999, z: 0.11249999}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -275866,7 +275866,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 610
+  m_SortingOrder: 62
   m_Sprite: {fileID: 1582791979, guid: b8945192622d3724bb1d5959e382ab55, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -275891,7 +275891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InteractiveUI: {fileID: 923307694}
-  targetSceneName: 2D_test
+  targetSceneName: ItemGame
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
   locationstore: {fileID: 3720424681303388709}
