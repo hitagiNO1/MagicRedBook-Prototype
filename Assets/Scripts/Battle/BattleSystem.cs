@@ -5,9 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Random = UnityEngine.Random;
-
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
-
 public class BattleSystem : MonoBehaviour
 {
     public List<GameObject> playerPrefabs;
@@ -25,14 +23,11 @@ public class BattleSystem : MonoBehaviour
     public BuffDebuffManager buffDebuffManager;
     public int turnCounter = 0;
     public GameController gameScript;
-
     private List<bool> playersActed;
     private Dictionary<int, Unit> selectedTargets;
-
-    // 新增：防止重複結束戰鬥
-    private bool isBattleEnding = false;
+    // 新增：防止重複結束戰鬥
+    private bool isBattleEnding = false;
     private bool hideAnimationTriggered = false;
-
     void Start()
     {
         state = BattleState.END;
@@ -55,7 +50,6 @@ public class BattleSystem : MonoBehaviour
         playersActed = new List<bool>();
         selectedTargets = new Dictionary<int, Unit>();
     }
-
     private void Update()
     {
         if (state == BattleState.START && !isHidden)
@@ -69,11 +63,10 @@ public class BattleSystem : MonoBehaviour
             isHidden = true;
         }
     }
-
     public IEnumerator SetupBattle()
     {
-        // 初始化玩家單位和 HUD
-        for (int i = 0; i < playerPrefabs.Count; i++)
+        // 初始化玩家單位和 HUD
+        for (int i = 0; i < playerPrefabs.Count; i++)
         {
             if (playerPrefabs[i] == null)
             {
@@ -98,9 +91,8 @@ public class BattleSystem : MonoBehaviour
             }
             playersActed.Add(false);
         }
-
-        // 初始化敵人單位和 HUD
-        for (int i = 0; i < enemyPrefabs.Count; i++)
+        // 初始化敵人單位和 HUD
+        for (int i = 0; i < enemyPrefabs.Count; i++)
         {
             if (enemyPrefabs[i] == null)
             {
@@ -114,7 +106,6 @@ public class BattleSystem : MonoBehaviour
                 yield break;
             }
             enemyUnits.Add(enemyUnit);
-
             if (i < enemyHUDs.Count && enemyHUDs[i] != null)
             {
                 enemyHUDs[i].SetHUD(enemyUnit);
@@ -124,7 +115,6 @@ public class BattleSystem : MonoBehaviour
             {
                 Debug.LogError($"enemyHUDs[{i}] 未設置或為空！");
             }
-
             Enemyskill enemySkillComponent = enemyPrefabs[i].GetComponent<Enemyskill>();
             if (enemySkillComponent == null)
             {
@@ -138,27 +128,21 @@ public class BattleSystem : MonoBehaviour
                 Debug.Log($"敵人 {enemyUnit.unitName} 的技能組件已設置完成");
             }
         }
-
         if (dialogueText != null)
         {
             dialogueText.text = "野生的敵人們出現了..";
         }
-
         yield return new WaitForSeconds(1f);
-
         skillManager.playerUnits = playerUnits;
         skillManager.enemyUnits = enemyUnits;
         skillManager.buffDebuffManager = buffDebuffManager;
-
         if (skillManager != null)
         {
             StartCoroutine(skillManager.DelayedInitSkillIcons(2f));
         }
-
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }
-
     public void PlayerTurn()
     {
         state = BattleState.PLAYERTURN;
@@ -172,7 +156,6 @@ public class BattleSystem : MonoBehaviour
         }
         selectedTargets.Clear();
     }
-
     public void OnPlayerConfirmSkillQueue()
     {
         if (AllEnemiesDead())
@@ -181,11 +164,9 @@ public class BattleSystem : MonoBehaviour
             EndBattle();
             return;
         }
-
         state = BattleState.ENEMYTURN;
         StartCoroutine(EnemyTurn());
     }
-
     public IEnumerator EnemyTurn()
     {
         skillManager.ClearAllHighlights();
@@ -194,19 +175,17 @@ public class BattleSystem : MonoBehaviour
             dialogueText.text = "敵人們的回合...";
         }
         yield return new WaitForSeconds(1f);
-
-        // 反向迴圈，安全處理每個敵人
-        for (int i = enemyUnits.Count - 1; i >= 0; i--)
+        // 反向迴圈，安全處理每個敵人
+        for (int i = enemyUnits.Count - 1; i >= 0; i--)
         {
-            // 關鍵修復 1：檢查敵人是否還活著
-            if (i >= enemyPrefabs.Count || enemyPrefabs[i] == null || enemyUnits[i] == null || enemyUnits[i].currentHP <= 0)
+            // 關鍵修復 1：檢查敵人是否還活著
+            if (i >= enemyPrefabs.Count || enemyPrefabs[i] == null || enemyUnits[i] == null || enemyUnits[i].currentHP <= 0)
             {
                 Debug.LogWarning($"敵人 {i} 已銷毀或死亡，跳過");
                 continue;
             }
-
-            // 關鍵修復 2：安全獲取 Enemyskill
-            Enemyskill enemySkillComponent = enemyPrefabs[i]?.GetComponent<Enemyskill>();
+            // 關鍵修復 2：安全獲取 Enemyskill
+            Enemyskill enemySkillComponent = enemyPrefabs[i]?.GetComponent<Enemyskill>();
             if (enemySkillComponent != null)
             {
                 bool skillExecuted = enemySkillComponent.ExecuteEnemySkill(enemyUnits[i]);
@@ -215,16 +194,14 @@ public class BattleSystem : MonoBehaviour
                     yield return new WaitForSeconds(1.5f);
                 }
             }
-
-            // 關鍵修復 3：死亡後立即銷毀（已檢查 null）
-            if (enemyUnits[i].currentHP <= 0)
+            // 關鍵修復 3：死亡後立即銷毀（已檢查 null）
+            if (enemyUnits[i].currentHP <= 0)
             {
                 DestroyEnemy(i);
             }
         }
-
-        // Buff/Debuff 處理（保持不變）
-        if (buffDebuffManager != null)
+        // Buff/Debuff 處理（保持不變）
+        if (buffDebuffManager != null)
         {
             buffDebuffManager.TickDefenseDebuffs();
             buffDebuffManager.TickDefenseBuffs();
@@ -232,9 +209,8 @@ public class BattleSystem : MonoBehaviour
             buffDebuffManager.TickPoison();
             buffDebuffManager.TickSkillDisable();
         }
-
-        // 減免冷卻（安全迴圈）
-        for (int i = enemyPrefabs.Count - 1; i >= 0; i--)
+        // 減免冷卻（安全迴圈）
+        for (int i = enemyPrefabs.Count - 1; i >= 0; i--)
         {
             if (enemyPrefabs[i] != null)
             {
@@ -245,9 +221,8 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
-
-        // 勝利/失敗檢查
-        if (AllPlayersDead())
+        // 勝利/失敗檢查
+        if (AllPlayersDead())
         {
             state = BattleState.LOST;
             EndBattle();
@@ -268,30 +243,26 @@ public class BattleSystem : MonoBehaviour
             PlayerTurn();
         }
     }
-
-    // 優化版：安全銷毀敵人
-    public void DestroyEnemy(int index)
+    // 優化版：安全銷毀敵人
+    public void DestroyEnemy(int index)
     {
-        // 多重檢查
-        if (index < 0 || index >= enemyUnits.Count ||
-            index >= enemyPrefabs.Count ||
-            enemyPrefabs[index] == null ||
-            enemyUnits[index] == null)
+        // 多重檢查
+        if (index < 0 || index >= enemyUnits.Count ||
+index >= enemyPrefabs.Count ||
+enemyPrefabs[index] == null ||
+enemyUnits[index] == null)
         {
             Debug.LogWarning($"DestroyEnemy({index})：索引或物件無效，跳過");
             return;
         }
-
-        // 禁用碰撞器
-        Collider2D col2D = enemyPrefabs[index].GetComponent<Collider2D>();
+        // 禁用碰撞器
+        Collider2D col2D = enemyPrefabs[index].GetComponent<Collider2D>();
         if (col2D != null) col2D.enabled = false;
         Collider col3D = enemyPrefabs[index].GetComponent<Collider>();
         if (col3D != null) col3D.enabled = false;
-
         Debug.Log($"銷毀敵人 {enemyUnits[index].unitName}（剩餘：{enemyUnits.Count - 1}）");
-
-        // 銷毀父物件
-        Transform parent = enemyPrefabs[index].transform.parent;
+        // 銷毀父物件
+        Transform parent = enemyPrefabs[index].transform.parent;
         if (parent != null)
         {
             Destroy(parent.gameObject);
@@ -300,62 +271,53 @@ public class BattleSystem : MonoBehaviour
         {
             Destroy(enemyPrefabs[index]);
         }
-
-        // 同步移除
-        enemyPrefabs.RemoveAt(index);
+        // 同步移除
+        enemyPrefabs.RemoveAt(index);
         enemyUnits.RemoveAt(index);
-
-        // 移除 HUD
-        if (index < enemyHUDs.Count && enemyHUDs[index] != null)
+        // 移除 HUD
+        if (index < enemyHUDs.Count && enemyHUDs[index] != null)
         {
             Destroy(enemyHUDs[index].gameObject);
             enemyHUDs.RemoveAt(index);
         }
     }
-
     private bool HasAnyPlayerActed()
     {
         foreach (bool acted in playersActed)
             if (acted) return true;
         return false;
     }
-
     private bool AllPlayersActed()
     {
         foreach (bool acted in playersActed)
             if (!acted) return false;
         return true;
     }
-
     private bool AllEnemiesDead()
     {
         foreach (Unit enemy in enemyUnits)
             if (enemy.currentHP > 0) return false;
         return true;
     }
-
     private bool AllPlayersDead()
     {
         foreach (Unit player in playerUnits)
             if (player.currentHP > 0) return false;
         return true;
     }
-
     public void OnRunbutton()
     {
         if (state != BattleState.PLAYERTURN) return;
         StartCoroutine(PlayerRun());
     }
-
     IEnumerator PlayerRun()
     {
         state = BattleState.RUN;
         yield return new WaitForSeconds(0.5f);
         EndBattle();
     }
-
-    // 關鍵修復：防止動畫重複播放
-    public void EndBattle()
+    // 關鍵修復：防止動畫重複播放
+    public void EndBattle()
     {
         if (isBattleEnding)
         {
@@ -363,16 +325,13 @@ public class BattleSystem : MonoBehaviour
             return;
         }
         isBattleEnding = true;
-
         if (state == BattleState.WON)
         {
             if (dialogueText != null)
                 dialogueText.text = "你贏得了戰鬥!";
-
             GameStateManager.Instance.SetState(GameState.Playing);
-
-            // 銷毀敵人與 HUD
-            for (int i = enemyPrefabs.Count - 1; i >= 0; i--)
+            // 銷毀敵人與 HUD
+            for (int i = enemyPrefabs.Count - 1; i >= 0; i--)
             {
                 if (enemyPrefabs[i] != null)
                 {
@@ -382,7 +341,6 @@ public class BattleSystem : MonoBehaviour
                 }
             }
             enemyPrefabs.Clear();
-
             foreach (var hud in enemyHUDs)
                 if (hud != null) Destroy(hud.gameObject);
             enemyHUDs.Clear();
@@ -394,12 +352,10 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = state == BattleState.LOST ? "你輸了..." : "逃跑成功...";
             }
-
-            // 關鍵修復：逃跑或失敗也必須恢復 Playing 狀態
-            GameStateManager.Instance.SetState(GameState.Playing);
-
-            // 回滿敵人血量（保留敵人）
-            foreach (Unit enemy in enemyUnits)
+            // 關鍵修復：逃跑或失敗也必須恢復 Playing 狀態
+            GameStateManager.Instance.SetState(GameState.Playing);
+            // 回滿敵人血量（保留敵人）
+            foreach (Unit enemy in enemyUnits)
             {
                 if (enemy != null)
                 {
@@ -410,37 +366,29 @@ public class BattleSystem : MonoBehaviour
             }
             enemyHUDs.Clear();
         }
-
-        // 清理 Buff/Debuff
-        if (buffDebuffManager != null)
+        // 清理 Buff/Debuff
+        if (buffDebuffManager != null)
             buffDebuffManager.ClearAllEffects();
-
-        // 動畫只觸發一次
-        if (animator != null && !hideAnimationTriggered)
+        // 動畫只觸發一次
+        if (animator != null && !hideAnimationTriggered)
         {
             animator.SetTrigger("Hide");
             hideAnimationTriggered = true;
         }
-
         if (skillManager != null)
             skillManager.ClearSkillIcons();
-
         isHidden = false;
-
         StartCoroutine(ResetBattleEndFlags());
     }
-
-    // 延遲重置旗標，支援連續戰鬥
-    private IEnumerator ResetBattleEndFlags()
+    // 延遲重置旗標，支援連續戰鬥
+    private IEnumerator ResetBattleEndFlags()
     {
         yield return new WaitForSeconds(1.5f); // 根據 Hide 動畫長度調整
-
-        isBattleEnding = false;
+        isBattleEnding = false;
         hideAnimationTriggered = false;
         state = BattleState.END;
         Debug.Log("戰鬥結束旗標已重置");
     }
-
     public void SetPlayerTarget(int playerIndex, Unit target)
     {
         if (playerIndex >= 0 && playerIndex < playerUnits.Count && enemyUnits.Contains(target))
@@ -452,7 +400,6 @@ public class BattleSystem : MonoBehaviour
             Debug.LogError($"無效的 playerIndex {playerIndex} 或 target {target?.unitName}");
         }
     }
-
     public Unit GetPlayerTarget(int playerIndex)
     {
         selectedTargets.TryGetValue(playerIndex, out Unit target);

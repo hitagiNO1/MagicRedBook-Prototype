@@ -737,6 +737,66 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    void PerformMultiTargetAttack(int playerIndex, int damage)
+    {
+        if (enemyUnits == null || enemyUnits.Count == 0) return;
+
+        List<int> deadIndices = new List<int>();
+
+        foreach (Unit enemy in enemyUnits.ToArray())
+        {
+            if (enemy != null && enemy.currentHP > 0)
+            {
+                bool isDead = enemy.TakeDamage(damage);
+                int targetIndex = enemyUnits.IndexOf(enemy);
+
+                if (targetIndex >= 0 && targetIndex < enemyHUDs.Count && enemyHUDs[targetIndex] != null)
+                {
+                    enemyHUDs[targetIndex].SetHP(enemy.currentHP);
+                }
+
+                if (isDead)
+                {
+                    deadIndices.Add(targetIndex);
+                    if (selectedTargets.ContainsValue(enemy))
+                    {
+                        foreach (var kvp in selectedTargets)
+                        {
+                            if (kvp.Value == enemy)
+                            {
+                                selectedTargets[kvp.Key] = null;
+                                HighlightTarget(enemy, false);
+                                break;
+                            }
+                        }
+                    }
+                    CleanSkillQueue(playerIndex, enemy);
+                }
+            }
+        }
+
+        StartCoroutine(DelayedDestroyEnemies(deadIndices));
+    }
+
+    private IEnumerator DelayedDestroyEnemies(List<int> indices)
+    {
+        yield return new WaitForEndOfFrame();
+        indices.Sort((a, b) => b.CompareTo(a));
+        foreach (int index in indices)
+        {
+            if (battlesystem != null && index >= 0 && index < enemyUnits.Count)
+            {
+                battlesystem.DestroyEnemy(index);
+            }
+        }
+
+        if (AllEnemiesDead() && battlesystem != null)
+        {
+            battlesystem.state = BattleState.WON;
+            battlesystem.EndBattle();
+        }
+    }
+
     IEnumerator ExecuteSkillQueueWithCallback(int playerIndex)
     {
         Debug.Log($"Starting ExecuteSkillQueueWithCallback for player {playerIndex}");
@@ -850,51 +910,9 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    void PerformMultiTargetAttack(int playerIndex, int damage)
-    {
-        if (enemyUnits == null || enemyUnits.Count == 0)
-        {
-            Debug.LogWarning($"enemyUnits 為空，跳過 PerformMultiTargetAttack");
-            return;
-        }
 
-        bool anyDead = false;
-        foreach (Unit enemy in enemyUnits.ToArray()) // 使用 ToArray 避免修改列表時的問題
-        {
-            if (enemy != null && enemy.currentHP > 0)
-            {
-                bool isDead = enemy.TakeDamage(damage);
-                int targetIndex = enemyUnits.IndexOf(enemy);
-                if (targetIndex >= 0 && targetIndex < enemyHUDs.Count && enemyHUDs[targetIndex] != null)
-                {
-                    enemyHUDs[targetIndex].SetHP(enemy.currentHP);
-                }
-                else
-                {
-                    Debug.LogWarning($"無效的 HUD for 敵人 {enemy.unitName} at 索引 {targetIndex}");
-                }
-                if (isDead)
-                {
-                    anyDead = true;
-                    if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == enemy)
-                    {
-                        selectedTargets[playerIndex] = null;
-                    }
-                    HighlightTarget(enemy, false);
-                    if (battlesystem != null)
-                    {
-                        battlesystem.DestroyEnemy(targetIndex);
-                        CleanSkillQueue(playerIndex, enemy);
-                    }
-                }
-            }
-        }
-        if (AllEnemiesDead())
-        {
-            battlesystem.state = BattleState.WON;
-            battlesystem.EndBattle();
-        }
-    }
+
+
 
     private void CleanSkillQueue(int playerIndex, Unit deadEnemy)
     {
