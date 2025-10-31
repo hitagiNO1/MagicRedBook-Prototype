@@ -1,50 +1,75 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class HoleState : MonoBehaviour
+[RequireComponent(typeof(Image))]
+public class HoleState : MonoBehaviour,
+    IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public Holenumber Hole { get; set; }
-    public Transform Parent { get; set; }
-    public bool IsMouse { get; set; } // true 表示老鼠，false 表示 C4
-    private mouseborn manager;
-    private Sprite originalSprite; // 記錄原始 Sprite（生成時的 spriteB 或 C4）
-    private SpriteRenderer sr;
+    [HideInInspector] public Holenumber Hole;
+    [HideInInspector] public bool IsMouse;
+    [HideInInspector] public mouseborn Mouseborn;
 
-    public void Initialize(Holenumber hole, Transform parent, bool isMouse, mouseborn manager)
+    private usercontrol userControl;
+    private Image img;
+    private Sprite originalSprite;
+    private bool isClicked = false;  // 新增：點擊後鎖定
+
+    public void Initialize(Holenumber hole, Transform root, bool isMouse, mouseborn mb)
     {
         Hole = hole;
-        Parent = parent;
         IsMouse = isMouse;
-        this.manager = manager;
-        sr = GetComponent<SpriteRenderer>();
-        originalSprite = sr.sprite; // 記錄當前 Sprite 作為原始圖
-    }
+        Mouseborn = mb;
+        isClicked = false;  // 重置
 
-    // 滑鼠進入：切換到 Hover Sprite
-    void OnMouseEnter()
-    {
-        if (sr != null)
+        userControl = FindObjectOfType<usercontrol>();
+        img = GetComponent<Image>();
+
+        if (img != null)
         {
-            // 根據類型切換 Hover Sprite（需從 manager 獲取）
-            Sprite hoverSprite = manager.GetHoverSprite(Hole);
-            if (hoverSprite != null)
-            {
-                sr.sprite = hoverSprite;
-            }
+            img.raycastTarget = true;
+            originalSprite = img.sprite;  // 記住地洞圖
         }
     }
 
-    // 滑鼠離開：恢復原始 Sprite
-    void OnMouseExit()
+    // 點擊
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (sr != null && originalSprite != null)
-        {
-            sr.sprite = originalSprite;
-        }
+        if (isClicked || userControl == null) return;
+
+        isClicked = true;  // 鎖定：不再換圖
+        userControl.OnHoleClicked(this);
     }
 
-    // 可選：點擊處理
-    public void OnClick()
+    // 滑鼠進入 → 換 Hover 圖
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        manager.OnObjectClicked(Hole);
+        if (isClicked || img == null || Mouseborn == null) return;
+
+        Sprite hover = Mouseborn.GetHoverSprite(Hole);
+        if (hover != null)
+            img.sprite = hover;
+    }
+
+    // 滑鼠離開 → 換回原本圖
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isClicked || img == null || Mouseborn == null) return;
+
+        Sprite normal = Mouseborn.GetSpawnedSprite(Hole);
+        img.sprite = normal != null ? normal : originalSprite;
+    }
+
+
+    // 重要：被 mouseborn 銷毀時，不要覆蓋 spriteA
+    private void OnDisable()
+    {
+        // 移除這段！否則會蓋掉 ResetHole 的 spriteA
+        // if (img != null && Mouseborn != null) { ... }
+    }
+
+    private void OnDestroy()
+    {
+        // 什麼都不做，讓 mouseborn 完全控制圖片
     }
 }

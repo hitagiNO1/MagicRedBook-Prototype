@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public enum Holenumber
@@ -11,7 +11,8 @@ public enum Holenumber
     Six,
     Seven,
     Eight,
-    Nine
+    Nine,
+    Invalid
 }
 public class mouseset : MonoBehaviour
 {
@@ -82,3 +83,4 @@ public class mouseset : MonoBehaviour
     }
 
 }
+*/

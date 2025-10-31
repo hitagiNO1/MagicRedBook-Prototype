@@ -61131,7 +61131,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -20.161522}
+  m_LocalPosition: {x: 0, y: 0, z: -14.061519}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -61139,7 +61139,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 443.7, y: 30.07001}
+  m_AnchoredPosition: {x: 577, y: 30.07001}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -95869,7 +95869,7 @@ MonoBehaviour:
   targetScript: {fileID: 537444389665327204}
   skillmanager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
-  enemyskill: {fileID: 1649820920}
+  enemyskill: {fileID: 0}
   newEnemies:
   - {fileID: 1018057255}
   - {fileID: 1649820917}
@@ -171026,7 +171026,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 443.7, y: 30.07001, z: -20.161522}
+  m_LocalPosition: {x: 577, y: 30.070007, z: -14.061519}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -231933,7 +231933,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 443.7, y: 0.07, z: 31.8}
+  m_LocalPosition: {x: 577, y: 0.07, z: 37.9}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -253001,7 +253001,7 @@ MonoBehaviour:
   targetScript: {fileID: 537444389665327204}
   skillmanager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
-  enemyskill: {fileID: 210002645}
+  enemyskill: {fileID: 0}
   newEnemies:
   - {fileID: 1773212871}
   - {fileID: 210002637}
@@ -255098,7 +255098,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -319
+  m_SortingOrder: -380
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -259591,7 +259591,7 @@ MonoBehaviour:
   targetScript: {fileID: 537444389665327204}
   skillmanager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
-  enemyskill: {fileID: 6841702849931286197}
+  enemyskill: {fileID: 0}
   newEnemies:
   - {fileID: 7063064098527536509}
   enemyUnits:
@@ -259944,6 +259944,7 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
+  battleTrigger: {fileID: 0}
 --- !u!114 &568772054141841471
 MonoBehaviour:
   m_ObjectHideFlags: 0
