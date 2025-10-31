@@ -721,22 +721,18 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"OnConfirmSkillQueue called, Total Skills = {GetTotalSelectedSkills()}");
         if (GetTotalSelectedSkills() == 0)
         {
             dialogueText.text = "請至少為一名玩家選擇一個技能！";
-            Debug.LogWarning("No skills selected by any player, cannot proceed to enemy turn");
             return;
         }
 
-        bool hasExecuted = false;
+        // 為每個有技能的玩家啟動協程
         for (int playerIndex = 0; playerIndex < playerUnits.Count; playerIndex++)
         {
             if (skillQueues[playerIndex].Count > 0)
             {
-                Debug.Log($"Executing skills for player {playerIndex}, Queue Count = {skillQueues[playerIndex].Count}");
                 StartCoroutine(ExecuteSkillQueueWithCallback(playerIndex));
-                hasExecuted = true;
             }
         }
     }
@@ -745,12 +741,13 @@ public class SkillManager : MonoBehaviour
     {
         Debug.Log($"Starting ExecuteSkillQueueWithCallback for player {playerIndex}");
         yield return StartCoroutine(ExecuteSkillQueue(playerIndex));
-        Debug.Log($"Finished ExecuteSkillQueueWithCallback for player {playerIndex}, Total Skills = {GetTotalSelectedSkills()}");
+        Debug.Log($"Finished ExecuteSkillQueueWithCallback for player {playerIndex}");
 
+        // 檢查是否所有玩家的技能隊列都清空
         bool allQueuesEmpty = true;
-        for (int i = 0; i < playerUnits.Count; i++)
+        foreach (var queue in skillQueues.Values)
         {
-            if (skillQueues[i].Count > 0)
+            if (queue.Count > 0)
             {
                 allQueuesEmpty = false;
                 break;
@@ -759,8 +756,8 @@ public class SkillManager : MonoBehaviour
 
         if (allQueuesEmpty && battlesystem != null)
         {
-            Debug.Log("All skill queues empty, proceeding to enemy turn");
-            battlesystem.OnPlayerConfirmSkillQueue(playerIndex);
+            Debug.Log("所有技能隊列已清空，進入敵人回合");
+            battlesystem.OnPlayerConfirmSkillQueue(); // 不再傳 playerIndex！
         }
     }
 
@@ -824,39 +821,32 @@ public class SkillManager : MonoBehaviour
 
     void PerformBasicAttack(int playerIndex, Unit target, int damageOverride = -1)
     {
-        if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target))
-        {
-            Debug.LogWarning($"Invalid target for player {playerIndex}");
-            return;
-        }
+        if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target)) return;
+
         int actualDamage = damageOverride > 0 ? damageOverride : playerUnits[playerIndex].damage;
         bool isDead = target.TakeDamage(actualDamage);
+
+        // 更新 HUD
         int targetIndex = enemyUnits.IndexOf(target);
         if (targetIndex >= 0 && targetIndex < enemyHUDs.Count && enemyHUDs[targetIndex] != null)
         {
             enemyHUDs[targetIndex].SetHP(target.currentHP);
         }
-        else
-        {
-            Debug.LogWarning($"Invalid HUD for target {target.unitName} at index {targetIndex}");
-        }
+
         if (isDead)
         {
-            if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == target)
-            {
-                selectedTargets[playerIndex] = null;
-            }
-            HighlightTarget(target, false);
-            if (battlesystem != null)
-            {
-                battlesystem.DestroyEnemy(targetIndex);
-                CleanSkillQueue(playerIndex, target);
-            }
-            if (AllEnemiesDead())
-            {
-                battlesystem.state = BattleState.WON;
-                battlesystem.EndBattle();
-            }
+            // 關鍵：延遲銷毀，避免當前幀崩潰
+            StartCoroutine(DelayedDestroyEnemy(targetIndex));
+        }
+    }
+
+    // 新增：延遲銷毀
+    private IEnumerator DelayedDestroyEnemy(int index)
+    {
+        yield return new WaitForEndOfFrame(); // 等一幀
+        if (battlesystem != null && index >= 0 && index < enemyUnits.Count)
+        {
+            battlesystem.DestroyEnemy(index);
         }
     }
 
