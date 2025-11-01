@@ -61131,7 +61131,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 11.238483}
+  m_LocalPosition: {x: 0, y: 0, z: 2.6384776}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -115908,6 +115908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 2277359395349797961}
+  nameText: {fileID: 0}
 --- !u!222 &947497829
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -171026,7 +171027,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 595.8, y: 30.070005, z: 11.238483}
+  m_LocalPosition: {x: 595.8, y: 30.07001, z: 2.6384776}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -231933,7 +231934,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 595.8, y: 0.07, z: 63.2}
+  m_LocalPosition: {x: 595.8, y: 0.07, z: 54.6}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -255098,7 +255099,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -633
+  m_SortingOrder: -547
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -261966,7 +261967,7 @@ PrefabInstance:
       objectReference: {fileID: 3720424681303388705}
     - target: {fileID: 6095438903741157589, guid: f7d53e5890f21964f80c00ad8b922568, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.22094727
+      value: 7.05
       objectReference: {fileID: 0}
     - target: {fileID: 6095438903741157589, guid: f7d53e5890f21964f80c00ad8b922568, type: 3}
       propertyPath: m_LocalPosition.y
@@ -273495,6 +273496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 1466738982962416007}
+  nameText: {fileID: 0}
 --- !u!65 &4487066867833929794
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -273843,7 +273845,7 @@ Transform:
   m_GameObject: {fileID: 8523023427601045329}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.019043, y: -0.55466294, z: -1.2175407}
+  m_LocalPosition: {x: -0.34, y: -0.55466294, z: -1.2175407}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -223,7 +223,7 @@ public class SkillManager : MonoBehaviour
         if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count)
         {
             Debug.LogError($"Invalid playerUnits or playerIndex: {playerIndex}, playerUnits count: {playerUnits?.Count}");
-            dialogueText.text = "錯誤：無效的玩家索引！";
+           // dialogueText.text = "錯誤：無效的玩家索引！";
             return;
         }
 
