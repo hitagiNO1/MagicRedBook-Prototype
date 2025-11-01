@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum Holenumber
 {
@@ -13,23 +12,23 @@ public class mouseborn : MonoBehaviour
 {
     public Transform mouseRoot;
     public usercontrol usercontrol;
-    [SerializeField] private Sprite spriteA;
-    [SerializeField] private Sprite spriteB;
-    [SerializeField] private Sprite spriteC4_1;
-    [SerializeField] private Sprite spriteC4_2;
-    [SerializeField] private Sprite spriteB_hover;
-    [SerializeField] private Sprite spriteC4_1_hover;
-    [SerializeField] private Sprite spriteC4_2_hover;
+
+    [SerializeField] private Sprite spriteA;           // 空洞
+    [SerializeField] private Sprite spriteB;           // 老鼠
+    [SerializeField] private Sprite spriteC4_1;        // C4 類型1
+    [SerializeField] private Sprite spriteC4_2;        // C4 類型2
+    [SerializeField] private Sprite spriteB_hover;     // 老鼠 hover
+    [SerializeField] private Sprite spriteC4_1_hover;  // C4 hover 1
+    [SerializeField] private Sprite spriteC4_2_hover;  // C4 hover 2
+
     [SerializeField] private GameObject[] holeObjectArray = new GameObject[9];
 
     private readonly Dictionary<Holenumber, GameObject> holeObjects = new Dictionary<Holenumber, GameObject>();
-    private readonly Dictionary<Holenumber, Image> holeImages = new Dictionary<Holenumber, Image>();
+    private readonly Dictionary<Holenumber, SpriteRenderer> holeRenderers = new Dictionary<Holenumber, SpriteRenderer>();
     private readonly Dictionary<Holenumber, Sprite> spawnedSprites = new Dictionary<Holenumber, Sprite>();
     private readonly Dictionary<Holenumber, Sprite> hoverSprites = new Dictionary<Holenumber, Sprite>();
     private readonly List<Holenumber> occupiedHoles = new List<Holenumber>();
     private readonly HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>();
-
-    //  新增：每個洞的「世代代號」記錄，用來防止舊 coroutine 誤重置
     private readonly Dictionary<Holenumber, int> holeGeneration = new Dictionary<Holenumber, int>();
     private int globalGeneration = 0;
 
@@ -107,21 +106,23 @@ public class mouseborn : MonoBehaviour
             GameObject go = holeObjectArray[i];
             Holenumber hole = (Holenumber)i;
             holeObjects[hole] = go;
-            Image img = go.GetComponent<Image>();
-            if (img != null)
+
+            SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+            if (sr != null)
             {
-                img.sprite = spriteA;
-                holeImages[hole] = img;
+                sr.sprite = spriteA;
+                holeRenderers[hole] = sr;
             }
             else
             {
-                Debug.LogError($"Hole {i} 沒有 Image！");
+                Debug.LogError($"Hole {i} 沒有 SpriteRenderer！");
                 continue;
             }
+
             var col = go.GetComponent<BoxCollider2D>() ?? go.AddComponent<BoxCollider2D>();
             col.enabled = false;
+            col.isTrigger = true; // 建議設為 trigger，避免物理干擾
 
-            //  初始化世代代號
             holeGeneration[hole] = 0;
         }
     }
@@ -144,7 +145,6 @@ public class mouseborn : MonoBehaviour
         if (usercontrol != null && !usercontrol.IsGameActive())
         {
             CancelAllInvokesAndCoroutines();
-            // enabled = false; // 註解掉，避免腳本完全停用
         }
     }
 
@@ -153,7 +153,7 @@ public class mouseborn : MonoBehaviour
         if (!CanSpawn()) return;
         Holenumber hole = GetUniqueHole();
         if (hole == Holenumber.Invalid || !holeObjects.ContainsKey(hole)) return;
-        StartCoroutineSafe(ShakeAndSpawn(hole, spriteB, true, 3f)); // 老鼠 3 秒
+        StartCoroutineSafe(ShakeAndSpawn(hole, spriteB, true, 3f));
     }
 
     public void Boom()
@@ -162,7 +162,7 @@ public class mouseborn : MonoBehaviour
         Holenumber hole = GetUniqueHole();
         if (hole == Holenumber.Invalid || !holeObjects.ContainsKey(hole)) return;
         Sprite c4 = Random.value > 0.5f ? spriteC4_1 : spriteC4_2;
-        StartCoroutineSafe(ShakeAndSpawn(hole, c4, false, 4f)); // C4 4 秒
+        StartCoroutineSafe(ShakeAndSpawn(hole, c4, false, 4f));
     }
 
     private bool CanSpawn()
@@ -171,23 +171,37 @@ public class mouseborn : MonoBehaviour
             && usercontrol.IsGameActive()
             && gameObject.activeInHierarchy
             && !isQuitting
-            && occupiedHoles.Count < 8; // 留 1 個空位，防臨界滿
+            && occupiedHoles.Count < 8
+            && GetMouseCount() < 1;  // ★ 最多一隻老鼠
+    }
+
+    private int GetMouseCount()
+    {
+        int count = 0;
+        foreach (Holenumber hole in occupiedHoles)
+        {
+            if (holeObjects.TryGetValue(hole, out GameObject go) && go != null)
+            {
+                HoleState state = go.GetComponent<HoleState>();
+                if (state != null && state.IsMouse)
+                    count++;
+            }
+        }
+        return count;
     }
 
     private IEnumerator ShakeAndSpawn(Holenumber hole, Sprite target, bool isMouse, float delay)
     {
         if (isQuitting || !holeObjects.TryGetValue(hole, out GameObject go) || go == null) yield break;
-        if (!holeImages.TryGetValue(hole, out Image img) || img == null) yield break;
+        if (!holeRenderers.TryGetValue(hole, out SpriteRenderer sr) || sr == null) yield break;
 
-        //  每次生成前，更新這個洞的世代代號
         globalGeneration++;
         int currentGen = globalGeneration;
         holeGeneration[hole] = currentGen;
 
-        RectTransform rt = go.GetComponent<RectTransform>();
-        if (rt != null) yield return Shake(rt);
+        yield return Shake(go.transform);
 
-        img.sprite = target;
+        sr.sprite = target;
         spawnedSprites[hole] = target;
         Sprite hover = isMouse ? spriteB_hover :
             (target == spriteC4_1 ? spriteC4_1_hover : spriteC4_2_hover);
@@ -206,7 +220,6 @@ public class mouseborn : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
-        //防止舊 coroutine 誤 Reset 新生成的物件
         if (holeGeneration.TryGetValue(hole, out int gen) && gen == currentGen)
         {
             if (occupiedHoles.Contains(hole) && !clickedHoles.Contains(hole))
@@ -216,25 +229,24 @@ public class mouseborn : MonoBehaviour
         }
     }
 
-    private IEnumerator Shake(RectTransform rt)
+    private IEnumerator Shake(Transform trans)
     {
-        Vector2 orig = rt.anchoredPosition;
+        Vector3 orig = trans.position;
         float t = 0f;
         while (t < shakeDuration)
         {
-            if (rt == null) yield break;
+            if (trans == null) yield break;
             float x = Mathf.Sin(t * shakeSpeed) * shakeMagnitude;
-            rt.anchoredPosition = orig + new Vector2(x, 0f);
+            trans.position = orig + new Vector3(x, 0f, 0f);
             t += Time.deltaTime;
             yield return null;
         }
-        if (rt != null) rt.anchoredPosition = orig;
+        if (trans != null) trans.position = orig;
     }
 
     public Holenumber GetUniqueHole()
     {
-        if (occupiedHoles.Count >= 8) return Holenumber.Invalid; // 提前防滿
-
+        if (occupiedHoles.Count >= 8) return Holenumber.Invalid;
         int attempts = 0;
         Holenumber h;
         do
@@ -243,7 +255,6 @@ public class mouseborn : MonoBehaviour
             if (++attempts > 30) return Holenumber.Invalid;
         }
         while (occupiedHoles.Contains(h));
-
         return h;
     }
 
@@ -258,12 +269,12 @@ public class mouseborn : MonoBehaviour
     private void ResetHole(Holenumber hole)
     {
         if (!holeObjects.TryGetValue(hole, out GameObject go) || go == null) return;
-        if (!holeImages.TryGetValue(hole, out Image img)) return;
+        if (!holeRenderers.TryGetValue(hole, out SpriteRenderer sr)) return;
 
         HoleState state = go.GetComponent<HoleState>();
         if (state != null) OnHoleRemoved?.Invoke(state);
 
-        img.sprite = spriteA;
+        sr.sprite = spriteA;
         var col = go.GetComponent<BoxCollider2D>();
         if (col != null) col.enabled = false;
         if (state != null) Destroy(state);
@@ -272,8 +283,6 @@ public class mouseborn : MonoBehaviour
         spawnedSprites.Remove(hole);
         hoverSprites.Remove(hole);
         occupiedHoles.Remove(hole);
-
-        // 清除該洞的世代紀錄
         holeGeneration[hole] = 0;
     }
 
