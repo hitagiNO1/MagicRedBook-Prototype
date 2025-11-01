@@ -289,6 +289,6 @@ public class canclick : MonoBehaviour
 
     void UpdateScoreText()
     {
-        scoreText.text = $"{currentSuccessCount} / {targetSuccessCount}";
+        scoreText.text = $"{currentSuccessCount}/{targetSuccessCount}";
     }
 }
