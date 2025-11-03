@@ -12037,7 +12037,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: -20.487669}
+  m_LocalPosition: {x: 0, y: 0, z: -23.51767}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12045,7 +12045,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.2800007, y: 19.15767}
+  m_AnchoredPosition: {x: 4.79, y: 16.65767}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -22739,16 +22739,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61848dd9266310c4598fec1d6b11129c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamera: {fileID: 993013735}
-  targetScript: {fileID: 537444389665327204}
-  skillmanager: {fileID: 3720424681303388706}
-  buffDebuffManager: {fileID: 3720424681303388705}
-  enemyskill: {fileID: 8963592478681553702}
-  newEnemy: {fileID: 1982475317498548013}
-  enemyUnit: {fileID: 8963592478681553701}
-  Addmonster: {fileID: 477213778}
-  monster: {fileID: 11400000, guid: 0dc774c1ec3821343be4e7db1a6b066e, type: 2}
-  IfScenes: []
 --- !u!1001 &996731217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36217,7 +36207,7 @@ SpriteMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520758991}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -36251,8 +36241,8 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8177471321811730583, guid: 87aaca0a643d54397ba969dab4fc8875, type: 3}
-  m_MaskAlphaCutoff: 0.236
+  m_Sprite: {fileID: 0}
+  m_MaskAlphaCutoff: 0.2
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
@@ -37988,7 +37978,7 @@ Transform:
   m_GameObject: {fileID: 1598988556}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -7.2800007, y: 19.15767, z: -20.487669}
+  m_LocalPosition: {x: 4.79, y: 16.65767, z: -23.51767}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -45413,6 +45403,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  originalUnitName: 
 --- !u!65 &1922109487
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -45490,14 +45481,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6feb671e142eb94ab1a02f2270e677d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1929828334}
-  stopDistance: 5
-  offset: {x: 0, y: 0, z: 0}
-  minSmoothTime: 0.8
-  maxSmoothTime: 0.1
-  idle: {fileID: 11400000, guid: 665f0ac8ec4d6da42a20f3f7cc9a2877, type: 2}
-  walk: {fileID: 0}
-  skeletonAnimation: {fileID: 316084926}
 --- !u!1 &1922605933
 GameObject:
   m_ObjectHideFlags: 0
@@ -45768,7 +45751,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.28, y: 1.48, z: -2.81}
+  m_LocalPosition: {x: 4.79, y: -1.02, z: -5.84}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -45847,6 +45830,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  originalUnitName: 
 --- !u!4 &1930682703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8716227219644204502, guid: e43e75aff50fb954b92f50ba686a4f17, type: 3}
@@ -49796,7 +49780,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2105839086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49940,7 +49924,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 29
+  m_SortingOrder: 59
   m_SortAtRoot: 0
 --- !u!1001 &2108383574
 PrefabInstance:
@@ -52923,6 +52907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 5640780078535234448}
+  nameText: {fileID: 0}
 --- !u!114 &341233937544738433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80159,6 +80144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 1466738982962416007}
+  nameText: {fileID: 0}
 --- !u!114 &4478600230107503777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110652,6 +110638,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  originalUnitName: 
 --- !u!114 &8963592478681553702
 MonoBehaviour:
   m_ObjectHideFlags: 0

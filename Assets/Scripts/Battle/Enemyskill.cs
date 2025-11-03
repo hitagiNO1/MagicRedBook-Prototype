@@ -21,7 +21,8 @@ public class Enemyskill : MonoBehaviour
             return false;
         }
 
-        string enemyName = enemyUnit.unitName;
+        // 關鍵：改用 originalUnitName
+        string enemyName = enemyUnit.originalUnitName;
 
         if (enemyName == "SOFT")
         {
@@ -29,7 +30,6 @@ public class Enemyskill : MonoBehaviour
         }
         else
         {
-            // 對於其他敵人，隨機選擇一個技能執行
             List<Func<bool>> skills = GetEnemySkills(enemyName);
             if (skills.Count > 0)
             {
@@ -37,7 +37,6 @@ public class Enemyskill : MonoBehaviour
                 return skills[randomIndex]();
             }
         }
-
         return false;
     }
 
@@ -75,17 +74,13 @@ public class Enemyskill : MonoBehaviour
         return true;
     }
 
-    public List<Func<bool>> GetEnemySkills(string enemyName)  // 修改為 Func<bool>
+    public List<Func<bool>> GetEnemySkills(string enemyName) // enemyName 是 originalUnitName
     {
         List<Func<bool>> skills = new List<Func<bool>>();
         Unit self = GetComponent<Unit>();
+        if (self == null) return skills;
 
-        if (self == null)
-        {
-            Debug.LogError("Enemyskill 缺少 Unit 組件！");
-            return skills;
-        }
-
+        // 這裡用 originalUnitName 判斷
         if (enemyName == "FISH")
         {
             skills.Add(() => { PerformFishskill_1(self); return true; });
@@ -104,14 +99,13 @@ public class Enemyskill : MonoBehaviour
         else if (enemyName == "SOFT")
         {
             skills.Add(() => { PerformSoftskill_1(self); return true; });
-            skills.Add(() => CheckAndPerformSoftskill_2(self));  // 返回 bool
-            skills.Add(() => CheckAndPerformSoftskill_3(self));  // 返回 bool
+            skills.Add(() => CheckAndPerformSoftskill_2(self));
+            skills.Add(() => CheckAndPerformSoftskill_3(self));
         }
         else
         {
-            Debug.LogWarning($"未知的敵人名稱: {enemyName}，無技能分配");
+            Debug.LogWarning($"未知的敵人類型: {enemyName}");
         }
-
         return skills;
     }
 

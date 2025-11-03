@@ -15,7 +15,17 @@ public class Unit : MonoBehaviour
     public float critdmgplus = 1.5f;
     public BuffDebuffManager buffManager;
     public BattleHUD battleHUD; // 新增對 BattleHUD 的引用
-
+    [HideInInspector] public string originalUnitName;
+    private void Awake()
+    {
+        // 自動記錄 Prefab 名稱（去掉 "(Clone)"）
+        if (string.IsNullOrEmpty(originalUnitName))
+        {
+            originalUnitName = gameObject.name
+                .Replace("(Clone)", "")
+                .Trim();
+        }
+    }
     private void Start()
     {
         float reduction = defenseData.GetDamageReduction(defense);

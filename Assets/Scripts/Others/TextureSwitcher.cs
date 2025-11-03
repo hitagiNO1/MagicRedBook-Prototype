@@ -27,7 +27,7 @@ public class TextureSwitcher : MonoBehaviour
 
             if (nextSprite == null)
             {
-                Debug.LogError($"{name}: Sprite 為 NULL，可能沒指定！");
+                //Debug.LogError($"{name}: Sprite 為 NULL，可能沒指定！");
             }
             sr.sprite = nextSprite;
         }

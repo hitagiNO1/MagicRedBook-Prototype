@@ -60,7 +60,7 @@ public class mutiplebattle : MonoBehaviour
         enemyToHUDMap.Clear();
 
         // 動態調整 Y 位置（可選優化）
-        float baseY = enemyUnits.Count <= 3 ? 290f : 330f;
+        float baseY = enemyUnits.Count <= 3 ? 230f : 270f;
 
         for (int i = 0; i < enemyUnits.Count; i++)
         {

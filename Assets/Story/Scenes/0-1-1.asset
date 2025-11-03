@@ -15,19 +15,21 @@ MonoBehaviour:
   StopMove: 1
   sentences:
   - text: "\u4F60\u5011\u77E5\u9053\u55CE\uFF1F"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    speaker: {fileID: 11400000, guid: 2f4f881bd9fcf0f428232bfffe413220, type: 2}
     actions: []
     timline:
     - animation: 1
       myPlayableAsset: {fileID: 11400000, guid: c37e6e58e64061f4e8be522711ddb563, type: 2}
+      timing: 0
   - text: "\u8070\u660E\u7684\u7375\u4EBA\u2026\u2026\u7E3D\u662F\u85CF\u5728\u6697\u8655\uFF0C\u7136\u5F8C\u2014\u2014"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    speaker: {fileID: 11400000, guid: 2f4f881bd9fcf0f428232bfffe413220, type: 2}
     actions: []
     timline:
     - animation: 1
       myPlayableAsset: {fileID: 11400000, guid: 114db20d0278c444dab948227976896c, type: 2}
+      timing: 0
   - text: "\u78C5\uFF01\uFF01\u4E00\u8209\u885D\u51FA\u53BB\uFF01"
-    speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+    speaker: {fileID: 11400000, guid: 2f4f881bd9fcf0f428232bfffe413220, type: 2}
     actions: []
     timline: []
   - text: "\u53EF\u2026\u2026\u53EF\u60E1\uFF01"
@@ -41,6 +43,7 @@ MonoBehaviour:
     timline:
     - animation: 1
       myPlayableAsset: {fileID: 11400000, guid: c304dcc14d0ef1d409659b32fcd84585, type: 2}
+      timing: 0
   - text: "\u4E0B\u6B21\u4E00\u5B9A\u80FD\u6293\u5230\uFF01"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
