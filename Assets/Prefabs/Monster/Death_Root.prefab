@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7069161969978629514
 Transform:
   m_ObjectHideFlags: 0
@@ -197,6 +197,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  originalUnitName: 
 --- !u!114 &5768338742510298433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5864957226828359289
 Transform:
   m_ObjectHideFlags: 0
@@ -444,7 +445,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1325100050749622222
 Transform:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class mouseborn : MonoBehaviour
     public Transform mouseRoot;
     public usercontrol usercontrol;
 
+    [Header("Sprites")]
     [SerializeField] private Sprite spriteA;           // 空洞
     [SerializeField] private Sprite spriteB;           // 老鼠
     [SerializeField] private Sprite spriteC4_1;        // C4 類型1
@@ -21,7 +22,23 @@ public class mouseborn : MonoBehaviour
     [SerializeField] private Sprite spriteC4_1_hover;  // C4 hover 1
     [SerializeField] private Sprite spriteC4_2_hover;  // C4 hover 2
 
+    [Header("洞物件 (共9個)")]
     [SerializeField] private GameObject[] holeObjectArray = new GameObject[9];
+
+    [Header("生成與持續時間設定")]
+    [SerializeField, Tooltip("老鼠存在時間 (秒)")]
+    private float mouseExistTime = 3f;
+    [SerializeField, Tooltip("C4存在時間 (秒)")]
+    private float c4ExistTime = 4f;
+    [SerializeField, Tooltip("老鼠生成間隔 (秒)")]
+    private float mouseSpawnInterval = 1.5f;
+    [SerializeField, Tooltip("C4生成間隔 (秒)")]
+    private float c4SpawnInterval = 3f;
+
+    [Header("震動設定")]
+    [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float shakeMagnitude = 0.1f;
+    [SerializeField] private float shakeSpeed = 15f;
 
     private readonly Dictionary<Holenumber, GameObject> holeObjects = new Dictionary<Holenumber, GameObject>();
     private readonly Dictionary<Holenumber, SpriteRenderer> holeRenderers = new Dictionary<Holenumber, SpriteRenderer>();
@@ -31,10 +48,6 @@ public class mouseborn : MonoBehaviour
     private readonly HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>();
     private readonly Dictionary<Holenumber, int> holeGeneration = new Dictionary<Holenumber, int>();
     private int globalGeneration = 0;
-
-    [SerializeField] private float shakeDuration = 0.5f;
-    [SerializeField] private float shakeMagnitude = 0.1f;
-    [SerializeField] private float shakeSpeed = 15f;
 
     public System.Action<HoleState> OnHoleSpawned;
     public System.Action<HoleState> OnHoleRemoved;
@@ -121,7 +134,7 @@ public class mouseborn : MonoBehaviour
 
             var col = go.GetComponent<BoxCollider2D>() ?? go.AddComponent<BoxCollider2D>();
             col.enabled = false;
-            col.isTrigger = true; // 建議設為 trigger，避免物理干擾
+            col.isTrigger = true;
 
             holeGeneration[hole] = 0;
         }
@@ -130,8 +143,8 @@ public class mouseborn : MonoBehaviour
     private void ScheduleSpawns()
     {
         CancelInvoke();
-        InvokeRepeating(nameof(Create), 0f, 1.5f);
-        InvokeRepeating(nameof(Boom), 3f, 3f);
+        InvokeRepeating(nameof(Create), 0f, mouseSpawnInterval);
+        InvokeRepeating(nameof(Boom), 3f, c4SpawnInterval);
     }
 
     private void CancelAllInvokesAndCoroutines()
@@ -153,7 +166,7 @@ public class mouseborn : MonoBehaviour
         if (!CanSpawn()) return;
         Holenumber hole = GetUniqueHole();
         if (hole == Holenumber.Invalid || !holeObjects.ContainsKey(hole)) return;
-        StartCoroutineSafe(ShakeAndSpawn(hole, spriteB, true, 3f));
+        StartCoroutineSafe(ShakeAndSpawn(hole, spriteB, true, mouseExistTime));
     }
 
     public void Boom()
@@ -162,7 +175,7 @@ public class mouseborn : MonoBehaviour
         Holenumber hole = GetUniqueHole();
         if (hole == Holenumber.Invalid || !holeObjects.ContainsKey(hole)) return;
         Sprite c4 = Random.value > 0.5f ? spriteC4_1 : spriteC4_2;
-        StartCoroutineSafe(ShakeAndSpawn(hole, c4, false, 4f));
+        StartCoroutineSafe(ShakeAndSpawn(hole, c4, false, c4ExistTime));
     }
 
     private bool CanSpawn()
@@ -172,7 +185,7 @@ public class mouseborn : MonoBehaviour
             && gameObject.activeInHierarchy
             && !isQuitting
             && occupiedHoles.Count < 8
-            && GetMouseCount() < 1;  // ★ 最多一隻老鼠
+            && GetMouseCount() < 1;
     }
 
     private int GetMouseCount()

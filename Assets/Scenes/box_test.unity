@@ -3197,6 +3197,10 @@ MonoBehaviour:
   - {fileID: 1518877507}
   - {fileID: 1073257244}
   - {fileID: 2092192872}
+  mouseExistTime: 0.5
+  c4ExistTime: 1
+  mouseSpawnInterval: 1.5
+  c4SpawnInterval: 3
   shakeDuration: 0.5
   shakeMagnitude: 0.8
   shakeSpeed: 25
