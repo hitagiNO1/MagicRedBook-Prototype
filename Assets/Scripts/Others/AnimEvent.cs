@@ -61,4 +61,17 @@ public class AnimEvent : MonoBehaviour
     {
         EffectManager.Instance.FlashRedAll(1f);
     }
+
+    public void Def()
+    {
+        EffectManager.Instance.FlashRedAll(1f);
+    }
+    public void Heal()
+    {
+        EffectManager.Instance.FlashRedAll(1f);
+    }
+    public void Def4()
+    {
+        EffectManager.Instance.Def4();
+    }
 }

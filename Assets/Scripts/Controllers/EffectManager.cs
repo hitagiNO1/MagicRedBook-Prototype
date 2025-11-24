@@ -27,6 +27,9 @@ public class EffectManager : MonoBehaviour
     public Image LylaHead;   //腳色變紅
     public Sprite LylahurtFace;
 
+    public Image Black;   //外框
+    public Image Lyla;   //
+    public Sprite BlackBall;
 
     void Awake()
     {
@@ -229,5 +232,65 @@ public class EffectManager : MonoBehaviour
         targetImage.color = originalColor;
         targetImage.sprite = originalSprite;
     }
+    public void Def()
+    {
+    }
+    public void Def4()
+    {
+        StartCoroutine(PlayBounceAndSwitch(BlackBall));
+    }
 
+    private IEnumerator PlayBounceAndSwitch(Sprite newSprite)
+    {
+        // 取得原始位置
+        Vector3 startPos = BlackHead.rectTransform.anchoredPosition;
+
+        // 跳動高度
+        float jumpHeight = 20f;
+
+        // 動畫時間
+        float duration = 0.2f;
+        float half = duration * 0.5f;
+
+        float t = 0f;
+
+        // ----------- 第一段：向上跳 -----------
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float percent = t / half;
+
+            // EaseOut (跳起來快→慢)
+            float height = Mathf.Lerp(0, jumpHeight, percent);
+
+            BlackHead.rectTransform.anchoredPosition =
+                startPos + Vector3.up * height;
+
+            yield return null;
+        }
+
+        // 切換頭像
+        BlackHead.sprite = newSprite;
+
+        // 重置 t
+        t = 0f;
+
+        // ----------- 第二段：落下 -----------
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float percent = t / half;
+
+            // EaseIn (落下慢→快)
+            float height = Mathf.Lerp(jumpHeight, 0, percent);
+
+            BlackHead.rectTransform.anchoredPosition =
+                startPos + Vector3.up * height;
+
+            yield return null;
+        }
+
+        // 最後保證回原位置
+        BlackHead.rectTransform.anchoredPosition = startPos;
+    }
 }
