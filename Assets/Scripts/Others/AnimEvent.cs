@@ -74,4 +74,16 @@ public class AnimEvent : MonoBehaviour
     {
         EffectManager.Instance.Def4();
     }
+    public void BlackJump()
+    {
+        EffectManager.Instance.BlackJump();
+    }
+    public void LylaJump()
+    {
+        EffectManager.Instance.LylaJump();
+    }
+    public void LylaMove()
+    {
+        EffectManager.Instance.LylaMove();
+    }
 }

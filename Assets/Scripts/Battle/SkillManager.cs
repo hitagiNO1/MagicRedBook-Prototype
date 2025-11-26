@@ -360,7 +360,8 @@ public class SkillManager : MonoBehaviour
             int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
             PerformBasicAttack(playerIndex, target, buffedDamage);
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 甩出手上的球攻擊 {target.unitName}";
-            
+            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
+
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";
         RemoveSkillIcon();
@@ -377,6 +378,8 @@ public class SkillManager : MonoBehaviour
             PerformMultiTargetAttack(playerIndex, buffedDamage);
             skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將手上的球分散甩出攻擊全部敵人";
+            EffectManager.Instance.PlayUIEffect("B2", new Vector2(0, 0));
+            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0), 0.22f, 0f);
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 2";
         RemoveSkillIcon();
@@ -392,6 +395,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
             skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將身上的毛整理好，使防禦力上升";
+            EffectManager.Instance.PlayUIEffect("B3", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 3";
         RemoveSkillIcon();
@@ -407,6 +411,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
             skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 緊縮成一團，使敵人找不到縫隙攻擊";
+            EffectManager.Instance.PlayUIEffect("B4", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 4";
         RemoveSkillIcon();
@@ -436,6 +441,7 @@ public class SkillManager : MonoBehaviour
             skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns; // 設置冷卻
             Debug.Log($"玩家 {playerIndex} 的 Skill_5 設置冷卻為 {skill5CooldownTurns} 回合");
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 抱住敵方，使出最強攻擊兔子踹！";
+            EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 5 對 {target.unitName}";
         RemoveSkillIcon();
@@ -456,7 +462,9 @@ public class SkillManager : MonoBehaviour
                 int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
                 PerformBasicAttack(playerIndex, target, buffedDamage);
                 dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
-            
+            EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
+            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0), 2.1f, 0f);
+
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";
         RemoveSkillIcon();
@@ -472,6 +480,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
             skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將傷口進行包紮";
+            EffectManager.Instance.PlayUIEffect("L2", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 2";
         RemoveSkillIcon();
@@ -494,6 +503,7 @@ public class SkillManager : MonoBehaviour
             skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
             Debug.Log($"玩家 {playerIndex} 的 catSkill_3 設置冷卻為 {catskill3CooldownTurns} 回合");
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過唱歌給全體敵人造成傷害";
+            EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 3";
         RemoveSkillIcon();

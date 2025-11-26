@@ -65,7 +65,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833722022911798073}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -560,7 +560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -799.6, y: -348.7}
+  m_AnchoredPosition: {x: 0, y: -348.7}
   m_SizeDelta: {x: 213.83, y: 214.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7980729957502650588
@@ -581,7 +581,7 @@ Animator:
   m_GameObject: {fileID: 5662237780993198987}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a546e1b41087ee24780e0c74a35884c5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 994ec5b3d0bd2e8428909d8336382c47, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

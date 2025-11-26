@@ -238,8 +238,7 @@ public class EffectManager : MonoBehaviour
     public void Def4()
     {
         StartCoroutine(PlayBounceAndSwitch(BlackBall));
-    }
-
+    } 
     private IEnumerator PlayBounceAndSwitch(Sprite newSprite)
     {
         // 取得原始位置
@@ -293,4 +292,104 @@ public class EffectManager : MonoBehaviour
         // 最後保證回原位置
         BlackHead.rectTransform.anchoredPosition = startPos;
     }
+    public void BlackJump()
+    {
+        Vector3 startPos = BlackHead.rectTransform.anchoredPosition;
+        StartCoroutine(PlayBounce(startPos));
+    }
+    public void LylaJump()
+    {
+        Vector3 startPos = LylaHead.rectTransform.anchoredPosition;
+        StartCoroutine(PlayBounce(startPos));
+    }
+    private IEnumerator PlayBounce(Vector3 startPos)
+    {
+        // 跳動高度
+        float jumpHeight = 20f;
+        // 動畫時間
+        float duration = 0.2f;
+        float half = duration * 0.5f;
+        float t = 0f;
+        // ----------- 第一段：向上跳 -----------
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float percent = t / half;
+
+            // EaseOut (跳起來快→慢)
+            float height = Mathf.Lerp(0, jumpHeight, percent);
+
+            BlackHead.rectTransform.anchoredPosition =
+                startPos + Vector3.up * height;
+
+            yield return null;
+        }
+        // 重置 t
+        t = 0f;
+        // ----------- 第二段：落下 -----------
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float percent = t / half;
+
+            // EaseIn (落下慢→快)
+            float height = Mathf.Lerp(jumpHeight, 0, percent);
+
+            BlackHead.rectTransform.anchoredPosition =
+                startPos + Vector3.up * height;
+
+            yield return null;
+        }
+        // 最後保證回原位置
+        BlackHead.rectTransform.anchoredPosition = startPos;
+    }
+    public void LylaMove()
+    {
+        StartCoroutine(LeftRightTwice(LylaHead.rectTransform, 40f, 0.15f));
+    }
+    public IEnumerator LeftRightTwice(RectTransform target, float distance, float stepTime)
+    {
+        Vector3 center = target.anchoredPosition;
+        Vector3 left = center + Vector3.left * distance;
+        Vector3 right = center + Vector3.right * distance;
+
+        // 動畫序列：左、中、右、中、左、中、右、中
+        Vector3[] path = new Vector3[]
+        {
+        left,  center,
+        right, center,
+        left,  center,
+        right, center
+        };
+
+        foreach (var pos in path)
+        {
+            yield return MoveTo(target, pos, stepTime);
+        }
+
+        // 最終確保回到中間
+        target.anchoredPosition = center;
+    }
+
+    private IEnumerator MoveTo(RectTransform target, Vector3 targetPos, float duration)
+    {
+        Vector3 startPos = target.anchoredPosition;
+        float t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float percent = t / duration;
+
+            // 順滑曲線（EaseInOut）
+            float curve = percent * percent * (3f - 2f * percent);
+
+            target.anchoredPosition = Vector3.Lerp(startPos, targetPos, curve);
+
+            yield return null;
+        }
+
+        target.anchoredPosition = targetPos;
+    }
+
 }
