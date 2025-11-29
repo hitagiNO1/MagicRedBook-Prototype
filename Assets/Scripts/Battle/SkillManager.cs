@@ -463,7 +463,7 @@ public class SkillManager : MonoBehaviour
                 PerformBasicAttack(playerIndex, target, buffedDamage);
                 dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
             EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
-            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0), 2.1f, 0f);
+            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0), 0.5f, 0f);
 
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";

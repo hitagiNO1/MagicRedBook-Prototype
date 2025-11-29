@@ -91,10 +91,12 @@ public class EffectManager : MonoBehaviour
     public void PlayUIEffect(string effectName, Vector2 uiPosition)
     {
         PlayUIEffect(effectName, uiPosition, 0f, 1f);
+        Debug.Log($"播放特效 {effectName}");
     }
     // 播放 UI 特效（延遲+縮放）
     public void PlayUIEffect(string effectName, Vector2 uiPosition, float delay, float scale)
     {
+        
         if (effectDict.TryGetValue(effectName, out GameObject prefab))
         {
             StartCoroutine(PlayUIEffectCoroutine(prefab, uiPosition, delay, scale));
@@ -145,7 +147,7 @@ public class EffectManager : MonoBehaviour
         fx.transform.localScale = scale;
         // 記錄最後一個特效方向
         lastEffectOnLeft = playLeft;
-        Debug.Log($"播放特效 {effectName} ({(playLeft ? "左" : "右")}) at {pos}, scale={scale}");
+        //Debug.Log($"播放特效 {effectName} ({(playLeft ? "左" : "右")}) at {pos}, scale={scale}");
     }
 
 

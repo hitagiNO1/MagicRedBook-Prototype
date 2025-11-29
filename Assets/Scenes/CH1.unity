@@ -11514,7 +11514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -63522,7 +63522,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 8.838478}
+  m_LocalPosition: {x: 0, y: 0, z: -24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63530,7 +63530,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 597.8, y: 30.070007}
+  m_AnchoredPosition: {x: 846.1, y: 33}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -285055,15 +285055,23 @@ MonoBehaviour:
     leftPosition: {x: 0, y: 0}
     rightPosition: {x: 0, y: 0}
   - effectName: L1
-    prefab: {fileID: 0}
+    prefab: {fileID: 2433122209791958464, guid: d09b14b31c91bfb46b976d578a548999, type: 3}
     leftPosition: {x: 0, y: 0}
     rightPosition: {x: 0, y: 0}
   - effectName: L2
     prefab: {fileID: 2928077199585023620, guid: 6736cdb9ddf9fc940aab52edf32a6bd6, type: 3}
-    leftPosition: {x: 0, y: 0}
-    rightPosition: {x: 0, y: 0}
+    leftPosition: {x: -800, y: 0}
+    rightPosition: {x: 800, y: 0}
   - effectName: L3
     prefab: {fileID: 6809608666892365786, guid: 855fa0dc52da62a4489ff1482b5dd1a5, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: L4
+    prefab: {fileID: 8476265357376407571, guid: 0713a2e548a45a14492ec4b70ea6e270, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: L5
+    prefab: {fileID: 2993475924266301686, guid: bc824bec5634ec04ead98ad05178b2dd, type: 3}
     leftPosition: {x: 0, y: 0}
     rightPosition: {x: 0, y: 0}
   targetCanvas: {fileID: 8402383343030094380}

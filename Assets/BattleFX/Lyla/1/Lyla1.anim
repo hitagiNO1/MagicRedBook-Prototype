@@ -23,7 +23,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -463
+        value: -477.7
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -31,17 +31,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.5
-        value: -442
-        inSlope: 41.460003
-        outSlope: 41.460003
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.6666666
-        value: -393.9
+        time: 0.16666667
+        value: -444.2
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -49,8 +40,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8333334
-        value: -393.9
+        time: 0.5
+        value: -444.2
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -58,16 +49,16 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2
+        time: 0.6666667
         value: -128
-        inSlope: 1169.6998
-        outSlope: 1169.6998
+        inSlope: 1320.6001
+        outSlope: 1320.6001
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.1666667
+        time: 0.8333333
         value: -4
         inSlope: 0
         outSlope: 0
@@ -97,16 +88,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.6666666
+        time: 0.16666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -115,7 +97,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8333334
+        time: 0.5
         value: 1
         inSlope: 0
         outSlope: 0
@@ -137,7 +119,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 741
+        value: 705
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -145,8 +127,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.5
-        value: 747
+        time: 0.16666667
+        value: 705
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -154,8 +136,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.6666666
-        value: 747
+        time: 0.5
+        value: 705
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -163,25 +145,16 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8333334
-        value: 747
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 2
+        time: 0.6666667
         value: 415
-        inSlope: -2243.9998
-        outSlope: -2243.9998
+        inSlope: -2118.0002
+        outSlope: -2118.0002
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.1666667
+        time: 0.8333333
         value: -1
         inSlope: 0
         outSlope: 0
@@ -238,7 +211,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2.1833334
+    m_StopTime: 0.85
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -260,7 +233,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -463
+        value: -477.7
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -268,17 +241,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.5
-        value: -442
-        inSlope: 41.460003
-        outSlope: 41.460003
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.6666666
-        value: -393.9
+        time: 0.16666667
+        value: -444.2
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -286,8 +250,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8333334
-        value: -393.9
+        time: 0.5
+        value: -444.2
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -295,16 +259,16 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2
+        time: 0.6666667
         value: -128
-        inSlope: 1169.6998
-        outSlope: 1169.6998
+        inSlope: 1320.6001
+        outSlope: 1320.6001
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.1666667
+        time: 0.8333333
         value: -4
         inSlope: 0
         outSlope: 0
@@ -334,16 +298,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.5
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1.6666666
+        time: 0.16666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -352,7 +307,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8333334
+        time: 0.5
         value: 1
         inSlope: 0
         outSlope: 0
@@ -374,7 +329,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 741
+        value: 705
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -382,8 +337,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.5
-        value: 747
+        time: 0.16666667
+        value: 705
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -391,8 +346,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.6666666
-        value: 747
+        time: 0.5
+        value: 705
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -400,25 +355,16 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8333334
-        value: 747
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 2
+        time: 0.6666667
         value: 415
-        inSlope: -2243.9998
-        outSlope: -2243.9998
+        inSlope: -2118.0002
+        outSlope: -2118.0002
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.1666667
+        time: 0.8333333
         value: -1
         inSlope: 0
         outSlope: 0
@@ -438,14 +384,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0
-    functionName: LylaMove
+  - time: 0.5
+    functionName: LylaJump
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.1833334
+  - time: 0.85
     functionName: DeleteObject
     data: 
     objectReferenceParameter: {fileID: 0}
