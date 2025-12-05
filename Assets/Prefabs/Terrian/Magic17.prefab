@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5588033799697831166}
   - component: {fileID: 6142957889544930688}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Magic17
   m_TagString: Bush
   m_Icon: {fileID: 0}

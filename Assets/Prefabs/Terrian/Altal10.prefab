@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4767477351039830540}
   - component: {fileID: 6366162978887847468}
   - component: {fileID: 8296184978134642506}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Altal10
   m_TagString: Bush
   m_Icon: {fileID: 0}

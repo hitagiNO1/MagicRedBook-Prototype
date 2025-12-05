@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4225956993934299547}
   - component: {fileID: 8862695764279393659}
   - component: {fileID: 6369030711119483377}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Stick
   m_TagString: Bush
   m_Icon: {fileID: 0}

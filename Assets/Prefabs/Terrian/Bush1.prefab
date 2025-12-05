@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2694498388527616532}
   - component: {fileID: 5296455202964883688}
   - component: {fileID: 9104637553055570928}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Bush1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
   m_LocalPosition: {x: -26.091518, y: -1.3886595, z: 9.78}
-  m_LocalScale: {x: 0.7, y: 0.70000005, z: 0.70000005}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
-  m_SortingLayer: 3
-  m_SortingOrder: -66
+  m_SortingLayer: 2
+  m_SortingOrder: -98
   m_Sprite: {fileID: -1870393216, guid: b8945192622d3724bb1d5959e382ab55, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

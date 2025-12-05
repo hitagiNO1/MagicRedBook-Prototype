@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8083133640741021855}
   - component: {fileID: 4184655688302016295}
   - component: {fileID: 8701975656599165782}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Floor1
   m_TagString: Bush
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 60
   m_Sprite: {fileID: 486962099, guid: 78fd82b1c2ae1af479fb4582b80ccee0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

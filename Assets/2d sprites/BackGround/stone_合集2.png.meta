@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e7c057b6ee551db419de2b55d97c4d38
+guid: b74d2575a89a8974288de298cdc9db51
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "stone_\u5408\u96C6_0"
+      name: "stone_\u5408\u96C62_0"
       rect:
         serializedVersion: 2
-        x: 91
-        y: 1501
-        width: 558
-        height: 397
+        x: 230
+        y: 1763
+        width: 402
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,146 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee46a95a88120c4409e03e5d12f93316
-      internalID: 236887231
+      spriteID: 579f8e17e5e97c54a8781e5b374cf489
+      internalID: -58923610
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "stone_\u5408\u96C6_1"
-      rect:
-        serializedVersion: 2
-        x: 714
-        y: 1502
-        width: 557
-        height: 406
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bd4a6ce881ffe2543b45b21a393310ef
-      internalID: 594301787
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "stone_\u5408\u96C6_2"
-      rect:
-        serializedVersion: 2
-        x: 1395
-        y: 1524
-        width: 434
-        height: 332
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a079d75c95c0b0b4fb111a383ad80ac5
-      internalID: 311213059
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "stone_\u5408\u96C6_4"
-      rect:
-        serializedVersion: 2
-        x: 68
-        y: 1004
-        width: 558
-        height: 397
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b2bc397a76712f47aab6fa63a1b39e1
-      internalID: -809667006
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "stone_\u5408\u96C6_5"
-      rect:
-        serializedVersion: 2
-        x: 742
-        y: 1020
-        width: 557
-        height: 406
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b1619bea035ac444b9e266c0a152b23
-      internalID: -405526290
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "stone_\u5408\u96C6_6"
-      rect:
-        serializedVersion: 2
-        x: 1401
-        y: 1031
-        width: 434
-        height: 332
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b12185c518ad5cf4b8ae1bdbcda85f09
-      internalID: -1930774091
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "stone_\u5408\u96C6_8"
-      rect:
-        serializedVersion: 2
-        x: 194
-        y: 638
-        width: 436
-        height: 230
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bef7d91d5e449fe428d225c38f517447
-      internalID: 1661561720
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "stone_\u5408\u96C6_10"
+      name: "stone_\u5408\u96C62_1"
       rect:
         serializedVersion: 2
         x: 769
-        y: 636
-        width: 435
-        height: 232
+        y: 1767
+        width: 403
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -271,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2bf3854f60d08f40afeaccc8d649323
-      internalID: -905866156
+      spriteID: 2d5f198f4ebcb614da0743bbe760a01d
+      internalID: 1333607521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "stone_\u5408\u96C6_12"
+      name: "stone_\u5408\u96C62_2"
       rect:
         serializedVersion: 2
-        x: 1310
-        y: 631
-        width: 435
-        height: 230
+        x: 1370
+        y: 1618
+        width: 509
+        height: 443
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,20 +166,125 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57fe83123d0857742bafafa81a69ae03
-      internalID: 1782272329
+      spriteID: 5a5a1241a1ce9f9419049fdadd927ac5
+      internalID: 1734562571
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "stone_\u5408\u96C6_14"
+      name: "stone_\u5408\u96C62_3"
       rect:
         serializedVersion: 2
-        x: 168
-        y: 190
+        x: 2055
+        y: 1333
+        width: 508
+        height: 444
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ade0fea77f44a2046a1505a51fae885b
+      internalID: -899773014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "stone_\u5408\u96C62_4"
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 1464
+        width: 402
+        height: 240
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c43b6367f4526542bb1349050b2ca3d
+      internalID: -33148568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "stone_\u5408\u96C62_5"
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 1068
+        width: 403
+        height: 335
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c261384c813554c4b952286c374cce5a
+      internalID: 579867632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "stone_\u5408\u96C62_6"
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 1068
+        width: 403
+        height: 335
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49eb424d60db46349b583b12c7ae3803
+      internalID: -624641477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "stone_\u5408\u96C62_7"
+      rect:
+        serializedVersion: 2
+        x: 1448
+        y: 1032
+        width: 509
+        height: 432
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6da9f18cc8f83424fad79e8954303cfb
+      internalID: 1702252804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "stone_\u5408\u96C62_8"
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 590
         width: 359
-        height: 242
+        height: 253
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -313,20 +292,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 95cf893e64301044eb45cfabe0b323ee
-      internalID: -2043396853
+      spriteID: 9ad22a8024d039c41bc97627e876bfef
+      internalID: 2014654492
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "stone_\u5408\u96C6_15"
+      name: "stone_\u5408\u96C62_10"
       rect:
         serializedVersion: 2
-        x: 769
-        y: 231
-        width: 294
-        height: 171
+        x: 1718
+        y: 610
+        width: 600
+        height: 335
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -334,20 +313,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 973fcd804a666474982b358b504031a7
-      internalID: 384070961
+      spriteID: 717a48758957c7941a8f8797daa7defe
+      internalID: -844082541
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "stone_\u5408\u96C6_16"
+      name: "stone_\u5408\u96C62_11"
       rect:
         serializedVersion: 2
-        x: 1342
-        y: 180
-        width: 359
-        height: 242
+        x: 656
+        y: 237
+        width: 326
+        height: 206
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -355,8 +334,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9623c5e88a6d984c8f938291b47582e
-      internalID: -1748311357
+      spriteID: c58de5f144d0e7a44899276708ab5534
+      internalID: -1643634084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "stone_\u5408\u96C62_12"
+      rect:
+        serializedVersion: 2
+        x: 1469
+        y: 179
+        width: 600
+        height: 336
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eff275c2162941849b54b8f2bb00d24f
+      internalID: -1364612927
       vertices: []
       indices: 
       edges: []
@@ -372,23 +372,19 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "stone_\u5408\u96C6_0": 236887231
-      "stone_\u5408\u96C6_1": 594301787
-      "stone_\u5408\u96C6_10": -905866156
-      "stone_\u5408\u96C6_11": 1579221955
-      "stone_\u5408\u96C6_12": 1782272329
-      "stone_\u5408\u96C6_13": -2013183787
-      "stone_\u5408\u96C6_14": -2043396853
-      "stone_\u5408\u96C6_15": 384070961
-      "stone_\u5408\u96C6_16": -1748311357
-      "stone_\u5408\u96C6_2": 311213059
-      "stone_\u5408\u96C6_3": -320057876
-      "stone_\u5408\u96C6_4": -809667006
-      "stone_\u5408\u96C6_5": -405526290
-      "stone_\u5408\u96C6_6": -1930774091
-      "stone_\u5408\u96C6_7": -2126689602
-      "stone_\u5408\u96C6_8": 1661561720
-      "stone_\u5408\u96C6_9": -827038424
+      "stone_\u5408\u96C62_0": -58923610
+      "stone_\u5408\u96C62_1": 1333607521
+      "stone_\u5408\u96C62_10": -844082541
+      "stone_\u5408\u96C62_11": -1643634084
+      "stone_\u5408\u96C62_12": -1364612927
+      "stone_\u5408\u96C62_2": 1734562571
+      "stone_\u5408\u96C62_3": -899773014
+      "stone_\u5408\u96C62_4": -33148568
+      "stone_\u5408\u96C62_5": 579867632
+      "stone_\u5408\u96C62_6": -624641477
+      "stone_\u5408\u96C62_7": 1702252804
+      "stone_\u5408\u96C62_8": 2014654492
+      "stone_\u5408\u96C62_9": 112418516
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

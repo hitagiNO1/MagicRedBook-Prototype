@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1967780696701834511}
   - component: {fileID: 6917835649648844656}
   - component: {fileID: 1389563430725363480}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Stone7
   m_TagString: Stone
   m_Icon: {fileID: 0}
@@ -72,14 +72,14 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 2
-  m_Sprite: {fileID: 1661561720, guid: e7c057b6ee551db419de2b55d97c4d38, type: 3}
+  m_Sprite: {fileID: -624641477, guid: b74d2575a89a8974288de298cdc9db51, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.36, y: 2.3}
+  m_Size: {x: 4.0302205, y: 3.3499997}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

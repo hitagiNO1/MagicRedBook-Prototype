@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6994135774911581000}
   - component: {fileID: 1346842010490556308}
   - component: {fileID: 6046025156347389031}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Fire4
   m_TagString: Bush
   m_Icon: {fileID: 0}
