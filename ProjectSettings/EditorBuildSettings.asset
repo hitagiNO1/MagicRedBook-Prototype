@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CG1.unity
     guid: b29a00f5426039345b66a0352d769314
+  - enabled: 1
+    path: Assets/Scenes/PersistentGameplay.unity
+    guid: 64e30f0918f66814cbbfeecb8eb0dde1
+  - enabled: 1
+    path: Assets/Scenes/CH1 1.unity
+    guid: 35aa789d809fb4b42bc87237cb70e090
   m_configObjects: {}

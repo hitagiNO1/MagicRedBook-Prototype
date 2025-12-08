@@ -27,6 +27,9 @@ public class canclick : MonoBehaviour
     public int randomAmount;
     public float fallSpeed = 5f;
 
+    [Header("Return Settings")]
+    public string mainSceneName; // 必須填寫：你要回去的那個主場景名稱
+
     // 白色 Tile 的 Sprite
     public Sprite[] columnSpecificWhiteSprites; // 類型 1：左、中、右的專屬白色 Sprite（長度為 3）
     public Sprite commonWhiteSprite; // 類型 2：單一通用白色 Sprite
@@ -266,12 +269,43 @@ public class canclick : MonoBehaviour
         }
     }
 
-    public void BackGame()
+  
+
+    // 這個方法可以在小遊戲結束時呼叫 (例如：打贏魔王、按下離開按鈕)
+    public void EndMiniGame()
     {
-        SceneManager.LoadScene("Prologue");
+        StartCoroutine(ReturnToMainScene());
     }
 
-    public void RestartGame()
+    private IEnumerator ReturnToMainScene()
+    {
+        // 1. 找到原本的主場景
+        Scene mainScene = SceneManager.GetSceneByName(mainSceneName);
+
+        if (mainScene.IsValid() && mainScene.isLoaded)
+        {
+            // 2. 把主場景的所有物件重新打開 (Resume)
+            GameObject[] rootObjects = mainScene.GetRootGameObjects();
+            foreach (GameObject obj in rootObjects)
+            {
+                obj.SetActive(true);
+            }
+
+            // 設定回主場景為 Active
+            SceneManager.SetActiveScene(mainScene);
+        }
+        else
+        {
+            Debug.LogError("找不到主場景，可能已被卸載或是名稱錯誤！");
+        }
+
+        // 3. 卸載目前的小遊戲場景
+        // 注意：這裡使用 gameObject.scene 可以自動抓取腳本所在的場景
+        yield return SceneManager.UnloadSceneAsync(gameObject.scene);
+    }
+
+
+public void RestartGame()
     {
         gameEnded = false;
         currentSuccessCount = 0;
