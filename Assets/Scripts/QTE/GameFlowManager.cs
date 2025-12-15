@@ -13,11 +13,13 @@ public class GameFlowManager : MonoBehaviour
     public GameObject track;
 
     public PlayableAsset OPening;
+    public PlayableDirector director;
 
     void Start()
     {
         ShowMainMenu();
-        //TimelineManager.Instance.PlayTimeline(OPening);
+        TimelineManager.Instance.PlayTimeline(OPening);
+        director.Play();
     }
 
     public void ShowMainMenu()
@@ -25,7 +27,6 @@ public class GameFlowManager : MonoBehaviour
         mainCanvas.SetActive(true);
         gameCanvas.SetActive(false);
         resultCanvas.SetActive(false);
-        track.SetActive(false);
     }
 
     public void StartGame()
