@@ -23629,7 +23629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottomBar: {fileID: 8165284785212235176}
-  FirstScene: {fileID: 0}
+  FirstScene: {fileID: 11400000, guid: 526677a1c59f62d4fb41e7776a40da29, type: 2}
   IsDone: 0
 --- !u!95 &4459690009211025243
 Animator:
@@ -25230,7 +25230,7 @@ MonoBehaviour:
   Rcoords: {x: 765, y: -45}
   LBar: {fileID: 21300000, guid: c66ceaa73da023743a32f016fdd31082, type: 3}
   RBar: {fileID: 21300000, guid: 92381ef972f884f4ca9cd07a41809239, type: 3}
-  MidBar: {fileID: 0}
+  MidBar: {fileID: 21300000, guid: e28f0ec68edf8b14cbf7764f91b65080, type: 3}
   LBack: {fileID: 443640531}
   RBack: {fileID: 1441902982}
   spritesPrefab: {fileID: 6486962572236652023}
@@ -25555,6 +25555,9 @@ MonoBehaviour:
   hurtFace: {fileID: 21300000, guid: 0a1909266f37a9d48a4f410a50227a47, type: 3}
   LylaHead: {fileID: 0}
   LylahurtFace: {fileID: 0}
+  Black: {fileID: 0}
+  Lyla: {fileID: 0}
+  BlackBall: {fileID: 0}
 --- !u!224 &8829831214532199222
 RectTransform:
   m_ObjectHideFlags: 0
