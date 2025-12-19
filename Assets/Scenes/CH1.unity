@@ -63478,7 +63478,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -18.661522}
+  m_LocalPosition: {x: 0, y: 0, z: 5.9384804}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63486,7 +63486,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 721.7, y: 30.070007}
+  m_AnchoredPosition: {x: 604.6, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -178964,7 +178964,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 721.7, y: 30.070007, z: -18.661522}
+  m_LocalPosition: {x: 604.6, y: 30.070007, z: 5.9384804}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -243191,7 +243191,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 721.7, y: 0.07, z: 33.3}
+  m_LocalPosition: {x: 604.6, y: 0.07, z: 57.9}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -266812,7 +266812,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -334
+  m_SortingOrder: -580
   m_SortAtRoot: 0
 --- !u!1 &2106109523
 GameObject:
@@ -272673,7 +272673,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3433247497458231736}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: ea11b930c7aee0f489667e6692526a62, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -273464,7 +273464,6 @@ GameObject:
   - component: {fileID: 3720424681303388710}
   - component: {fileID: 3720424681303388711}
   - component: {fileID: 3720424681303388712}
-  - component: {fileID: 3720424681303388713}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -275654,7 +275653,7 @@ MonoBehaviour:
   - {fileID: 0}
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
-  itemuse: {fileID: 0}
+  itemuse: {fileID: 3720424681303388710}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -275819,7 +275818,8 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   dialogueText: {fileID: 422702079435835153}
   playerHUDs: []
-  playerUnits: {fileID: 0}
+  playerUnits:
+  - {fileID: 0}
   can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
   tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
   grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
@@ -275855,28 +275855,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistentGameplaySceneName: CH1
   level1SceneName: CH1
---- !u!114 &3720424681303388713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052940225863114260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3181c7e482e4a18449418408547436b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  redbook: {fileID: 1736902325}
-  skillManager: {fileID: 3720424681303388706}
-  buffDebuffManager: {fileID: 3720424681303388705}
-  dialogueText: {fileID: 422702079435835153}
-  playerHUDs: []
-  playerUnits: {fileID: 437807605}
-  can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
-  tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
-  grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
-  drying: {fileID: 11400000, guid: ad1f8d38b1a34a242982e60d76ec66a3, type: 2}
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5

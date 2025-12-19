@@ -228,7 +228,6 @@ public class Itemuse : MonoBehaviour
                 
             }
         });
-        Debug.Log($"即將攻擊，當前爆擊率：{playerUnits.unitName} = {playerUnits.critChance * 100:F1}%");
         dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Grass 對 {target.unitName}";
         skillManager.RemoveSkillIcon();
     }
@@ -387,7 +386,6 @@ public class Itemuse : MonoBehaviour
         if (GameStateManager.Instance.IsState(GameState.Battle))
         {
             // 打開紅書 
-            GameStateManager.Instance.SetState(GameState.Redbook);
             StartCoroutine(redbook.OpenBook());
             // 更新道具UI
             if (redbook.inventoryUI != null)

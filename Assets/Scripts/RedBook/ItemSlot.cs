@@ -55,11 +55,11 @@ public class ItemSlot : MonoBehaviour
             }
         }
         // 判斷目前是否在戰鬥中（使用你既有的 GameStateManager）
-        if (GameStateManager.Instance != null && GameStateManager.Instance.IsState(GameState.Redbook))
+        if (GameStateManager.Instance != null)
         {
             TriggerBattleItemUse();
             redbook.CloseRedBook();
-            GameStateManager.Instance.IsState(GameState.Battle);
+            
         }
         else
         {

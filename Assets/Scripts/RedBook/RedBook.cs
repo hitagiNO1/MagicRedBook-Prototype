@@ -38,18 +38,18 @@ public class RedBook : MonoBehaviour
         {
             if (GameStateManager.Instance.IsState(GameState.Playing))
             {
+                GameStateManager.Instance.SetState(GameState.Redbook);
                 OpenRedBook(GameState.Playing);
             }
-            else if (isOpen && GameStateManager.Instance.IsState(GameState.Redbook))
+            else if (isOpen)
             {
                 CloseRedBook();
             }
         }
 
         // ESC 關閉紅書
-        if (Input.GetKeyDown(KeyCode.Escape) && isOpen && GameStateManager.Instance.IsState(GameState.Redbook))
+        if (Input.GetKeyDown(KeyCode.Escape) && isOpen)     
         {
-            Debug.Log("Escape key pressed, closing Red Book");
             CloseRedBook();
         }
     }
@@ -65,7 +65,6 @@ public class RedBook : MonoBehaviour
 
     public void OpenRedBook(GameState previousState)
     {
-        GameStateManager.Instance.SetState(GameState.Redbook);
         StartCoroutine(OpenBookCoroutine(previousState));
     }
 
@@ -95,7 +94,7 @@ public class RedBook : MonoBehaviour
         menuUI.SetActive(false);
 
         // 恢復到之前的狀態
-        if (GameStateManager.Instance.previousState == GameState.Battle)
+        if (GameStateManager.Instance.IsState(GameState.Battle))
         {
             GameStateManager.Instance.SetState(GameState.Battle);
         }
