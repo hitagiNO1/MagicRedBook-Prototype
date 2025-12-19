@@ -215,37 +215,93 @@ public class SkillManager : MonoBehaviour
         Debug.Log("All highlights cleared successfully");
     }
 
+    /* public void OnPlayerHeadClick(int playerIndex)
+     {
+         Debug.Log($"OnPlayerHeadClick called for playerIndex: {playerIndex}, pendingSkill: {pendingSkill}, isWaitingForTarget: {isWaitingForTarget}, caller: {new System.Diagnostics.StackTrace().ToString()}");
+
+         // 檢查 playerUnits 是否有效
+         if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count)
+         {
+             Debug.LogError($"Invalid playerUnits or playerIndex: {playerIndex}, playerUnits count: {playerUnits?.Count}");
+            // dialogueText.text = "錯誤：無效的玩家索引！";
+             return;
+         }
+
+         // 檢查狀態是否正確
+         if (!isWaitingForTarget || pendingSkill != "catSkill_4" || pendingPlayerIndex != 1)
+         {
+             Debug.LogWarning($"OnPlayerHeadClick ignored: Invalid state (isWaitingForTarget: {isWaitingForTarget}, pendingSkill: {pendingSkill}, pendingPlayerIndex: {pendingPlayerIndex})");
+             return;
+         }
+
+         Unit target = playerUnits[playerIndex];
+         if (target != null && target.currentHP > 0)
+         {
+             Debug.Log($"Player head click: Selecting target {target.unitName} for catSkill_4");
+             SelectTarget(pendingPlayerIndex, target);
+             ExecutePendingSkill();
+         }
+         else
+         {
+             dialogueText.text = "請選擇一個存活的玩家目標！";
+             Debug.LogWarning($"Invalid player target: {playerIndex}, target: {(target != null ? target.unitName : "null")}, HP: {(target != null ? target.currentHP : -1)}");
+         }
+     }*/
+
     public void OnPlayerHeadClick(int playerIndex)
     {
-        Debug.Log($"OnPlayerHeadClick called for playerIndex: {playerIndex}, pendingSkill: {pendingSkill}, isWaitingForTarget: {isWaitingForTarget}, caller: {new System.Diagnostics.StackTrace().ToString()}");
+        Debug.Log($"OnPlayerHeadClick called for playerIndex: {playerIndex}, pendingSkill: {pendingSkill}, pendingPlayerIndex: {pendingPlayerIndex}");
 
-        // 檢查 playerUnits 是否有效
         if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count)
         {
-            Debug.LogError($"Invalid playerUnits or playerIndex: {playerIndex}, playerUnits count: {playerUnits?.Count}");
-           // dialogueText.text = "錯誤：無效的玩家索引！";
+            Debug.LogError($"Invalid playerUnits or playerIndex: {playerIndex}");
             return;
         }
 
-        // 檢查狀態是否正確
-        if (!isWaitingForTarget || pendingSkill != "catSkill_4" || pendingPlayerIndex != 1)
-        {
-            Debug.LogWarning($"OnPlayerHeadClick ignored: Invalid state (isWaitingForTarget: {isWaitingForTarget}, pendingSkill: {pendingSkill}, pendingPlayerIndex: {pendingPlayerIndex})");
-            return;
-        }
+        Unit selectedTarget = playerUnits[playerIndex];
 
-        Unit target = playerUnits[playerIndex];
-        if (target != null && target.currentHP > 0)
-        {
-            Debug.Log($"Player head click: Selecting target {target.unitName} for catSkill_4");
-            SelectTarget(pendingPlayerIndex, target);
-            ExecutePendingSkill();
-        }
-        else
+        if (selectedTarget == null || selectedTarget.currentHP <= 0)
         {
             dialogueText.text = "請選擇一個存活的玩家目標！";
-            Debug.LogWarning($"Invalid player target: {playerIndex}, target: {(target != null ? target.unitName : "null")}, HP: {(target != null ? target.currentHP : -1)}");
+            Debug.LogWarning("選擇的目標已死亡或無效");
+            return;
         }
+
+        // 檢查是否正在等待「選擇玩家目標」的技能/道具
+        // 支援 catSkill_4 和所有背包道具
+        bool isWaitingForPlayerTarget =
+            pendingSkill == "catSkill_4" ||
+            pendingSkill == "Can" ||
+            pendingSkill == "Grass" ||
+            pendingSkill == "Drying" ||
+            pendingSkill == "Can"; // 如果你還有其他
+
+        // 必須有 pendingSkill，且目前回合玩家要匹配（避免亂點）
+        if (!isWaitingForPlayerTarget || pendingPlayerIndex < 0 || pendingPlayerIndex != GetCurrentPlayerIndex())
+        {
+            // 如果不在等待狀態，就不處理（避免誤點觸發）
+            Debug.Log("目前沒有等待選擇玩家目標的技能或道具，或不是正確的玩家回合");
+            return;
+        }
+
+        // 成功選擇目標
+        dialogueText.text = $"{playerUnits[pendingPlayerIndex].unitName} 選擇對 {selectedTarget.unitName} 使用 {pendingSkill}";
+        SelectTarget(pendingPlayerIndex, selectedTarget);
+        ExecutePendingSkill();
+
+        // 清除等待狀態
+        pendingSkill = null;
+        pendingPlayerIndex = -1;
+    }
+
+    // 建議加這個輔助方法，取得目前回合玩家
+    private int GetCurrentPlayerIndex()
+    {
+        if (battlesystem != null)
+        {
+            return battlesystem.currentPlayerIndex; // 請確保 BattleSystem 有 public int currentPlayerIndex
+        }
+        return 0; // fallback
     }
 
     public void CancelSkill(int playerIndex, string skillName)

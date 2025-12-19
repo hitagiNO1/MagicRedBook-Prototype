@@ -26,7 +26,8 @@ public class BattleSystem : MonoBehaviour
     private List<bool> playersActed;
     private Dictionary<int, Unit> selectedTargets;
     // 新增：防止重複結束戰鬥
-    private bool isBattleEnding = false;
+    public int currentPlayerIndex = 0;
+    private bool isBattleEnding = false;
     private bool hideAnimationTriggered = false;
     public mutiplebattle battleTrigger;
 
@@ -208,6 +209,7 @@ public class BattleSystem : MonoBehaviour
         buffDebuffManager?.TickDamageBuffs();
         buffDebuffManager?.TickPoison();
         buffDebuffManager?.TickSkillDisable();
+        currentPlayerIndex = (currentPlayerIndex + 1) % playerUnits.Count;
 
         // 冷卻處理（也用反向迴圈）
         for (int i = enemyPrefabs.Count - 1; i >= 0; i--)

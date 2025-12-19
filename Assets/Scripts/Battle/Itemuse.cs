@@ -9,7 +9,8 @@ public class Itemuse : MonoBehaviour
     public SkillManager skillManager; // 引用 SkillManager
     public BuffDebuffManager buffDebuffManager; // 引用 BuffDebuffManager 以執行效果
     public TextMeshProUGUI dialogueText; // 用於顯示訊息
-
+    public List<BattleHUD> playerHUDs;
+    public Unit playerUnits;
     public ItemData can;
     public ItemData tuna;
     public ItemData grass;
@@ -69,6 +70,8 @@ public class Itemuse : MonoBehaviour
         }
     }
 
+
+
     // 驗證物品是否可用（類似 ValidateSkill）
     private bool ValidateItem(int playerIndex, string itemName)
     {
@@ -123,13 +126,30 @@ public class Itemuse : MonoBehaviour
         {
             if (target.currentHP > 0)
             {
-                buffDebuffManager.Heal(target, 0.6f); // 恢復 60% 失去血量
-                itemInventory["Can"]--; // 減少庫存
-                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Can 恢復 {target.unitName} 的血量";
-                Debug.Log($"使用 Can，剩餘數量：{itemInventory["Can"]}");
+                // 執行治療：恢復已損失血量的 60%
+                int lostHP = target.maxHP - target.currentHP;
+                int healAmount = Mathf.RoundToInt(lostHP * 0.6f);
+                target.currentHP = Mathf.Min(target.currentHP + healAmount, target.maxHP);
+
+                // === 關鍵：更新血條 UI ===
+                if (target.battleHUD != null)
+                {
+                    target.battleHUD.SetHP(target.currentHP);
+                }
+                else
+                {
+                    Debug.LogWarning($"目標 {target.unitName} 沒有綁定 battleHUD！");
+                }
+
+                // 減少物品庫存
+                itemInventory["Can"]--;
+
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 神聖罐罐 恢復 {target.unitName} 的血量（+{healAmount}）";
+                Debug.Log($"使用 神聖罐罐，恢復 {healAmount} HP，剩餘數量：{itemInventory["Can"]}");
             }
         });
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Can 對 {target.unitName}";
+
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 神聖罐罐 對 {target.unitName}";
         skillManager.RemoveSkillIcon();
     }
 
@@ -141,24 +161,44 @@ public class Itemuse : MonoBehaviour
         skillManager.selectedSkillNames[playerIndex].Add("Tuna");
         skillManager.skillQueues[playerIndex].Add(() =>
         {
-            int healedCount = 0;
+            int totalHealedAmount = 0;   // 統計總共恢復多少血
+            int healedCount = 0;         // 統計治療了幾個單位
+
             foreach (Unit player in skillManager.playerUnits)
             {
-                if (player.currentHP > 0)
+                if (player.currentHP > 0 && player.currentHP < player.maxHP) // 只治療有損血的單位（可選）
                 {
                     int healAmount = Mathf.RoundToInt(player.maxHP * 0.3f); // 30% 最大生命
-                    player.currentHP = Mathf.Min(player.currentHP + healAmount, player.maxHP);
+                    int actualHeal = Mathf.Min(healAmount, player.maxHP - player.currentHP); // 實際恢復量（不會超過滿血）
+
+                    player.currentHP += actualHeal;
+                    totalHealedAmount += actualHeal;
+                    healedCount++;
+
+                    // 更新血條 UI
                     if (player.battleHUD != null)
                     {
                         player.battleHUD.SetHP(player.currentHP);
                     }
-                    healedCount++;
                 }
             }
-            itemInventory["Tuna"]--; // 減少庫存
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Tuna 恢復全體血量（治療了 {healedCount} 個單位）";
-            Debug.Log($"使用 Tuna，剩餘數量：{itemInventory["Tuna"]}");
+
+            // 減少物品庫存
+            itemInventory["Tuna"]--;
+
+            // 更清楚的對話顯示
+            if (healedCount > 0)
+            {
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Tuna 恢復全體血量（共 +{totalHealedAmount} HP，治療了 {healedCount} 個單位）";
+                Debug.Log($"使用 Tuna，總恢復 {totalHealedAmount} HP，治療 {healedCount} 個單位，剩餘數量：{itemInventory["Tuna"]}");
+            }
+            else
+            {
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Tuna，但全體已滿血，無效果";
+                Debug.Log($"使用 Tuna，但無單位需要治療，剩餘數量：{itemInventory["Tuna"]}");
+            }
         });
+
         dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Tuna";
         skillManager.RemoveSkillIcon();
     }
@@ -188,6 +228,7 @@ public class Itemuse : MonoBehaviour
                 
             }
         });
+        Debug.Log($"即將攻擊，當前爆擊率：{playerUnits.unitName} = {playerUnits.critChance * 100:F1}%");
         dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Grass 對 {target.unitName}";
         skillManager.RemoveSkillIcon();
     }

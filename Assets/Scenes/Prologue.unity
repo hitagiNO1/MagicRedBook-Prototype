@@ -45750,7 +45750,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 0, z: -113.681564}
+  m_LocalPosition: {x: 0, y: 0, z: -60.88156}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45758,7 +45758,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.9, y: 20.591208}
+  m_AnchoredPosition: {x: 248.3, y: 20.59121}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -106902,9 +106902,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1978676189}
-        m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
-        m_MethodName: ConfirmUse
+      - m_Target: {fileID: 1788175062}
+        m_TargetAssemblyTypeName: ItemSlot, Assembly-CSharp
+        m_MethodName: OnUseButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -115783,7 +115783,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3720424681303388710}
+      - m_Target: {fileID: 3720424681303388712}
         m_TargetAssemblyTypeName: Itemuse, Assembly-CSharp
         m_MethodName: redbookuse
         m_Mode: 1
@@ -140326,7 +140326,7 @@ Transform:
   m_GameObject: {fileID: 1246287581}
   serializedVersion: 2
   m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 15.9, y: 20.591208, z: -113.681564}
+  m_LocalPosition: {x: 248.3, y: 20.59121, z: -60.88156}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -182743,6 +182743,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5970011484390629358, guid: 961bd45f71386ef44972f9276e5da9ff, type: 3}
   m_PrefabInstance: {fileID: 1787870665}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1788175062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5749929627061385918, guid: a379b7af0c511dd4ea89b10173b0d895, type: 3}
+  m_PrefabInstance: {fileID: 50167138}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d6e8010b5ce0948bc3110323b7b726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1788636225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201437,7 +201448,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.9, y: 0.070000015, z: -57.3}
+  m_LocalPosition: {x: 248.3, y: 0.070000015, z: -4.5}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -219290,7 +219301,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 572
+  m_SortingOrder: 44
   m_SortAtRoot: 0
 --- !u!1001 &2106314355
 PrefabInstance:
@@ -228579,6 +228590,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!4 &536798154587584046
 Transform:
   m_ObjectHideFlags: 0
@@ -228629,6 +228643,7 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
+  currentPlayerIndex: 0
   battleTrigger: {fileID: 0}
 --- !u!222 &574295765314852895
 CanvasRenderer:
@@ -229038,8 +229053,8 @@ GameObject:
   - component: {fileID: 3720424681303388707}
   - component: {fileID: 3720424681303388708}
   - component: {fileID: 3720424681303388709}
-  - component: {fileID: 3720424681303388710}
   - component: {fileID: 3720424681303388711}
+  - component: {fileID: 3720424681303388712}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -229995,6 +230010,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!108 &2626367078648709751
 Light:
   m_ObjectHideFlags: 0
@@ -230238,7 +230256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2890620666838143054
 Transform:
   m_ObjectHideFlags: 0
@@ -230313,6 +230331,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &2947648178839155672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -230936,7 +230957,7 @@ MonoBehaviour:
   - {fileID: 0}
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
-  itemuse: {fileID: 0}
+  itemuse: {fileID: 3720424681303388712}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -231079,26 +231100,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastPlayerPosition: {x: 0, y: 0, z: 0}
---- !u!114 &3720424681303388710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052940225863114260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3181c7e482e4a18449418408547436b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  redbook: {fileID: 1736902325}
-  skillManager: {fileID: 3720424681303388706}
-  buffDebuffManager: {fileID: 3720424681303388705}
-  dialogueText: {fileID: 0}
-  can: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
-  tuna: {fileID: 0}
-  grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
-  drying: {fileID: 11400000, guid: ad1f8d38b1a34a242982e60d76ec66a3, type: 2}
 --- !u!114 &3720424681303388711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231113,6 +231114,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistentGameplaySceneName: PersistentGameplay
   level1SceneName: Prologue
+--- !u!114 &3720424681303388712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052940225863114260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3181c7e482e4a18449418408547436b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redbook: {fileID: 1736902325}
+  skillManager: {fileID: 3720424681303388706}
+  buffDebuffManager: {fileID: 3720424681303388705}
+  dialogueText: {fileID: 2839821715735069237}
+  playerHUDs: []
+  playerUnits: {fileID: 437807605}
+  can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
+  tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
+  grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
+  drying: {fileID: 11400000, guid: ad1f8d38b1a34a242982e60d76ec66a3, type: 2}
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5
@@ -231182,6 +231205,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!212 &3760446097700140101
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -231605,15 +231631,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 3060387183313581591}
-  targetScript: {fileID: 0}
-  skillmanager: {fileID: 0}
-  buffDebuffManager: {fileID: 0}
+  targetScript: {fileID: 537444389665327204}
+  skillmanager: {fileID: 3720424681303388706}
+  buffDebuffManager: {fileID: 3720424681303388705}
   enemyskill: {fileID: 7752731964517424043}
   newEnemies:
   - {fileID: 6023069306390899131}
   enemyUnits:
   - {fileID: 5383440018897433967}
-  Addmonster: {fileID: 0}
+  Addmonster: {fileID: 477213778}
   monsters:
   - {fileID: 11400000, guid: 0dc774c1ec3821343be4e7db1a6b066e, type: 2}
   enemyBattleHUDPrefab: {fileID: 7600166811978819099, guid: 4e533792e08c11b448a74e83a1bdb17e, type: 3}
@@ -231898,6 +231924,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &4958733936448208834
 GameObject:
   m_ObjectHideFlags: 0
@@ -247399,6 +247428,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!114 &6579541339561595525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247564,6 +247596,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &6818857299451261484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -248021,6 +248056,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &7453151949604705192
 GameObject:
   m_ObjectHideFlags: 0
