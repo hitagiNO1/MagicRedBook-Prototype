@@ -10,7 +10,7 @@ public class Itemuse : MonoBehaviour
     public BuffDebuffManager buffDebuffManager; // 引用 BuffDebuffManager 以執行效果
     public TextMeshProUGUI dialogueText; // 用於顯示訊息
     public List<BattleHUD> playerHUDs;
-    public Unit playerUnits;
+    public List<Unit> playerUnits;
     public ItemData can;
     public ItemData tuna;
     public ItemData grass;

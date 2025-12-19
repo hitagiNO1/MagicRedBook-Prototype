@@ -272526,6 +272526,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!114 &537444389665327204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272559,6 +272562,7 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
+  currentPlayerIndex: 0
   battleTrigger: {fileID: 0}
 --- !u!114 &568772054141841471
 MonoBehaviour:
@@ -273460,6 +273464,7 @@ GameObject:
   - component: {fileID: 3720424681303388710}
   - component: {fileID: 3720424681303388711}
   - component: {fileID: 3720424681303388712}
+  - component: {fileID: 3720424681303388713}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -274804,6 +274809,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &2644603841317974574
 RectTransform:
   m_ObjectHideFlags: 0
@@ -274992,6 +275000,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &2947648178839155672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -275807,6 +275818,8 @@ MonoBehaviour:
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
   dialogueText: {fileID: 422702079435835153}
+  playerHUDs: []
+  playerUnits: {fileID: 0}
   can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
   tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
   grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
@@ -275842,6 +275855,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistentGameplaySceneName: CH1
   level1SceneName: CH1
+--- !u!114 &3720424681303388713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052940225863114260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3181c7e482e4a18449418408547436b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redbook: {fileID: 1736902325}
+  skillManager: {fileID: 3720424681303388706}
+  buffDebuffManager: {fileID: 3720424681303388705}
+  dialogueText: {fileID: 422702079435835153}
+  playerHUDs: []
+  playerUnits: {fileID: 437807605}
+  can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
+  tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
+  grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
+  drying: {fileID: 11400000, guid: ad1f8d38b1a34a242982e60d76ec66a3, type: 2}
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5
@@ -275948,6 +275983,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!212 &3760446097700140101
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -281780,6 +281818,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &4958733936448208834
 GameObject:
   m_ObjectHideFlags: 0
@@ -282750,6 +282791,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &6585799718845992622
 GameObject:
   m_ObjectHideFlags: 0
@@ -282903,6 +282947,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &6771314457851508790
 GameObject:
   m_ObjectHideFlags: 0
@@ -283639,6 +283686,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!195 &7401157980521209857
 NavMeshAgent:
   m_ObjectHideFlags: 0
