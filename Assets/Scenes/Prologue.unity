@@ -26131,7 +26131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScene: {fileID: 11400000, guid: bd48da9cb579fe94e98b64f1496a3cd0, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!65 &269962104
@@ -46092,7 +46092,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -53.06152}
+  m_LocalPosition: {x: 0, y: 0, z: -58.26152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46100,7 +46100,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.6999993, y: 30.070007}
+  m_AnchoredPosition: {x: 0.79999954, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -48754,9 +48754,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c555f93d9b9603b4d90d6ac190430cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractiveUI: {fileID: 0}
+  InteractiveUI: {fileID: 923307694}
   currentScene: {fileID: 11400000, guid: 568c10aa2af7e2548bb32acd51e8c0bf, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!1001 &508036571
@@ -71253,7 +71253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractiveUI: {fileID: 0}
   currentScene: {fileID: 11400000, guid: 2956ff1e1ed6ba54fb42aecedb430171, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!1001 &749520227
@@ -81303,7 +81303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScene: {fileID: 11400000, guid: 5a227718f9adde8459ae4099f6eafac6, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!1001 &842825056
@@ -87349,7 +87349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScene: {fileID: 11400000, guid: a66b15c54b7967b41b1427909e20aa6d, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!65 &911748845
@@ -103452,7 +103452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScene: {fileID: 11400000, guid: bd48da9cb579fe94e98b64f1496a3cd0, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!65 &1046918921
@@ -104340,6 +104340,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1326437121386155222, guid: 48050a1fbcda01449a4d824a828546c1, type: 3}
   m_PrefabInstance: {fileID: 1056573555}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1056609024 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6247094221769932535, guid: f5699f89c6a45f844a3668180e5d26ae, type: 3}
+  m_PrefabInstance: {fileID: 267749091373484281}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1057120466
 PrefabInstance:
@@ -109524,7 +109529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScene: {fileID: 11400000, guid: ec8a3608efbecd348b17f487c663ff81, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!65 &1105927151
@@ -140709,7 +140714,7 @@ Transform:
   m_GameObject: {fileID: 1246287581}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 2.6999993, y: 30.070007, z: -53.06152}
+  m_LocalPosition: {x: 0.79999954, y: 30.070007, z: -58.26152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -174182,7 +174187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScene: {fileID: 11400000, guid: 322cc1a5845dec844a3dab162f68e0ff, type: 2}
-  Gamescript: {fileID: 0}
+  Gamescript: {fileID: 4336947258115202937}
   LimitScenes: []
   sec: 2
 --- !u!65 &1684203117
@@ -187601,7 +187606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1836469524}
   m_Layer: 0
-  m_Name: LIGHT (1)
+  m_Name: LIGHT1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -187624,6 +187629,7 @@ Transform:
   - {fileID: 1291103202}
   - {fileID: 420806249}
   - {fileID: 1707399904}
+  - {fileID: 1056609024}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1837104695
@@ -201839,7 +201845,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.7, y: 0.070000015, z: -1.1}
+  m_LocalPosition: {x: 0.8, y: 0.070000015, z: -6.3}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -219693,7 +219699,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 10
+  m_SortingOrder: 62
   m_SortAtRoot: 0
 --- !u!114 &2105839092
 MonoBehaviour:
@@ -228775,7 +228781,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1836469524}
     m_Modifications:
     - target: {fileID: 1443395133266222806, guid: f5699f89c6a45f844a3668180e5d26ae, type: 3}
       propertyPath: m_Name
@@ -228795,15 +228801,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247094221769932535, guid: f5699f89c6a45f844a3668180e5d26ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.7
+      value: 6.2630215
       objectReference: {fileID: 0}
     - target: {fileID: 6247094221769932535, guid: f5699f89c6a45f844a3668180e5d26ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.5
+      value: 15.610821
       objectReference: {fileID: 0}
     - target: {fileID: 6247094221769932535, guid: f5699f89c6a45f844a3668180e5d26ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.6
+      value: -9.516629
       objectReference: {fileID: 0}
     - target: {fileID: 6247094221769932535, guid: f5699f89c6a45f844a3668180e5d26ae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -229067,6 +229073,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!4 &536798154587584046
 Transform:
   m_ObjectHideFlags: 0
@@ -229117,6 +229126,7 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
+  currentPlayerIndex: 0
   battleTrigger: {fileID: 0}
 --- !u!222 &574295765314852895
 CanvasRenderer:
@@ -229191,7 +229201,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3433247497458231736}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: dcd49a90c2518a44c81fc974ffb5de9a, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -230483,6 +230493,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!108 &2626367078648709751
 Light:
   m_ObjectHideFlags: 0
@@ -230801,6 +230814,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &2947648178839155672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -231076,7 +231092,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4482779814156470700}
   m_Layer: 0
-  m_Name: LIGHT
+  m_Name: LIGHT2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231583,6 +231599,8 @@ MonoBehaviour:
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
   dialogueText: {fileID: 0}
+  playerHUDs: []
+  playerUnits: {fileID: 0}
   can: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
   tuna: {fileID: 0}
   grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
@@ -231670,6 +231688,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!212 &3760446097700140101
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -231985,7 +232006,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottomBar: {fileID: 8165284785212235176}
-  FirstScene: {fileID: 0}
+  FirstScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   IsDone: 0
 --- !u!54 &4342046730514332061
 Rigidbody:
@@ -232386,6 +232407,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &4958733936448208834
 GameObject:
   m_ObjectHideFlags: 0
@@ -247887,6 +247911,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!114 &6579541339561595525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248052,6 +248079,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &6818857299451261484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -248509,6 +248539,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &7453151949604705192
 GameObject:
   m_ObjectHideFlags: 0
@@ -254425,11 +254458,10 @@ SceneRoots:
   - {fileID: 36843498}
   - {fileID: 1381323863}
   - {fileID: 988337843}
-  - {fileID: 4482779814156470700}
   - {fileID: 1836469524}
+  - {fileID: 4482779814156470700}
   - {fileID: 365683853}
   - {fileID: 445298808382860964}
   - {fileID: 3720424681303388700}
-  - {fileID: 267749091373484281}
   - {fileID: 822250615}
   - {fileID: 401508586}

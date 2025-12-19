@@ -107871,7 +107871,7 @@ Transform:
   m_GameObject: {fileID: 825336081}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 985.7723, y: 30.07001, z: -26.998878}
+  m_LocalPosition: {x: 979.99, y: 30.07001, z: -26.861523}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -272526,6 +272526,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!114 &537444389665327204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272559,6 +272562,7 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
+  currentPlayerIndex: 0
   battleTrigger: {fileID: 0}
 --- !u!114 &568772054141841471
 MonoBehaviour:
@@ -272669,7 +272673,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3433247497458231736}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: ea11b930c7aee0f489667e6692526a62, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -274804,6 +274808,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &2644603841317974574
 RectTransform:
   m_ObjectHideFlags: 0
@@ -274992,6 +274999,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!224 &2947648178839155672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -275807,6 +275817,8 @@ MonoBehaviour:
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
   dialogueText: {fileID: 422702079435835153}
+  playerHUDs: []
+  playerUnits: {fileID: 0}
   can: {fileID: 11400000, guid: f131c84329a4c1b4a8a44774a159d1f1, type: 2}
   tuna: {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
   grass: {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
@@ -275948,6 +275960,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!212 &3760446097700140101
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -281780,6 +281795,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &4958733936448208834
 GameObject:
   m_ObjectHideFlags: 0
@@ -282750,6 +282768,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &6585799718845992622
 GameObject:
   m_ObjectHideFlags: 0
@@ -282903,6 +282924,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!1 &6771314457851508790
 GameObject:
   m_ObjectHideFlags: 0
@@ -283639,6 +283663,9 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  itemuse: {fileID: 0}
+  redbook: {fileID: 0}
+  skillmanager: {fileID: 0}
 --- !u!195 &7401157980521209857
 NavMeshAgent:
   m_ObjectHideFlags: 0
