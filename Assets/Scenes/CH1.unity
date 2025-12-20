@@ -272612,15 +272612,13 @@ MonoBehaviour:
   - {fileID: 947497828}
   enemyHUDs:
   - {fileID: 0}
-  enemySkill: {fileID: 0}
   animator: {fileID: 3721955857226714691}
   state: 6
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
-  turnCounter: 0
   gameScript: {fileID: 4336947258115202937}
-  currentPlayerIndex: 0
   battleTrigger: {fileID: 0}
+  currentPlayerIndex: 0
 --- !u!114 &568772054141841471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275711,6 +275709,16 @@ MonoBehaviour:
   isWaitingForTarget: 0
   pendingSkill: 
   pendingPlayerIndex: -1
+  skill1Button: {fileID: 4154336567583965772}
+  skill2Button: {fileID: 1748639616870672649}
+  skill3Button: {fileID: 151117734038371682}
+  skill4Button: {fileID: 87896144006217784}
+  skill5Button: {fileID: 577991091169507018}
+  catSkill1Button: {fileID: 1315479698}
+  catSkill2Button: {fileID: 121548979}
+  catSkill3Button: {fileID: 790104856}
+  catSkill4Button: {fileID: 1945005604}
+  catSkill5Button: {fileID: 1663391579}
 --- !u!114 &3720424681303388707
 MonoBehaviour:
   m_ObjectHideFlags: 0
