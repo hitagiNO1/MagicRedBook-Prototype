@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &947663099996756836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1187138811509714888}
+  - component: {fileID: 3185419275821275501}
+  - component: {fileID: 1163215823590722691}
+  - component: {fileID: 6993363932666302220}
+  m_Layer: 5
+  m_Name: BattleFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1187138811509714888
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947663099996756836}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3185419275821275501
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947663099996756836}
+  m_CullTransparentMesh: 1
+--- !u!114 &1163215823590722691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947663099996756836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6993363932666302220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947663099996756836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d0746d0105f5a40b690bf50328dcbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+  - effectName: Fish1
+    prefab: {fileID: 6309938433455153388, guid: 39ec2ca8b6d02564f9e5e016ad89c66b, type: 3}
+    leftPosition: {x: 805, y: -352}
+    rightPosition: {x: -805, y: -352}
+  - effectName: Fish2
+    prefab: {fileID: 6132545290400878021, guid: c736216d94ea7db4ab2419d7fac083e4, type: 3}
+    leftPosition: {x: 708, y: -206}
+    rightPosition: {x: -708, y: -206}
+  - effectName: Snake1
+    prefab: {fileID: 939851737400155110, guid: 5bc6e420fd69f054091d8959ea05a536, type: 3}
+    leftPosition: {x: 677, y: -230}
+    rightPosition: {x: -677, y: -230}
+  - effectName: Snake2
+    prefab: {fileID: 8303397880169534836, guid: 82e05f0cf86a65242b041188f325d4c4, type: 3}
+    leftPosition: {x: 800, y: -450}
+    rightPosition: {x: -800, y: -450}
+  - effectName: Clock1
+    prefab: {fileID: 2359626551078060115, guid: e4a5840800b3ec148ac9854b5e9d83bb, type: 3}
+    leftPosition: {x: 696, y: -100}
+    rightPosition: {x: -696, y: -100}
+  - effectName: Clock1
+    prefab: {fileID: 2359626551078060115, guid: e4a5840800b3ec148ac9854b5e9d83bb, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: Clock2
+    prefab: {fileID: 803669831136065606, guid: d66487d44382b514eb36b546d658f33b, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: Blanket2
+    prefab: {fileID: 3661147550612665169, guid: 95a92b3b78c75694cbcf8cb23a39a62f, type: 3}
+    leftPosition: {x: 0, y: -571.11}
+    rightPosition: {x: 0, y: 571.11}
+  - effectName: Blanket3
+    prefab: {fileID: 148805211539422760, guid: b1bda65ed4f8749489d8664c4d5cdf8f, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: B1
+    prefab: {fileID: 7857229456275139305, guid: f0baca2da1297544cb3418512e69c8e7, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: B2
+    prefab: {fileID: 3644402868235097841, guid: 3a1e3f55ef1b3c74a95fb68d400d5890, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: B3
+    prefab: {fileID: 127556641128039160, guid: df148f9456435c740bfe066bdd1f11f3, type: 3}
+    leftPosition: {x: -800, y: 0}
+    rightPosition: {x: 800, y: 0}
+  - effectName: B4
+    prefab: {fileID: 1833722022911798073, guid: d349857acc135b54db84c4dc15a973a0, type: 3}
+    leftPosition: {x: -800, y: 0}
+    rightPosition: {x: 800, y: 0}
+  - effectName: B5
+    prefab: {fileID: 2026065819063308762, guid: d4725b050c8ac3e42a9363d2dda33b47, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: L1
+    prefab: {fileID: 2433122209791958464, guid: d09b14b31c91bfb46b976d578a548999, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: L2
+    prefab: {fileID: 2928077199585023620, guid: 6736cdb9ddf9fc940aab52edf32a6bd6, type: 3}
+    leftPosition: {x: -800, y: 0}
+    rightPosition: {x: 800, y: 0}
+  - effectName: L3
+    prefab: {fileID: 6809608666892365786, guid: 855fa0dc52da62a4489ff1482b5dd1a5, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  - effectName: L4
+    prefab: {fileID: 8046036732119873484, guid: 0713a2e548a45a14492ec4b70ea6e270, type: 3}
+    leftPosition: {x: 785, y: 0}
+    rightPosition: {x: -795, y: 0}
+  - effectName: L5
+    prefab: {fileID: 2993475924266301686, guid: bc824bec5634ec04ead98ad05178b2dd, type: 3}
+    leftPosition: {x: 0, y: 0}
+    rightPosition: {x: 0, y: 0}
+  targetCanvas: {fileID: 947663099996756836}
+  BlackHead: {fileID: 0}
+  hurtFace: {fileID: 21300000, guid: 0a1909266f37a9d48a4f410a50227a47, type: 3}
+  LylaHead: {fileID: 0}
+  LylahurtFace: {fileID: 21300000, guid: 81eb106a1615a9844a36a8f674d7f9ef, type: 3}
+  Black: {fileID: 0}
+  Lyla: {fileID: 0}
+  BlackBall: {fileID: 21300000, guid: 398ef47556f5e0f41a97138a7984b777, type: 3}
