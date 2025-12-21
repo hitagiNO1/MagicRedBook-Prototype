@@ -284,19 +284,33 @@ public class BattleSystem : MonoBehaviour
 
         if (skillManager != null)
         {
-            // 清空所有選擇
+            // 1. 清空兩個玩家的技能選擇
             skillManager.skillQueues[0].Clear();
             skillManager.skillQueues[1].Clear();
             skillManager.selectedSkillNames[0].Clear();
             skillManager.selectedSkillNames[1].Clear();
             skillManager.selectedTargets.Clear();
 
-            // 清除高亮與圖示
+            // 2. 清除目標高亮
             skillManager.ClearAllHighlights();
-            skillManager.InitSkillIcons();  // 這會重置圖示 + 更新按鈕狀態
 
-            // 額外保險：強制更新一次按鈕（確保所有變灰的已選按鈕恢復）
-           // skillManager.UpdateAllSkillButtonStates();
+            // 3. 🔥 重置所有玩家技能冷卻為 0（最優雅的方式）
+            foreach (var key in new List<string>(skillManager.skillCooldowns.Keys))
+            {
+                // 只重置玩家技能（key 結尾為 _0 或 _1）
+                if (key.EndsWith("_0") || key.EndsWith("_1"))
+                {
+                    skillManager.skillCooldowns[key] = 0;
+                }
+            }
+
+            // 4. 重置技能圖示與按鈕狀態
+            skillManager.InitSkillIcons();  // 這會呼叫 ResetSkillIcons() + ResetAllSkillButtonStates() + UpdateAllSkillButtonStates()
+
+            // 5. 額外保險：強制更新一次按鈕狀態（確保冷卻歸零後外觀正確）
+            skillManager.UpdateAllSkillButtonStates();
+
+            Debug.Log("逃跑成功：已清空技能選擇、目標高亮，並重置所有技能冷卻時間");
         }
 
         state = BattleState.RUN;
