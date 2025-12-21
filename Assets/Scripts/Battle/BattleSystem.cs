@@ -159,7 +159,7 @@ public class BattleSystem : MonoBehaviour
         skillManager?.InitSkillIcons(); // 這會呼叫 Reset + UpdateAllSkillButtonStates
     }
 
-    // 玩家按下「確認」後呼叫此方法（由 SkillManager.OnConfirmSkillQueue 最後呼叫）
+    // 玩家按下「確認」後呼叫此方法（由 SkillManager.OnConfirmSkillQueue 最後呼叫）這家#######################
     public void OnPlayerConfirmSkillQueue()
     {
         if (AllEnemiesDead())

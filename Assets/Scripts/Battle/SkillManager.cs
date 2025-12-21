@@ -920,7 +920,7 @@ public class SkillManager : MonoBehaviour
                 StartCoroutine(ExecuteSkillQueueWithCallback(playerIndex));
             }
         }
-        battlesystem.OnPlayerConfirmSkillQueue();
+        //battlesystem.OnPlayerConfirmSkillQueue();
     }
 
     void PerformMultiTargetAttack(int playerIndex, int damage)
