@@ -2549,6 +2549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1654170161}
   - component: {fileID: 1654170160}
+  - component: {fileID: 1654170162}
   m_Layer: 0
   m_Name: gameflow
   m_TagString: Untagged
@@ -2589,6 +2590,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1654170162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654170159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecf7f4d80ac9ba348bd740420970ba21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultCursor: {fileID: 2800000, guid: e0ebcdb566e8f9147ad15387ddc1bfec, type: 3}
+  clickCursor: {fileID: 2800000, guid: 729cda12580003d41b696295162011cd, type: 3}
+  hotSpot: {x: 0, y: 0}
 --- !u!1 &1706603028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3202,7 +3218,7 @@ MonoBehaviour:
   mouseSpawnInterval: 1.5
   c4SpawnInterval: 3
   shakeDuration: 0.5
-  shakeMagnitude: 0.8
+  shakeMagnitude: 0.5
   shakeSpeed: 25
 --- !u!4 &2091093244
 Transform:
