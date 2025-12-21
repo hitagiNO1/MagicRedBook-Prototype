@@ -16,7 +16,7 @@ public class SkillManager : MonoBehaviour
     public Itemuse itemuse;
     public LayerMask enemyLayer;
     public LayerMask playerLayer;
-    private Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
+    public Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
     private int skill2CooldownTurns = 3;
     private int skill3CooldownTurns = 2;
     private int skill4CooldownTurns = 3;
@@ -52,7 +52,7 @@ public class SkillManager : MonoBehaviour
     public Button catSkill4Button;
     public Button catSkill5Button;
 
-    void Start()
+    public void Start()
     {
         audioSource = GetComponent<AudioSource>();
         if (playerUnits.Count != 2) Debug.LogError("playerUnits count is not 2, check initialization");
@@ -230,7 +230,7 @@ public class SkillManager : MonoBehaviour
         button.colors = colors;
     }
 
-    private void UpdateAllSkillButtonStates()
+    public void UpdateAllSkillButtonStates()
     {
         // Player 0
         SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
@@ -280,7 +280,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // ==================== 新增：統一冷卻檢查與提示 ====================
-    private bool CheckSkillCooldownAndShowMessage(int playerIndex, string skillName, string displayName = null)
+    public bool CheckSkillCooldownAndShowMessage(int playerIndex, string skillName, string displayName = null)
     {
         if (displayName == null) displayName = skillName.Replace("Skill_", "").Replace("catSkill_", "");
 
