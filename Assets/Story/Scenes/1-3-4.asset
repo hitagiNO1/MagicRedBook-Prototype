@@ -22,7 +22,10 @@ MonoBehaviour:
       actionType: 1
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 124ee26021ebf2346ae80ba2ce246c88, type: 2}
+      timing: 0
   - text: "\u7D50\u675F\u4E86\u2026\u2026\u5927\u6982\u5427\u3002"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:
@@ -96,7 +99,10 @@ MonoBehaviour:
   - text: "(\u9B54\u6CD5\u66F8\u4E0A\u7684\u5149\u8292\u9010\u6F38\u7184\u6EC5\uFF0C\u56DB\u5468\u56DE\u6B78\u5BC2\u975C\u3002\u4F46\u67D0\u7A2E\u7570\u6A23\u7684\u58D3\u8FEB\u611F\uFF0C\u4ECD\u5728\u7A7A\u6C23\u4E2D\u76E4\u65CB\u4E0D\u6563\u3002)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 25218410a1366a944be45f41c0b6105e, type: 2}
+      timing: 0
   - text: "\u7B49\u4E00\u4E0B\u2026\u2026\u840A\u83C8\uFF0C\u59B3\u6709\u6C92\u6709\u807D\u5230\u2026\u2026"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
     actions:

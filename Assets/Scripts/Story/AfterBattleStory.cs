@@ -34,7 +34,6 @@ public class AfterBattleStory : MonoBehaviour
             // ½T«O¹CÀ¸ª¬ºA¬O Playing
             if (GameStateManager.Instance.IsState(GameState.Playing))
             {
-                Debug.Log("77777777777777777");
                 GameController.Instance.PlayScene(storyToPlay);
                 hasTriggered = true;
             }

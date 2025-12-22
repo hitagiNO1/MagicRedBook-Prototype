@@ -144,6 +144,10 @@ public class Itemuse : MonoBehaviour
                 // 減少物品庫存
                 itemInventory["Can"]--;
 
+                int targetIndex = skillManager.playerUnits.IndexOf(target);
+                bool isTargetLeft = (targetIndex == 0);
+                EffectManager.Instance.PlayUIEffectOneSide("L2", isTargetLeft);
+
                 dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 神聖罐罐 恢復 {target.unitName} 的血量（+{healAmount}）";
                 Debug.Log($"使用 神聖罐罐，恢復 {healAmount} HP，剩餘數量：{itemInventory["Can"]}");
             }
@@ -185,6 +189,9 @@ public class Itemuse : MonoBehaviour
 
             // 減少物品庫存
             itemInventory["Tuna"]--;
+
+            EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
+            EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
 
             // 更清楚的對話顯示
             if (healedCount > 0)

@@ -11,7 +11,7 @@ public class CharControlles : MonoBehaviour
     private float h;
     private float v;
     private float damping = 2.5f;
-
+    public SpriteRenderer redbook;
     [Header("動畫控制")]
     public SkeletonAnimation skeletonAnimation;
     public AnimationReferenceAsset idle, walking, RedBook;
@@ -106,8 +106,15 @@ public class CharControlles : MonoBehaviour
         if (meshRenderer == null) return;
 
         if (GameStateManager.Instance.IsState(GameState.Battle))
+        {
             meshRenderer.enabled = false;
+            redbook.enabled = false;
+        }
+
         else
+        {
             meshRenderer.enabled = true;
+            redbook.enabled = true;        }
+
     }
 }
