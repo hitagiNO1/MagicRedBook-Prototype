@@ -477,7 +477,6 @@ public class SkillManager : MonoBehaviour
             skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將手上的球分散甩出攻擊全部敵人";
             EffectManager.Instance.PlayUIEffect("B2", new Vector2(0, 0));
-            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0), 0.22f, 0f);
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 2";
@@ -496,7 +495,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
             skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將身上的毛整理好，使防禦力上升";
-            EffectManager.Instance.PlayUIEffect("B3", new Vector2(0, 0));
+            EffectManager.Instance.PlayUIEffect("B3", new Vector2(-800, 0));
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 3";
@@ -515,7 +514,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
             skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 緊縮成一團，使敵人找不到縫隙攻擊";
-            EffectManager.Instance.PlayUIEffect("B4", new Vector2(0, 0));
+            EffectManager.Instance.PlayUIEffect("B4", new Vector2(-800, 0));
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 4";
@@ -565,7 +564,6 @@ public class SkillManager : MonoBehaviour
             PerformBasicAttack(playerIndex, target, buffedDamage);
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
             EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
-            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0), 0.5f, 0f);
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";
@@ -583,7 +581,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
             skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 將傷口進行包紮";
-            EffectManager.Instance.PlayUIEffect("L2", new Vector2(0, 0));
+            EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 2";
@@ -637,6 +635,12 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2);
             skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 對 {target.unitName} 施展魔法，提升其攻擊力";
+
+            // 找出目標在玩家列表中的索引 (假設 0 是左邊，1 是右邊)
+            int targetIndex = playerUnits.IndexOf(target);
+            //判斷是否為左邊 (若 targetIndex 為 0 則為 true，否則為 false)
+            bool isTargetLeft = (targetIndex == 1);
+            EffectManager.Instance.PlayUIEffectOneSide("L4", isTargetLeft);
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 4 對 {target.unitName}";
@@ -657,6 +661,7 @@ public class SkillManager : MonoBehaviour
             }
             skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過歌聲振奮士氣，使我方全體承受傷害降低";
+            EffectManager.Instance.PlayUIEffect("L5", new Vector2(0, 0));
         });
 
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 5";

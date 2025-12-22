@@ -21,7 +21,8 @@ public class BattleSystem : MonoBehaviour
     public BuffDebuffManager buffDebuffManager;
     public GameController gameScript;
     public mutiplebattle battleTrigger;
-
+    [Header("特效容器")]
+    public GameObject battleFxContainer;
     // 新增旗標：防止重複結束戰鬥或動畫
     private bool isBattleEnding = false;
     private bool hideAnimationTriggered = false;
@@ -150,12 +151,23 @@ public class BattleSystem : MonoBehaviour
             EndBattle();
             return;
         }
-        state = BattleState.ENEMYTURN;
         StartCoroutine(EnemyTurn());
     }
 
     public IEnumerator EnemyTurn()
     {
+        // --- 新增：等待玩家特效結束 ---
+        if (battleFxContainer != null)
+        {
+            // 當 battleFxContainer 裡面還有子物件時，就持續等待下一幀
+            while (battleFxContainer.transform.childCount > 0)
+            {
+                yield return null; // 等待一幀
+            }
+        }
+        // ----------------------------
+        state = BattleState.ENEMYTURN;
+
         skillManager?.ClearAllHighlights();
         if (dialogueText != null)
             dialogueText.text = "敵人回合...";

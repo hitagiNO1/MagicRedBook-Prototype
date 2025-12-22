@@ -294,56 +294,67 @@ public class EffectManager : MonoBehaviour
         // 最後保證回原位置
         BlackHead.rectTransform.anchoredPosition = startPos;
     }
+    // 讓 Black 跳
     public void BlackJump()
     {
-        Vector3 startPos = BlackHead.rectTransform.anchoredPosition;
-        StartCoroutine(PlayBounce(startPos));
+        // 傳入 Black 的 RectTransform
+        StartCoroutine(PlayBounce(BlackHead.rectTransform));
     }
+
+    // 讓 Lyla 跳
     public void LylaJump()
     {
-        Vector3 startPos = LylaHead.rectTransform.anchoredPosition;
-        StartCoroutine(PlayBounce(startPos));
+        // 傳入 Lyla 的 RectTransform
+        StartCoroutine(PlayBounce(LylaHead.rectTransform));
     }
-    private IEnumerator PlayBounce(Vector3 startPos)
+
+    // 通用跳躍函式：傳入「誰」要跳 (target)
+    private IEnumerator PlayBounce(RectTransform target)
     {
-        // 跳動高度
+        if (target == null) yield break;
+
+        // 1. 先記住這個人原本站在哪裡
+        Vector3 startPos = target.anchoredPosition;
+
         float jumpHeight = 20f;
-        // 動畫時間
         float duration = 0.2f;
         float half = duration * 0.5f;
         float t = 0f;
+
         // ----------- 第一段：向上跳 -----------
         while (t < half)
         {
             t += Time.deltaTime;
             float percent = t / half;
 
-            // EaseOut (跳起來快→慢)
+            // EaseOut
             float height = Mathf.Lerp(0, jumpHeight, percent);
 
-            BlackHead.rectTransform.anchoredPosition =
-                startPos + Vector3.up * height;
+            // 【關鍵修正】這裡改成移動傳進來的 target，而不是寫死的 BlackHead
+            target.anchoredPosition = startPos + Vector3.up * height;
 
             yield return null;
         }
-        // 重置 t
+
         t = 0f;
+
         // ----------- 第二段：落下 -----------
         while (t < half)
         {
             t += Time.deltaTime;
             float percent = t / half;
 
-            // EaseIn (落下慢→快)
+            // EaseIn
             float height = Mathf.Lerp(jumpHeight, 0, percent);
 
-            BlackHead.rectTransform.anchoredPosition =
-                startPos + Vector3.up * height;
+            // 【關鍵修正】移動 target
+            target.anchoredPosition = startPos + Vector3.up * height;
 
             yield return null;
         }
-        // 最後保證回原位置
-        BlackHead.rectTransform.anchoredPosition = startPos;
+
+        // 最後確保回到原本的位置
+        target.anchoredPosition = startPos;
     }
     public void LylaMove()
     {
