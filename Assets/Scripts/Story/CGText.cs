@@ -19,8 +19,10 @@ public class CGText : MonoBehaviour
     public PlayableAsset FadeOutTimeline;  // 淡出 (從亮變黑)
 
     [Header("Data")]
+    public int targetItemID; // 請在 Inspector 設定這個劇情對應的物品 ID (0~5)
     public StoryScene currentScene;
     public string mainSceneName;
+    public float waitAfterSceneEnd = 3.5f;
     private int sentenceIndex = -1;
     private Animator animator;
     private StoryScene.Sentence currentSentence;
@@ -35,7 +37,6 @@ public class CGText : MonoBehaviour
         // 防呆：如果忘記拉 Director，嘗試自動抓取
         if (director == null)
             director = GetComponent<PlayableDirector>();
-
         StartCoroutine(PlaySceneSequence());
     }
 
@@ -88,7 +89,7 @@ public class CGText : MonoBehaviour
         {
             director.playableAsset = TCG;
             // 設定為循環播放 (這樣對話時背景會一直動)
-            director.extrapolationMode = DirectorWrapMode.Loop;
+            director.extrapolationMode = DirectorWrapMode.Hold;
             director.Play();
         }
 
@@ -121,9 +122,9 @@ public class CGText : MonoBehaviour
             // 淡出通常不需要循環，設為 Hold (停在最後一幀全黑)
             director.extrapolationMode = DirectorWrapMode.Hold;
             director.Play();
-
             // 關鍵：等待淡出播完
-            yield return new WaitUntil(() => director.state != PlayState.Playing);
+            yield return new WaitForSeconds(waitAfterSceneEnd);
+
         }
 
         Debug.Log("場景結束 (全黑)。");
@@ -132,19 +133,25 @@ public class CGText : MonoBehaviour
 
     private IEnumerator ReturnToMainScene()
     {
-        // 1. 找到原本的主場景
+        // 1. 告訴管理器：這個 ID 的事件已經完成了！
+        if (CGManager.Instance != null)
+        {
+            CGManager.Instance.SetItemTriggered(targetItemID);
+        }
+        // 2. 找到原本的主場景
         Scene mainScene = SceneManager.GetSceneByName(mainSceneName);
 
         if (mainScene.IsValid() && mainScene.isLoaded)
         {
-            // 2. 把主場景的所有物件重新打開 (Resume)
             GameObject[] rootObjects = mainScene.GetRootGameObjects();
             foreach (GameObject obj in rootObjects)
             {
+                // 當這行執行，主場景物件被設為 Active = true
+                // 它們身上的 ItemTrigger.OnEnable() 就會瞬間執行
+                // 然後自動發現 Manager 的狀態變了，進而自己換圖
                 obj.SetActive(true);
             }
 
-            // 設定回主場景為 Active
             SceneManager.SetActiveScene(mainScene);
         }
         else
@@ -152,11 +159,9 @@ public class CGText : MonoBehaviour
             Debug.LogError("找不到主場景，可能已被卸載或是名稱錯誤！");
         }
 
-        // 3. 卸載目前的小遊戲場景
-        // 注意：這裡使用 gameObject.scene 可以自動抓取腳本所在的場景
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
-    // --- 以下為原本的對話邏輯 (無大幅更動) ---
+    // --- 以下對話邏輯 
 
     public void PlayNextSentence()
     {

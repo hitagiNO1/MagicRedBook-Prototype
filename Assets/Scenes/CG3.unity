@@ -704,7 +704,6 @@ GameObject:
   - component: {fileID: 630513683}
   - component: {fileID: 630513682}
   - component: {fileID: 630513681}
-  - component: {fileID: 630513685}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -797,18 +796,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &630513685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 630513680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8c91a045cfb0624ab4ce1a53af454c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &918627337
 GameObject:
   m_ObjectHideFlags: 3
@@ -951,8 +938,10 @@ MonoBehaviour:
   FadeInTimeline: {fileID: 11400000, guid: f11bcc1797edd194499f24182994d201, type: 2}
   TCG: {fileID: 11400000, guid: 6eb9b04549b014f44934248699ac1e16, type: 2}
   FadeOutTimeline: {fileID: 11400000, guid: ce32c7930574037449301d3347bd85c3, type: 2}
+  targetItemID: 0
   currentScene: {fileID: 11400000, guid: 38d7858ffb76f2d4bb03e45cd24b75e1, type: 2}
   mainSceneName: CH2
+  waitAfterSceneEnd: 3.5
 --- !u!95 &1118190013
 Animator:
   serializedVersion: 5
