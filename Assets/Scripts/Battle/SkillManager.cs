@@ -981,25 +981,46 @@ public class SkillManager : MonoBehaviour
             battlesystem.OnPlayerConfirmSkillQueue();
     }
 
+    /* private void ExecuteSkillAction(System.Action skillAction, int playerIndex)
+     {
+         if (skillAction == null) return;
+         try
+         {
+             if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count || playerUnits[playerIndex] == null) return;
+             if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == null) return;
+             skillAction.Invoke();
+         }
+         catch (System.Exception e)
+         {
+             Debug.LogError($"Error executing skill for player {playerIndex}: {e.Message}\n{e.StackTrace}");
+             if (skillQueues.ContainsKey(playerIndex))
+             {
+                 skillQueues[playerIndex].Clear();
+                 selectedSkillNames[playerIndex].Clear();
+             }
+         }
+     }*/
+
     private void ExecuteSkillAction(System.Action skillAction, int playerIndex)
     {
         if (skillAction == null) return;
-        try
-        {
-            if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count || playerUnits[playerIndex] == null) return;
-            if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == null) return;
-            skillAction.Invoke();
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Error executing skill for player {playerIndex}: {e.Message}\n{e.StackTrace}");
-            if (skillQueues.ContainsKey(playerIndex))
-            {
-                skillQueues[playerIndex].Clear();
-                selectedSkillNames[playerIndex].Clear();
-            }
-        }
+
+        // ❗ 只有「真的需要目標」的技能才檢查
+        bool needsTarget =
+            selectedSkillNames[playerIndex].Contains("Skill_1") ||
+            selectedSkillNames[playerIndex].Contains("Skill_5") ||
+            selectedSkillNames[playerIndex].Contains("catSkill_1") ||
+            selectedSkillNames[playerIndex].Contains("catSkill_4") ||
+            selectedSkillNames[playerIndex].Contains("Can") ||
+            selectedSkillNames[playerIndex].Contains("Grass") ||
+            selectedSkillNames[playerIndex].Contains("Drying");
+
+        if (needsTarget && selectedTargets[playerIndex] == null)
+            return;
+
+        skillAction.Invoke();
     }
+
 
     IEnumerator ExecuteSkillQueue(int playerIndex)
     {

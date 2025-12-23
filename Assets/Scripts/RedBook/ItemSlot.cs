@@ -103,7 +103,7 @@ public class ItemSlot : MonoBehaviour
                 itemuse.TriggerDryingForPlayer(currentPlayerIndex);
                 break;
             case "ÂC³½¦×ªd":
-                itemuse.UseTuna(currentPlayerIndex);
+                itemuse.TriggerTunaForPlayer(currentPlayerIndex);
                 skillmanager.dialogueText.text = $"{skillmanager.playerUnits[currentPlayerIndex].unitName} ¿ï¾Ü¤F Tuna";
                 break;
 

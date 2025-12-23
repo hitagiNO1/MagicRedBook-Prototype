@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -6,95 +6,95 @@ using TMPro;
 public class Itemuse : MonoBehaviour
 {
     public RedBook redbook;
-    public SkillManager skillManager; // ¤Ş¥Î SkillManager
-    public BuffDebuffManager buffDebuffManager; // ¤Ş¥Î BuffDebuffManager ¥H°õ¦æ®ÄªG
-    public TextMeshProUGUI dialogueText; // ¥Î©óÅã¥Ü°T®§
+    public SkillManager skillManager; // å¼•ç”¨ SkillManager
+    public BuffDebuffManager buffDebuffManager; // å¼•ç”¨ BuffDebuffManager ä»¥åŸ·è¡Œæ•ˆæœ
+    public TextMeshProUGUI dialogueText; // ç”¨æ–¼é¡¯ç¤ºè¨Šæ¯
     public List<BattleHUD> playerHUDs;
     public List<Unit> playerUnits;
     public ItemData can;
     public ItemData tuna;
     public ItemData grass;
     public ItemData drying;
-
-    // ª««~®w¦sºŞ²z
-    private Dictionary<string, int> itemInventory = new Dictionary<string, int>(); // ª««~®w¦s
+    private float lastTunaClickTime = 0f;
+    // ç‰©å“åº«å­˜ç®¡ç†
+    private Dictionary<string, int> itemInventory = new Dictionary<string, int>(); // ç‰©å“åº«å­˜
 
     void Start()
     {
-        // ±q ItemData Åª¨ú¹D¨ã¼Æ¶q¨Ãªì©l¤Æ®w¦s
+        // å¾ ItemData è®€å–é“å…·æ•¸é‡ä¸¦åˆå§‹åŒ–åº«å­˜
         if (can != null)
         {
             itemInventory["Can"] = can.amount;
-            Debug.Log($"ªì©l¤Æ Can ¼Æ¶q¡G{can.amount}");
+            Debug.Log($"åˆå§‹åŒ– Can æ•¸é‡ï¼š{can.amount}");
         }
         else
         {
-            Debug.LogWarning("Can ItemData ¥¼«ü©w¡I");
+            Debug.LogWarning("Can ItemData æœªæŒ‡å®šï¼");
         }
 
         if (tuna != null)
         {
             itemInventory["Tuna"] = tuna.amount;
-            Debug.Log($"ªì©l¤Æ Tuna ¼Æ¶q¡G{tuna.amount}");
+            Debug.Log($"åˆå§‹åŒ– Tuna æ•¸é‡ï¼š{tuna.amount}");
         }
         else
         {
-            Debug.LogWarning("Tuna ItemData ¥¼«ü©w¡I");
+            Debug.LogWarning("Tuna ItemData æœªæŒ‡å®šï¼");
         }
 
         if (grass != null)
         {
             itemInventory["Grass"] = grass.amount;
-            Debug.Log($"ªì©l¤Æ Grass ¼Æ¶q¡G{grass.amount}");
+            Debug.Log($"åˆå§‹åŒ– Grass æ•¸é‡ï¼š{grass.amount}");
         }
         else
         {
-            Debug.LogWarning("Grass ItemData ¥¼«ü©w¡I");
+            Debug.LogWarning("Grass ItemData æœªæŒ‡å®šï¼");
         }
 
         if (drying != null)
         {
             itemInventory["Drying"] = drying.amount;
-            Debug.Log($"ªì©l¤Æ Drying ¼Æ¶q¡G{drying.amount}");
+            Debug.Log($"åˆå§‹åŒ– Drying æ•¸é‡ï¼š{drying.amount}");
         }
         else
         {
-            Debug.LogWarning("Drying ItemData ¥¼«ü©w¡I");
+            Debug.LogWarning("Drying ItemData æœªæŒ‡å®šï¼");
         }
 
-        // ÅçÃÒ©Ò¦³ª««~®w¦s¬O§_¥¿½Tªì©l¤Æ
-        Debug.Log("=== ª««~®w¦sªì©l¤Æ§¹¦¨ ===");
+        // é©—è­‰æ‰€æœ‰ç‰©å“åº«å­˜æ˜¯å¦æ­£ç¢ºåˆå§‹åŒ–
+        Debug.Log("=== ç‰©å“åº«å­˜åˆå§‹åŒ–å®Œæˆ ===");
         foreach (var item in itemInventory)
         {
-            Debug.Log($"{item.Key}: {item.Value} ­Ó");
+            Debug.Log($"{item.Key}: {item.Value} å€‹");
         }
     }
 
 
 
-    // ÅçÃÒª««~¬O§_¥i¥Î¡]Ãş¦ü ValidateSkill¡^
+    // é©—è­‰ç‰©å“æ˜¯å¦å¯ç”¨ï¼ˆé¡ä¼¼ ValidateSkillï¼‰
     private bool ValidateItem(int playerIndex, string itemName)
     {
         if (!itemInventory.ContainsKey(itemName) || itemInventory[itemName] <= 0)
         {
-            dialogueText.text = $"¨S¦³ {itemName} ¥i¨Ï¥Î¡I";
+            dialogueText.text = $"æ²’æœ‰ {itemName} å¯ä½¿ç”¨ï¼";
             Debug.LogWarning($"No {itemName} left in inventory!");
             return false;
         }
         if (skillManager.GetTotalSelectedSkills() >= skillManager.maxSkillPerTurn)
         {
-            dialogueText.text = "§Ş¯àÄæ¦ì¤wº¡¡I";
+            dialogueText.text = "æŠ€èƒ½æ¬„ä½å·²æ»¿ï¼";
             return false;
         }
-        if (skillManager.selectedSkillNames[playerIndex].Contains(itemName))
+       /* if (skillManager.selectedSkillNames[playerIndex].Contains(itemName))
         {
             CancelItem(playerIndex, itemName);
             return false;
-        }
+        }*/
         return true;
     }
 
-    // ¨ú®øª««~¡]Ãş¦ü CancelSkill¡^
+    // å–æ¶ˆç‰©å“ï¼ˆé¡ä¼¼ CancelSkillï¼‰
     private void CancelItem(int playerIndex, string itemName)
     {
         if (skillManager.selectedSkillNames[playerIndex].Contains(itemName))
@@ -107,13 +107,13 @@ public class Itemuse : MonoBehaviour
                 skillManager.HighlightTarget(skillManager.selectedTargets[playerIndex], false);
                 skillManager.selectedTargets[playerIndex] = null;
             }
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¨ú®ø¤F {itemName}";
-            skillManager.AddSkillIcon(); // «ì´_¹Ï¥Ü
+            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} å–æ¶ˆäº† {itemName}";
+            skillManager.AddSkillIcon(); // æ¢å¾©åœ–ç¤º
             Debug.Log($"Player {playerIndex} cancelled item: {itemName}");
         }
     }
 
-    // ¨Ï¥Î Can¡]¿ï¾Ü¤@¦Wª±®a³æ¦ì¦^´_¤w·l¥¢¦å¶qªº60%¦å¶q¡^
+    // ä½¿ç”¨ Canï¼ˆé¸æ“‡ä¸€åç©å®¶å–®ä½å›å¾©å·²æå¤±è¡€é‡çš„60%è¡€é‡ï¼‰
     public void UseCan(int playerIndex, Unit target)
     {
         if (!ValidateItem(playerIndex, "Can") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target))
@@ -126,38 +126,38 @@ public class Itemuse : MonoBehaviour
         {
             if (target.currentHP > 0)
             {
-                // °õ¦æªvÀø¡G«ì´_¤w·l¥¢¦å¶qªº 60%
+                // åŸ·è¡Œæ²»ç™‚ï¼šæ¢å¾©å·²æå¤±è¡€é‡çš„ 60%
                 int lostHP = target.maxHP - target.currentHP;
                 int healAmount = Mathf.RoundToInt(lostHP * 0.6f);
                 target.currentHP = Mathf.Min(target.currentHP + healAmount, target.maxHP);
 
-                // === ÃöÁä¡G§ó·s¦å±ø UI ===
+                // === é—œéµï¼šæ›´æ–°è¡€æ¢ UI ===
                 if (target.battleHUD != null)
                 {
                     target.battleHUD.SetHP(target.currentHP);
                 }
                 else
                 {
-                    Debug.LogWarning($"¥Ø¼Ğ {target.unitName} ¨S¦³¸j©w battleHUD¡I");
+                    Debug.LogWarning($"ç›®æ¨™ {target.unitName} æ²’æœ‰ç¶å®š battleHUDï¼");
                 }
 
-                // ´î¤Öª««~®w¦s
-                itemInventory["Can"]--;
+                // æ¸›å°‘ç‰©å“åº«å­˜
+                can.amount--;
 
                 int targetIndex = skillManager.playerUnits.IndexOf(target);
                 bool isTargetLeft = (targetIndex == 0);
                 EffectManager.Instance.PlayUIEffectOneSide("L2", isTargetLeft);
 
-                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¨Ï¥Î ¯«¸tÅøÅø «ì´_ {target.unitName} ªº¦å¶q¡]+{healAmount}¡^";
-                Debug.Log($"¨Ï¥Î ¯«¸tÅøÅø¡A«ì´_ {healAmount} HP¡A³Ñ¾l¼Æ¶q¡G{itemInventory["Can"]}");
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ä½¿ç”¨ ç¥è–ç½ç½ æ¢å¾© {target.unitName} çš„è¡€é‡ï¼ˆ+{healAmount}ï¼‰";
+                Debug.Log($"ä½¿ç”¨ ç¥è–ç½ç½ï¼Œæ¢å¾© {healAmount} HPï¼Œå‰©é¤˜æ•¸é‡ï¼š{itemInventory["Can"]}");
             }
         });
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¿ï¾Ü¤F ¯«¸tÅøÅø ¹ï {target.unitName}";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} é¸æ“‡äº† ç¥è–ç½ç½ å° {target.unitName}";
         skillManager.RemoveSkillIcon();
     }
 
-    // ¨Ï¥Î Tuna¡]¦^´_§Ú¤è¥şÅé³æ¦ì¦Û¨­³Ì¤j¥Í©R30%ªº¦å¶q¡^
+    // ä½¿ç”¨ Tunaï¼ˆå›å¾©æˆ‘æ–¹å…¨é«”å–®ä½è‡ªèº«æœ€å¤§ç”Ÿå‘½30%çš„è¡€é‡ï¼‰
     public void UseTuna(int playerIndex)
     {
         if (!ValidateItem(playerIndex, "Tuna")) return;
@@ -165,21 +165,21 @@ public class Itemuse : MonoBehaviour
         skillManager.selectedSkillNames[playerIndex].Add("Tuna");
         skillManager.skillQueues[playerIndex].Add(() =>
         {
-            int totalHealedAmount = 0;   // ²Î­pÁ`¦@«ì´_¦h¤Ö¦å
-            int healedCount = 0;         // ²Î­pªvÀø¤F´X­Ó³æ¦ì
+            int totalHealedAmount = 0;   // çµ±è¨ˆç¸½å…±æ¢å¾©å¤šå°‘è¡€
+            int healedCount = 0;         // çµ±è¨ˆæ²»ç™‚äº†å¹¾å€‹å–®ä½
 
             foreach (Unit player in skillManager.playerUnits)
             {
-                if (player.currentHP > 0 && player.currentHP < player.maxHP) // ¥uªvÀø¦³·l¦åªº³æ¦ì¡]¥i¿ï¡^
+                if (player.currentHP > 0 && player.currentHP < player.maxHP) // åªæ²»ç™‚æœ‰æè¡€çš„å–®ä½ï¼ˆå¯é¸ï¼‰
                 {
-                    int healAmount = Mathf.RoundToInt(player.maxHP * 0.3f); // 30% ³Ì¤j¥Í©R
-                    int actualHeal = Mathf.Min(healAmount, player.maxHP - player.currentHP); // ¹ê»Ú«ì´_¶q¡]¤£·|¶W¹Lº¡¦å¡^
+                    int healAmount = Mathf.RoundToInt(player.maxHP * 0.3f); // 30% æœ€å¤§ç”Ÿå‘½
+                    int actualHeal = Mathf.Min(healAmount, player.maxHP - player.currentHP); // å¯¦éš›æ¢å¾©é‡ï¼ˆä¸æœƒè¶…éæ»¿è¡€ï¼‰
 
                     player.currentHP += actualHeal;
                     totalHealedAmount += actualHeal;
                     healedCount++;
 
-                    // §ó·s¦å±ø UI
+                    // æ›´æ–°è¡€æ¢ UI
                     if (player.battleHUD != null)
                     {
                         player.battleHUD.SetHP(player.currentHP);
@@ -187,30 +187,31 @@ public class Itemuse : MonoBehaviour
                 }
             }
 
-            // ´î¤Öª««~®w¦s
-            itemInventory["Tuna"]--;
+            // æ¸›å°‘ç‰©å“åº«å­˜
+           tuna.amount--;
 
             EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
             EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
 
-            // §ó²M·¡ªº¹ï¸ÜÅã¥Ü
+            // æ›´æ¸…æ¥šçš„å°è©±é¡¯ç¤º
             if (healedCount > 0)
             {
-                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¨Ï¥Î Tuna «ì´_¥şÅé¦å¶q¡]¦@ +{totalHealedAmount} HP¡AªvÀø¤F {healedCount} ­Ó³æ¦ì¡^";
-                Debug.Log($"¨Ï¥Î Tuna¡AÁ`«ì´_ {totalHealedAmount} HP¡AªvÀø {healedCount} ­Ó³æ¦ì¡A³Ñ¾l¼Æ¶q¡G{itemInventory["Tuna"]}");
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ä½¿ç”¨ Tuna æ¢å¾©å…¨é«”è¡€é‡ï¼ˆå…± +{totalHealedAmount} HPï¼Œæ²»ç™‚äº† {healedCount} å€‹å–®ä½ï¼‰";
+                Debug.Log($"ä½¿ç”¨ Tunaï¼Œç¸½æ¢å¾© {totalHealedAmount} HPï¼Œæ²»ç™‚ {healedCount} å€‹å–®ä½ï¼Œå‰©é¤˜æ•¸é‡ï¼š{itemInventory["Tuna"]}");
             }
             else
             {
-                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¨Ï¥Î Tuna¡A¦ı¥şÅé¤wº¡¦å¡AµL®ÄªG";
-                Debug.Log($"¨Ï¥Î Tuna¡A¦ıµL³æ¦ì»İ­nªvÀø¡A³Ñ¾l¼Æ¶q¡G{itemInventory["Tuna"]}");
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ä½¿ç”¨ Tunaï¼Œä½†å…¨é«”å·²æ»¿è¡€ï¼Œç„¡æ•ˆæœ";
+                Debug.Log($"ä½¿ç”¨ Tunaï¼Œä½†ç„¡å–®ä½éœ€è¦æ²»ç™‚ï¼Œå‰©é¤˜æ•¸é‡ï¼š{itemInventory["Tuna"]}");
             }
         });
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¿ï¾Ü¤F Tuna";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} é¸æ“‡äº† Tuna";
         skillManager.RemoveSkillIcon();
+       
     }
 
-    // ¨Ï¥Î Grass¡]¿ï¾Ü¤@¦Wª±®a³æ¦ì´£¤É¦Û¨­ÃzÀ»²v50%¨Ã´î¤Ö¦Û¨­30%ªº¨¾¿m¤O¡A«ùÄò¨â¦^¦X¡^
+    // ä½¿ç”¨ Grassï¼ˆé¸æ“‡ä¸€åç©å®¶å–®ä½æå‡è‡ªèº«çˆ†æ“Šç‡50%ä¸¦æ¸›å°‘è‡ªèº«30%çš„é˜²ç¦¦åŠ›ï¼ŒæŒçºŒå…©å›åˆï¼‰
     public void UseGrass(int playerIndex, Unit target)
     {
         if (!ValidateItem(playerIndex, "Grass") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target))
@@ -223,23 +224,23 @@ public class Itemuse : MonoBehaviour
         {
             if (target.currentHP > 0)
             {
-                // ´£¤ÉÃzÀ»²v 50%
+                // æå‡çˆ†æ“Šç‡ 50%
                 buffDebuffManager.ApplyCritChanceBuff(target, 0.5f, 2);
 
-                // ´î¤Ö¨¾¿m¤O 30%
+                // æ¸›å°‘é˜²ç¦¦åŠ› 30%
                 buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
 
-                itemInventory["Grass"]--; // ´î¤Ö®w¦s
-                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¨Ï¥Î Grass ±j¤Æ {target.unitName} ªºÃzÀ»¦ı«d®z¨¾¿m";
-                Debug.Log($"¨Ï¥Î Grass¡A³Ñ¾l¼Æ¶q¡G{itemInventory["Grass"]}");
+                grass.amount--; // æ¸›å°‘åº«å­˜
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ä½¿ç”¨ Grass å¼·åŒ– {target.unitName} çš„çˆ†æ“Šä½†å‰Šå¼±é˜²ç¦¦";
+                Debug.Log($"ä½¿ç”¨ Grassï¼Œå‰©é¤˜æ•¸é‡ï¼š{itemInventory["Grass"]}");
                 
             }
         });
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¿ï¾Ü¤F Grass ¹ï {target.unitName}";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} é¸æ“‡äº† Grass å° {target.unitName}";
         skillManager.RemoveSkillIcon();
     }
 
-    // ¨Ï¥Î Drying¡]¿ï¾Ü¤@¦Wª±®a³æ¦ì´£¤É¦Û¨­§ğÀ»¤O300%¡A«ùÄò¨â¦^¦X¡^
+    // ä½¿ç”¨ Dryingï¼ˆé¸æ“‡ä¸€åç©å®¶å–®ä½æå‡è‡ªèº«æ”»æ“ŠåŠ›300%ï¼ŒæŒçºŒå…©å›åˆï¼‰
     public void UseDrying(int playerIndex, Unit target)
     {
         if (!ValidateItem(playerIndex, "Drying") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target))
@@ -252,20 +253,20 @@ public class Itemuse : MonoBehaviour
         {
             if (target.currentHP > 0)
             {
-                // ´£¤É§ğÀ»¤O 300%¡]§Y x4¡^
+                // æå‡æ”»æ“ŠåŠ› 300%ï¼ˆå³ x4ï¼‰
                 buffDebuffManager.ApplyDamageBuff(target, 4.0f, 2);
 
-                itemInventory["Drying"]--; // ´î¤Ö®w¦s
-                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¨Ï¥Î Drying ¤j´T´£¤É {target.unitName} ªº§ğÀ»¤O";
-                Debug.Log($"¨Ï¥Î Drying¡A³Ñ¾l¼Æ¶q¡G{itemInventory["Drying"]}");
+                drying.amount--; // æ¸›å°‘åº«å­˜
+                dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ä½¿ç”¨ Drying å¤§å¹…æå‡ {target.unitName} çš„æ”»æ“ŠåŠ›";
+                Debug.Log($"ä½¿ç”¨ Dryingï¼Œå‰©é¤˜æ•¸é‡ï¼š{itemInventory["Drying"]}");
                
             }
         });
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} ¿ï¾Ü¤F Drying ¹ï {target.unitName}";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} é¸æ“‡äº† Drying å° {target.unitName}";
         skillManager.RemoveSkillIcon();
     }
 
-    // UI Ä²µo¤èªk¡GCan¡A»İ­nµ¥«İ¥Ø¼Ğ
+    // UI è§¸ç™¼æ–¹æ³•ï¼šCanï¼Œéœ€è¦ç­‰å¾…ç›®æ¨™
     public void TriggerCanForPlayer(int playerIndex)
     {
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
@@ -278,33 +279,40 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Can";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "½ĞÂIÀ»¤@­Óª±®aÀY¹³¥H¨Ï¥Î Can¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹ç©å®¶é ­åƒä»¥ä½¿ç”¨ Canï¼";
         }
         else
         {
-            dialogueText.text = "¨S¦³ Can ¥i¨Ï¥Î¡I";
+            dialogueText.text = "æ²’æœ‰ Can å¯ä½¿ç”¨ï¼";
         }
     }
 
-    // UI Ä²µo¤èªk¡GTuna¡AµL»İ¥Ø¼Ğ
+    // UI è§¸ç™¼æ–¹æ³•ï¼šTunaï¼Œç„¡éœ€ç›®æ¨™
     public void TriggerTunaForPlayer(int playerIndex)
     {
+        // é˜²æ­¢çŸ­æ™‚é–“å…§é‡è¤‡è§¸ç™¼ (0.2ç§’å†·å»)
+        if (Time.time - lastTunaClickTime < 0.2f) return;
+        lastTunaClickTime = Time.time;
+
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
+
+        // åŸæœ¬çš„é‚è¼¯
         if (skillManager.selectedSkillNames[playerIndex].Contains("Tuna"))
         {
             CancelItem(playerIndex, "Tuna");
+            return;
         }
-        else if (HasItem("Tuna"))
+
+        if (!HasItem("Tuna"))
         {
-            UseTuna(playerIndex);
+            dialogueText.text = "æ²’æœ‰ Tuna å¯ä½¿ç”¨ï¼";
+            return;
         }
-        else
-        {
-            dialogueText.text = "¨S¦³ Tuna ¥i¨Ï¥Î¡I";
-        }
+
+        UseTuna(playerIndex);
     }
 
-    // UI Ä²µo¤èªk¡GGrass¡A»İ­nµ¥«İ¥Ø¼Ğ
+    // UI è§¸ç™¼æ–¹æ³•ï¼šGrassï¼Œéœ€è¦ç­‰å¾…ç›®æ¨™
     public void TriggerGrassForPlayer(int playerIndex)
     {
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
@@ -317,15 +325,15 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Grass";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "½ĞÂIÀ»¤@­Óª±®aÀY¹³¥H¨Ï¥Î Grass¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹ç©å®¶é ­åƒä»¥ä½¿ç”¨ Grassï¼";
         }
         else
         {
-            dialogueText.text = "¨S¦³ Grass ¥i¨Ï¥Î¡I";
+            dialogueText.text = "æ²’æœ‰ Grass å¯ä½¿ç”¨ï¼";
         }
     }
 
-    // UI Ä²µo¤èªk¡GDrying¡A»İ­nµ¥«İ¥Ø¼Ğ
+    // UI è§¸ç™¼æ–¹æ³•ï¼šDryingï¼Œéœ€è¦ç­‰å¾…ç›®æ¨™
     public void TriggerDryingForPlayer(int playerIndex)
     {
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
@@ -338,33 +346,33 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Drying";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "½ĞÂIÀ»¤@­Óª±®aÀY¹³¥H¨Ï¥Î Drying¡I";
+            dialogueText.text = "è«‹é»æ“Šä¸€å€‹ç©å®¶é ­åƒä»¥ä½¿ç”¨ Dryingï¼";
         }
         else
         {
-            dialogueText.text = "¨S¦³ Drying ¥i¨Ï¥Î¡I";
+            dialogueText.text = "æ²’æœ‰ Drying å¯ä½¿ç”¨ï¼";
         }
     }
 
-    // Àò¨úª««~®w¦s¼Æ¶q
+    // ç²å–ç‰©å“åº«å­˜æ•¸é‡
     public int GetItemCount(string itemName)
     {
         return itemInventory.ContainsKey(itemName) ? itemInventory[itemName] : 0;
     }
 
-    // ÀË¬dª««~¬O§_¥i¥Î
+    // æª¢æŸ¥ç‰©å“æ˜¯å¦å¯ç”¨
     public bool HasItem(string itemName)
     {
         return itemInventory.ContainsKey(itemName) && itemInventory[itemName] > 0;
     }
 
-    // Àò¨ú©Ò¦³ª««~ªº®w¦sª¬ºA¡]¥Î©ó UI Åã¥Ü¡^
+    // ç²å–æ‰€æœ‰ç‰©å“çš„åº«å­˜ç‹€æ…‹ï¼ˆç”¨æ–¼ UI é¡¯ç¤ºï¼‰
     public Dictionary<string, int> GetAllItemCounts()
     {
         return new Dictionary<string, int>(itemInventory);
     }
 
-    // ²K¥[ª««~¡]¥Î©ó¹CÀ¸¤¤Àò±o·sª««~¡^
+    // æ·»åŠ ç‰©å“ï¼ˆç”¨æ–¼éŠæˆ²ä¸­ç²å¾—æ–°ç‰©å“ï¼‰
     public void AddItem(string itemName, int amount)
     {
         if (itemInventory.ContainsKey(itemName))
@@ -375,16 +383,16 @@ public class Itemuse : MonoBehaviour
         {
             itemInventory[itemName] = amount;
         }
-        Debug.Log($"Àò±o {amount} ­Ó {itemName}¡A·í«e¼Æ¶q¡G{itemInventory[itemName]}");
+        Debug.Log($"ç²å¾— {amount} å€‹ {itemName}ï¼Œç•¶å‰æ•¸é‡ï¼š{itemInventory[itemName]}");
     }
 
-    // ²¾°£ª««~¡]¥Î©ó´ú¸Õ©Î¯S®í±¡ªp¡^
+    // ç§»é™¤ç‰©å“ï¼ˆç”¨æ–¼æ¸¬è©¦æˆ–ç‰¹æ®Šæƒ…æ³ï¼‰
     public void RemoveItem(string itemName, int amount)
     {
         if (itemInventory.ContainsKey(itemName))
         {
             itemInventory[itemName] = Mathf.Max(0, itemInventory[itemName] - amount);
-            Debug.Log($"²¾°£ {amount} ­Ó {itemName}¡A³Ñ¾l¼Æ¶q¡G{itemInventory[itemName]}");
+            Debug.Log($"ç§»é™¤ {amount} å€‹ {itemName}ï¼Œå‰©é¤˜æ•¸é‡ï¼š{itemInventory[itemName]}");
         }
     }
 
@@ -392,9 +400,9 @@ public class Itemuse : MonoBehaviour
     {
         if (GameStateManager.Instance.IsState(GameState.Battle))
         {
-            // ¥´¶}¬õ®Ñ 
+            // æ‰“é–‹ç´…æ›¸ 
             StartCoroutine(redbook.OpenBook());
-            // §ó·s¹D¨ãUI
+            // æ›´æ–°é“å…·UI
             if (redbook.inventoryUI != null)
                 redbook.inventoryUI.GetComponent<InventoryUI>().RefreshUI();
         }
