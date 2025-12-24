@@ -42,7 +42,7 @@ public class CSVLoader : MonoBehaviour
             }
         }
 
-        Debug.Log("CSV 更ЧΘ羆更" + defenseData.defenseEntries.Count + " 掸计沮");
+        //Debug.Log("CSV 更ЧΘ羆更" + defenseData.defenseEntries.Count + " 掸计沮");
     }
 
 }

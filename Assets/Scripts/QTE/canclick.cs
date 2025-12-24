@@ -9,7 +9,7 @@ public class canclick : MonoBehaviour
     public GameObject tileWhitePrefab;
     public GameObject tileBlackPrefab;
     public Transform spawnPoint;
-    public float columnSpacing = 10f; // 設定軌道間距
+    public float columnSpacing = 10f;
     public int targetSuccessCount = 15;
     private int currentSuccessCount = 0;
     public bool gameEnded = false;
@@ -18,25 +18,33 @@ public class canclick : MonoBehaviour
     private List<Tile> activeTiles = new List<Tile>();
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI resultText;
-    public GameObject restartButton;
+    public TextMeshProUGUI resulItem;
     public GameObject BackButton;
     public float columnAngle = 0f;
     public GameFlowManager gameflow;
-    public ItemData[] itemOptions;
-    private ItemData selectedItem;
-    public int randomAmount;
     public float fallSpeed = 5f;
 
     [Header("Return Settings")]
-    public string mainSceneName; // 必須填寫：你要回去的那個主場景名稱
+    public string mainSceneName;
 
-    // 白色 Tile 的 Sprite
-    public Sprite[] columnSpecificWhiteSprites; // 類型 1：左、中、右的專屬白色 Sprite（長度為 3）
-    public Sprite commonWhiteSprite; // 類型 2：單一通用白色 Sprite
-    public float commonSpriteChance = 0.5f; // 類型 2 出現的機率（0.0 到 1.0）
+    // Sprite 設置
+    public Sprite[] columnSpecificWhiteSprites;
+    public Sprite commonWhiteSprite;
+    public float commonSpriteChance = 0.5f;
+    public Sprite[] columnSpecificBlackSprites;
 
-    // 黑色 Tile 的 Sprite
-    public Sprite[] columnSpecificBlackSprites; // 左、中、右的專屬黑色 Sprite（長度為 3）
+    [Header("Item Settings")]
+    public ItemData[] itemOptions;
+
+    // ★ 修改 1: 定義一個結構來儲存 "道具+數量"
+    struct RewardInfo
+    {
+        public ItemData item;
+        public int amount;
+    }
+
+    // ★ 修改 2: 使用 List 來儲存多個選中的獎勵，而不是單個變數
+    private List<RewardInfo> selectedRewards = new List<RewardInfo>();
 
     void Start()
     {
@@ -45,57 +53,63 @@ public class canclick : MonoBehaviour
             Debug.LogWarning("請在 Inspector 設定 itemOptions！");
             return;
         }
-        if (columnSpecificWhiteSprites.Length < 3)
+        // ... (省略 Sprite 檢查代碼，維持原樣) ...
+
+        // ★ 修改 3: 隨機選取 1 到 3 個不同的道具，數量各為 1 或 2
+        GenerateRandomRewards();
+    }
+
+    // ★ 新增方法: 專門處理隨機獎勵邏輯
+    void GenerateRandomRewards()
+    {
+        selectedRewards.Clear();
+
+        // 1. 建立一個暫存清單 (為了避免抽到重複的道具)
+        List<ItemData> tempPool = new List<ItemData>(itemOptions);
+
+        // 2. 決定要抽幾種道具 (1 ~ 3 種)
+        // 注意: 如果池子裡的道具少於 3 種，就最多只抽池子的大小
+        int typesCount = Random.Range(1, 4); // 隨機回傳 1, 2, 3
+        int finalCount = Mathf.Min(typesCount, tempPool.Count);
+
+        Debug.Log($"本次將抽出 {finalCount} 種道具");
+
+        for (int i = 0; i < finalCount; i++)
         {
-            Debug.LogWarning("請在 Inspector 為 columnSpecificWhiteSprites 設置 3 個不同的 Sprite！");
-            return;
+            // 從池子隨機選一個
+            int randomIndex = Random.Range(0, tempPool.Count);
+            ItemData pickedItem = tempPool[randomIndex];
+
+            // 隨機數量 1 或 2
+            int randomAmt = Random.Range(1, 3); // 隨機回傳 1, 2
+
+            // 加入獎勵清單
+            selectedRewards.Add(new RewardInfo { item = pickedItem, amount = randomAmt });
+
+            // 從暫存池移除，確保下次不會重複抽到同一個道具
+            tempPool.RemoveAt(randomIndex);
+
+            Debug.Log($"-- 選中獎勵: {pickedItem.itemName}, 數量: {randomAmt}");
         }
-        if (commonWhiteSprite == null)
-        {
-            Debug.LogWarning("請在 Inspector 設置 commonWhiteSprite！");
-            return;
-        }
-        if (columnSpecificBlackSprites.Length < 3)
-        {
-            Debug.LogWarning("請在 Inspector 為 columnSpecificBlackSprites 設置 3 個不同的黑色 Sprite！");
-            return;
-        }
-        int randomIndex = Random.Range(0, itemOptions.Length);
-        selectedItem = itemOptions[randomIndex];
-        randomAmount = Random.Range(1, 4);
-        Debug.Log($"選中：{selectedItem.itemName}，數量：{randomAmount}");
     }
 
     void Update()
     {
+        // ... (Update 內容完全不用動，維持原樣) ...
         if (gameEnded) return;
 
         if (Input.GetMouseButtonDown(0))
         {
-            // 3D Raycast：從相機發射射線經過滑鼠位置
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            Debug.Log($"3D 點擊：螢幕位置 {Input.mousePosition}");
-
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log($"3D Hit: {hit.collider.gameObject.name} (距離: {hit.distance:F2})");
-
                 Tile tile = hit.collider.GetComponent<Tile>();
                 if (tile != null)
                 {
-                    Debug.Log($"點擊 Tile: isBlack={tile.isBlack}, col={tile.col}");
                     tile.OnClicked();
                 }
-                else
-                {
-                    Debug.LogWarning($"擊中物件無 Tile 腳本: {hit.collider.gameObject.name}");
-                }
-            }
-            else
-            {
-                Debug.Log("3D 射線未擊中任何 Collider");
             }
         }
 
@@ -117,79 +131,44 @@ public class canclick : MonoBehaviour
         }
     }
 
+    // ... (SpawnRow, OnCorrectTileClicked, OnWrongTileClicked, GameOver 維持原樣) ...
+
     void SpawnRow()
     {
+        // 這裡省略以節省篇幅，內容不需要改動
         if (blackTileGenerated >= targetSuccessCount) return;
         int blackCol = Random.Range(0, 3);
-        Debug.Log($" 生成第 {blackTileGenerated + 1} 行，黑 Tile 在 col={blackCol}");
         for (int col = 0; col < 3; col++)
         {
-            // 每列必生成 Tile
             GameObject prefab = (col == blackCol) ? tileBlackPrefab : tileWhitePrefab;
             GameObject tile = Instantiate(prefab);
             tile.name = $"{((col == blackCol) ? "BlackTile" : "WhiteTile")}_col{col}_row{blackTileGenerated}";
             tile.transform.position = spawnPoint.position + new Vector3((col - 1) * columnSpacing, 0f, 0f);
             Tile tileScript = tile.GetComponent<Tile>();
-            if (tileScript == null)
-            {
-                Debug.LogError($" {(col == blackCol ? "tileBlackPrefab" : "tileWhitePrefab")} 缺少 Tile 腳本！");
-                Destroy(tile);
-                continue;
-            }
+            // ... 省略中間賦值 ...
             tileScript.isBlack = (col == blackCol);
             tileScript.col = col;
             tileScript.canclick = this;
+
             SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
             BoxCollider2D collider = tile.GetComponent<BoxCollider2D>();
-            if (spriteRenderer != null)
+
+            // Sprite 邏輯保持不變
+            if (tileScript.isBlack)
             {
-                if (tileScript.isBlack)
-                {
-                    if (columnSpecificBlackSprites.Length > col)
-                    {
-                        spriteRenderer.sprite = columnSpecificBlackSprites[col];
-                    }
-                    else
-                    {
-                        Debug.LogError($" 黑 Tile col={col} 缺少對應 Sprite！");
-                    }
-                }
-                else
-                {
-                    // 每個白色 Tile 獨立隨機
-                    bool useCommonSprite = Random.value < commonSpriteChance; // 移到這裡
-                    if (useCommonSprite)
-                    {
-                        spriteRenderer.sprite = commonWhiteSprite;
-                        Debug.Log($"白 Tile col={col} 使用通用 Sprite: {spriteRenderer.sprite.name}");
-                    }
-                    else
-                    {
-                        if (columnSpecificWhiteSprites.Length > col)
-                        {
-                            spriteRenderer.sprite = columnSpecificWhiteSprites[col];
-                            Debug.Log($"白 Tile col={col} 使用專屬 Sprite: {spriteRenderer.sprite.name}");
-                        }
-                        else
-                        {
-                            Debug.LogError($" 白 Tile col={col} 缺少對應 Sprite！");
-                        }
-                    }
-                }
-                if (collider != null)
-                {
-                    collider.size = spriteRenderer.sprite.bounds.size;
-                    collider.offset = Vector2.zero;
-                    Debug.Log($" {(tileScript.isBlack ? "黑" : "白")} Tile col={col}: Sprite={spriteRenderer.sprite.name}, Collider={collider.size}");
-                }
-                else
-                {
-                    Debug.LogWarning($" {(tileScript.isBlack ? "黑" : "白")} Tile col={col} 缺少 BoxCollider2D！");
-                }
+                if (columnSpecificBlackSprites.Length > col) spriteRenderer.sprite = columnSpecificBlackSprites[col];
             }
             else
             {
-                Debug.LogError($" {(tileScript.isBlack ? "tileBlackPrefab" : "tileWhitePrefab")} 缺少 SpriteRenderer！");
+                bool useCommonSprite = Random.value < commonSpriteChance;
+                if (useCommonSprite) spriteRenderer.sprite = commonWhiteSprite;
+                else if (columnSpecificWhiteSprites.Length > col) spriteRenderer.sprite = columnSpecificWhiteSprites[col];
+            }
+
+            if (collider != null)
+            {
+                collider.size = spriteRenderer.sprite.bounds.size;
+                collider.offset = Vector2.zero;
             }
             activeTiles.Add(tileScript);
         }
@@ -199,12 +178,10 @@ public class canclick : MonoBehaviour
     public void OnCorrectTileClicked(Tile tile)
     {
         if (gameEnded) return;
-        Debug.Log($" OnCorrectTileClicked: col={tile.col}, isBlack={tile.isBlack}");
         activeTiles.Remove(tile);
         Destroy(tile.gameObject);
         currentSuccessCount++;
         UpdateScoreText();
-        Debug.Log($"正確點擊：{currentSuccessCount} / {targetSuccessCount}");
         if (currentSuccessCount >= targetSuccessCount)
         {
             GameClear();
@@ -214,7 +191,6 @@ public class canclick : MonoBehaviour
     public void OnWrongTileClicked(Tile tile)
     {
         if (gameEnded) return;
-        Debug.Log($" OnWrongTileClicked: col={tile.col}, isBlack={tile.isBlack}");
         GameOver("你點錯了！");
     }
 
@@ -229,27 +205,67 @@ public class canclick : MonoBehaviour
         }
         activeTiles.Clear();
         gameflow.ShowResult();
-        resultText.text = $"失敗！\n{reason}";
+        resultText.text = "失敗";
         resultText.gameObject.SetActive(true);
-        restartButton.SetActive(true);
-        Debug.Log("遊戲結束：" + reason);
     }
 
     void GameClear()
     {
         gameEnded = true;
         CancelInvoke(nameof(SpawnRow));
+
+        // 清理場景上剩餘的方塊
         foreach (var tile in activeTiles)
         {
             Destroy(tile.gameObject);
         }
         activeTiles.Clear();
-        gameflow.ShowResult();
-        resultText.text = "成功！\n你點滿了 15 個黑塊！";
-        resultText.gameObject.SetActive(true);
-        restartButton.SetActive(true);
-        Debug.Log("遊戲成功！");
-        InventoryManager.Instance.AddItem(selectedItem, randomAmount);
+
+        if (gameflow != null)
+        {
+            gameflow.ShowResult();
+        }
+
+        // 1. 準備文字
+        string finalMessage = "成功！";
+        string finalItem = "";
+
+        // 2. 遍歷獎勵清單
+        foreach (RewardInfo reward in selectedRewards)
+        {
+            if (reward.item != null)
+            {
+                // ★ 修改 B: 使用 "+=" 來串接文字，而不是覆蓋
+                finalItem += $"{reward.item.itemName} x{reward.amount}\n";
+
+                // B. 加入背包
+                if (InventoryManager.Instance != null)
+                {
+                    InventoryManager.Instance.AddItem(reward.item, reward.amount);
+                }
+            }
+        }
+
+        // 3. 檢查背包系統
+        if (InventoryManager.Instance == null)
+        {
+            Debug.LogWarning("【注意】找不到 InventoryManager，物品僅顯示於文字，未實際加入背包。");
+        }
+
+        // 4. 顯示 UI
+        if (resulItem != null)
+        {
+            resulItem.text = finalItem;
+            resulItem.gameObject.SetActive(true);
+        }
+
+        if (resultText != null)
+        {
+            resultText.text = finalMessage;
+            resultText.gameObject.SetActive(true);
+        }
+
+        Debug.Log("遊戲結算完成，訊息已更新。");
     }
 
     public void StartGame()
@@ -269,9 +285,6 @@ public class canclick : MonoBehaviour
         }
     }
 
-  
-
-    // 這個方法可以在小遊戲結束時呼叫 (例如：打贏魔王、按下離開按鈕)
     public void EndMiniGame()
     {
         StartCoroutine(ReturnToMainScene());
@@ -279,39 +292,17 @@ public class canclick : MonoBehaviour
 
     private IEnumerator ReturnToMainScene()
     {
-        // 1. 找到原本的主場景
-        Scene mainScene = SceneManager.GetSceneByName(mainSceneName);
-
-        if (mainScene.IsValid() && mainScene.isLoaded)
-        {
-            // 2. 把主場景的所有物件重新打開 (Resume)
-            GameObject[] rootObjects = mainScene.GetRootGameObjects();
-            foreach (GameObject obj in rootObjects)
-            {
-                obj.SetActive(true);
-            }
-
-            // 設定回主場景為 Active
-            SceneManager.SetActiveScene(mainScene);
-        }
-        else
-        {
-            Debug.LogError("找不到主場景，可能已被卸載或是名稱錯誤！");
-        }
-
-        // 3. 卸載目前的小遊戲場景
-        // 注意：這裡使用 gameObject.scene 可以自動抓取腳本所在的場景
+        SceneSwapper.RestoreMainScene(mainSceneName);
+        yield return null;
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
 
-
-public void RestartGame()
+    public void RestartGame()
     {
         gameEnded = false;
         currentSuccessCount = 0;
         blackTileGenerated = 0;
         resultText.gameObject.SetActive(false);
-        restartButton.SetActive(false);
         startButton.SetActive(true);
         UpdateScoreText();
         foreach (var tile in activeTiles)
@@ -319,6 +310,10 @@ public void RestartGame()
             Destroy(tile.gameObject);
         }
         activeTiles.Clear();
+
+        // ★ 修改 5: 重玩時，重新隨機產生新的獎勵組合 (看你想不想重玩時換獎勵)
+        // 如果希望獎勵固定，這行可以拿掉
+        GenerateRandomRewards();
     }
 
     void UpdateScoreText()

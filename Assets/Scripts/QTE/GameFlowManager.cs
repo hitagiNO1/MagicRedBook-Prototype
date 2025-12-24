@@ -18,7 +18,6 @@ public class GameFlowManager : MonoBehaviour
     void Start()
     {
         ShowMainMenu();
-        TimelineManager.Instance.PlayTimeline(OPening);
         director.Play();
     }
 

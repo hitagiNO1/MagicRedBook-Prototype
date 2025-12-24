@@ -25,7 +25,7 @@ public class Itemuse : MonoBehaviour
         if (can != null)
         {
             itemInventory["Can"] = can.amount;
-            Debug.Log($"初始化 Can 數量：{can.amount}");
+            //Debug.Log($"初始化 Can 數量：{can.amount}");
         }
         else
         {
@@ -35,7 +35,7 @@ public class Itemuse : MonoBehaviour
         if (tuna != null)
         {
             itemInventory["Tuna"] = tuna.amount;
-            Debug.Log($"初始化 Tuna 數量：{tuna.amount}");
+            //Debug.Log($"初始化 Tuna 數量：{tuna.amount}");
         }
         else
         {
@@ -45,7 +45,7 @@ public class Itemuse : MonoBehaviour
         if (grass != null)
         {
             itemInventory["Grass"] = grass.amount;
-            Debug.Log($"初始化 Grass 數量：{grass.amount}");
+            //Debug.Log($"初始化 Grass 數量：{grass.amount}");
         }
         else
         {
@@ -55,7 +55,7 @@ public class Itemuse : MonoBehaviour
         if (drying != null)
         {
             itemInventory["Drying"] = drying.amount;
-            Debug.Log($"初始化 Drying 數量：{drying.amount}");
+            //Debug.Log($"初始化 Drying 數量：{drying.amount}");
         }
         else
         {

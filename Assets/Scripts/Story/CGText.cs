@@ -14,7 +14,6 @@ public class CGText : MonoBehaviour
 
     [Header("Timeline Settings")]
     public PlayableDirector director; // 請將掛在同一物件上的 PlayableDirector 拉進來
-    public PlayableAsset FadeInTimeline;   // 淡入 (從黑變亮)
     public PlayableAsset TCG;              // 中間的背景動畫
     public PlayableAsset FadeOutTimeline;  // 淡出 (從亮變黑)
 
@@ -74,17 +73,7 @@ public class CGText : MonoBehaviour
     // --- [核心] 1. 開場流程 ---
     private IEnumerator PlaySceneSequence()
     {
-        // A. 播放淡入動畫 (如果有)
-        if (FadeInTimeline != null)
-        {
-            director.playableAsset = FadeInTimeline;
-            director.Play();
-
-            // 關鍵：這行會讓程式「卡住」，直到淡入動畫播完才往下執行
-            yield return new WaitUntil(() => director.state != PlayState.Playing);
-        }
-
-        // B. 接著播放 TCG (背景)
+        // 播放 TCG (背景)
         if (TCG != null)
         {
             director.playableAsset = TCG;
@@ -92,7 +81,7 @@ public class CGText : MonoBehaviour
             director.extrapolationMode = DirectorWrapMode.Hold;
             director.Play();
         }
-
+        yield return new WaitForSeconds(1.5f); // 等 UI 浮現
         // C. 顯示對話框 UI
         animator.SetTrigger("Show");
         yield return new WaitForSeconds(0.5f); // 等 UI 浮現
@@ -151,8 +140,12 @@ public class CGText : MonoBehaviour
                 // 然後自動發現 Manager 的狀態變了，進而自己換圖
                 obj.SetActive(true);
             }
+            // ★ 1. 直接呼叫靜態方法還原狀態
+            // 這裡會自動找到主場景，並只打開原本該開的物件
+            SceneSwapper.RestoreMainScene(mainSceneName);
 
-            SceneManager.SetActiveScene(mainScene);
+            // 2. 等待一幀確保狀態切換順暢 (選用)
+            yield return null;
         }
         else
         {

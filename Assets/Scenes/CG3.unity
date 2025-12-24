@@ -935,10 +935,9 @@ MonoBehaviour:
   personNameText: {fileID: 1502245949}
   characterDisplay: {fileID: 1133895684}
   director: {fileID: 1133895685}
-  FadeInTimeline: {fileID: 11400000, guid: f11bcc1797edd194499f24182994d201, type: 2}
   TCG: {fileID: 11400000, guid: 6eb9b04549b014f44934248699ac1e16, type: 2}
   FadeOutTimeline: {fileID: 11400000, guid: ce32c7930574037449301d3347bd85c3, type: 2}
-  targetItemID: 0
+  targetItemID: 2
   currentScene: {fileID: 11400000, guid: 38d7858ffb76f2d4bb03e45cd24b75e1, type: 2}
   mainSceneName: CH2
   waitAfterSceneEnd: 3.5
@@ -1092,7 +1091,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1133895680}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: ce32c7930574037449301d3347bd85c3, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -1112,6 +1111,10 @@ PlayableDirector:
     value: {fileID: 1477506341}
   - key: {fileID: -4191374838335442898, guid: ce32c7930574037449301d3347bd85c3, type: 2}
     value: {fileID: 1477506345}
+  - key: {fileID: -3674394854494626054, guid: 6eb9b04549b014f44934248699ac1e16, type: 2}
+    value: {fileID: 1151898471}
+  - key: {fileID: -691846429912944885, guid: 6eb9b04549b014f44934248699ac1e16, type: 2}
+    value: {fileID: 1151898473}
   m_ExposedReferences:
     m_References: []
 --- !u!1 &1151898471
