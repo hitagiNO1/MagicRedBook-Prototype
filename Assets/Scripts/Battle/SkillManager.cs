@@ -17,6 +17,7 @@ public class SkillManager : MonoBehaviour
     public LayerMask enemyLayer;
     public LayerMask playerLayer;
     public Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
+
     private int skill2CooldownTurns = 3;
     private int skill3CooldownTurns = 2;
     private int skill4CooldownTurns = 3;
@@ -25,19 +26,27 @@ public class SkillManager : MonoBehaviour
     private int catskill3CooldownTurns = 2;
     private int catskill4CooldownTurns = 3;
     private int catskill5CooldownTurns = 4;
+
     public AudioSource audioSource;
     public GameObject skillIconPrefab;
     public Transform skillIconParent;
     public List<GameObject> skillIcons = new List<GameObject>();
-    public Dictionary<int, List<System.Action>> skillQueues = new Dictionary<int, List<System.Action>>();
+
+    // 改為儲存 IEnumerator 協程
+    public Dictionary<int, List<IEnumerator>> skillQueues = new Dictionary<int, List<IEnumerator>>();
     public Dictionary<int, List<string>> selectedSkillNames = new Dictionary<int, List<string>>();
+    public Dictionary<int, List<bool>> skillNeedsTarget = new Dictionary<int, List<bool>>();
+
     public int maxSkillPerTurn = 3;
     public Dictionary<int, Unit> selectedTargets = new Dictionary<int, Unit>();
+
     public bool isWaitingForTarget = false;
     public string pendingSkill = null;
     public int pendingPlayerIndex = -1;
 
-    // ==================== 新增：技能按鈕引用 ====================
+    // 正在執行的玩家計數器
+    private int executingPlayerCount = 0;
+
     [Header("Skill Buttons - Player 0 (兔子)")]
     public Button skill1Button;
     public Button skill2Button;
@@ -60,8 +69,9 @@ public class SkillManager : MonoBehaviour
         for (int i = 0; i < playerUnits.Count; i++)
         {
             Debug.Log($"Initializing player {i}: {playerUnits[i]?.unitName}");
-            skillQueues[i] = new List<System.Action>();
+            skillQueues[i] = new List<IEnumerator>();
             selectedSkillNames[i] = new List<string>();
+            skillNeedsTarget[i] = new List<bool>();
             selectedTargets[i] = null;
 
             if (i == 0)
@@ -86,7 +96,6 @@ public class SkillManager : MonoBehaviour
 
     void Update()
     {
-        // 左鍵：處理目標選擇（僅在等待目標時）
         if (isWaitingForTarget && Input.GetMouseButtonDown(0))
         {
             Debug.Log("Left mouse button clicked, processing target selection");
@@ -96,12 +105,10 @@ public class SkillManager : MonoBehaviour
 
             if (isPlayerTarget)
             {
-                // 玩家目標由 OnPlayerHeadClick 處理，這裡不處理 raycast
                 return;
             }
             else
             {
-                LayerMask targetLayer = enemyLayer;
                 RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, LayerMask.GetMask("Enemy"));
                 if (hit.collider != null)
                 {
@@ -110,7 +117,7 @@ public class SkillManager : MonoBehaviour
                 else
                 {
                     RaycastHit hit3D;
-                    if (Physics.Raycast(ray, out hit3D, Mathf.Infinity, targetLayer))
+                    if (Physics.Raycast(ray, out hit3D, Mathf.Infinity, enemyLayer))
                     {
                         targetUnit = hit3D.collider.GetComponent<Unit>();
                     }
@@ -128,23 +135,18 @@ public class SkillManager : MonoBehaviour
             }
         }
 
-        // 右鍵：取消最新技能（全局）
         if (Input.GetMouseButtonDown(1))
         {
             CancelLatestSkill();
         }
     }
 
-    // ==================== 新增：右鍵取消最新技能 ====================
     public void CancelLatestSkill()
     {
-        // 優先處理：如果正在等待目標選擇，先取消 pending
         if (isWaitingForTarget && pendingSkill != null && pendingPlayerIndex >= 0)
         {
             Button pendingButton = GetSkillButton(pendingPlayerIndex, pendingSkill);
-            if (pendingButton != null)
-                SetButtonDimmed(pendingButton, false);
-
+            if (pendingButton != null) SetButtonDimmed(pendingButton, false);
             isWaitingForTarget = false;
             pendingSkill = null;
             pendingPlayerIndex = -1;
@@ -153,7 +155,6 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-        // 找出目前所有已選擇技能中，最後添加的那一個
         int latestPlayerIndex = -1;
         int latestSkillIndex = -1;
         string latestSkillName = null;
@@ -163,7 +164,7 @@ public class SkillManager : MonoBehaviour
             if (selectedSkillNames[i].Count > 0)
             {
                 int lastIdx = selectedSkillNames[i].Count - 1;
-                if (latestPlayerIndex == -1 || lastIdx > latestSkillIndex) // 取最晚加入的
+                if (latestPlayerIndex == -1 || lastIdx > latestSkillIndex)
                 {
                     latestPlayerIndex = i;
                     latestSkillIndex = lastIdx;
@@ -172,7 +173,6 @@ public class SkillManager : MonoBehaviour
             }
         }
 
-        // 沒有任何已選擇的技能
         if (latestPlayerIndex == -1)
         {
             dialogueText.text = "沒有可取消的技能";
@@ -182,29 +182,21 @@ public class SkillManager : MonoBehaviour
         Unit playerUnit = playerUnits[latestPlayerIndex];
         dialogueText.text = $"{playerUnit.unitName} 取消了 {latestSkillName}";
 
-        // 移除對應的 action 和 name
         skillQueues[latestPlayerIndex].RemoveAt(latestSkillIndex);
         selectedSkillNames[latestPlayerIndex].RemoveAt(latestSkillIndex);
+        skillNeedsTarget[latestPlayerIndex].RemoveAt(latestSkillIndex);
 
-        // 清除該技能的目標高亮（如果有的話）
         if (selectedTargets.ContainsKey(latestPlayerIndex) && selectedTargets[latestPlayerIndex] != null)
         {
             HighlightTarget(selectedTargets[latestPlayerIndex], false);
             selectedTargets[latestPlayerIndex] = null;
         }
 
-        // 恢復按鈕狀態
         Button buttonToRestore = GetSkillButton(latestPlayerIndex, latestSkillName);
-        if (buttonToRestore != null)
-            SetButtonDimmed(buttonToRestore, false);
+        if (buttonToRestore != null) SetButtonDimmed(buttonToRestore, false);
 
-        // 加回一個技能圖標空位
         AddSkillIcon();
-
-        // 更新所有按鈕狀態（包含冷卻）
         UpdateAllSkillButtonStates();
-
-        Debug.Log($"玩家 {latestPlayerIndex} 取消了最新技能: {latestSkillName}");
     }
 
     private Button GetSkillButton(int playerIndex, string skillName)
@@ -234,7 +226,6 @@ public class SkillManager : MonoBehaviour
         return null;
     }
 
-    // ==================== 按鈕顏色控制 ====================
     private void SetButtonDimmed(Button button, bool dimmed)
     {
         if (button == null) return;
@@ -250,7 +241,7 @@ public class SkillManager : MonoBehaviour
         else
         {
             colors.normalColor = Color.white;
-            colors.highlightedColor = new Color(1f, 1f, 1f, 1f);
+            colors.highlightedColor = Color.white;
             colors.pressedColor = new Color(0.78f, 0.78f, 0.78f, 1f);
             colors.selectedColor = Color.white;
             button.interactable = true;
@@ -273,7 +264,7 @@ public class SkillManager : MonoBehaviour
         else
         {
             colors.normalColor = Color.white;
-            colors.highlightedColor = new Color(1f, 1f, 1f, 1f);
+            colors.highlightedColor = Color.white;
             colors.pressedColor = new Color(0.78f, 0.78f, 0.78f, 1f);
             colors.selectedColor = Color.white;
         }
@@ -282,7 +273,6 @@ public class SkillManager : MonoBehaviour
 
     public void UpdateAllSkillButtonStates()
     {
-        // Player 0
         SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
         SetButtonCooldownDimmed(skill2Button, skillCooldowns["Skill_2_0"] > 0);
         SetButtonDimmed(skill2Button, selectedSkillNames[0].Contains("Skill_2"));
@@ -293,7 +283,6 @@ public class SkillManager : MonoBehaviour
         SetButtonCooldownDimmed(skill5Button, skillCooldowns["Skill_5_0"] > 0);
         SetButtonDimmed(skill5Button, selectedSkillNames[0].Contains("Skill_5"));
 
-        // Player 1
         SetButtonDimmed(catSkill1Button, selectedSkillNames[1].Contains("catSkill_1"));
         SetButtonCooldownDimmed(catSkill2Button, skillCooldowns["catSkill_2_1"] > 0);
         SetButtonDimmed(catSkill2Button, selectedSkillNames[1].Contains("catSkill_2"));
@@ -320,7 +309,6 @@ public class SkillManager : MonoBehaviour
         UpdateAllSkillButtonStates();
     }
 
-    // ==================== 統一冷卻檢查與提示 ====================
     public bool CheckSkillCooldownAndShowMessage(int playerIndex, string skillName, string displayName = null)
     {
         if (displayName == null) displayName = skillName.Replace("Skill_", "").Replace("catSkill_", "");
@@ -335,23 +323,18 @@ public class SkillManager : MonoBehaviour
 
     public void SelectTarget(int playerIndex, Unit target)
     {
-        Debug.Log($"SelectTarget called for playerIndex: {playerIndex}, target: {target?.unitName}");
         if (target != null && (enemyUnits.Contains(target) || playerUnits.Contains(target)) && target.currentHP > 0)
         {
             selectedTargets[playerIndex] = target;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 已選擇目標：{target.unitName}";
-            Debug.Log($"Player {playerIndex} selected target: {target.unitName}");
             HighlightTarget(target, true);
-            foreach (var unit in enemyUnits)
-                if (unit != target && unit.currentHP > 0) HighlightTarget(unit, false);
-            foreach (var unit in playerUnits)
-                if (unit != target && unit.currentHP > 0) HighlightTarget(unit, false);
+            foreach (var unit in enemyUnits) if (unit != target && unit.currentHP > 0) HighlightTarget(unit, false);
+            foreach (var unit in playerUnits) if (unit != target && unit.currentHP > 0) HighlightTarget(unit, false);
         }
         else
         {
             selectedTargets[playerIndex] = null;
             dialogueText.text = $"{playerUnits[playerIndex].unitName}：無效的目標，請點擊一個存活的目標！";
-            Debug.LogWarning($"Player {playerIndex}: Invalid or dead target!");
         }
     }
 
@@ -367,13 +350,11 @@ public class SkillManager : MonoBehaviour
 
     public void ClearAllHighlights()
     {
-        List<int> keysToClear = new List<int>(selectedTargets.Keys);
-        foreach (int playerIndex in keysToClear)
+        foreach (int playerIndex in new List<int>(selectedTargets.Keys))
         {
-            if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] != null)
+            if (selectedTargets[playerIndex] != null)
             {
-                Unit target = selectedTargets[playerIndex];
-                HighlightTarget(target, false);
+                HighlightTarget(selectedTargets[playerIndex], false);
                 selectedTargets[playerIndex] = null;
             }
         }
@@ -383,7 +364,6 @@ public class SkillManager : MonoBehaviour
 
     public void OnPlayerHeadClick(int playerIndex)
     {
-        Debug.Log($"OnPlayerHeadClick called for playerIndex: {playerIndex}, pendingSkill: {pendingSkill}");
         if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count) return;
         Unit selectedTarget = playerUnits[playerIndex];
         if (selectedTarget == null || selectedTarget.currentHP <= 0)
@@ -391,6 +371,7 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = "請選擇一個存活的玩家目標！";
             return;
         }
+
         bool isWaitingForPlayerTarget = pendingSkill == "catSkill_4" || pendingSkill == "Can" || pendingSkill == "Grass" || pendingSkill == "Drying";
         if (!isWaitingForPlayerTarget || pendingPlayerIndex < 0) return;
 
@@ -406,11 +387,14 @@ public class SkillManager : MonoBehaviour
             int index = selectedSkillNames[playerIndex].IndexOf(skillName);
             selectedSkillNames[playerIndex].RemoveAt(index);
             skillQueues[playerIndex].RemoveAt(index);
+            skillNeedsTarget[playerIndex].RemoveAt(index);
+
             if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] != null)
             {
                 HighlightTarget(selectedTargets[playerIndex], false);
                 selectedTargets[playerIndex] = null;
             }
+
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 取消了 {skillName}";
             AddSkillIcon();
             UpdateAllSkillButtonStates();
@@ -437,17 +421,12 @@ public class SkillManager : MonoBehaviour
         if (GetTotalSelectedSkills() >= maxSkillPerTurn)
         {
             dialogueText.text = "已達技能數量上限！";
-        }
-        string cooldownKey = $"{skillName}_{playerIndex}";
-        if (!skillCooldowns.ContainsKey(cooldownKey))
-        {
-            skillCooldowns[cooldownKey] = 0;
-        }
-        if (skillCooldowns[cooldownKey] > 0)
-        {
             return false;
         }
-        return GetTotalSelectedSkills() < maxSkillPerTurn;
+        string cooldownKey = $"{skillName}_{playerIndex}";
+        if (!skillCooldowns.ContainsKey(cooldownKey)) skillCooldowns[cooldownKey] = 0;
+        if (skillCooldowns[cooldownKey] > 0) return false;
+        return true;
     }
 
     private void ExecutePendingSkill()
@@ -473,20 +452,162 @@ public class SkillManager : MonoBehaviour
         pendingPlayerIndex = -1;
     }
 
-    // ==================== 技能實作 ====================
+    // ==================== 技能協程 ====================
+
+    private IEnumerator Skill1Coroutine(int playerIndex, Unit target)
+    {
+        if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target)) yield break;
+
+        PlaySoundByName("skill1");
+        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
+        PerformBasicAttack(playerIndex, target, buffedDamage);
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 甩出手上的球攻擊 {target.unitName}";
+        EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
+
+        yield return new WaitForSeconds(1.5f); // 請根據實際特效長度調整
+    }
+
+    private IEnumerator Skill2Coroutine(int playerIndex)
+    {
+        PlaySoundByName("skill2");
+        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.5f);
+        PerformMultiTargetAttack(playerIndex, buffedDamage);
+        skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 將手上的球分散甩出攻擊全部敵人";
+        EffectManager.Instance.PlayUIEffect("B2", new Vector2(0, 0));
+
+        yield return new WaitForSeconds(2.0f); // 請根據實際特效長度調整
+    }
+
+    private IEnumerator Skill3Coroutine(int playerIndex)
+    {
+        PlaySoundByName("skill3");
+        buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
+        skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 將身上的毛整理好，使防禦力上升";
+        EffectManager.Instance.PlayUIEffect("B3", new Vector2(-800, 0));
+
+        yield return new WaitForSeconds(1.8f);
+    }
+
+    private IEnumerator Skill4Coroutine(int playerIndex)
+    {
+        PlaySoundByName("Skill_4");
+        buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
+        skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 緊縮成一團，使敵人找不到縫隙攻擊";
+        EffectManager.Instance.PlayUIEffect("B4", new Vector2(-800, 0));
+
+        yield return new WaitForSeconds(2.0f);
+    }
+
+    private IEnumerator Skill5Coroutine(int playerIndex, Unit target)
+    {
+        if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0) yield break;
+        if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target))
+        {
+            skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
+            yield break;
+        }
+
+        PlaySoundByName("skill4-1");
+        PlaySoundByName("skill4-2");
+        buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
+        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.3f);
+        PerformBasicAttack(playerIndex, target, buffedDamage);
+        skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 抱住敵方，使出最強攻擊兔子踹！";
+        EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
+
+        yield return new WaitForSeconds(2.2f);
+    }
+
+    private IEnumerator CatSkill1Coroutine(int playerIndex, Unit target)
+    {
+        if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target)) yield break;
+
+        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
+        PerformBasicAttack(playerIndex, target, buffedDamage);
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
+        EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
+
+        yield return new WaitForSeconds(1.5f);
+    }
+
+    private IEnumerator CatSkill2Coroutine(int playerIndex)
+    {
+        buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
+        skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 將傷口進行包紮";
+        EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
+        EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
+
+        yield return new WaitForSeconds(1.8f);
+    }
+
+    private IEnumerator CatSkill3Coroutine(int playerIndex)
+    {
+        if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0)
+        {
+            skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
+            yield break;
+        }
+
+        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
+        PerformMultiTargetAttack(playerIndex, buffedDamage);
+        skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過唱歌給全體敵人造成傷害";
+        EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
+
+        yield return new WaitForSeconds(2.0f);
+    }
+
+    private IEnumerator CatSkill4Coroutine(int playerIndex, Unit target)
+    {
+        if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0)
+        {
+            skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
+            yield break;
+        }
+        if (target == null || target.currentHP <= 0 || !playerUnits.Contains(target))
+        {
+            skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
+            yield break;
+        }
+
+        buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2);
+        skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 對 {target.unitName} 施展魔法，提升其攻擊力";
+        int targetIndex = playerUnits.IndexOf(target);
+        bool isTargetLeft = (targetIndex == 0);
+        EffectManager.Instance.PlayUIEffectOneSide("L4", isTargetLeft);
+
+        yield return new WaitForSeconds(2.0f);
+    }
+
+    private IEnumerator CatSkill5Coroutine(int playerIndex)
+    {
+        foreach (Unit player in playerUnits)
+        {
+            buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1);
+        }
+        skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
+        dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過歌聲振奮士氣，使我方全體承受傷害降低";
+        EffectManager.Instance.PlayUIEffect("L5", new Vector2(0, 0));
+
+        yield return new WaitForSeconds(2.0f);
+    }
+
+    // ==================== 技能選擇 ====================
+
     public void Skill_1(int playerIndex, Unit target)
     {
         if (playerIndex != 0 || !ValidateSkill(playerIndex, "Skill_1") || !ValidateTarget(playerIndex, target)) return;
+
         selectedSkillNames[playerIndex].Add("Skill_1");
-        skillQueues[playerIndex].Add(() =>
-        {
-            if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target)) return;
-            PlaySoundByName("skill1");
-            int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
-            PerformBasicAttack(playerIndex, target, buffedDamage);
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 甩出手上的球攻擊 {target.unitName}";
-            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(true);
+        skillQueues[playerIndex].Add(Skill1Coroutine(playerIndex, target));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -495,16 +616,11 @@ public class SkillManager : MonoBehaviour
     public void Skill_2(int playerIndex)
     {
         if (playerIndex != 0 || !ValidateSkill(playerIndex, "Skill_2")) return;
+
         selectedSkillNames[playerIndex].Add("Skill_2");
-        skillQueues[playerIndex].Add(() =>
-        {
-            PlaySoundByName("skill2");
-            int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.5f);
-            PerformMultiTargetAttack(playerIndex, buffedDamage);
-            skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 將手上的球分散甩出攻擊全部敵人";
-            EffectManager.Instance.PlayUIEffect("B2", new Vector2(0, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(false);
+        skillQueues[playerIndex].Add(Skill2Coroutine(playerIndex));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 2";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -513,15 +629,11 @@ public class SkillManager : MonoBehaviour
     public void Skill_3(int playerIndex)
     {
         if (playerIndex != 0 || !ValidateSkill(playerIndex, "Skill_3")) return;
+
         selectedSkillNames[playerIndex].Add("Skill_3");
-        skillQueues[playerIndex].Add(() =>
-        {
-            PlaySoundByName("skill3");
-            buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
-            skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 將身上的毛整理好，使防禦力上升";
-            EffectManager.Instance.PlayUIEffect("B3", new Vector2(-800, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(false);
+        skillQueues[playerIndex].Add(Skill3Coroutine(playerIndex));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 3";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -530,15 +642,11 @@ public class SkillManager : MonoBehaviour
     public void Skill_4(int playerIndex)
     {
         if (playerIndex != 0 || !ValidateSkill(playerIndex, "Skill_4")) return;
+
         selectedSkillNames[playerIndex].Add("Skill_4");
-        skillQueues[playerIndex].Add(() =>
-        {
-            PlaySoundByName("Skill_4");
-            buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
-            skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 緊縮成一團，使敵人找不到縫隙攻擊";
-            EffectManager.Instance.PlayUIEffect("B4", new Vector2(-800, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(false);
+        skillQueues[playerIndex].Add(Skill4Coroutine(playerIndex));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 4";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -547,24 +655,11 @@ public class SkillManager : MonoBehaviour
     public void Skill_5(int playerIndex, Unit target)
     {
         if (!ValidateSkill(playerIndex, "Skill_5") || !ValidateTarget(playerIndex, target)) return;
+
         selectedSkillNames[playerIndex].Add("Skill_5");
-        skillQueues[playerIndex].Add(() =>
-        {
-            if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0) return;
-            if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target))
-            {
-                skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
-                return;
-            }
-            PlaySoundByName("skill4-1");
-            PlaySoundByName("skill4-2");
-            buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
-            int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.3f);
-            PerformBasicAttack(playerIndex, target, buffedDamage);
-            skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 抱住敵方，使出最強攻擊兔子踹！";
-            EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(true);
+        skillQueues[playerIndex].Add(Skill5Coroutine(playerIndex, target));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 5 對 {target.unitName}";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -573,15 +668,11 @@ public class SkillManager : MonoBehaviour
     public void catSkill_1(int playerIndex, Unit target)
     {
         if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_1") || !ValidateTarget(playerIndex, target)) return;
+
         selectedSkillNames[playerIndex].Add("catSkill_1");
-        skillQueues[playerIndex].Add(() =>
-        {
-            if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target)) return;
-            int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
-            PerformBasicAttack(playerIndex, target, buffedDamage);
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
-            EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(true);
+        skillQueues[playerIndex].Add(CatSkill1Coroutine(playerIndex, target));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -590,15 +681,11 @@ public class SkillManager : MonoBehaviour
     public void catSkill_2(int playerIndex)
     {
         if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_2")) return;
+
         selectedSkillNames[playerIndex].Add("catSkill_2");
-        skillQueues[playerIndex].Add(() =>
-        {
-            buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
-            skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 將傷口進行包紮";
-            EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
-            EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(false);
+        skillQueues[playerIndex].Add(CatSkill2Coroutine(playerIndex));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 2";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -607,20 +694,11 @@ public class SkillManager : MonoBehaviour
     public void catSkill_3(int playerIndex)
     {
         if (!ValidateSkill(playerIndex, "catSkill_3")) return;
+
         selectedSkillNames[playerIndex].Add("catSkill_3");
-        skillQueues[playerIndex].Add(() =>
-        {
-            if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0)
-            {
-                skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
-                return;
-            }
-            int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
-            PerformMultiTargetAttack(playerIndex, buffedDamage);
-            skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過唱歌給全體敵人造成傷害";
-            EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(false);
+        skillQueues[playerIndex].Add(CatSkill3Coroutine(playerIndex));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 3";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -629,27 +707,11 @@ public class SkillManager : MonoBehaviour
     public void catSkill_4(int playerIndex, Unit target)
     {
         if (!ValidateSkill(playerIndex, "catSkill_4") || !ValidateTarget(playerIndex, target)) return;
-        selectedSkillNames[playerIndex].Add("catSkill_4");
-        skillQueues[playerIndex].Add(() =>
-        {
-            if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0)
-            {
-                skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
-                return;
-            }
-            if (target == null || target.currentHP <= 0 || !playerUnits.Contains(target))
-            {
-                skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
-                return;
-            }
-            buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2);
-            skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 對 {target.unitName} 施展魔法，提升其攻擊力";
 
-            int targetIndex = playerUnits.IndexOf(target);
-            bool isTargetLeft = (targetIndex == 0);
-            EffectManager.Instance.PlayUIEffectOneSide("L4", isTargetLeft);
-        });
+        selectedSkillNames[playerIndex].Add("catSkill_4");
+        skillNeedsTarget[playerIndex].Add(true);
+        skillQueues[playerIndex].Add(CatSkill4Coroutine(playerIndex, target));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 4 對 {target.unitName}";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -658,17 +720,11 @@ public class SkillManager : MonoBehaviour
     public void catSkill_5(int playerIndex)
     {
         if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_5")) return;
+
         selectedSkillNames[playerIndex].Add("catSkill_5");
-        skillQueues[playerIndex].Add(() =>
-        {
-            foreach (Unit player in playerUnits)
-            {
-                buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1);
-            }
-            skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過歌聲振奮士氣，使我方全體承受傷害降低";
-            EffectManager.Instance.PlayUIEffect("L5", new Vector2(0, 0));
-        });
+        skillNeedsTarget[playerIndex].Add(false);
+        skillQueues[playerIndex].Add(CatSkill5Coroutine(playerIndex));
+
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 5";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -885,14 +941,7 @@ public class SkillManager : MonoBehaviour
         SetButtonDimmed(catSkill5Button, true);
     }
 
-    // ==================== 其他功能 ====================
-    public int GetTotalSelectedSkills()
-    {
-        int total = 0;
-        foreach (var queue in skillQueues.Values)
-            total += queue.Count;
-        return total;
-    }
+    // ==================== 執行與其他功能 ====================
 
     public void OnConfirmSkillQueue()
     {
@@ -906,13 +955,57 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = "請至少為一名玩家選擇一個技能！";
             return;
         }
-        for (int playerIndex = 0; playerIndex < playerUnits.Count; playerIndex++)
+
+        executingPlayerCount = 0;
+        for (int i = 0; i < playerUnits.Count; i++)
         {
-            if (skillQueues[playerIndex].Count > 0)
+            if (skillQueues[i].Count > 0)
             {
-                StartCoroutine(ExecuteSkillQueueWithCallback(playerIndex));
+                executingPlayerCount++;
+                StartCoroutine(ExecuteSkillQueueWithCallback(i));
             }
         }
+
+        if (executingPlayerCount == 0)
+        {
+            battlesystem?.OnPlayerConfirmSkillQueue();
+        }
+    }
+
+    IEnumerator ExecuteSkillQueueWithCallback(int playerIndex)
+    {
+        yield return StartCoroutine(ExecuteSkillQueue(playerIndex));
+
+        executingPlayerCount--;
+
+        if (executingPlayerCount <= 0 && battlesystem != null)
+        {
+            battlesystem.OnPlayerConfirmSkillQueue();
+        }
+    }
+
+    IEnumerator ExecuteSkillQueue(int playerIndex)
+    {
+        var coroutines = new List<IEnumerator>(skillQueues[playerIndex]);
+
+        foreach (var coroutine in coroutines)
+        {
+            if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0)
+                yield break;
+
+            yield return StartCoroutine(coroutine);
+        }
+
+        skillQueues[playerIndex].Clear();
+        selectedSkillNames[playerIndex].Clear();
+        skillNeedsTarget[playerIndex].Clear();
+    }
+
+    public int GetTotalSelectedSkills()
+    {
+        int total = 0;
+        foreach (var queue in skillQueues.Values) total += queue.Count;
+        return total;
     }
 
     void PerformMultiTargetAttack(int playerIndex, int damage)
@@ -965,76 +1058,6 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    IEnumerator ExecuteSkillQueueWithCallback(int playerIndex)
-    {
-        yield return StartCoroutine(ExecuteSkillQueue(playerIndex));
-        bool allQueuesEmpty = true;
-        foreach (var queue in skillQueues.Values)
-        {
-            if (queue.Count > 0)
-            {
-                allQueuesEmpty = false;
-                break;
-            }
-        }
-        if (allQueuesEmpty && battlesystem != null)
-            battlesystem.OnPlayerConfirmSkillQueue();
-    }
-
-    /* private void ExecuteSkillAction(System.Action skillAction, int playerIndex)
-     {
-         if (skillAction == null) return;
-         try
-         {
-             if (playerUnits == null || playerIndex < 0 || playerIndex >= playerUnits.Count || playerUnits[playerIndex] == null) return;
-             if (selectedTargets.ContainsKey(playerIndex) && selectedTargets[playerIndex] == null) return;
-             skillAction.Invoke();
-         }
-         catch (System.Exception e)
-         {
-             Debug.LogError($"Error executing skill for player {playerIndex}: {e.Message}\n{e.StackTrace}");
-             if (skillQueues.ContainsKey(playerIndex))
-             {
-                 skillQueues[playerIndex].Clear();
-                 selectedSkillNames[playerIndex].Clear();
-             }
-         }
-     }*/
-
-    private void ExecuteSkillAction(System.Action skillAction, int playerIndex)
-    {
-        if (skillAction == null) return;
-
-        // ❗ 只有「真的需要目標」的技能才檢查
-        bool needsTarget =
-            selectedSkillNames[playerIndex].Contains("Skill_1") ||
-            selectedSkillNames[playerIndex].Contains("Skill_5") ||
-            selectedSkillNames[playerIndex].Contains("catSkill_1") ||
-            selectedSkillNames[playerIndex].Contains("catSkill_4") ||
-            selectedSkillNames[playerIndex].Contains("Can") ||
-            selectedSkillNames[playerIndex].Contains("Grass") ||
-            selectedSkillNames[playerIndex].Contains("Drying");
-
-        if (needsTarget && selectedTargets[playerIndex] == null)
-            return;
-
-        skillAction.Invoke();
-    }
-
-
-    IEnumerator ExecuteSkillQueue(int playerIndex)
-    {
-        var actions = new List<System.Action>(skillQueues[playerIndex]);
-        foreach (var skillAction in actions)
-        {
-            if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0) continue;
-            ExecuteSkillAction(skillAction, playerIndex);
-            yield return new WaitForSeconds(1f);
-        }
-        skillQueues[playerIndex].Clear();
-        selectedSkillNames[playerIndex].Clear();
-    }
-
     void PerformBasicAttack(int playerIndex, Unit target, int damageOverride = -1)
     {
         if (target == null || target.currentHP <= 0 || !enemyUnits.Contains(target)) return;
@@ -1058,25 +1081,24 @@ public class SkillManager : MonoBehaviour
     {
         if (skillQueues.ContainsKey(playerIndex))
         {
-            var newActions = new List<System.Action>();
-            var newSkillNames = new List<string>();
+            var newQueues = new List<IEnumerator>();
+            var newNames = new List<string>();
+            var newNeeds = new List<bool>();
             for (int i = 0; i < skillQueues[playerIndex].Count; i++)
             {
-                if (!IsActionTargeting(deadEnemy, skillQueues[playerIndex][i], selectedSkillNames[playerIndex][i]))
+                string skillName = selectedSkillNames[playerIndex][i];
+                if (!(skillName == "Skill_1" || skillName == "Skill_5" || skillName == "catSkill_1" || skillName == "catSkill_4" ||
+                      skillName == "Can" || skillName == "Grass" || skillName == "Drying") || !selectedTargets.ContainsValue(deadEnemy))
                 {
-                    newActions.Add(skillQueues[playerIndex][i]);
-                    newSkillNames.Add(selectedSkillNames[playerIndex][i]);
+                    newQueues.Add(skillQueues[playerIndex][i]);
+                    newNames.Add(skillName);
+                    newNeeds.Add(skillNeedsTarget[playerIndex][i]);
                 }
             }
-            skillQueues[playerIndex] = newActions;
-            selectedSkillNames[playerIndex] = newSkillNames;
+            skillQueues[playerIndex] = newQueues;
+            selectedSkillNames[playerIndex] = newNames;
+            skillNeedsTarget[playerIndex] = newNeeds;
         }
-    }
-
-    private bool IsActionTargeting(Unit target, System.Action action, string skillName)
-    {
-        return (skillName == "Skill_1" || skillName == "Skill_5" || skillName == "catSkill_1" || skillName == "catSkill_4" ||
-                skillName == "Can" || skillName == "Grass" || skillName == "Drying") && selectedTargets.ContainsValue(target);
     }
 
     private bool AllEnemiesDead()

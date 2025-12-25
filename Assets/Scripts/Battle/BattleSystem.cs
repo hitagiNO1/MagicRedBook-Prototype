@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
-
 public class BattleSystem : MonoBehaviour
 {
     public List<GameObject> playerPrefabs;
@@ -27,10 +25,8 @@ public class BattleSystem : MonoBehaviour
     private bool isBattleEnding = false;
     private bool hideAnimationTriggered = false;
     private bool isHidden = false;
-
     // 用來追蹤目前是哪位玩家（給 SkillManager.OnPlayerHeadClick 使用）
     public int currentPlayerIndex = 0;
-
     void Start()
     {
         state = BattleState.END;
@@ -45,7 +41,6 @@ public class BattleSystem : MonoBehaviour
         playerUnits = new List<Unit>();
         enemyUnits = new List<Unit>();
     }
-
     private void Update()
     {
         // 戰鬥開始觸發（由外部設定 state = START 時觸發一次）
@@ -58,7 +53,6 @@ public class BattleSystem : MonoBehaviour
             isHidden = true;
         }
     }
-
     public IEnumerator SetupBattle()
     {
         // ---------- 玩家初始化 ----------
@@ -72,6 +66,7 @@ public class BattleSystem : MonoBehaviour
                 yield break;
             }
             playerUnits.Add(playerUnit);
+
             if (i < playerHUDs.Count && playerHUDs[i] != null)
             {
                 playerHUDs[i].SetHUD(playerUnit);
@@ -89,6 +84,7 @@ public class BattleSystem : MonoBehaviour
                 Debug.LogError($"enemyPrefabs[{i}] 為 null！");
                 continue;
             }
+
             Unit enemyUnit = enemyGO.GetComponent<Unit>();
             if (enemyUnit == null)
             {
@@ -96,11 +92,13 @@ public class BattleSystem : MonoBehaviour
                 continue;
             }
             enemyUnits.Add(enemyUnit);
+
             if (i < enemyHUDs.Count && enemyHUDs[i] != null)
             {
                 enemyHUDs[i].SetHUD(enemyUnit);
                 enemyUnit.battleHUD = enemyHUDs[i];
             }
+
             // 設定每個敵人的 Enemyskill
             Enemyskill enemySkillComp = enemyGO.GetComponent<Enemyskill>();
             if (enemySkillComp != null)
@@ -114,6 +112,8 @@ public class BattleSystem : MonoBehaviour
         // ---------- 初始對話 ----------
         if (dialogueText != null)
             dialogueText.text = "野生的敵人們出現了..";
+
+        // 這裡的等待是為了讓玩家看清楚文字，同時確保 Animator 的 Trigger 已經觸發
         yield return new WaitForSeconds(1f);
 
         // ---------- SkillManager 初始化 ----------
@@ -123,15 +123,27 @@ public class BattleSystem : MonoBehaviour
         skillManager.buffDebuffManager = buffDebuffManager;
         skillManager.dialogueText = dialogueText;
 
-        // 延遲初始化技能圖示與按鈕狀態（等 UI 準備好）
-        if (skillManager != null)
-            StartCoroutine(skillManager.DelayedInitSkillIcons(1.5f));
+        // [修改處]：移除原本的 DelayedInitSkillIcons，改為等待動畫播放完畢
+        // 確保 Animator 存在
+        if (animator != null)
+        {
+            // 等待一幀，確保 Animator 狀態機已經切換到 Show
+            yield return null;
+
+            // 檢查動畫是否播放完畢
+            // normalizedTime >= 1.0f 代表播放進度達到 100%
+            // 注意：請確保 Unity 中該動畫的 "Loop Time" 已關閉，否則此條件可能失效
+            while (animator.IsInTransition(0) || animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            {
+                yield return null; // 每幀檢查一次
+            }
+        }
 
         // ---------- 進入玩家回合 ----------
+        // 當程式執行到這裡時，動畫已結束，PlayerTurn 內的 InitSkillIcons 會立即顯示 AP
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }
-
     public void PlayerTurn()
     {
         state = BattleState.PLAYERTURN;
@@ -141,7 +153,6 @@ public class BattleSystem : MonoBehaviour
         // 重要：重置技能圖示與按鈕狀態
         skillManager?.InitSkillIcons(); // 這會呼叫 Reset + UpdateAllSkillButtonStates
     }
-
     // 玩家按下「確認」後呼叫此方法（由 SkillManager.OnConfirmSkillQueue 最後呼叫）
     public void OnPlayerConfirmSkillQueue()
     {
@@ -151,9 +162,12 @@ public class BattleSystem : MonoBehaviour
             EndBattle();
             return;
         }
+
+        // 防止重複進入敵人回合
+        if (state == BattleState.ENEMYTURN) return;
+
         StartCoroutine(EnemyTurn());
     }
-
     public IEnumerator EnemyTurn()
     {
         // --- 新增：等待玩家特效結束 ---
@@ -167,18 +181,15 @@ public class BattleSystem : MonoBehaviour
         }
         // ----------------------------
         state = BattleState.ENEMYTURN;
-
         skillManager?.ClearAllHighlights();
         if (dialogueText != null)
             dialogueText.text = "敵人回合...";
         yield return new WaitForSeconds(1f);
-
         // 反向遍歷，避免銷毀時索引錯亂
         for (int i = enemyUnits.Count - 1; i >= 0; i--)
         {
             if (i >= enemyUnits.Count || enemyUnits[i] == null || enemyUnits[i].currentHP <= 0)
                 continue;
-
             Enemyskill es = enemyPrefabs[i]?.GetComponent<Enemyskill>();
             if (es != null)
             {
@@ -186,21 +197,18 @@ public class BattleSystem : MonoBehaviour
                 if (executed)
                     yield return new WaitForSeconds(1.5f);
             }
-
             // 若此敵人在技能中死亡，立即銷毀
             if (enemyUnits[i] != null && enemyUnits[i].currentHP <= 0)
             {
                 DestroyEnemy(i);
             }
         }
-
         // Buff/Debuff 回合結束 tick
         buffDebuffManager?.TickDefenseDebuffs();
         buffDebuffManager?.TickDefenseBuffs();
         buffDebuffManager?.TickDamageBuffs();
         buffDebuffManager?.TickPoison();
         buffDebuffManager?.TickSkillDisable();
-
         // 敵人技能冷卻減少
         foreach (GameObject enemyGO in enemyPrefabs)
         {
@@ -210,7 +218,6 @@ public class BattleSystem : MonoBehaviour
                 es?.ReduceCooldowns();
             }
         }
-
         // 勝負判定
         if (AllPlayersDead())
         {
@@ -231,7 +238,6 @@ public class BattleSystem : MonoBehaviour
             PlayerTurn();
         }
     }
-
     // 安全銷毀敵人（同步三個列表）
     public void DestroyEnemy(int index)
     {
@@ -244,18 +250,14 @@ public class BattleSystem : MonoBehaviour
         Unit enemyUnit = enemyUnits[index];
         if (enemyGO == null || enemyUnit == null || enemyUnit.currentHP > 0)
             return;
-
         Debug.Log($"銷毀敵人: {enemyUnit.unitName} (索引 {index})");
-
         // 關閉碰撞器避免誤觸
         Collider2D col2D = enemyGO.GetComponent<Collider2D>();
         if (col2D) col2D.enabled = false;
         Collider col3D = enemyGO.GetComponent<Collider>();
         if (col3D) col3D.enabled = false;
-
         // 銷毀 GameObject
         Destroy(enemyGO);
-
         // 同步移除三個列表
         enemyPrefabs.RemoveAt(index);
         enemyUnits.RemoveAt(index);
@@ -264,7 +266,6 @@ public class BattleSystem : MonoBehaviour
             Destroy(enemyHUDs[index].gameObject);
             enemyHUDs.RemoveAt(index);
         }
-
         // 若戰鬥中敵人全滅，立即結束
         if (AllEnemiesDead() && state != BattleState.WON && state != BattleState.LOST && state != BattleState.END)
         {
@@ -272,7 +273,6 @@ public class BattleSystem : MonoBehaviour
             EndBattle();
         }
     }
-
     private bool AllEnemiesDead()
     {
         foreach (Unit enemy in enemyUnits)
@@ -280,7 +280,6 @@ public class BattleSystem : MonoBehaviour
                 return false;
         return true;
     }
-
     private bool AllPlayersDead()
     {
         foreach (Unit player in playerUnits)
@@ -288,12 +287,9 @@ public class BattleSystem : MonoBehaviour
                 return false;
         return true;
     }
-
-
     public void OnRunbutton()
     {
         if (state != BattleState.PLAYERTURN) return;
-
         if (skillManager != null)
         {
             // 1. 清空兩個玩家的技能選擇
@@ -301,11 +297,11 @@ public class BattleSystem : MonoBehaviour
             skillManager.skillQueues[1].Clear();
             skillManager.selectedSkillNames[0].Clear();
             skillManager.selectedSkillNames[1].Clear();
+            skillManager.skillNeedsTarget[0].Clear();
+            skillManager.skillNeedsTarget[1].Clear();
             skillManager.selectedTargets.Clear();
-
             // 2. 清除目標高亮
             skillManager.ClearAllHighlights();
-
             // 3. 🔥 重置所有玩家技能冷卻為 0（最優雅的方式）
             foreach (var key in new List<string>(skillManager.skillCooldowns.Keys))
             {
@@ -315,20 +311,15 @@ public class BattleSystem : MonoBehaviour
                     skillManager.skillCooldowns[key] = 0;
                 }
             }
-
             // 4. 重置技能圖示與按鈕狀態
-            skillManager.InitSkillIcons();  // 這會呼叫 ResetSkillIcons() + ResetAllSkillButtonStates() + UpdateAllSkillButtonStates()
-
+            skillManager.InitSkillIcons(); // 這會呼叫 ResetSkillIcons() + ResetAllSkillButtonStates() + UpdateAllSkillButtonStates()
             // 5. 額外保險：強制更新一次按鈕狀態（確保冷卻歸零後外觀正確）
             skillManager.UpdateAllSkillButtonStates();
-
             Debug.Log("逃跑成功：已清空技能選擇、目標高亮，並重置所有技能冷卻時間");
         }
-
         state = BattleState.RUN;
         EndBattle();
     }
-
     public void EndBattle()
     {
         if (isBattleEnding)
@@ -337,7 +328,6 @@ public class BattleSystem : MonoBehaviour
             return;
         }
         isBattleEnding = true;
-
         if (state == BattleState.WON)
         {
             dialogueText.text = "你贏得了戰鬥！";
@@ -374,25 +364,20 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
-
         // 清除所有 Buff/Debuff
         buffDebuffManager?.ClearAllEffects();
-
         // 清除技能選擇高亮與技能清單（EndBattle 通用邏輯）
         skillManager?.ClearAllHighlights();
         skillManager?.ClearSkillIcons();
-
         // 播放隱藏動畫（只一次）
         if (animator != null && !hideAnimationTriggered)
         {
             animator.SetTrigger("Hide");
             hideAnimationTriggered = true;
         }
-
         // 延遲重置旗標，準備下一次戰鬥
         StartCoroutine(ResetBattleFlags());
     }
-
     private IEnumerator ResetBattleFlags()
     {
         // 根據你的 Hide 動畫長度調整（建議 1~2 秒）
