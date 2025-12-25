@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8680833076712833349}
   - component: {fileID: 1603819336342097465}
   - component: {fileID: 6794705710932062845}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: Eat
   m_TagString: Bush
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5597152988087294531}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -19.95, y: 4.63, z: 13}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
@@ -73,9 +73,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -146
+  m_SortingOrder: -130
   m_Sprite: {fileID: -1199555898, guid: 73723c1edba172d49a871f0357ff15d0, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

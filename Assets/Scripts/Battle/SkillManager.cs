@@ -485,6 +485,22 @@ public class SkillManager : MonoBehaviour
             int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
             PerformBasicAttack(playerIndex, target, buffedDamage);
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 甩出手上的球攻擊 {target.unitName}";
+
+            /* 判斷 1: 如果敵人總數只有 1 人，直接播放在中間
+            if (enemyUnits.Count == 1)
+            {
+                EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
+            }
+            // 判斷 2: 如果有多人，才去判斷左右位置
+            else
+            {
+                // 依照方法一：去 enemyUnits 找索引
+                int targetIndex = enemyUnits.IndexOf(target);
+                // 假設 Index 0 是左邊，其他是右邊
+                bool isTargetLeft = (targetIndex == 0);
+                EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
+            }
+            */
             EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 1 對 {target.unitName}";
@@ -563,6 +579,22 @@ public class SkillManager : MonoBehaviour
             PerformBasicAttack(playerIndex, target, buffedDamage);
             skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
             dialogueText.text = $"{playerUnits[playerIndex].unitName} 抱住敵方，使出最強攻擊兔子踹！";
+
+            /* 判斷 1: 如果敵人總數只有 1 人，直接播放在中間
+            if (enemyUnits.Count == 1)
+            {
+                EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
+            }
+            // 判斷 2: 如果有多人，才去判斷左右位置
+            else
+            {
+                // 依照方法一：去 enemyUnits 找索引
+                int targetIndex = enemyUnits.IndexOf(target);
+                // 假設 Index 0 是左邊，其他是右邊
+                bool isTargetLeft = (targetIndex == 0);
+                EffectManager.Instance.PlayUIEffectOneSide("B5", isTargetLeft);
+            }
+            */
             EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
         });
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 選擇了技能 5 對 {target.unitName}";
