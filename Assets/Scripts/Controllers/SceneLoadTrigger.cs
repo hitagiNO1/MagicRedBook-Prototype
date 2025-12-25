@@ -37,8 +37,7 @@ public class SceneLoadTrigger : MonoBehaviour
             StartCoroutine(FadeInAnimation());
         }
 
-        // 重置載入狀態，讓玩家以後還能再次觸發
-        isLoading = false;
+        playerInRange = false;
     }
 
     public void Update()

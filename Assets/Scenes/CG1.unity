@@ -430,7 +430,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -9.899983}
-  m_SizeDelta: {x: 685, y: 130.26852}
+  m_SizeDelta: {x: 850, y: 130.26852}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &621285801
 MonoBehaviour:
@@ -1091,7 +1091,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1133895680}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 71ff6531794645a4db0cf1115ce5cd00, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
