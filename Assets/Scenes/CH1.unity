@@ -11396,6 +11396,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!61 &90618343
 BoxCollider2D:
@@ -25839,6 +25840,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!61 &210002639
 BoxCollider2D:
@@ -35405,6 +35407,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!114 &290101557
 MonoBehaviour:
@@ -56493,6 +56496,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!61 &437807606
 BoxCollider2D:
@@ -128157,6 +128161,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!210 &1018057261
 SortingGroup:
@@ -142641,6 +142646,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!210 &1132619230
 SortingGroup:
@@ -204116,6 +204122,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!114 &1649820920
 MonoBehaviour:
@@ -220304,6 +220311,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!61 &1773212873
 BoxCollider2D:
@@ -239754,6 +239762,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!114 &1929828339
 MonoBehaviour:
@@ -269524,6 +269533,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!114 &1123742288082679283
 MonoBehaviour:
@@ -272058,7 +272068,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d88e65b89de9f2a42aeee0baa9120e6d, type: 2}
+  - {fileID: 2100000, guid: 1364e354982012f44943bc60814656dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -278617,6 +278627,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!198 &6642199199430131871 stripped
 ParticleSystem:
@@ -279586,6 +279597,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!1 &7581418983999645485
 GameObject:
@@ -280506,6 +280518,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!95 &8620324780132114360
 Animator:

@@ -15,7 +15,12 @@ public class Unit : MonoBehaviour
     public float critdmgplus = 1.5f;
     public BuffDebuffManager buffManager;
     public BattleHUD battleHUD; // 新增對 BattleHUD 的引用
+
+    // 新增：死亡旗標
+    public bool isDead = false;
+
     [HideInInspector] public string originalUnitName;
+
     private void Awake()
     {
         // 自動記錄 Prefab 名稱（去掉 "(Clone)"）
@@ -25,7 +30,9 @@ public class Unit : MonoBehaviour
                 .Replace("(Clone)", "")
                 .Trim();
         }
+        isDead = false; // 確保初始為 false
     }
+
     private void Start()
     {
         float reduction = defenseData.GetDamageReduction(defense);
@@ -34,18 +41,14 @@ public class Unit : MonoBehaviour
 
     public bool TakeDamage(int dmg)
     {
-      
         // 應用 Buff/Debuff 減傷
         int reducedDamage = buffManager != null ? buffManager.ApplyReductionIfApplicable(this, dmg) : dmg;
-     
 
         // 計算爆擊
         bool isCritical = Random.value < critChance;
-       
 
         // 計算防禦減傷比例
         float reduction = defenseData.GetDamageReduction(defense);
-      
 
         // 計算最終傷害
         int finalDMG;
@@ -60,36 +63,47 @@ public class Unit : MonoBehaviour
             float reducedDMG = reducedDamage * (1 - reduction);
             finalDMG = Mathf.RoundToInt(reducedDMG);
         }
-        // 新增：確保傷害不為負值
+
+        // 確保傷害不為負值
         finalDMG = Mathf.Max(finalDMG, 0);
         Debug.Log($"最終計算傷害={finalDMG}");
 
         // 扣血
         currentHP -= finalDMG;
+        currentHP = Mathf.Max(currentHP, 0); // 防止負血
+
         Debug.Log($"扣血後當前HP={currentHP}");
 
         // 更新 HUD
         if (battleHUD != null)
         {
             battleHUD.SetHP(currentHP);
-          
         }
         else
         {
             Debug.LogWarning($"battleHUD 為 null，無法更新 HUD，但實際HP已更新為 {currentHP}");
         }
 
-        // 檢查死亡並處理
-        if (currentHP <= 0)
+        // 檢查死亡
+        if (currentHP <= 0 && !isDead)
         {
+            isDead = true;
+
+            // 找到 BattleSystem 並標記此敵人為死亡（不銷毀）
             BattleSystem battleSystem = FindObjectOfType<BattleSystem>();
             if (battleSystem != null && battleSystem.enemyUnits.Contains(this))
             {
                 int index = battleSystem.enemyUnits.IndexOf(this);
-                battleSystem.DestroyEnemy(index); // 立即銷毀
+                if (index >= 0)
+                {
+                
+                    battleSystem.MarkEnemyAsDead(index);
+                }
             }
-            return true;
+
+            return true; // 表示死亡
         }
-        return false;
+
+        return false; // 未死亡
     }
 }
