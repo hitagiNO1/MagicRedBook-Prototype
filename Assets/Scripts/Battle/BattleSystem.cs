@@ -179,7 +179,7 @@ public class BattleSystem : MonoBehaviour
     {
         isRoundEnding = false; // 新回合開始，重置旗標
 
-        // 等待玩家特效結束
+        /* 等待玩家特效結束
         if (battleFxContainer != null)
         {
             while (battleFxContainer.transform.childCount > 0)
@@ -187,6 +187,7 @@ public class BattleSystem : MonoBehaviour
                 yield return null;
             }
         }
+        */
 
         state = BattleState.ENEMYTURN;
         skillManager?.ClearAllHighlights();

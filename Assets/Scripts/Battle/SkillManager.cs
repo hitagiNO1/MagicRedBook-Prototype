@@ -466,8 +466,22 @@ public class SkillManager : MonoBehaviour
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
         PerformBasicAttack(playerIndex, target, buffedDamage);
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 甩出手上的球攻擊 {target.unitName}";
-        EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
-        yield return new WaitForSeconds(1.5f);
+
+        // 判斷 1: 如果敵人總數只有 1 人，直接播放在中間
+        if (enemyUnits.Count == 1)
+        {
+            EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
+        }
+        // 判斷 2: 如果有多人，才去判斷左右位置
+        else
+        {
+            // 依照方法一：去 enemyUnits 找索引
+            int targetIndex = enemyUnits.IndexOf(target);
+            // 假設 Index 0 是左邊，其他是右邊
+            bool isTargetLeft = (targetIndex == 0);
+            EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
+        }
+        yield return new WaitForSeconds(0.5f);
     }
 
     private IEnumerator Skill2Coroutine(int playerIndex)
@@ -478,7 +492,7 @@ public class SkillManager : MonoBehaviour
         skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 將手上的球分散甩出攻擊全部敵人";
         EffectManager.Instance.PlayUIEffect("B2", new Vector2(0, 0));
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(0.67f);
     }
 
     private IEnumerator Skill3Coroutine(int playerIndex)
@@ -488,7 +502,7 @@ public class SkillManager : MonoBehaviour
         skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 將身上的毛整理好，使防禦力上升";
         EffectManager.Instance.PlayUIEffect("B3", new Vector2(-800, 0));
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(0.9f);
     }
 
     private IEnumerator Skill4Coroutine(int playerIndex)
@@ -498,7 +512,7 @@ public class SkillManager : MonoBehaviour
         skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 緊縮成一團，使敵人找不到縫隙攻擊";
         EffectManager.Instance.PlayUIEffect("B4", new Vector2(-800, 0));
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.1f);
     }
 
     private IEnumerator Skill5Coroutine(int playerIndex, Unit target)
@@ -517,8 +531,21 @@ public class SkillManager : MonoBehaviour
         PerformBasicAttack(playerIndex, target, buffedDamage);
         skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 抱住敵方，使出最強攻擊兔子踹！";
-        EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
-        yield return new WaitForSeconds(2.2f);
+        // 判斷 1: 如果敵人總數只有 1 人，直接播放在中間
+        if (enemyUnits.Count == 1)
+        {
+            EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
+        }
+        // 判斷 2: 如果有多人，才去判斷左右位置
+        else
+        {
+            // 依照方法一：去 enemyUnits 找索引
+            int targetIndex = enemyUnits.IndexOf(target);
+            // 假設 Index 0 是左邊，其他是右邊
+            bool isTargetLeft = (targetIndex == 0);
+            EffectManager.Instance.PlayUIEffectOneSide("B5", isTargetLeft);
+        }
+        yield return new WaitForSeconds(1.5f);
     }
 
     private IEnumerator CatSkill1Coroutine(int playerIndex, Unit target)
@@ -529,7 +556,7 @@ public class SkillManager : MonoBehaviour
         PerformBasicAttack(playerIndex, target, buffedDamage);
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 撿起身邊的東西丟向 {target.unitName}";
         EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.3f);
     }
 
     private IEnumerator CatSkill2Coroutine(int playerIndex)
@@ -539,7 +566,7 @@ public class SkillManager : MonoBehaviour
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 將傷口進行包紮";
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(2.5f);
     }
 
     private IEnumerator CatSkill3Coroutine(int playerIndex)
@@ -555,7 +582,7 @@ public class SkillManager : MonoBehaviour
         skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過唱歌給全體敵人造成傷害";
         EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(3f);
     }
 
     private IEnumerator CatSkill4Coroutine(int playerIndex, Unit target)
@@ -577,7 +604,7 @@ public class SkillManager : MonoBehaviour
         int targetIndex = playerUnits.IndexOf(target);
         bool isTargetLeft = (targetIndex == 0);
         EffectManager.Instance.PlayUIEffectOneSide("L4", isTargetLeft);
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1f);
     }
 
     private IEnumerator CatSkill5Coroutine(int playerIndex)
