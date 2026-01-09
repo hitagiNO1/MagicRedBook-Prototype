@@ -582,7 +582,8 @@ public class SkillManager : MonoBehaviour
         skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 透過唱歌給全體敵人造成傷害";
         EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
-        yield return new WaitForSeconds(3f);
+        //yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
     }
 
     private IEnumerator CatSkill4Coroutine(int playerIndex, Unit target)

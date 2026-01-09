@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7069161969978629514
 Transform:
   m_ObjectHideFlags: 0
@@ -86,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4364877973772245489}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 1
@@ -94,7 +94,7 @@ Transform:
   - {fileID: 1325100050749622222}
   - {fileID: 5864957226828359289}
   m_Father: {fileID: 7069161969978629514}
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!212 &2273164703250851281
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -197,6 +197,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!114 &5768338742510298433
 MonoBehaviour:
@@ -372,7 +373,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5864957226828359289
 Transform:
   m_ObjectHideFlags: 0
@@ -381,14 +382,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7113679177749292655}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.13052624, y: 0, z: 0, w: 0.9914449}
-  m_LocalPosition: {x: 0, y: -37.9, z: -132.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -6.2, z: -148.4}
   m_LocalScale: {x: 0, y: 3.3333333, z: 3.3333333}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7759517435393042037}
   m_Father: {fileID: 1614377713902432611}
-  m_LocalEulerAnglesHint: {x: -15, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4289191523828316278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +397,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7113679177749292655}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
@@ -445,7 +446,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1325100050749622222
 Transform:
   m_ObjectHideFlags: 0
