@@ -39,7 +39,7 @@ public class Unit : MonoBehaviour
         //Debug.Log($"防禦 {defense}，減傷比例：{reduction}");
     }
 
-    public bool TakeDamage(int dmg)
+    public bool TakeDamage(int dmg, out int damageDealt)
     {
         // 應用 Buff/Debuff 減傷
         int reducedDamage = buffManager != null ? buffManager.ApplyReductionIfApplicable(this, dmg) : dmg;
@@ -66,6 +66,10 @@ public class Unit : MonoBehaviour
 
         // 確保傷害不為負值
         finalDMG = Mathf.Max(finalDMG, 0);
+
+        // 將實際傷害傳出去
+        damageDealt = finalDMG;
+
         Debug.Log($"最終計算傷害={finalDMG}");
 
         // 扣血
@@ -88,20 +92,17 @@ public class Unit : MonoBehaviour
         if (currentHP <= 0 && !isDead)
         {
             isDead = true;
-
-            // 找到 BattleSystem 並標記此敵人為死亡（不銷毀）
+            // 找到 BattleSystem 並標記此敵人為死亡
             BattleSystem battleSystem = FindObjectOfType<BattleSystem>();
             if (battleSystem != null && battleSystem.enemyUnits.Contains(this))
             {
                 int index = battleSystem.enemyUnits.IndexOf(this);
                 if (index >= 0)
                 {
-                
                     battleSystem.MarkEnemyAsDead(index);
                 }
             }
-
-            return true; // 表示死亡
+            return true; // 表示這次攻擊導致死亡
         }
 
         return false; // 未死亡

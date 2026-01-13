@@ -1,56 +1,61 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random; // 添加別名，解決模擬兩可問題
 
 public class Enemyskill : MonoBehaviour
 {
     public List<Unit> enemyUnits;
+    public TextMeshProUGUI dialogueText;
     public List<Unit> playerUnits;
     public BuffDebuffManager buffDebuffManager;
-
+    int damageDealt;
     // 新增：技能冷卻字典，假設每個敵人技能有獨立冷卻
     private Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
 
     // 新增：執行敵人技能的主要方法
-    public bool ExecuteEnemySkill(Unit enemyUnit)
+    public IEnumerator ExecuteEnemySkillCoroutine(Unit enemyUnit)
     {
         if (enemyUnit == null)
         {
             Debug.LogError("敵人單位無效！");
-            return false;
+            yield break;
         }
 
-        // 關鍵：改用 originalUnitName
         string enemyName = enemyUnit.originalUnitName;
 
         if (enemyName == "SOFT")
         {
-            return ExecuteSoftSkills(enemyUnit);
+            yield return StartCoroutine(ExecuteSoftSkillsCoroutine(enemyUnit));
         }
         else
         {
-            List<Func<bool>> skills = GetEnemySkills(enemyName);
+            var skills = GetEnemySkills(enemyName);
             if (skills.Count > 0)
             {
                 int randomIndex = Random.Range(0, skills.Count);
-                return skills[randomIndex]();
+                yield return StartCoroutine(skills[randomIndex](enemyUnit));
             }
         }
-        return false;
     }
 
     // 新增：專門處理 SOFT 敵人的技能選擇邏輯
-    private bool ExecuteSoftSkills(Unit self)
+    private IEnumerator ExecuteSoftSkillsCoroutine(Unit self)
     {
-        // 創建有冷卻的技能列表（優先技能）
-        List<Func<bool>> prioritySkills = new List<Func<bool>>
-        {
-            () => CheckAndPerformSoftskill_2(self),
-            () => CheckAndPerformSoftskill_3(self)
-        };
+        // 優先技能（改用協程）
+        var prioritySkills = new List<Func<Unit, IEnumerator>>
+    {
+        Softskill_2Coroutine,
+        Softskill_3Coroutine
+    };
 
-        // 隨機打亂優先技能順序
+        // 隨機打亂順序（保持原有邏輯）
         for (int i = 0; i < prioritySkills.Count; i++)
         {
             int randomIndex = Random.Range(0, prioritySkills.Count);
@@ -59,307 +64,369 @@ public class Enemyskill : MonoBehaviour
             prioritySkills[randomIndex] = temp;
         }
 
-        // 嘗試執行優先技能
+        // 嘗試執行優先技能（只要成功一個就結束）
         foreach (var skill in prioritySkills)
         {
-            if (skill()) // 如果技能執行成功
-            {
-                return true;
-            }
+            // 這裡需要檢查冷卻，但因為現在是協程，我們把冷卻檢查包在協程裡
+            // 所以直接呼叫，裡面會自己判斷是否執行
+            yield return StartCoroutine(skill(self));
+
+            // 如果執行成功就離開（你可以根據需求加判斷）
+            yield break;  // 這裡簡單處理：執行一個優先技能就結束
         }
 
-        // 如果所有優先技能都在冷卻中，執行備用技能 Softskill_1
+        // 備用技能
         Debug.Log($"{self.unitName} 的所有特殊技能都在冷卻中，使用備用技能 Softskill_1");
-        PerformSoftskill_1(self);
-        return true;
+        yield return StartCoroutine(PerformSoftskill_1(self));
     }
 
-    public List<Func<bool>> GetEnemySkills(string enemyName) // enemyName 是 originalUnitName
+    public List<Func<Unit, IEnumerator>> GetEnemySkills(string enemyName)
     {
-        List<Func<bool>> skills = new List<Func<bool>>();
-        Unit self = GetComponent<Unit>();
-        if (self == null) return skills;
+        var coroutines = new List<Func<Unit, IEnumerator>>();
 
-        // 這裡用 originalUnitName 判斷
         if (enemyName == "FISH")
         {
-            skills.Add(() => { PerformFishskill_1(self); return true; });
-            skills.Add(() => { PerformFishskill_2(self); return true; });
+            coroutines.Add(PerformFishskill_1);
+            coroutines.Add(PerformFishskill_2);
         }
         else if (enemyName == "SNAKE")
         {
-            skills.Add(() => { PerformSnakeskill_1(self); return true; });
-            skills.Add(() => { PerformSnakeskill_2(self); return true; });
+            coroutines.Add(PerformSnakeskill_1);
+            coroutines.Add(PerformSnakeskill_2);
         }
         else if (enemyName == "CLOCK")
         {
-            skills.Add(() => { PerformClockskill_1(self); return true; });
-            skills.Add(() => { PerformClockskill_2(self); return true; });
+            coroutines.Add(PerformClockskill_1);
+            coroutines.Add(PerformClockskill_2);
         }
         else if (enemyName == "SOFT")
         {
-            skills.Add(() => { PerformSoftskill_1(self); return true; });
-            skills.Add(() => CheckAndPerformSoftskill_2(self));
-            skills.Add(() => CheckAndPerformSoftskill_3(self));
+            coroutines.Add(PerformSoftskill_1);
+            coroutines.Add(Softskill_2Coroutine);  // 改用協程版本
+            coroutines.Add(Softskill_3Coroutine);  // 改用協程版本
         }
         else
         {
             Debug.LogWarning($"未知的敵人類型: {enemyName}");
         }
-        return skills;
+
+        return coroutines;
     }
 
-    private bool CheckAndPerformSoftskill_2(Unit self)
+    private IEnumerator Softskill_2Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Softskill_2";
         if (!skillCooldowns.ContainsKey(skillKey))
-        {
             skillCooldowns[skillKey] = 0;
-        }
 
         if (skillCooldowns[skillKey] > 0)
         {
             Debug.Log($"{self.unitName} 的 Softskill_2 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            return false; // 返回 false，表示未執行
+            yield break; // 不執行
         }
 
-        PerformSoftskill_2(self);
-        skillCooldowns[skillKey] = 2; // 設置 2 回合冷卻
-        return true; // 返回 true，表示成功執行
+        yield return StartCoroutine(PerformSoftskill_2(self));
+        skillCooldowns[skillKey] = 2; // 設置冷卻
     }
 
-    private bool CheckAndPerformSoftskill_3(Unit self)
+    private IEnumerator Softskill_3Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Softskill_3";
         if (!skillCooldowns.ContainsKey(skillKey))
-        {
             skillCooldowns[skillKey] = 0;
-        }
 
         if (skillCooldowns[skillKey] > 0)
         {
             Debug.Log($"{self.unitName} 的 Softskill_3 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            return false; // 返回 false，表示未執行
+            yield break;
         }
 
-        PerformSoftskill_3(self);
-        skillCooldowns[skillKey] = 2; // 設置 2 回合冷卻
-        return true; // 返回 true，表示成功執行
+        yield return StartCoroutine(PerformSoftskill_3(self));
+        skillCooldowns[skillKey] = 2;
     }
 
-    private void PerformFishskill_1(Unit self)
+    private IEnumerator PerformFishskill_1(Unit self)
     {
-        if (playerUnits == null || playerUnits.Count == 0)
-        {
-            Debug.LogError("playerUnits 未初始化或為空！");
-            return;
-        }
-
         Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            PerformBasicAttack(self, target, self.damage);
+        if (target == null || target.isDead || !enemyUnits.Contains(target)) yield break;
 
-            //EffectManager.Instance.PlayUIEffect("Fish1", new Vector2(-805, -352));
-            bool playLeft;
-            if (target.unitName == "BlackCat") playLeft = false;
-            else playLeft = true;
-            EffectManager.Instance.PlayUIEffectOneSide("Fish1", playLeft);
+        int damage = self.damage;
+
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        // ★ 這裡自己組合想要的文字 ★
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 魚叉突刺\n握緊手中叉子刺向  {target.unitName}\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
         }
+
+        bool playLeft = target.unitName != "布萊克";
+        EffectManager.Instance.PlayUIEffectOneSide("Fish1", playLeft);
+        yield return new WaitForSeconds(1.5f);
     }
 
-    private void PerformFishskill_2(Unit self)
+    private IEnumerator PerformFishskill_2(Unit self)
+    {
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target == null || target.isDead) yield break;
+
+        int damage = Mathf.RoundToInt(self.damage * 1.2f);
+
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 神魚擺尾！\n蓄力轉身，用尾巴甩向 {target.unitName}。\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+
+        }
+
+        bool playLeft = target.unitName != "布萊克";
+        EffectManager.Instance.PlayUIEffectOneSide("Fish2", playLeft);
+
+        yield return new WaitForSeconds(1.5f);
+    }
+
+    private IEnumerator PerformSnakeskill_1(Unit self)
+    {
+        Unit target = GetRandomValidTarget(playerUnits);
+        if (target == null || target.isDead) yield break;
+
+        int damage = self.damage * 2;
+
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使用了 咬咬咬！\n大口咬向 {target.unitName}。\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+        }
+
+        bool playLeft = target.unitName != "布萊克";
+        EffectManager.Instance.PlayUIEffectOneSide("Snake1", playLeft);
+
+        yield return new WaitForSeconds(1.5f);
+    }
+
+    private IEnumerator PerformSnakeskill_2(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0)
         {
             Debug.LogError("playerUnits 未初始化或為空！");
-            return;
+            yield break;
         }
 
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
-            return;
+            yield break;
         }
 
         Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            int damage = Mathf.RoundToInt(self.damage * 1.2f);
-            PerformBasicAttack(self, target, damage);
+        if (target == null || target.isDead) yield break;
 
-            //EffectManager.Instance.PlayUIEffect("Fish2", new Vector2(-708, -206));
-            bool playLeft;
-            if (target.unitName == "BlackCat") playLeft = false;
-            else playLeft = true;
-            EffectManager.Instance.PlayUIEffectOneSide("Fish2", playLeft);
+        // 施加中毒效果
+        buffDebuffManager.ApplyPoison(target);
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 陳年老痰！\n" +
+                               $"對 {target.unitName} 噴出帶毒黏液， {target.unitName} 中毒。\n" +
+                               $"{target.unitName} 將在接下來幾回合持續受到傷害...";
         }
+
+        // 特效
+        bool playLeft = target.unitName != "布萊克";
+        EffectManager.Instance.PlayUIEffectOneSide("Snake2", playLeft);
+
+        // 最後延遲 1.5 秒，讓玩家看清楚文字與特效
+        yield return new WaitForSeconds(1.5f);
     }
 
-    private void PerformSnakeskill_1(Unit self)
+    private IEnumerator PerformClockskill_1(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0)
         {
             Debug.LogError("playerUnits 未初始化或為空！");
-            return;
+            yield break;
         }
 
         Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            PerformBasicAttack(self, target, self.damage * 2);
+        if (target == null || target.isDead) yield break;
 
-            //EffectManager.Instance.PlayUIEffect("Snake1", new Vector2(-677, -230));
-            bool playLeft;
-            if (target.unitName == "BlackCat") playLeft = false;
-            else playLeft = true;
-            EffectManager.Instance.PlayUIEffectOneSide("Snake1", playLeft);
+        // 計算傷害（原本是 self.damage * 2）
+        int damage = self.damage * 2;
+
+        // 執行攻擊並取得實際傷害與是否擊殺
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        // 自己組合想要的對話文字（時鐘主題可以帶點時間、命運感）
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 當頭棒喝！\n" +
+                               $"拿槌子敲向   {target.unitName}！\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
         }
+
+        // 特效
+        bool playLeft = target.unitName != "布萊克";
+        EffectManager.Instance.PlayUIEffectOneSide("Clock1", playLeft);
+
+        // 最後延遲 1.5 秒，讓玩家看清楚
+        yield return new WaitForSeconds(1.5f);
     }
 
-    private void PerformSnakeskill_2(Unit self)
+    private IEnumerator PerformClockskill_2(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0)
         {
             Debug.LogError("playerUnits 未初始化或為空！");
-            return;
+            yield break;
         }
 
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
-            return;
+            yield break;
         }
 
         Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            buffDebuffManager.ApplyPoison(target);
-            //EffectManager.Instance.PlayUIEffect("Snake2", new Vector2(-800, -450));
+        if (target == null || target.isDead) yield break;
 
-            bool playLeft;
-            if (target.unitName == "BlackCat") playLeft = false;
-            else playLeft = true;
-            EffectManager.Instance.PlayUIEffectOneSide("Snake2", playLeft);
+        // 施加 debuff 效果（先施加再攻擊，符合邏輯）
+        buffDebuffManager.ApplyDamageBuff(target, 0.7f, 2);     // 傷害降低 30%（0.7f），持續 2 回合
+        buffDebuffManager.ApplyHealDebuff(target, 2);           // 治療效果降低，持續 2 回合
+
+        // 計算並執行攻擊
+        int damage = Mathf.RoundToInt(self.damage * 1.5f);
+
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        // 自己組合文字（時鐘主題可以帶點「時間扭曲」「削弱」感）
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 鈴鈴鈴！\n" +
+                               $"敲擊自己腦袋，發出聲波攻擊{target.unitName} ！\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害，"/* +
+                               "接下來 2 回合傷害與治療效果大幅降低！"*/;
         }
+
+        // 特效（全場中央）
+        EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
+
+        // 最後延遲 1.5 秒
+        yield return new WaitForSeconds(1.5f);
     }
 
-    private void PerformClockskill_1(Unit self)
+    private IEnumerator PerformSoftskill_1(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0)
         {
             Debug.LogError("playerUnits 未初始化或為空！");
-            return;
+            yield break;
         }
 
         Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            PerformBasicAttack(self, target, self.damage * 2);
+        if (target == null || target.isDead) yield break;
 
-            //EffectManager.Instance.PlayUIEffect("Clock1", new Vector2(-696, -100));
-            bool playLeft;
-            if (target.unitName == "BlackCat") playLeft = false;
-            else playLeft = true;
-            EffectManager.Instance.PlayUIEffectOneSide("Clock1", playLeft);
+        // 計算傷害（原本是 self.damage * 2）
+        int damage = self.damage * 2;
+
+        // 執行攻擊並取得實際傷害與是否擊殺
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 軟軟甩擊！\n" +
+                               $"對 {target.unitName} 甩了一巴掌！\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
         }
+
+        yield return new WaitForSeconds(1.5f);
     }
 
-    private void PerformClockskill_2(Unit self)
+    private IEnumerator PerformSoftskill_2(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0)
         {
             Debug.LogError("playerUnits 未初始化或為空！");
-            return;
+            yield break;
         }
 
         if (buffDebuffManager == null)
         {
             Debug.LogError("buffDebuffManager 未初始化！");
-            return;
-        }
-
-        Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            buffDebuffManager.ApplyDamageBuff(target, 0.7f, 2);
-            buffDebuffManager.ApplyHealDebuff(target, 2);
-            int damage = Mathf.RoundToInt(self.damage * 1.5f);
-            PerformBasicAttack(self, target, damage);
-
-            EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
-        }
-    }
-
-    private void PerformSoftskill_1(Unit self)
-    {
-        if (playerUnits == null || playerUnits.Count == 0)
-        {
-            Debug.LogError("playerUnits 未初始化或為空！");
-            return;
-        }
-
-        Unit target = GetRandomValidTarget(playerUnits);
-        if (target != null)
-        {
-            PerformBasicAttack(self, target, self.damage * 2);
-            Debug.Log($"{self.unitName} 使用 Softskill_1：對 {target.unitName} 造成 {self.damage * 2} 傷害");
-        }
-    }
-
-    private void PerformSoftskill_2(Unit self)
-    {
-        if (playerUnits == null || playerUnits.Count == 0)
-        {
-            Debug.LogError("playerUnits 未初始化或為空！");
-            return;
-        }
-
-        if (buffDebuffManager == null)
-        {
-            Debug.LogError("buffDebuffManager 未初始化！");
-            return;
+            yield break;
         }
 
         List<Unit> validTargets = playerUnits.FindAll(unit => unit != null && unit.currentHP > 0);
         if (validTargets.Count == 0)
         {
             Debug.LogWarning("無有效的玩家目標！");
-            return;
+            yield break;
         }
 
         Unit target = validTargets[Random.Range(0, validTargets.Count)];
-        buffDebuffManager.ApplySkillDisable(target, 1);
-        int damage = Mathf.RoundToInt(self.damage * 0.5f);
-        PerformBasicAttack(self, target, damage);
 
-        //EffectManager.Instance.PlayUIEffect("Blanket2", new Vector2(0f, 571.11f));
-        bool playLeft;
-        if (target.unitName == "BlackCat") playLeft = false;
-        else playLeft = true;
+        // 先施加禁用技能效果
+        buffDebuffManager.ApplySkillDisable(target, 1);
+
+        // 計算並執行攻擊
+        int damage = Mathf.RoundToInt(self.damage * 0.5f);
+
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        // 自己組合對話文字（毛毯主題 + 禁用說明）
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使出了 軟軟纏繞！\n" +
+                               $"纏住 {target.unitName}， {target.unitName} 動彈不得。！\n" +
+                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害，" +
+                               "並且下一回合無法使用技能！";
+        }
+
+        // 特效
+        bool playLeft = target.unitName != "布萊克";
         EffectManager.Instance.PlayUIEffectOneSide("Blanket2", playLeft);
-        //Debug.Log($"{self.unitName} 對 {target.unitName} 使用 Softskill_2：禁用技能 1 回合，造成 {damage} 傷害");
+
+        // 最後延遲 1.5 秒，讓玩家看清楚文字與效果
+        yield return new WaitForSeconds(1.5f);
     }
 
-    private void PerformSoftskill_3(Unit self)
+    private IEnumerator PerformSoftskill_3(Unit self)
     {
-        if (playerUnits == null || playerUnits.Count == 0)
-        {
-            Debug.LogError("playerUnits 未初始化或為空！");
-            return;
-        }
+        if (playerUnits == null || playerUnits.Count == 0) yield break;
+
+        int totalDamageDealt = 0;
 
         foreach (Unit target in playerUnits)
         {
-            if (target != null && target.currentHP > 0)
-            {
-                int damage = Mathf.RoundToInt(self.damage * 3f);
-                PerformBasicAttack(self, target, damage);
-            }
+            if (target == null || target.currentHP <= 0) continue;
+
+            int damage = Mathf.RoundToInt(self.damage * 3f);
+
+            int actualDamageDealt;
+            bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+            totalDamageDealt += actualDamageDealt;
+        }
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = $"{self.unitName} 使用了 天黑請閉眼！\n" +
+                               $"我方受到了總共 {totalDamageDealt} 點傷害！";
         }
 
         EffectManager.Instance.PlayUIEffect("Blanket3", new Vector2(0f, 0f));
-        Debug.Log($"{self.unitName} 使用 Softskill_3 對所有玩家造成 {Mathf.RoundToInt(self.damage * 3f)} 傷害！");
+
+        yield return new WaitForSeconds(1.5f);  
     }
 
     private Unit GetRandomValidTarget(List<Unit> units)
@@ -376,14 +443,17 @@ public class Enemyskill : MonoBehaviour
 
     private void PerformBasicAttack(Unit attacker, Unit target, int damage)
     {
-        if (target != null && target.TakeDamage(damage))
+        if (attacker == null || target == null || target.isDead)
         {
-            Debug.Log($"{attacker.unitName} 擊敗 {target.unitName}！");
+            Debug.LogWarning("攻擊目標無效，跳過攻擊");
+            return;
         }
-        else
-        {
-            Debug.Log($"{attacker.unitName} 對 {target.unitName} 造成 {damage} 傷害！");
-        }
+
+        int actualDamageDealt;
+        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+
+        // 只做必要的事：扣血、更新 HUD（如果有玩家 HUD 系統就加在這裡）
+        // 這裡不再寫 Debug.Log 或 dialogueText
     }
 
     public void ReduceCooldowns()

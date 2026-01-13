@@ -8937,7 +8937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e901abda54227343afcb94ef87d58ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Lyla
+  unitName: "\u840A\u83C8"
   unitLevel: 1
   damage: 25
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
@@ -22927,6 +22927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!4 &210002646
@@ -31423,6 +31424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &290101558
@@ -47495,7 +47497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e901abda54227343afcb94ef87d58ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: BlackCat
+  unitName: "\u5E03\u840A\u514B"
   unitLevel: 10
   damage: 20
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
@@ -54272,7 +54274,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -21.961523}
+  m_LocalPosition: {x: 0, y: 0, z: 24.538479}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -54280,7 +54282,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 967, y: 30.277802}
+  m_AnchoredPosition: {x: 741.9, y: 30.300007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -109855,6 +109857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1018057260
@@ -121987,6 +121990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1132619229
@@ -153684,7 +153688,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 967, y: 30.277802, z: -21.961523}
+  m_LocalPosition: {x: 741.9, y: 30.300007, z: 24.538479}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -181480,6 +181484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!114 &1649820921
@@ -198232,6 +198237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!210 &1773212877
@@ -214574,7 +214580,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 967, y: 0.27779153, z: 30}
+  m_LocalPosition: {x: 741.9, y: 0.3, z: 76.5}
   m_LocalScale: {x: -0.10000002, y: 0.10000002, z: 0.10000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -231132,6 +231138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!210 &2073287926
@@ -235660,7 +235667,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -301
+  m_SortingOrder: -766
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
@@ -249515,6 +249522,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CLOCK
       objectReference: {fileID: 0}
+    - target: {fileID: 2002173326021242782, guid: 097e354aae500654ba9bd664fd41449e, type: 3}
+      propertyPath: dialogueText
+      value: 
+      objectReference: {fileID: 422702079435835153}
+    - target: {fileID: 2002173326021242782, guid: 097e354aae500654ba9bd664fd41449e, type: 3}
+      propertyPath: buffDebuffManager
+      value: 
+      objectReference: {fileID: 3720424681303388705}
     - target: {fileID: 2676591332438027165, guid: 097e354aae500654ba9bd664fd41449e, type: 3}
       propertyPath: buffManager
       value: 
@@ -309597,6 +309612,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3720424681303388705}
     - target: {fileID: 7752731964368406297, guid: 15099cb494987664eacf6b03859f0ba7, type: 3}
+      propertyPath: dialogueText
+      value: 
+      objectReference: {fileID: 422702079435835153}
+    - target: {fileID: 7752731964368406297, guid: 15099cb494987664eacf6b03859f0ba7, type: 3}
       propertyPath: buffDebuffManager
       value: 
       objectReference: {fileID: 3720424681303388705}
@@ -316419,6 +316438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!1 &4138282837094861319
@@ -350212,8 +350232,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 422702079435835153}
   playerUnits: []
-  buffDebuffManager: {fileID: 0}
+  buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!1001 &5771814219555590012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -368711,8 +368732,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 422702079435835153}
   playerUnits: []
-  buffDebuffManager: {fileID: 0}
+  buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!1001 &6842222814828634977
 PrefabInstance:
   m_ObjectHideFlags: 0

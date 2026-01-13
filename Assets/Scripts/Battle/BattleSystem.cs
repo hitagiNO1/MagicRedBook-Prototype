@@ -179,45 +179,33 @@ public class BattleSystem : MonoBehaviour
     {
         isRoundEnding = false; // 新回合開始，重置旗標
 
-        /* 等待玩家特效結束
-        if (battleFxContainer != null)
-        {
-            while (battleFxContainer.transform.childCount > 0)
-            {
-                yield return null;
-            }
-        }
-        */
-
         state = BattleState.ENEMYTURN;
         skillManager?.ClearAllHighlights();
+
         if (dialogueText != null)
             dialogueText.text = "敵人回合...";
 
         yield return new WaitForSeconds(1f);
 
-        for (int i = enemyUnits.Count - 1; i >= 0; i--)
+        // 輪流執行：一個敵人攻擊完成後，才輪到下一個
+        for (int i = 0; i < enemyUnits.Count; i++)
         {
-            if (i >= enemyUnits.Count || enemyUnits[i] == null || enemyUnits[i].isDead)
+            Unit currentEnemy = enemyUnits[i];
+            if (currentEnemy == null || currentEnemy.isDead)
                 continue;
 
             Enemyskill es = enemyPrefabs[i]?.GetComponent<Enemyskill>();
             if (es != null)
             {
-                bool executed = es.ExecuteEnemySkill(enemyUnits[i]);
-                if (executed)
-                    yield return new WaitForSeconds(1.5f);
+                // ★ 關鍵：使用 yield return 等待這個敵人的技能完全執行完（包含 1.5 秒延遲）
+                yield return StartCoroutine(es.ExecuteEnemySkillCoroutine(currentEnemy));
             }
 
-            // 若此敵人在技能中死亡，標記為死亡狀態（會啟動淡出協程）
-          /*  if (enemyUnits[i] != null && enemyUnits[i].currentHP <= 0)
-            {
-                Debug.Log(i);
-                MarkEnemyAsDead(i);
-            }*/
+            // 可選：每個敵人攻擊完後加一點額外間隔（讓畫面呼吸一下）
+            yield return new WaitForSeconds(0.5f);  // 這個 0.5f 可以調整或刪除
         }
 
-        // Buff/Debuff 回合結束 tick
+        // Buff/Debuff 回合結束處理
         buffDebuffManager?.TickDefenseDebuffs();
         buffDebuffManager?.TickDefenseBuffs();
         buffDebuffManager?.TickDamageBuffs();
@@ -249,7 +237,7 @@ public class BattleSystem : MonoBehaviour
         {
             skillManager?.ReduceCooldown();
             skillManager?.InitSkillIcons();
-            isRoundEnding = true; // 敵人回合結束，準備進入下一玩家回合
+            isRoundEnding = true;
             state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
