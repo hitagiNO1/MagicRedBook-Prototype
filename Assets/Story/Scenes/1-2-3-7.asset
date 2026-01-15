@@ -209,5 +209,8 @@ MonoBehaviour:
   - text: "(\u96A8\u8EAB\u807D\u8F49\u8EAB\uFF0C\u64AD\u653E\u8D77\u8F15\u67D4\u7684\u65CB\u5F8B\uFF0C\u5728\u97F3\u6A02\u4E2D\u9010\u6F38\u9060\u53BB)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 6b7c9130f58e1614baa83e5024501c8c, type: 2}
+      timing: 1
   nextScene: {fileID: 0}

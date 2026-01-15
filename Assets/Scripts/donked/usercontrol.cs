@@ -21,6 +21,10 @@ public class usercontrol : MonoBehaviour,
     public boxgameflow gameflow;
     public GameObject backbutton;
 
+
+    [Header("Return Settings")]
+    public string mainSceneName;
+
     private mouseborn mouseborn;
 
     //=====================================================================
@@ -151,9 +155,16 @@ public class usercontrol : MonoBehaviour,
             mouseborn.Restart();
     }
 
-    public void BackGame()
+    public void EndMiniGame()
     {
-        SceneManager.LoadScene("Prologue");
+        StartCoroutine(ReturnToMainScene());
+    }
+
+    private IEnumerator ReturnToMainScene()
+    {
+        SceneSwapper.RestoreMainScene(mainSceneName);
+        yield return null;
+        yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
 
     //=====================================================================

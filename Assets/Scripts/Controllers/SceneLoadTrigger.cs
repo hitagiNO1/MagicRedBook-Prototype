@@ -97,7 +97,24 @@ public class SceneLoadTrigger : MonoBehaviour
             fadeImage.gameObject.SetActive(false);
         }
     }
+    // --- 新增：給 Timeline 呼叫的專用入口 ---
+    public void TriggerTransitionFromTimeline()
+    {
+        // 防止重複觸發
+        if (isLoading) return;
 
+        isLoading = true;
+
+        // 如果 UI 剛好開著，要強制關閉
+        if (InteractiveUI != null) InteractiveUI.SetActive(false);
+
+        // 為了保險，把 Collider 關掉，避免 Timeline 跑到一半玩家誤觸
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // 啟動原本的轉場邏輯
+        StartCoroutine(SwitchToMiniGame());
+    }
     private IEnumerator SwitchToMiniGame()
     {
         // 1. 先變黑

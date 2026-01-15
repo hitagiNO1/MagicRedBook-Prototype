@@ -198,7 +198,11 @@ public class TimelineManager : MonoBehaviour
 
     public void GoTapeGame()
     {
-        SceneManager.LoadScene("TapeGame");
+        SceneManager.LoadScene("Game_Tape");
+    }
+    public void GoBOXGame()
+    {
+        SceneManager.LoadScene("Game_BOX");
     }
     public  void Page1Pick()
     {

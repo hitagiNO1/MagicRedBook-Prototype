@@ -449,7 +449,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &553306121
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2016,7 +2016,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1517387923}
         m_TargetAssemblyTypeName: usercontrol, Assembly-CSharp
-        m_MethodName: BackGame
+        m_MethodName: EndMiniGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2113,6 +2113,7 @@ MonoBehaviour:
   resault: {fileID: 1619631300}
   gameflow: {fileID: 1654170160}
   backbutton: {fileID: 1467081387}
+  mainSceneName: CH1
 --- !u!1 &1518877507
 GameObject:
   m_ObjectHideFlags: 0
