@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;   // 必須
+using UnityEngine.UI;
 
 public class usercontrol : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler   // 用來偵測滑鼠進出（可選）
@@ -24,6 +25,9 @@ public class usercontrol : MonoBehaviour,
 
     [Header("Return Settings")]
     public string mainSceneName;
+    public GameScene currentScene;
+    public Image fadeImage;
+    public float fadeDuration = 1f;
 
     private mouseborn mouseborn;
 
@@ -162,9 +166,31 @@ public class usercontrol : MonoBehaviour,
 
     private IEnumerator ReturnToMainScene()
     {
+        yield return StartCoroutine(FadeOutAnimation());
+        yield return new WaitForSeconds(0.5f);
         SceneSwapper.RestoreMainScene(mainSceneName);
+        GameController.Instance.PlayScene(currentScene as StoryScene);
         yield return null;
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
+    }
+    // 1. 變黑 (Fade Out to Black)
+    private IEnumerator FadeOutAnimation()
+    {
+        if (fadeImage != null)
+        {
+            fadeImage.gameObject.SetActive(true);
+            fadeImage.color = new Color(0, 0, 0, 0); // 從透明開始
+
+            float elapsed = 0f;
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float alpha = Mathf.Clamp01(elapsed / fadeDuration);
+                fadeImage.color = new Color(0, 0, 0, alpha);
+                yield return null;
+            }
+            fadeImage.color = new Color(0, 0, 0, 1); // 確保全黑
+        }
     }
 
     //=====================================================================

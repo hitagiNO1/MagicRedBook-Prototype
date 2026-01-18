@@ -9,21 +9,12 @@ public class boxgameflow : MonoBehaviour
     public GameObject gameCanvas;      // 只控制遊戲 UI，不控制背景
     public GameObject resultCanvas;
 
-    [Header("Background (永遠顯示)")]
-    public GameObject backgroundCanvas;  // BackgroundCanvas（拖入）
-
     [Header("Buttons")]
     public GameObject startbutton;
     public usercontrol usercontrol;
 
     void Start()
     {
-        GameObject bg = GameObject.Find("BG"); // 或你的背景名稱
-        if (bg != null)
-        {
-            bg.transform.SetAsFirstSibling(); // 移到最前面（最底層）
-            Debug.Log("背景已設為最底層");
-        }
         ShowMainMenu();
     }
 
@@ -32,7 +23,6 @@ public class boxgameflow : MonoBehaviour
         mainCanvas.SetActive(true);
         gameCanvas.SetActive(false);     // 遊戲 UI 隱藏
         resultCanvas.SetActive(false);
-        backgroundCanvas.SetActive(true); // 背景永遠顯示
     }
 
     public void StartGame()
@@ -40,8 +30,6 @@ public class boxgameflow : MonoBehaviour
         mainCanvas.SetActive(false);
         gameCanvas.SetActive(true);      // 只顯示遊戲 UI
         resultCanvas.SetActive(false);
-        backgroundCanvas.SetActive(true); // 背景永遠顯示
-
         usercontrol.RestartGame();
         startbutton.SetActive(true);
     }
@@ -51,6 +39,5 @@ public class boxgameflow : MonoBehaviour
         mainCanvas.SetActive(false);
         gameCanvas.SetActive(false);     // 遊戲 UI 隱藏
         resultCanvas.SetActive(true);
-        backgroundCanvas.SetActive(true); // 背景永遠顯示
     }
 }

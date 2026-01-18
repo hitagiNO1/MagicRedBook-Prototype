@@ -18,6 +18,14 @@ public class RedBook : MonoBehaviour
     public Animator animator;
     public GameObject inventoryUI;
 
+    [Header("MAP")]
+    public Transform player; // 玩家的 Transform
+    public float thresholdX = 574.7f; // 臨界值 (例如 0)
+    public Sprite spriteA;   // 圖片 A
+    public Sprite spriteB;   // 圖片 B
+    public Image mapRenderer;
+    public GameObject ZoneA;
+    public GameObject ZoneB;
     //public CinemachineVirtualCamera BookCamera = null;
     private void Start()
     {
@@ -29,6 +37,7 @@ public class RedBook : MonoBehaviour
     {
         HandleInput();
         UpdateHUD();
+        UpdateMap();
     }
 
     private void HandleInput()
@@ -60,6 +69,32 @@ public class RedBook : MonoBehaviour
         {
             BlackState.SetHUD();
             LylaState.SetHUD();
+        }
+    }
+    public void UpdateMap()
+    {
+        if (player == null || mapRenderer == null) return;
+
+        // 判斷邏輯
+        if (player.position.x < thresholdX)
+        {
+            // 如果目前圖片不是 A，才換成 A (節省效能)
+            if (mapRenderer.sprite != spriteA)
+            {
+                mapRenderer.sprite = spriteA;
+                ZoneA.SetActive(true);
+                ZoneB.SetActive(false);
+            }
+        }
+        else
+        {
+            // 如果目前圖片不是 B，才換成 B
+            if (mapRenderer.sprite != spriteB)
+            {
+                mapRenderer.sprite = spriteB;
+                ZoneA.SetActive(false);
+                ZoneB.SetActive(true);
+            }
         }
     }
 

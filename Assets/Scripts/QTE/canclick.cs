@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class canclick : MonoBehaviour
 {
@@ -26,7 +27,8 @@ public class canclick : MonoBehaviour
 
     [Header("Return Settings")]
     public string mainSceneName;
-
+    public Image fadeImage;
+    public float fadeDuration = 1f;
     // Sprite 設置
     public Sprite[] columnSpecificWhiteSprites;
     public Sprite commonWhiteSprite;
@@ -292,11 +294,31 @@ public class canclick : MonoBehaviour
 
     private IEnumerator ReturnToMainScene()
     {
+        yield return StartCoroutine(FadeOutAnimation());
+        yield return new WaitForSeconds(0.5f);
         SceneSwapper.RestoreMainScene(mainSceneName);
         yield return null;
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
+    // 1. 變黑 (Fade Out to Black)
+    private IEnumerator FadeOutAnimation()
+    {
+        if (fadeImage != null)
+        {
+            fadeImage.gameObject.SetActive(true);
+            fadeImage.color = new Color(0, 0, 0, 0); // 從透明開始
 
+            float elapsed = 0f;
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float alpha = Mathf.Clamp01(elapsed / fadeDuration);
+                fadeImage.color = new Color(0, 0, 0, alpha);
+                yield return null;
+            }
+            fadeImage.color = new Color(0, 0, 0, 1); // 確保全黑
+        }
+    }
     public void RestartGame()
     {
         gameEnded = false;
