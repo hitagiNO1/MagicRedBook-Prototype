@@ -306759,6 +306759,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   enemyHUDs:
   - {fileID: 0}
+  playerHUDs: []
   battlesystem: {fileID: 537444389665327204}
   buffDebuffManager: {fileID: 3720424681303388705}
   itemuse: {fileID: 3720424681303388710}
@@ -306768,6 +306769,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  playerSkillButtons: []
+  playerSkillIcons: []
   audioSource: {fileID: 0}
   skillIconPrefab: {fileID: 7392400310071351197, guid: 73240bd9a52a4dc418392145b9507b3c, type: 3}
   skillIconParent: {fileID: 416347393}
@@ -313979,7 +313982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 979604863200588119, guid: 6c8776bf430fe7c4d8b15efb39d433d8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1102717462019289952, guid: 6c8776bf430fe7c4d8b15efb39d433d8, type: 3}
       propertyPath: Addmonster
@@ -353149,7 +353152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1001 &5897863011908472142
 PrefabInstance:
   m_ObjectHideFlags: 0

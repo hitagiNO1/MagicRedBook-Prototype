@@ -11,13 +11,16 @@ public class SkillManager : MonoBehaviour
     public List<Unit> enemyUnits;
     public TextMeshProUGUI dialogueText;
     public List<BattleHUD> enemyHUDs;
+    public List<BattleHUD> playerHUDs;
     public BattleSystem battlesystem;
     public BuffDebuffManager buffDebuffManager;
     public Itemuse itemuse;
     public LayerMask enemyLayer;
     public LayerMask playerLayer;
     public Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
-
+    public List<Button> playerSkillButtons;     // 或按玩家索引分開
+    public List<Image> playerSkillIcons;        // 或其他 UI 元件
+   
     private int skill2CooldownTurns = 3;
     private int skill3CooldownTurns = 2;
     private int skill4CooldownTurns = 3;
@@ -63,6 +66,7 @@ public class SkillManager : MonoBehaviour
 
     public void Start()
     {
+
         audioSource = GetComponent<AudioSource>();
         if (playerUnits.Count != 2) Debug.LogError("playerUnits count is not 2, check initialization");
 
@@ -275,6 +279,19 @@ public class SkillManager : MonoBehaviour
 
     public void UpdateAllSkillButtonStates()
     {
+        bool p0Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[0]);
+        bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
+        skill1Button.interactable = !p0Disabled;
+        skill2Button.interactable = !p0Disabled;
+        skill3Button.interactable = !p0Disabled;
+        skill4Button.interactable = !p0Disabled;
+        skill5Button.interactable = !p0Disabled;
+
+        catSkill1Button.interactable = !p1Disabled;
+        catSkill2Button.interactable = !p1Disabled;
+        catSkill3Button.interactable = !p1Disabled;
+        catSkill4Button.interactable = !p1Disabled;
+        catSkill5Button.interactable = !p1Disabled;
         SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
         SetButtonCooldownDimmed(skill2Button, skillCooldowns["Skill_2_0"] > 0);
         SetButtonDimmed(skill2Button, selectedSkillNames[0].Contains("Skill_2"));
@@ -418,21 +435,28 @@ public class SkillManager : MonoBehaviour
 
     public bool ValidateSkill(int playerIndex, string skillName)
     {
+    
+        if (!CanUseSkill(playerIndex)) return false;
+
         if (selectedSkillNames[playerIndex].Contains(skillName))
         {
             CancelSkill(playerIndex, skillName);
             return false;
         }
+
         if (GetTotalSelectedSkills() >= maxSkillPerTurn)
         {
             dialogueText.text = "已達技能數量上限！";
             return false;
         }
+
         string cooldownKey = $"{skillName}_{playerIndex}";
         if (!skillCooldowns.ContainsKey(cooldownKey)) skillCooldowns[cooldownKey] = 0;
         if (skillCooldowns[cooldownKey] > 0) return false;
+
         return true;
     }
+
 
     private void ExecutePendingSkill()
     {
@@ -626,16 +650,30 @@ public class SkillManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
     }
-
     private IEnumerator CatSkill2Coroutine(int playerIndex)
     {
-        buffDebuffManager.Heal(playerUnits[playerIndex], 0.75f);
+        foreach (Unit unit in playerUnits)
+        {
+            if (unit != null && !unit.isDead)
+            {
+                buffDebuffManager.Heal(unit, 0.75f);
+
+                // 更新 HUD
+                int idx = playerUnits.IndexOf(unit);
+                if (idx >= 0 && idx < playerHUDs.Count && playerHUDs[idx] != null)
+                {
+                    playerHUDs[idx].SetHP(unit.currentHP);
+                }
+            }
+        }
+
         skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
         dialogueText.text = $"萊拉 使出了 小意思！\n將傷口進行包紮";
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
         yield return new WaitForSeconds(2.5f);
     }
+
 
     private IEnumerator CatSkill3Coroutine(int playerIndex)
     {
@@ -793,6 +831,7 @@ public class SkillManager : MonoBehaviour
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill2Coroutine(playerIndex));
         dialogueText.text = $"小意思！\n將傷口進行包紮。\n萊拉 選擇了 小意思！";
+        
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -838,6 +877,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(0)) return;
         if (selectedSkillNames[0].Contains("Skill_1"))
         {
             CancelSkill(0, "Skill_1");
@@ -860,6 +900,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_2", "2")) return;
         if (selectedSkillNames[0].Contains("Skill_2"))
         {
@@ -880,6 +921,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_3", "3")) return;
         if (selectedSkillNames[0].Contains("Skill_3"))
         {
@@ -900,6 +942,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_4", "4")) return;
         if (selectedSkillNames[0].Contains("Skill_4"))
         {
@@ -920,6 +963,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_5", "5")) return;
         if (selectedSkillNames[0].Contains("Skill_5"))
         {
@@ -943,6 +987,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(1)) return;
         if (selectedSkillNames[1].Contains("catSkill_1"))
         {
             CancelSkill(1, "catSkill_1");
@@ -965,6 +1010,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_2", "2")) return;
         if (selectedSkillNames[1].Contains("catSkill_2"))
         {
@@ -985,6 +1031,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_3", "3")) return;
         if (selectedSkillNames[1].Contains("catSkill_3"))
         {
@@ -1005,6 +1052,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_4", "4")) return;
         if (selectedSkillNames[1].Contains("catSkill_4"))
         {
@@ -1028,6 +1076,7 @@ public class SkillManager : MonoBehaviour
     {
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
+        if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_5", "5")) return;
         if (selectedSkillNames[1].Contains("catSkill_5"))
         {
@@ -1097,13 +1146,24 @@ public class SkillManager : MonoBehaviour
 
     IEnumerator ExecuteSkillQueue(int playerIndex)
     {
+
+        if (!CanUseSkill(playerIndex))
+        {
+            skillQueues[playerIndex].Clear();
+            selectedSkillNames[playerIndex].Clear();
+            skillNeedsTarget[playerIndex].Clear();
+            yield break;
+        }
+
         var coroutines = new List<IEnumerator>(skillQueues[playerIndex]);
         foreach (var coroutine in coroutines)
         {
             if (playerUnits[playerIndex] == null || playerUnits[playerIndex].isDead)
                 yield break;
+
             yield return StartCoroutine(coroutine);
         }
+
         skillQueues[playerIndex].Clear();
         selectedSkillNames[playerIndex].Clear();
         skillNeedsTarget[playerIndex].Clear();
@@ -1207,6 +1267,21 @@ public class SkillManager : MonoBehaviour
             audioSource.PlayOneShot(clip);
         else
             Debug.LogWarning("音效找不到: " + soundName);
+    }
+
+    private bool CanUseSkill(int playerIndex)
+    {
+        if (buffDebuffManager == null) return true;
+        Unit unit = playerUnits[playerIndex];
+        if (unit == null) return false;
+
+        if (buffDebuffManager.IsSkillDisabled(unit))
+        {
+            if (dialogueText != null)
+                dialogueText.text = $"{unit.unitName} 被技能封印，無法使用技能！";
+            return false;
+        }
+        return true;
     }
 
     public void OnCanButtonClick() => itemuse.TriggerCanForPlayer(0);

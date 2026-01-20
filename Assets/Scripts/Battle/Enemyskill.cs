@@ -34,6 +34,14 @@ public class Enemyskill : MonoBehaviour
     private int dcatskill4CooldownTurns = 3;
 
     // ==================== 主要執行方法 ====================
+    private bool IsSkillReady(string skillKey)
+    {
+        if (!skillCooldowns.ContainsKey(skillKey))
+            skillCooldowns[skillKey] = 0;
+
+        return skillCooldowns[skillKey] <= 0;
+    }
+
     public IEnumerator ExecuteEnemySkillCoroutine(Unit enemyUnit)
     {
         if (enemyUnit == null)
@@ -66,63 +74,59 @@ public class Enemyskill : MonoBehaviour
     // ==================== SOFT 專用技能選擇邏輯 ====================
     private IEnumerator ExecuteSoftSkillsCoroutine(Unit self)
     {
-        var prioritySkills = new List<Func<Unit, IEnumerator>>
-        {
-            Softskill_2Coroutine,
-            Softskill_3Coroutine
-        };
+        // 可用技能池
+        var availableSkills = new List<Func<Unit, IEnumerator>>();
 
-        for (int i = 0; i < prioritySkills.Count; i++)
-        {
-            int randomIndex = Random.Range(0, prioritySkills.Count);
-            var temp = prioritySkills[i];
-            prioritySkills[i] = prioritySkills[randomIndex];
-            prioritySkills[randomIndex] = temp;
-        }
+        string skill2Key = $"{self.unitName}_Softskill_2";
+        string skill3Key = $"{self.unitName}_Softskill_3";
 
-        foreach (var skill in prioritySkills)
+        if (IsSkillReady(skill2Key))
+            availableSkills.Add(Softskill_2Coroutine);
+
+        if (IsSkillReady(skill3Key))
+            availableSkills.Add(Softskill_3Coroutine);
+
+        //  如果有任何可用技能 → 隨機選一個
+        if (availableSkills.Count > 0)
         {
-            yield return StartCoroutine(skill(self));
+            var chosenSkill = availableSkills[Random.Range(0, availableSkills.Count)];
+            yield return StartCoroutine(chosenSkill(self));
             yield break;
         }
 
-        Debug.Log($"{self.unitName} 的所有特殊技能都在冷卻中，使用備用技能 Softskill_1");
+        //  全部冷卻 → 使用備用技能
+        Debug.Log($"{self.unitName} 所有技能冷卻中，使用 Softskill_1");
         yield return StartCoroutine(PerformSoftskill_1(self));
     }
 
     // ==================== DCAT 專用技能選擇邏輯 ====================
     private IEnumerator ExecuteDcatSkillsCoroutine(Unit self)
     {
-        // 定義優先級技能（可調整順序重要性，但這裡隨機）
-        var prioritySkills = new List<Func<Unit, IEnumerator>>
-    {
-        Dcatskill_2Coroutine,  // 群中毒
-        Dcatskill_4Coroutine,  // 全體大傷
-        Dcatskill_3Coroutine   // 單體+自身狂暴
-    };
+        var availableSkills = new List<Func<Unit, IEnumerator>>();
 
-        // 隨機打亂（與 SOFT 相同洗牌方式）
-        for (int i = 0; i < prioritySkills.Count; i++)
+        string skill2Key = $"{self.unitName}_Dcatskill_2";
+        string skill3Key = $"{self.unitName}_Dcatskill_3";
+        string skill4Key = $"{self.unitName}_Dcatskill_4";
+
+        if (IsSkillReady(skill2Key))
+            availableSkills.Add(Dcatskill_2Coroutine);
+
+        if (IsSkillReady(skill3Key))
+            availableSkills.Add(Dcatskill_3Coroutine);
+
+        if (IsSkillReady(skill4Key))
+            availableSkills.Add(Dcatskill_4Coroutine);
+
+        //  有技能可用 → 隨機選
+        if (availableSkills.Count > 0)
         {
-            int rnd = Random.Range(0, prioritySkills.Count);
-            var temp = prioritySkills[i];
-            prioritySkills[i] = prioritySkills[rnd];
-            prioritySkills[rnd] = temp;
-        }
-
-        // 嘗試執行
-        foreach (var skill in prioritySkills)
-        {
-            yield return StartCoroutine(skill(self));
-
-            // 因為冷卻中的技能會直接 yield break
-            // 所以只要這個協程有跑超過 0.1 秒左右，通常代表真的執行了
-            // 這裡我們直接認為執行了就結束（最接近 SOFT 原寫法）
+            var chosenSkill = availableSkills[Random.Range(0, availableSkills.Count)];
+            yield return StartCoroutine(chosenSkill(self));
             yield break;
         }
 
-        // 如果全部都 yield break 了才到這裡 → 全冷卻
-        Debug.Log($"{self.unitName} 的所有特殊技能都在冷卻中，使用備用技能 Dcatskill_1");
+        // 全部冷卻 → 備用技能
+        Debug.Log($"{self.unitName} 所有技能冷卻中，使用 Dcatskill_1");
         yield return StartCoroutine(Dcatskill_1Coroutine(self));
     }
 
@@ -365,7 +369,7 @@ public class Enemyskill : MonoBehaviour
 
         Unit target = validTargets[Random.Range(0, validTargets.Count)];
 
-        buffDebuffManager.ApplySkillDisable(target, 1);
+        buffDebuffManager.ApplySkillDisable(target, 2);
 
         int damage = Mathf.RoundToInt(self.damage * 0.5f);
         int actualDamageDealt;
