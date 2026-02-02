@@ -2,39 +2,74 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("高度設定")]
-    public float groundY = -0.5f; // 地面軌道的 Y 座標 (請依照你的場景調整)
-    public float airY = 1.5f;     // 空中軌道的 Y 座標
+    [Header("軌道高度")]
+    public float groundY = -3.0f;
+    public float airY = 1.5f;
 
     [Header("按鍵設定")]
-    public KeyCode groundKey = KeyCode.F; // 地面攻擊/移動鍵
-    public KeyCode airKey = KeyCode.J;    // 空中攻擊/移動鍵
+    public KeyCode groundKey = KeyCode.F;
+    public KeyCode airKey = KeyCode.J;
 
-    // 紀錄角色目前在哪個軌道 (0 = 地面, 1 = 空中)
-    private int currentLane = 0;
+    // --- 新增：攻擊設定 ---
+    [Header("攻擊設定")]
+    public float attackRange = 1.5f;   // 攻擊範圍 (圓圈半徑)
+    public float attackOffset = 1.0f;  // 攻擊點要在主角前方多遠
+    public LayerMask enemyLayer;       // 指定要偵測哪一層 (選 Enemy)
+    // ---------------------
+
+    void Start()
+    {
+        MoveToLane(true);
+    }
 
     void Update()
     {
-        // 偵測輸入
         if (Input.GetKeyDown(groundKey))
         {
-            MoveToLane(0); // 去地面
-            // 這裡之後可以加入：播放地面攻擊動畫、判定打擊
+            MoveToLane(true);
+            CheckHit(true); // --- 新增：移動同時進行攻擊判定 ---
         }
-        else if (Input.GetKeyDown(airKey))
+
+        if (Input.GetKeyDown(airKey))
         {
-            MoveToLane(1); // 去空中
-            // 這裡之後可以加入：播放空中攻擊動畫、判定打擊
+            MoveToLane(false);
+            CheckHit(false); // --- 新增：移動同時進行攻擊判定 ---
         }
     }
 
-    void MoveToLane(int laneIndex)
+    void MoveToLane(bool goGround)
     {
-        currentLane = laneIndex;
+        float targetY = goGround ? groundY : airY;
+        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+    }
 
-        // 取得目前的 X 和 Z，只改變 Y
-        float newY = (laneIndex == 0) ? groundY : airY;
+    // --- 新增：攻擊判定邏輯 ---
+    void CheckHit(bool isGround)
+    {
+ 
+        float targetY = isGround ? groundY : airY;
+        Vector2 attackPos = new Vector2(transform.position.x + attackOffset, targetY);
 
-        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPos, attackRange, enemyLayer);
+
+        // 3. 如果偵測到了東西
+        if (hitEnemy != null)
+        {
+            Debug.Log("打中了！"); // 在 Console 印出訊息方便測試
+            Destroy(hitEnemy.gameObject); // 消滅敵人
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        // 畫出地面攻擊範圍預覽
+        Vector2 groundAttackPos = new Vector2(transform.position.x + attackOffset, groundY);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundAttackPos, attackRange);
+
+        // 畫出空中攻擊範圍預覽
+        Vector2 airAttackPos = new Vector2(transform.position.x + attackOffset, airY);
+        Gizmos.DrawWireSphere(airAttackPos, attackRange);
     }
 }
