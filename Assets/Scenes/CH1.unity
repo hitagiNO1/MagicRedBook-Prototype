@@ -210234,8 +210234,6 @@ GameObject:
   - component: {fileID: 1929828334}
   - component: {fileID: 1929828335}
   - component: {fileID: 1929828336}
-  - component: {fileID: 1929828337}
-  - component: {fileID: 1929828339}
   - component: {fileID: 1929828332}
   - component: {fileID: 1929828340}
   m_Layer: 7
@@ -210328,43 +210326,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 28.956299, y: 32.679325, z: 14.036182}
   m_Center: {x: 1.0762024, y: 14.991073, z: 6.3613505}
---- !u!114 &1929828337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929828331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e901abda54227343afcb94ef87d58ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitName: BlackCat
-  unitLevel: 10
-  damage: 20
-  defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
-  defense: 10
-  maxHP: 100
-  currentHP: 100
-  critChance: 0.25
-  critdmgplus: 1.5
-  buffManager: {fileID: 3720424681303388705}
-  battleHUD: {fileID: 0}
-  isDead: 0
-  originalUnitName: 
---- !u!114 &1929828339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929828331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddad33366cb0a2047ad8d6204e981556, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &1929828340
 Animator:
   serializedVersion: 5
@@ -326973,7 +326934,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 27.875977, y: 32.679325, z: 14.663048}
   m_Center: {x: -0.80841064, y: 14.991073, z: -1.6000003}
@@ -354795,7 +354756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 1063838296403707288}
-  Unit: {fileID: 1929828337}
+  Unit: {fileID: 0}
 --- !u!1001 &6021901453181375681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -402546,7 +402507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpSlider: {fileID: 4558052106653470621}
-  Unit: {fileID: 1929828337}
+  Unit: {fileID: 0}
 --- !u!1001 &8624540968071053929
 PrefabInstance:
   m_ObjectHideFlags: 0
