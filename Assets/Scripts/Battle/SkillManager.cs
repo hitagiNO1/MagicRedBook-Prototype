@@ -563,7 +563,7 @@ public class SkillManager : MonoBehaviour
         buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
         skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
         dialogueText.text = $"布萊克 使出了 舔舔舔！\n將身上的毛整理好，使防禦力上升。";
-        EffectManager.Instance.PlayUIEffect("B3", new Vector2(-800, 0));
+        EffectManager.Instance.PlayUIEffect("B3", new Vector2(-802, -362));
         yield return new WaitForSeconds(1.5f);
     }
 
@@ -573,7 +573,7 @@ public class SkillManager : MonoBehaviour
         buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
         skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
         dialogueText.text = $"布萊克 使出了 大雞腿～\n緊縮成一團，使敵人找不到縫隙攻擊。";
-        EffectManager.Instance.PlayUIEffect("B4", new Vector2(-800, 0));
+        EffectManager.Instance.PlayUIEffect("B4", new Vector2(-802, -362));
         yield return new WaitForSeconds(1.5f);
     }
 

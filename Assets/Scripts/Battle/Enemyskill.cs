@@ -15,11 +15,11 @@ public class Enemyskill : MonoBehaviour
     public List<Unit> playerUnits;
     public BuffDebuffManager buffDebuffManager;
 
-    // §Þ¯à§N«o¦r¨å¡]©Ò¦³¼Ä¤H¦@¥Î¡^
+    // ï¿½Þ¯ï¿½Nï¿½oï¿½rï¿½ï¿½]ï¿½Ò¦ï¿½ï¿½Ä¤Hï¿½@ï¿½Î¡^
     private Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
 
-    // ==================== ¦U©Çª«§Þ¯à§N«o®É¶¡ ====================
-    private int skill2CooldownTurns = 3;           // ­ì¦³¡]¥i²¾°£©Î«O¯d¡^
+    // ==================== ï¿½Uï¿½Çªï¿½ï¿½Þ¯ï¿½Nï¿½oï¿½É¶ï¿½ ====================
+    private int skill2CooldownTurns = 3;           // ï¿½ì¦³ï¿½]ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Î«Oï¿½dï¿½^
     private int skill3CooldownTurns = 2;
     private int skill4CooldownTurns = 3;
     private int skill5CooldownTurns = 3;
@@ -28,12 +28,12 @@ public class Enemyskill : MonoBehaviour
     private int catskill4CooldownTurns = 3;
     private int catskill5CooldownTurns = 4;
 
-    // DCAT ±M¥Î§N«o®É¶¡
+    // DCAT ï¿½Mï¿½Î§Nï¿½oï¿½É¶ï¿½
     private int dcatskill2CooldownTurns = 2;
     private int dcatskill3CooldownTurns = 2;
     private int dcatskill4CooldownTurns = 3;
 
-    // ==================== ¥D­n°õ¦æ¤èªk ====================
+    // ==================== ï¿½Dï¿½nï¿½ï¿½ï¿½ï¿½ï¿½k ====================
     private bool IsSkillReady(string skillKey)
     {
         if (!skillCooldowns.ContainsKey(skillKey))
@@ -46,7 +46,7 @@ public class Enemyskill : MonoBehaviour
     {
         if (enemyUnit == null)
         {
-            Debug.LogError("¼Ä¤H³æ¦ìµL®Ä¡I");
+            Debug.LogError("ï¿½Ä¤Hï¿½ï¿½ï¿½Lï¿½Ä¡I");
             yield break;
         }
 
@@ -71,10 +71,10 @@ public class Enemyskill : MonoBehaviour
         }
     }
 
-    // ==================== SOFT ±M¥Î§Þ¯à¿ï¾ÜÅÞ¿è ====================
+    // ==================== SOFT ï¿½Mï¿½Î§Þ¯ï¿½ï¿½ï¿½ï¿½Þ¿ï¿½ ====================
     private IEnumerator ExecuteSoftSkillsCoroutine(Unit self)
     {
-        // ¥i¥Î§Þ¯à¦À
+        // ï¿½iï¿½Î§Þ¯ï¿½ï¿½
         var availableSkills = new List<Func<Unit, IEnumerator>>();
 
         string skill2Key = $"{self.unitName}_Softskill_2";
@@ -86,7 +86,7 @@ public class Enemyskill : MonoBehaviour
         if (IsSkillReady(skill3Key))
             availableSkills.Add(Softskill_3Coroutine);
 
-        //  ¦pªG¦³¥ô¦ó¥i¥Î§Þ¯à ¡÷ ÀH¾÷¿ï¤@­Ó
+        //  ï¿½pï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½Î§Þ¯ï¿½ ï¿½ï¿½ ï¿½Hï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½
         if (availableSkills.Count > 0)
         {
             var chosenSkill = availableSkills[Random.Range(0, availableSkills.Count)];
@@ -94,12 +94,12 @@ public class Enemyskill : MonoBehaviour
             yield break;
         }
 
-        //  ¥þ³¡§N«o ¡÷ ¨Ï¥Î³Æ¥Î§Þ¯à
-        Debug.Log($"{self.unitName} ©Ò¦³§Þ¯à§N«o¤¤¡A¨Ï¥Î Softskill_1");
+        //  ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½o ï¿½ï¿½ ï¿½Ï¥Î³Æ¥Î§Þ¯ï¿½
+        Debug.Log($"{self.unitName} ï¿½Ò¦ï¿½ï¿½Þ¯ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ï¥ï¿½ Softskill_1");
         yield return StartCoroutine(PerformSoftskill_1(self));
     }
 
-    // ==================== DCAT ±M¥Î§Þ¯à¿ï¾ÜÅÞ¿è ====================
+    // ==================== DCAT ï¿½Mï¿½Î§Þ¯ï¿½ï¿½ï¿½ï¿½Þ¿ï¿½ ====================
     private IEnumerator ExecuteDcatSkillsCoroutine(Unit self)
     {
         var availableSkills = new List<Func<Unit, IEnumerator>>();
@@ -117,7 +117,7 @@ public class Enemyskill : MonoBehaviour
         if (IsSkillReady(skill4Key))
             availableSkills.Add(Dcatskill_4Coroutine);
 
-        //  ¦³§Þ¯à¥i¥Î ¡÷ ÀH¾÷¿ï
+        //  ï¿½ï¿½ï¿½Þ¯ï¿½iï¿½ï¿½ ï¿½ï¿½ ï¿½Hï¿½ï¿½ï¿½ï¿½
         if (availableSkills.Count > 0)
         {
             var chosenSkill = availableSkills[Random.Range(0, availableSkills.Count)];
@@ -125,12 +125,12 @@ public class Enemyskill : MonoBehaviour
             yield break;
         }
 
-        // ¥þ³¡§N«o ¡÷ ³Æ¥Î§Þ¯à
-        Debug.Log($"{self.unitName} ©Ò¦³§Þ¯à§N«o¤¤¡A¨Ï¥Î Dcatskill_1");
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½o ï¿½ï¿½ ï¿½Æ¥Î§Þ¯ï¿½
+        Debug.Log($"{self.unitName} ï¿½Ò¦ï¿½ï¿½Þ¯ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ï¥ï¿½ Dcatskill_1");
         yield return StartCoroutine(Dcatskill_1Coroutine(self));
     }
 
-    // ==================== ¨ú±o§Þ¯à¦Cªí ====================
+    // ==================== ï¿½ï¿½ï¿½oï¿½Þ¯ï¿½Cï¿½ï¿½ ====================
     public List<Func<Unit, IEnumerator>> GetEnemySkills(string enemyName)
     {
         var coroutines = new List<Func<Unit, IEnumerator>>();
@@ -165,20 +165,20 @@ public class Enemyskill : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"¥¼ª¾ªº¼Ä¤HÃþ«¬: {enemyName}");
+            Debug.LogWarning($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¤Hï¿½ï¿½ï¿½ï¿½: {enemyName}");
         }
 
         return coroutines;
     }
 
-    // ==================== SOFT §Þ¯à§N«oÀË¬d ====================
+    // ==================== SOFT ï¿½Þ¯ï¿½Nï¿½oï¿½Ë¬d ====================
     private IEnumerator Softskill_2Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Softskill_2";
         if (!skillCooldowns.ContainsKey(skillKey)) skillCooldowns[skillKey] = 0;
         if (skillCooldowns[skillKey] > 0)
         {
-            Debug.Log($"{self.unitName} ªº Softskill_2 §N«o¤¤¡A³Ñ¾l {skillCooldowns[skillKey]} ¦^¦X");
+            Debug.Log($"{self.unitName} ï¿½ï¿½ Softskill_2 ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ñ¾l {skillCooldowns[skillKey]} ï¿½^ï¿½X");
             yield break;
         }
         yield return StartCoroutine(PerformSoftskill_2(self));
@@ -191,14 +191,14 @@ public class Enemyskill : MonoBehaviour
         if (!skillCooldowns.ContainsKey(skillKey)) skillCooldowns[skillKey] = 0;
         if (skillCooldowns[skillKey] > 0)
         {
-            Debug.Log($"{self.unitName} ªº Softskill_3 §N«o¤¤¡A³Ñ¾l {skillCooldowns[skillKey]} ¦^¦X");
+            Debug.Log($"{self.unitName} ï¿½ï¿½ Softskill_3 ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ñ¾l {skillCooldowns[skillKey]} ï¿½^ï¿½X");
             yield break;
         }
         yield return StartCoroutine(PerformSoftskill_3(self));
         skillCooldowns[skillKey] = 2;
     }
 
-    // ==================== FISH §Þ¯à ====================
+    // ==================== FISH ï¿½Þ¯ï¿½ ====================
     private IEnumerator PerformFishskill_1(Unit self)
     {
         Unit target = GetRandomValidTarget(playerUnits);
@@ -210,11 +210,11 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ³½¤e¬ð¨ë\n´¤ºò¤â¤¤¤e¤l¨ë¦V {target.unitName}\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½\nï¿½ï¿½ï¿½ï¿½â¤¤ï¿½eï¿½lï¿½ï¿½V {target.unitName}\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Fish1", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
@@ -230,16 +230,16 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ¯«³½Â\§À¡I\n»W¤OÂà¨­¡A¥Î§À¤Ú¥Ï¦V {target.unitName}¡C\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I\nï¿½Wï¿½Oï¿½à¨­ï¿½Aï¿½Î§ï¿½ï¿½Ú¥Ï¦V {target.unitName}ï¿½C\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Fish2", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
 
-    // ==================== SNAKE §Þ¯à ====================
+    // ==================== SNAKE ï¿½Þ¯ï¿½ ====================
     private IEnumerator PerformSnakeskill_1(Unit self)
     {
         Unit target = GetRandomValidTarget(playerUnits);
@@ -251,11 +251,11 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥Î¤F «r«r«r¡I\n¤j¤f«r¦V {target.unitName}¡C\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Î¤F ï¿½rï¿½rï¿½rï¿½I\nï¿½jï¿½fï¿½rï¿½V {target.unitName}ï¿½C\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Snake1", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
@@ -272,17 +272,17 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ³¯¦~¦Ñ·ð¡I\n" +
-                               $"¹ï {target.unitName} ¼Q¥X±a¬rÂH²G¡A {target.unitName} ¤¤¬r¡C\n" +
-                               $"{target.unitName} ±N¦b±µ¤U¨Ó´X¦^¦X«ùÄò¨ü¨ì¶Ë®`...";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½~ï¿½Ñ·ï¿½I\n" +
+                               $"ï¿½ï¿½ {target.unitName} ï¿½Qï¿½Xï¿½aï¿½rï¿½Hï¿½Gï¿½A {target.unitName} ï¿½ï¿½ï¿½rï¿½C\n" +
+                               $"{target.unitName} ï¿½Nï¿½bï¿½ï¿½ï¿½Uï¿½Ó´Xï¿½^ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®`...";
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Snake2", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
 
-    // ==================== CLOCK §Þ¯à ====================
+    // ==================== CLOCK ï¿½Þ¯ï¿½ ====================
     private IEnumerator PerformClockskill_1(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0) yield break;
@@ -296,12 +296,12 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ·íÀY´Î³Ü¡I\n" +
-                               $"®³ºl¤lºV¦V {target.unitName}¡I\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½Yï¿½Î³Ü¡I\n" +
+                               $"ï¿½ï¿½ï¿½lï¿½lï¿½Vï¿½V {target.unitName}ï¿½I\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Clock1", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
@@ -323,17 +323,17 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ¹a¹a¹a¡I\n" +
-                               $"ºVÀ»¦Û¤v¸£³U¡Aµo¥XÁnªi§ðÀ» {target.unitName}¡I\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡A" +
-                               "±µ¤U¨Ó 2 ¦^¦X¶Ë®`»PªvÀø®ÄªG¤j´T­°§C¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½aï¿½aï¿½aï¿½I\n" +
+                               $"ï¿½Vï¿½ï¿½ï¿½Û¤vï¿½ï¿½ï¿½Uï¿½Aï¿½oï¿½Xï¿½nï¿½iï¿½ï¿½ï¿½ï¿½ {target.unitName}ï¿½I\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½A" +
+                               "ï¿½ï¿½ï¿½Uï¿½ï¿½ 2 ï¿½^ï¿½Xï¿½Ë®`ï¿½Pï¿½vï¿½ï¿½ï¿½ÄªGï¿½jï¿½Tï¿½ï¿½ï¿½Cï¿½I";
         }
 
         EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
         yield return new WaitForSeconds(1.5f);
     }
 
-    // ==================== SOFT §Þ¯à ====================
+    // ==================== SOFT ï¿½Þ¯ï¿½ ====================
     private IEnumerator PerformSoftskill_1(Unit self)
     {
         if (playerUnits == null || playerUnits.Count == 0) yield break;
@@ -347,11 +347,12 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ³n³n¥ÏÀ»¡I\n" +
-                               $"¹ï {target.unitName} ¥Ï¤F¤@¤Ú´x¡I\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½nï¿½nï¿½ï¿½ï¿½ï¿½ï¿½I\n" +
+                               $"ï¿½ï¿½ {target.unitName} ï¿½Ï¤Fï¿½@ï¿½Ú´xï¿½I\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
-
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
+        EffectManager.Instance.PlayUIEffectOneSide("Blanket1", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
 
@@ -363,7 +364,7 @@ public class Enemyskill : MonoBehaviour
         List<Unit> validTargets = playerUnits.FindAll(unit => unit != null && unit.currentHP > 0);
         if (validTargets.Count == 0)
         {
-            Debug.LogWarning("µL¦³®Äªºª±®a¥Ø¼Ð¡I");
+            Debug.LogWarning("ï¿½Lï¿½ï¿½ï¿½Äªï¿½ï¿½ï¿½ï¿½aï¿½Ø¼Ð¡I");
             yield break;
         }
 
@@ -377,13 +378,13 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ³n³nÄñÂ¶¡I\n" +
-                               $"Äñ¦í {target.unitName}¡A {target.unitName} °Ê¼u¤£±o¡C\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡A" +
-                               "¨Ã¥B¤U¤@¦^¦XµLªk¨Ï¥Î§Þ¯à¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½nï¿½nï¿½ï¿½Â¶ï¿½I\n" +
+                               $"ï¿½ï¿½ï¿½ {target.unitName}ï¿½A {target.unitName} ï¿½Ê¼uï¿½ï¿½ï¿½oï¿½C\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½A" +
+                               "ï¿½Ã¥Bï¿½Uï¿½@ï¿½^ï¿½Xï¿½Lï¿½kï¿½Ï¥Î§Þ¯ï¿½I";
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Blanket2", playLeft);
         yield return new WaitForSeconds(1.5f);
     }
@@ -405,15 +406,15 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥Î¤F ¤Ñ¶Â½Ð³¬²´¡I\n" +
-                               $"§Ú¤è¨ü¨ì¤FÁ`¦@ {totalDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Î¤F ï¿½Ñ¶Â½Ð³ï¿½ï¿½ï¿½ï¿½I\n" +
+                               $"ï¿½Ú¤ï¿½ï¿½ï¿½ï¿½Fï¿½`ï¿½@ {totalDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
         EffectManager.Instance.PlayUIEffect("Blanket3", new Vector2(0f, 0f));
         yield return new WaitForSeconds(1.5f);
     }
 
-    // ==================== DCAT §Þ¯à ====================
+    // ==================== DCAT ï¿½Þ¯ï¿½ ====================
     private IEnumerator Dcatskill_1Coroutine(Unit self)
     {
         Unit target = GetRandomValidTarget(playerUnits);
@@ -425,9 +426,9 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ±ÙÀ»¡I\n" +
-                               $"¹ï {target.unitName} ¶i¦æ±ÙÀ»¡I\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½ï¿½ï¿½I\n" +
+                               $"ï¿½ï¿½ {target.unitName} ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
 
@@ -443,7 +444,7 @@ public class Enemyskill : MonoBehaviour
 
         if (skillCooldowns[skillKey] > 0)
         {
-            Debug.Log($"{self.unitName} ªº Dcatskill_2 §N«o¤¤¡A³Ñ¾l {skillCooldowns[skillKey]} ¦^¦X");
+            Debug.Log($"{self.unitName} ï¿½ï¿½ Dcatskill_2 ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ñ¾l {skillCooldowns[skillKey]} ï¿½^ï¿½X");
             yield break;
         }
 
@@ -453,7 +454,7 @@ public class Enemyskill : MonoBehaviour
         {
             if (target == null || target.isDead || target.currentHP <= 0) continue;
 
-            buffDebuffManager.ApplyPoison(target, 3);  // ¹ï¨C­Ó¦s¬¡ª±®a¬I¥[ 3 ¦^¦X¤¤¬r
+            buffDebuffManager.ApplyPoison(target, 3);  // ï¿½ï¿½Cï¿½Ó¦sï¿½ï¿½ï¿½ï¿½ï¿½aï¿½Iï¿½[ 3 ï¿½^ï¿½Xï¿½ï¿½ï¿½r
             totalAffected++;
         }
 
@@ -461,8 +462,8 @@ public class Enemyskill : MonoBehaviour
         {
             if (totalAffected > 0)
             {
-                dialogueText.text = $"{self.unitName} ¨Ï¥X¤F îî¤§®ð®§¡I\n" +
-                                   $"¦º¤`ªº®ð®§Ãb¸n¥þ³¡³æ¦ì¡I\n" ;
+                dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½î¤§ï¿½ð®§¡I\n" +
+                                   $"ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I\n" ;
             }
         }
 
@@ -480,7 +481,7 @@ public class Enemyskill : MonoBehaviour
 
         if (skillCooldowns[skillKey] > 0)
         {
-            Debug.Log($"{self.unitName} ªº Dcatskill_3 §N«o¤¤¡A³Ñ¾l {skillCooldowns[skillKey]} ¦^¦X");
+            Debug.Log($"{self.unitName} ï¿½ï¿½ Dcatskill_3 ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ñ¾l {skillCooldowns[skillKey]} ï¿½^ï¿½X");
             yield break;
         }
 
@@ -493,18 +494,18 @@ public class Enemyskill : MonoBehaviour
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
 
-        buffDebuffManager.ApplyDefenseBuff(self, 1.5f, 2);   // ¨¾¿m +150%
-        buffDebuffManager.ApplyDamageBuff(self, 2.0f, 2);    // §ðÀ» +200%
+        buffDebuffManager.ApplyDefenseBuff(self, 1.5f, 2);   // ï¿½ï¿½ï¿½m +150%
+        buffDebuffManager.ApplyDamageBuff(self, 2.0f, 2);    // ï¿½ï¿½ï¿½ï¿½ +200%
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ¯«¤§§ÈÅ@¡I\n" +
-                               $"{target.unitName} ¨ü¨ì¤F {actualDamageDealt} ÂI¶Ë®`¡A\n" +
-                               $"¡H¡H¡H ªº¨¾¿m»P§ðÀ»¤j´T´£¤É¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½I\n" +
+                               $"{target.unitName} ï¿½ï¿½ï¿½ï¿½F {actualDamageDealt} ï¿½Iï¿½Ë®`ï¿½A\n" +
+                               $"ï¿½Hï¿½Hï¿½H ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½jï¿½Tï¿½ï¿½ï¿½É¡I";
 
         }
 
-        bool playLeft = target.unitName != "¥¬µÜ§J";
+        bool playLeft = target.unitName != "ï¿½ï¿½ï¿½Ü§J";
         EffectManager.Instance.PlayUIEffectOneSide("Dcat3", playLeft);
 
         skillCooldowns[skillKey] = dcatskill3CooldownTurns;
@@ -520,7 +521,7 @@ public class Enemyskill : MonoBehaviour
 
         if (skillCooldowns[skillKey] > 0)
         {
-            Debug.Log($"{self.unitName} ªº Dcatskill_4 §N«o¤¤¡A³Ñ¾l {skillCooldowns[skillKey]} ¦^¦X");
+            Debug.Log($"{self.unitName} ï¿½ï¿½ Dcatskill_4 ï¿½Nï¿½oï¿½ï¿½ï¿½Aï¿½Ñ¾l {skillCooldowns[skillKey]} ï¿½^ï¿½X");
             yield break;
         }
 
@@ -538,9 +539,9 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} ¨Ï¥X¤F ¦º¦¡¡AÓ¥¡I\n" +
-                               $"»Wº¡¯à¶qªº¤@À»¡A´Â¦V¥þ³¡³æ¦ì¡I\n" +
-                               $"¥þÅé¨ü¨ì¤FÁ`¦@ {totalDamageDealt} ÂI¶Ë®`¡I";
+            dialogueText.text = $"{self.unitName} ï¿½Ï¥Xï¿½F ï¿½ï¿½ï¿½ï¿½ï¿½AÓ¥ï¿½I\n" +
+                               $"ï¿½Wï¿½ï¿½ï¿½ï¿½qï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½Aï¿½Â¦Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I\n" +
+                               $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½`ï¿½@ {totalDamageDealt} ï¿½Iï¿½Ë®`ï¿½I";
         }
 
         EffectManager.Instance.PlayUIEffect("Dcat4", new Vector2(0, 0));
@@ -550,7 +551,7 @@ public class Enemyskill : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
     }
 
-    // ==================== ³q¥Î»²§U¤èªk ====================
+    // ==================== ï¿½qï¿½Î»ï¿½ï¿½Uï¿½ï¿½k ====================
     private Unit GetRandomValidTarget(List<Unit> units)
     {
         List<Unit> validTargets = units.FindAll(unit => unit != null && unit.currentHP > 0);
@@ -566,7 +567,7 @@ public class Enemyskill : MonoBehaviour
     {
         if (attacker == null || target == null || target.isDead)
         {
-            Debug.LogWarning("§ðÀ»¥Ø¼ÐµL®Ä¡A¸õ¹L§ðÀ»");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ÐµLï¿½Ä¡Aï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½");
             return;
         }
         int actualDamageDealt;
@@ -580,7 +581,7 @@ public class Enemyskill : MonoBehaviour
             if (skillCooldowns[skill] > 0)
             {
                 skillCooldowns[skill]--;
-                Debug.Log($"§Þ¯à {skill} §N«o³Ñ¾l {skillCooldowns[skill]} ¦^¦X");
+                Debug.Log($"ï¿½Þ¯ï¿½ {skill} ï¿½Nï¿½oï¿½Ñ¾l {skillCooldowns[skill]} ï¿½^ï¿½X");
             }
         }
     }

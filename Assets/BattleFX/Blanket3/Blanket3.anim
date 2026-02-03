@@ -333,7 +333,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 2.8833334
+  - time: 2.9166667
     functionName: FlashRedAll
     data: 
     objectReferenceParameter: {fileID: 0}
