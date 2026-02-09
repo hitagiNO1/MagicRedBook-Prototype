@@ -15,8 +15,9 @@ public class RedBook : MonoBehaviour
     public GoalController Goal;
     private int currentPage = 0;
     public bool isOpen = false;
-    public Animator animator;
+    private Animator animator;
     public GameObject inventoryUI;
+    private bool isTriggered = false;
 
     [Header("MAP")]
     public Transform player; // 玩家的 Transform
@@ -26,6 +27,13 @@ public class RedBook : MonoBehaviour
     public Image mapRenderer;
     public GameObject ZoneA;
     public GameObject ZoneB;
+
+    [Header("限制：這些劇情都播過且結束才能播放 Timeline")]
+    public List<GameScene> LimitScenes;
+
+    [Header("Lyla Visuals")]
+    public Image LylaImage; // 指向 UI 上的 Image 組件
+    public Sprite LylaAfterEventSprite; // 劇情後的圖片
     //public CinemachineVirtualCamera BookCamera = null;
     private void Start()
     {
@@ -38,8 +46,27 @@ public class RedBook : MonoBehaviour
         HandleInput();
         UpdateHUD();
         UpdateMap();
+        // 確保只會觸發一次
+        if (!isTriggered && AllLimitScenesPlayed())
+        {
+            LylaImage.sprite = LylaAfterEventSprite;
+            Debug.Log("劇情觸發：Lyla 的圖片已更新！");
+            isTriggered = true;
+        }
     }
-
+    private bool AllLimitScenesPlayed()
+    {
+        foreach (GameScene scene in LimitScenes)
+        {
+            bool played;
+            // 如果沒紀錄，或值不是 true → 還沒完整播完
+            if (!GameController.Instance.ScenePlayedState.TryGetValue(scene, out played) || !played)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     private void HandleInput()
     {
         // Tab 切換紅書
