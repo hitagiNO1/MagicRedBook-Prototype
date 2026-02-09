@@ -326,7 +326,7 @@ public class Enemyskill : MonoBehaviour
             dialogueText.text = $"{self.unitName} 使用了 滴答滴！\n" +
                                $"敲擊自己腦袋，發出聲波攻擊 {target.unitName}！\n" +
                                $"{target.unitName} 受到了 {actualDamageDealt} 點傷害，" +
-                               "接下來 2 回合傷害與治療效果降低！";
+                               "攻擊與治療降低！";
         }
 
         EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
@@ -381,7 +381,7 @@ public class Enemyskill : MonoBehaviour
             dialogueText.text = $"{self.unitName} 使用了 軟軟纏繞！\n" +
                                $"抱住 {target.unitName}， {target.unitName} 動彈不得。\n" +
                                $"{target.unitName} 受到了 {actualDamageDealt} 點傷害，" +
-                               "並且下一回合無法使用技能！";
+                               "並且無法使用技能！";
         }
 
         bool playLeft = target.unitName != "布萊克";
