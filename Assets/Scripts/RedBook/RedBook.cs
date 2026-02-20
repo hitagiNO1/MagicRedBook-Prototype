@@ -27,13 +27,14 @@ public class RedBook : MonoBehaviour
     public Image mapRenderer;
     public GameObject ZoneA;
     public GameObject ZoneB;
-
+    /*
     [Header("限制：這些劇情都播過且結束才能播放 Timeline")]
     public List<GameScene> LimitScenes;
 
     [Header("Lyla Visuals")]
     public Image LylaImage; // 指向 UI 上的 Image 組件
     public Sprite LylaAfterEventSprite; // 劇情後的圖片
+    */
     //public CinemachineVirtualCamera BookCamera = null;
     private void Start()
     {
@@ -46,14 +47,16 @@ public class RedBook : MonoBehaviour
         HandleInput();
         UpdateHUD();
         UpdateMap();
-        // 確保只會觸發一次
+        /*
         if (!isTriggered && AllLimitScenesPlayed())
         {
-            LylaImage.sprite = LylaAfterEventSprite;
+            //LylaImage.sprite = LylaAfterEventSprite;
             Debug.Log("劇情觸發：Lyla 的圖片已更新！");
             isTriggered = true;
         }
+        */
     }
+    /*
     private bool AllLimitScenesPlayed()
     {
         foreach (GameScene scene in LimitScenes)
@@ -67,6 +70,7 @@ public class RedBook : MonoBehaviour
         }
         return true;
     }
+    */
     private void HandleInput()
     {
         // Tab 切換紅書
