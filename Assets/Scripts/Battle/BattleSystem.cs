@@ -70,6 +70,7 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator SetupBattle()
     {
         // ---------- 玩家初始化 ----------
+        
         playerUnits.Clear();
         for (int i = 0; i < playerPrefabs.Count; i++)
         {
@@ -132,6 +133,10 @@ public class BattleSystem : MonoBehaviour
         skillManager.enemyHUDs = enemyHUDs;
         skillManager.buffDebuffManager = buffDebuffManager;
         skillManager.dialogueText = dialogueText;
+        foreach (Unit player in playerUnits)
+        {
+            EquipmentManager.Instance.ApplyPermanentEquipmentEffects(player);
+        }
 
         // 等待入場動畫播放完畢
         if (animator != null)
@@ -150,14 +155,25 @@ public class BattleSystem : MonoBehaviour
 
     public void PlayerTurn()
     {
-        isRoundEnding = false; // 新回合開始，重置旗標
-
+        isRoundEnding = false;
         state = BattleState.PLAYERTURN;
         currentPlayerIndex = 0;
+
+        // 這裡很重要！確保對話文字有更新
         if (dialogueText != null)
             dialogueText.text = "玩家回合：請選擇技能與目標";
 
-        skillManager?.InitSkillIcons();
+        // 呼叫 SkillManager 初始化 UI
+        if (skillManager != null)
+        {
+            // 如果你的 AP 儲存在 SkillManager，請確保這裡有重置它
+            // 例如：skillManager.currentAP = skillManager.maxAP;
+            skillManager.InitSkillIcons();
+        }
+        else
+        {
+            Debug.LogError("SkillManager 為空，無法初始化技能！");
+        }
     }
 
     public void OnPlayerConfirmSkillQueue()

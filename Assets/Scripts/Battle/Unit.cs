@@ -6,6 +6,15 @@ public class Unit : MonoBehaviour
 {
     public string unitName;
     public int unitLevel;
+    public bool isPlayer;
+    // --- 裝備相關變數 ---
+    public string currentEquipment; // 當前裝備名稱
+
+    [Header("Base Stats (For Recovery)")]
+    public int baseDamage;          // 紀錄初始攻擊力
+    public int baseDefense;         // 紀錄初始防禦力
+    // ------------------
+
     public int damage;
     public DefenseData defenseData;
     public int defense;
@@ -14,43 +23,51 @@ public class Unit : MonoBehaviour
     public float critChance = 0.25f;
     public float critdmgplus = 1.5f;
     public BuffDebuffManager buffManager;
-    public BattleHUD battleHUD; // 新增對 BattleHUD 的引用
+    public BattleHUD battleHUD;
 
-    // 新增：死亡旗標
     public bool isDead = false;
 
     [HideInInspector] public string originalUnitName;
 
     private void Awake()
     {
-        // 自動記錄 Prefab 名稱（去掉 "(Clone)"）
         if (string.IsNullOrEmpty(originalUnitName))
         {
             originalUnitName = gameObject.name
                 .Replace("(Clone)", "")
                 .Trim();
         }
-        isDead = false; // 確保初始為 false
+        isDead = false;
+
+        // 初始化時記錄原始數值
+        baseDamage = damage;
+        baseDefense = defense;
     }
 
     private void Start()
     {
-        float reduction = defenseData.GetDamageReduction(defense);
-        //Debug.Log($"防禦 {defense}，減傷比例：{reduction}");
+        // 如果你的裝備是在進戰鬥前就穿好的，
+        // 可以在這裡呼叫一次 EquipmentManager (選做)
+        // EquipmentManager.Instance.ApplyPermanentEquipmentEffects(this);
     }
 
+    /// <summary>
+    /// 還原數值到初始狀態 (當需要更換裝備或清除效果時使用)
+    /// </summary>
+    public void ResetStatsToOuterBase()
+    {
+        damage = baseDamage;
+        defense = baseDefense;
+        // 如果有速度基礎值也可以在此還原
+    }
+
+    // TakeDamage 部分保持不變...
     public bool TakeDamage(int dmg, out int damageDealt)
     {
-        // 應用 Buff/Debuff 減傷
         int reducedDamage = buffManager != null ? buffManager.ApplyReductionIfApplicable(this, dmg) : dmg;
-
-        // 計算爆擊
         bool isCritical = Random.value < critChance;
-
-        // 計算防禦減傷比例
         float reduction = defenseData.GetDamageReduction(defense);
 
-        // 計算最終傷害
         int finalDMG;
         if (isCritical)
         {
@@ -64,35 +81,20 @@ public class Unit : MonoBehaviour
             finalDMG = Mathf.RoundToInt(reducedDMG);
         }
 
-        // 確保傷害不為負值
         finalDMG = Mathf.Max(finalDMG, 0);
-
-        // 將實際傷害傳出去
         damageDealt = finalDMG;
 
-        Debug.Log($"最終計算傷害={finalDMG}");
-
-        // 扣血
         currentHP -= finalDMG;
-        currentHP = Mathf.Max(currentHP, 0); // 防止負血
+        currentHP = Mathf.Max(currentHP, 0);
 
-        Debug.Log($"扣血後當前HP={currentHP}");
-
-        // 更新 HUD
         if (battleHUD != null)
         {
             battleHUD.SetHP(currentHP);
         }
-        else
-        {
-            Debug.LogWarning($"battleHUD 為 null，無法更新 HUD，但實際HP已更新為 {currentHP}");
-        }
 
-        // 檢查死亡
         if (currentHP <= 0 && !isDead)
         {
             isDead = true;
-            // 找到 BattleSystem 並標記此敵人為死亡
             BattleSystem battleSystem = FindObjectOfType<BattleSystem>();
             if (battleSystem != null && battleSystem.enemyUnits.Contains(this))
             {
@@ -102,9 +104,9 @@ public class Unit : MonoBehaviour
                     battleSystem.MarkEnemyAsDead(index);
                 }
             }
-            return true; // 表示這次攻擊導致死亡
+            return true;
         }
 
-        return false; // 未死亡
+        return false;
     }
 }

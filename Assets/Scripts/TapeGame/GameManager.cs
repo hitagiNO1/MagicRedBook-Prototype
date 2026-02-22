@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private int score = 0;
     private int currentHealth;
     private float currentTime;
-    private bool isGameOver = false;
+    public bool isGameOver = false;
 
     void Awake()
     {

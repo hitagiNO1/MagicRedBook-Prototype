@@ -8765,6 +8765,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: "\u840A\u83C8"
   unitLevel: 1
+  isPlayer: 1
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 25
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -22620,6 +22624,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: FISH
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -31303,6 +31311,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: FISH
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -46153,6 +46165,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: "\u5E03\u840A\u514B"
   unitLevel: 10
+  isPlayer: 1
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 20
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -52671,7 +52687,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -17.26152}
+  m_LocalPosition: {x: 0, y: 0, z: 14.63848}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -52679,7 +52695,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 508.1, y: 30.000008}
+  m_AnchoredPosition: {x: 596.4, y: 30.000006}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -107714,6 +107730,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: SNAKE
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -119210,6 +119230,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: SNAKE
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -150623,7 +150647,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 508.1, y: 30.000008, z: -17.26152}
+  m_LocalPosition: {x: 596.4, y: 30.000006, z: 14.63848}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -178054,6 +178078,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: FISH
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -194288,6 +194316,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: SNAKE
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -210465,8 +210497,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ed41428b2a4ba409e18b43974bf2e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
-  runSpeed: 10
+  baseWalkSpeed: 6
+  baseRunSpeed: 10
+  speedBonus: 0
   redbook: {fileID: 8574294908418165228}
   skeletonAnimation: {fileID: 2105839086}
   idle: {fileID: 11400000, guid: 88bfb60a172d2f24c92cb09ef7bb40ad, type: 2}
@@ -210481,7 +210514,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 508.1, y: -0, z: 34.7}
+  m_LocalPosition: {x: 596.4, y: 0, z: 66.6}
   m_LocalScale: {x: -0.10000002, y: 0.10000002, z: 0.10000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -231004,7 +231037,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -348
+  m_SortingOrder: -667
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
@@ -255555,6 +255588,7 @@ GameObject:
   - component: {fileID: 3720424681303388710}
   - component: {fileID: 3720424681303388711}
   - component: {fileID: 3720424681303388712}
+  - component: {fileID: 3720424681303388713}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -256075,6 +256109,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: SNAKE
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -267108,10 +267146,6 @@ MonoBehaviour:
   mapRenderer: {fileID: 3506553188813601801}
   ZoneA: {fileID: 7285144222481439441}
   ZoneB: {fileID: 33186927120392381}
-  LimitScenes:
-  - {fileID: 11400000, guid: d285e3000b69a1448af33107ad38b9c5, type: 2}
-  LylaImage: {fileID: 5407983666432827458}
-  LylaAfterEventSprite: {fileID: 21300000, guid: e6ada3ccd61928b48b393e2cc7b80baa, type: 3}
 --- !u!1001 &1594414166732699543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -279224,8 +279258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ed41428b2a4ba409e18b43974bf2e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
-  runSpeed: 10
+  baseWalkSpeed: 6
+  baseRunSpeed: 10
+  speedBonus: 0
   redbook: {fileID: 8574294908418165228}
   skeletonAnimation: {fileID: 1722154673819176347}
   idle: {fileID: 11400000, guid: ec3f9bafa2978cf4287495b1c67e3861, type: 2}
@@ -307128,6 +307163,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistentGameplaySceneName: CH1
   level1SceneName: CH1
+--- !u!114 &3720424681303388713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052940225863114260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b23f41e2ed60eb45ae55fe5cc60ce28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equippedItems: []
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5
@@ -365869,6 +365917,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: SOFT
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 13
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 80
@@ -382325,6 +382377,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: CLOCK
   unitLevel: 10
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -401994,6 +402050,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Lyla
   unitLevel: 1
+  isPlayer: 0
+  currentEquipment: 
+  baseDamage: 0
+  baseDefense: 0
   damage: 25
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10

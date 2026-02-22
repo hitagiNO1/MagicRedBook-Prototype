@@ -20,7 +20,28 @@ public class SkillManager : MonoBehaviour
     public Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
     public List<Button> playerSkillButtons;     // 或按玩家索引分開
     public List<Image> playerSkillIcons;        // 或其他 UI 元件
-   
+
+    private Dictionary<string, string> skillDisplayNameMap = new Dictionary<string, string>()
+{
+    // 兔子技能 (Player 0)
+    { "Skill_1", "吃我一擊！" },
+    { "Skill_2", "上吧，球球們！" },
+    { "Skill_3", "舔舔舔！" },
+    { "Skill_4", "大雞腿～" },
+    { "Skill_5", "連環兔子踹！" },
+
+    // 貓技能 (Player 1)
+    { "catSkill_1", "三分球！" },
+    { "catSkill_2", "小意思！" },
+    { "catSkill_3", "Do～Re～Mi～" },
+    { "catSkill_4", "打起精神來！" },
+    { "catSkill_5", "痛痛飛走～" },
+
+    // 道具
+    { "Can", "罐罐" },
+    { "Grass", "貓草" },
+    { "Drying", "肉乾" }
+};
     private int skill2CooldownTurns = 3;
     private int skill3CooldownTurns = 2;
     private int skill4CooldownTurns = 3;
@@ -66,13 +87,12 @@ public class SkillManager : MonoBehaviour
 
     public void Start()
     {
-
         audioSource = GetComponent<AudioSource>();
-        if (playerUnits.Count != 2) Debug.LogError("playerUnits count is not 2, check initialization");
 
-        for (int i = 0; i < playerUnits.Count; i++)
+        // 不依賴 playerUnits.Count，直接寫死初始化 2 個玩家的資料空間
+        for (int i = 0; i < 2; i++)
         {
-            Debug.Log($"Initializing player {i}: {playerUnits[i]?.unitName}");
+            Debug.Log($"Initializing player dictionary for index {i}");
             skillQueues[i] = new List<IEnumerator>();
             selectedSkillNames[i] = new List<string>();
             skillNeedsTarget[i] = new List<bool>();
@@ -95,7 +115,9 @@ public class SkillManager : MonoBehaviour
                 skillCooldowns["catSkill_5_1"] = 0;
             }
         }
-        UpdateAllSkillButtonStates();
+
+        // 註解掉這行，因為這時 UI 可能還沒完全準備好
+        // UpdateAllSkillButtonStates(); 
     }
 
     void Update()
@@ -186,7 +208,12 @@ public class SkillManager : MonoBehaviour
         }
 
         Unit playerUnit = playerUnits[latestPlayerIndex];
-        dialogueText.text = $"{playerUnit.unitName} 取消了 {latestSkillName}";
+        string readableName = latestSkillName;
+        if (skillDisplayNameMap.ContainsKey(latestSkillName))
+        {
+            readableName = skillDisplayNameMap[latestSkillName];
+        }
+        dialogueText.text = $"{playerUnit.unitName} 取消了 {readableName}";
 
         skillQueues[latestPlayerIndex].RemoveAt(latestSkillIndex);
         selectedSkillNames[latestPlayerIndex].RemoveAt(latestSkillIndex);
@@ -279,38 +306,71 @@ public class SkillManager : MonoBehaviour
 
     public void UpdateAllSkillButtonStates()
     {
+        // 2. 檢查防呆：玩家數量對不對？
+        if (playerUnits == null || playerUnits.Count < 2)
+        {
+           
+            return;
+        }
+        if (buffDebuffManager == null)
+        {
+ 
+            return;
+        }
+
+     
+
+        // 1. 取得封印狀態
         bool p0Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[0]);
         bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
+
+        // 2. 取得裝備限制狀態
+        bool p0OnlySkill1 = playerUnits[0].currentEquipment == "穿戴式紙箱盔甲";
+        bool p1OnlySkill1 = playerUnits[1].currentEquipment == "穿戴式紙箱盔甲";
+
+        // 兔子按鈕
         skill1Button.interactable = !p0Disabled;
-        skill2Button.interactable = !p0Disabled;
-        skill3Button.interactable = !p0Disabled;
-        skill4Button.interactable = !p0Disabled;
-        skill5Button.interactable = !p0Disabled;
+        skill2Button.interactable = !p0Disabled && !p0OnlySkill1;
+        skill3Button.interactable = !p0Disabled && !p0OnlySkill1;
+        skill4Button.interactable = !p0Disabled && !p0OnlySkill1;
+        skill5Button.interactable = !p0Disabled && !p0OnlySkill1;
 
+        // 貓咪按鈕
         catSkill1Button.interactable = !p1Disabled;
-        catSkill2Button.interactable = !p1Disabled;
-        catSkill3Button.interactable = !p1Disabled;
-        catSkill4Button.interactable = !p1Disabled;
-        catSkill5Button.interactable = !p1Disabled;
-        SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
-        SetButtonCooldownDimmed(skill2Button, skillCooldowns["Skill_2_0"] > 0);
-        SetButtonDimmed(skill2Button, selectedSkillNames[0].Contains("Skill_2"));
-        SetButtonCooldownDimmed(skill3Button, skillCooldowns["Skill_3_0"] > 0);
-        SetButtonDimmed(skill3Button, selectedSkillNames[0].Contains("Skill_3"));
-        SetButtonCooldownDimmed(skill4Button, skillCooldowns["Skill_4_0"] > 0);
-        SetButtonDimmed(skill4Button, selectedSkillNames[0].Contains("Skill_4"));
-        SetButtonCooldownDimmed(skill5Button, skillCooldowns["Skill_5_0"] > 0);
-        SetButtonDimmed(skill5Button, selectedSkillNames[0].Contains("Skill_5"));
+        catSkill2Button.interactable = !p1Disabled && !p1OnlySkill1;
+        catSkill3Button.interactable = !p1Disabled && !p1OnlySkill1;
+        catSkill4Button.interactable = !p1Disabled && !p1OnlySkill1;
+        catSkill5Button.interactable = !p1Disabled && !p1OnlySkill1;
 
-        SetButtonDimmed(catSkill1Button, selectedSkillNames[1].Contains("catSkill_1"));
-        SetButtonCooldownDimmed(catSkill2Button, skillCooldowns["catSkill_2_1"] > 0);
-        SetButtonDimmed(catSkill2Button, selectedSkillNames[1].Contains("catSkill_2"));
-        SetButtonCooldownDimmed(catSkill3Button, skillCooldowns["catSkill_3_1"] > 0);
-        SetButtonDimmed(catSkill3Button, selectedSkillNames[1].Contains("catSkill_3"));
-        SetButtonCooldownDimmed(catSkill4Button, skillCooldowns["catSkill_4_1"] > 0);
-        SetButtonDimmed(catSkill4Button, selectedSkillNames[1].Contains("catSkill_4"));
-        SetButtonCooldownDimmed(catSkill5Button, skillCooldowns["catSkill_5_1"] > 0);
-        SetButtonDimmed(catSkill5Button, selectedSkillNames[1].Contains("catSkill_5"));
+        // UI 變暗邏輯 (這裡如果出錯通常是因為字典找不到 Key)
+        try
+        {
+            SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
+            SetButtonCooldownDimmed(skill2Button, skillCooldowns["Skill_2_0"] > 0);
+            SetButtonDimmed(skill2Button, selectedSkillNames[0].Contains("Skill_2"));
+            SetButtonCooldownDimmed(skill3Button, skillCooldowns["Skill_3_0"] > 0);
+            SetButtonDimmed(skill3Button, selectedSkillNames[0].Contains("Skill_3"));
+            SetButtonCooldownDimmed(skill4Button, skillCooldowns["Skill_4_0"] > 0);
+            SetButtonDimmed(skill4Button, selectedSkillNames[0].Contains("Skill_4"));
+            SetButtonCooldownDimmed(skill5Button, skillCooldowns["Skill_5_0"] > 0);
+            SetButtonDimmed(skill5Button, selectedSkillNames[0].Contains("Skill_5"));
+
+            SetButtonDimmed(catSkill1Button, selectedSkillNames[1].Contains("catSkill_1"));
+            SetButtonCooldownDimmed(catSkill2Button, skillCooldowns["catSkill_2_1"] > 0);
+            SetButtonDimmed(catSkill2Button, selectedSkillNames[1].Contains("catSkill_2"));
+            SetButtonCooldownDimmed(catSkill3Button, skillCooldowns["catSkill_3_1"] > 0);
+            SetButtonDimmed(catSkill3Button, selectedSkillNames[1].Contains("catSkill_3"));
+            SetButtonCooldownDimmed(catSkill4Button, skillCooldowns["catSkill_4_1"] > 0);
+            SetButtonDimmed(catSkill4Button, selectedSkillNames[1].Contains("catSkill_4"));
+            SetButtonCooldownDimmed(catSkill5Button, skillCooldowns["catSkill_5_1"] > 0);
+            SetButtonDimmed(catSkill5Button, selectedSkillNames[1].Contains("catSkill_5"));
+
+       
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"按鈕狀態更新時發生崩潰！錯誤原因: {e.Message}");
+        }
     }
 
     private void ResetAllSkillButtonStates()
@@ -500,7 +560,13 @@ public class SkillManager : MonoBehaviour
         {
             enemyHUDs[targetIndex].SetHP(target.currentHP);
         }
+        yield return new WaitForSeconds(1.5f); // 原本的等待
 
+        // --- 新增：觸發膠帶拳套二段傷害 ---
+        if (EquipmentManager.Instance != null)
+        {
+            yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
+        }
         // 顯示傷害文字
         dialogueText.text = $"{playerUnits[playerIndex].unitName} 使出 吃我一擊！\n" +
                             $"甩出手上的球攻擊了 {target.unitName}\n" +
@@ -518,7 +584,13 @@ public class SkillManager : MonoBehaviour
             EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.5f); // 原本的等待
+
+        // --- 新增：觸發膠帶拳套二段傷害 ---
+        if (EquipmentManager.Instance != null)
+        {
+            yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
+        }
     }
 
     private IEnumerator Skill2Coroutine(int playerIndex)
@@ -624,6 +696,10 @@ public class SkillManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1.5f);
+        if (EquipmentManager.Instance != null)
+        {
+            yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
+        }
     }
     private IEnumerator CatSkill1Coroutine(int playerIndex, Unit target)
     {
@@ -878,9 +954,11 @@ public class SkillManager : MonoBehaviour
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
-        if (selectedSkillNames[0].Contains("Skill_1"))
+
+        string skillID = "Skill_1";
+        if (selectedSkillNames[0].Contains(skillID))
         {
-            CancelSkill(0, "Skill_1");
+            CancelSkill(0, skillID);
             SetButtonDimmed(skill1Button, false);
             return;
         }
@@ -889,10 +967,12 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = "已達技能數量上限！";
             return;
         }
+
         isWaitingForTarget = true;
-        pendingSkill = "Skill_1";
+        pendingSkill = skillID;
         pendingPlayerIndex = 0;
-        dialogueText.text = "請點擊一個敵人目標以使用技能 1！";
+        // 動態顯示：請點擊一個敵人目標以使用 吃我一擊！！
+        dialogueText.text = $"請點擊一個敵人目標以使用 {GetSkillDisplayName(skillID)}！";
         SetButtonDimmed(skill1Button, true);
     }
 
@@ -965,9 +1045,11 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_5", "5")) return;
-        if (selectedSkillNames[0].Contains("Skill_5"))
+
+        string skillID = "Skill_5";
+        if (selectedSkillNames[0].Contains(skillID))
         {
-            CancelSkill(0, "Skill_5");
+            CancelSkill(0, skillID);
             SetButtonDimmed(skill5Button, false);
             return;
         }
@@ -976,10 +1058,11 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = "已達技能數量上限！";
             return;
         }
+
         isWaitingForTarget = true;
-        pendingSkill = "Skill_5";
+        pendingSkill = skillID;
         pendingPlayerIndex = 0;
-        dialogueText.text = "請點擊一個敵人目標以使用技能 5！";
+        dialogueText.text = $"請點擊一個敵人目標以使用 {GetSkillDisplayName(skillID)}！";
         SetButtonDimmed(skill5Button, true);
     }
 
@@ -988,9 +1071,11 @@ public class SkillManager : MonoBehaviour
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(1)) return;
-        if (selectedSkillNames[1].Contains("catSkill_1"))
+
+        string skillID = "catSkill_1";
+        if (selectedSkillNames[1].Contains(skillID))
         {
-            CancelSkill(1, "catSkill_1");
+            CancelSkill(1, skillID);
             SetButtonDimmed(catSkill1Button, false);
             return;
         }
@@ -999,10 +1084,11 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = "已達技能數量上限！";
             return;
         }
+
         isWaitingForTarget = true;
-        pendingSkill = "catSkill_1";
+        pendingSkill = skillID;
         pendingPlayerIndex = 1;
-        dialogueText.text = "請點擊一個敵人目標以使用貓技能 1！";
+        dialogueText.text = $"請點擊一個敵人目標以使用 {GetSkillDisplayName(skillID)}！";
         SetButtonDimmed(catSkill1Button, true);
     }
 
@@ -1054,9 +1140,11 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_4", "4")) return;
-        if (selectedSkillNames[1].Contains("catSkill_4"))
+
+        string skillID = "catSkill_4";
+        if (selectedSkillNames[1].Contains(skillID))
         {
-            CancelSkill(1, "catSkill_4");
+            CancelSkill(1, skillID);
             SetButtonDimmed(catSkill4Button, false);
             return;
         }
@@ -1065,10 +1153,12 @@ public class SkillManager : MonoBehaviour
             dialogueText.text = "已達技能數量上限！";
             return;
         }
+
         isWaitingForTarget = true;
-        pendingSkill = "catSkill_4";
+        pendingSkill = skillID;
         pendingPlayerIndex = 1;
-        dialogueText.text = "請點擊一個玩家頭像以使用貓技能 4！";
+        // 這裡因為是輔助技能，提示略有不同
+        dialogueText.text = $"請點擊一個玩家頭像以使用 {GetSkillDisplayName(skillID)}！";
         SetButtonDimmed(catSkill4Button, true);
     }
 
@@ -1235,23 +1325,52 @@ public class SkillManager : MonoBehaviour
         }
         UpdateAllSkillButtonStates();
     }
-
+    private string GetSkillDisplayName(string skillKey)
+    {
+        if (skillDisplayNameMap.ContainsKey(skillKey))
+        {
+            return skillDisplayNameMap[skillKey];
+        }
+        return skillKey; // 如果找不到，就回傳原始 ID
+    }
     void ResetSkillIcons()
     {
+        // 1. 檢查防呆：Prefab 和 Parent 有沒有在 Inspector 拖進去？
+        if (skillIconPrefab == null)
+        {
+           
+            return;
+        }
+        if (skillIconParent == null)
+        {
+       
+            return;
+        }
+
+      
         foreach (GameObject icon in skillIcons) Destroy(icon);
         skillIcons.Clear();
+
+       
         for (int i = 0; i < maxSkillPerTurn; i++)
         {
             GameObject icon = Instantiate(skillIconPrefab, skillIconParent);
+            icon.SetActive(true); // 確保生成的圖示沒有被隱藏
             skillIcons.Add(icon);
         }
+   
     }
 
     public void InitSkillIcons()
     {
+
         ResetSkillIcons();
+
+     
         ResetAllSkillButtonStates();
-        UpdateAllSkillButtonStates();
+        // UpdateAllSkillButtonStates 已經被 ResetAllSkillButtonStates 呼叫過了，所以這裡不用再呼叫一次
+
+    
     }
 
     public void ClearSkillIcons()

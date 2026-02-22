@@ -2,106 +2,116 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("軌道高度")]
-    public float groundY = -3.0f;
-    public float airY = 1.5f;
+    [Header("軌道高度設定")]
+    public float groundY = -3.0f; // 地面層高度
+    public float airY = 1.5f;     // 空中層高度
+
+    [Header("平滑移動設定")]
+    public float moveSpeed = 30f; // 角色上下移動的速度 (數值越大越快)
+    private float targetY;        // 角色目前「應該」要去的高度
 
     [Header("按鍵設定")]
     public KeyCode groundKey1 = KeyCode.F;
-    public KeyCode groundKey2 = KeyCode.D; // 新增 D 鍵
+    public KeyCode groundKey2 = KeyCode.D;
     public KeyCode airKey1 = KeyCode.J;
-    public KeyCode airKey2 = KeyCode.K;    // 新增 K 鍵
+    public KeyCode airKey2 = KeyCode.K;
 
     [Header("自動落地設定")]
-    public float airStayTime = 0.5f; // 空中滯留時間 (秒)
+    public float airStayTime = 0.5f;    // 在空中停留多久後自動掉下來
     private float currentAirTimer = 0f; // 內部計時器
 
-    [Header("攻擊設定")]
-    public float attackRange = 1.5f;
-    public float attackOffset = 1.0f;
-    public LayerMask enemyLayer;
+    [Header("攻擊判定設定")]
+    public float attackRange = 1.5f;  // 攻擊圓圈大小
+    public float attackOffset = 1.0f; // 攻擊點在角色前方多遠
+    public LayerMask enemyLayer;      // 指定只打 Enemy 層
 
     // 內部狀態
     private bool isGrounded = true;
 
     void Start()
     {
-        MoveToLane(true); // 一開始先在地板
+        // 遊戲開始時，設定目標為地面，並瞬間把角色放過去
+        targetY = groundY;
+        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
     }
 
     void Update()
     {
-        // --- 1. 地面攻擊 / 主動下潛 (F 或 D) ---
+        // --- 1. 偵測玩家輸入 ---
+
         if (Input.GetKeyDown(groundKey1) || Input.GetKeyDown(groundKey2))
         {
-            MoveToLane(true); // 切換到地面
-            CheckHit(true);   // 進行地面攻擊判定
+            MoveToLane(true);
+            CheckHit(true);
         }
 
-        // --- 2. 空中攻擊 / 跳躍 (J 或 K) ---
         if (Input.GetKeyDown(airKey1) || Input.GetKeyDown(airKey2))
         {
-            MoveToLane(false); // 切換到空中
-            CheckHit(false);   // 進行空中攻擊判定
-
-            // 關鍵：每次按下空中鍵，計時器重置 (讓你可以連續按 J 滯空，如果你想的話)
+            MoveToLane(false);
+            CheckHit(false);
             currentAirTimer = 0f;
         }
 
-        // --- 3. 自動落地邏輯 ---
-        // 如果現在 "不在地面" (isGrounded == false)
+        // --- 2. 空中自動落地邏輯 ---
         if (!isGrounded)
         {
-            // 開始計時
             currentAirTimer += Time.deltaTime;
-
-            // 如果計時超過設定的時間 (0.5秒)
             if (currentAirTimer >= airStayTime)
             {
-                MoveToLane(true); // 時間到，強制回到地面
+                MoveToLane(true);
             }
         }
+
+        // --- 3. 執行平滑移動 ---
+        Vector3 targetPos = new Vector3(transform.position.x, targetY, transform.position.z);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
     }
+
+    // ==========================================
+    // 下面這兩個就是剛才系統說找不到的函數，
+    // 它們必須獨立在 Update() 外面！
+    // ==========================================
 
     void MoveToLane(bool goGround)
     {
         isGrounded = goGround;
 
-        // 如果是回到地面，重置計時器 (雖然不重置也沒差，但習慣上歸零比較乾淨)
         if (goGround)
         {
             currentAirTimer = 0f;
         }
 
-        float targetY = goGround ? groundY : airY;
-
-        // 保持 X 和 Z 不變，只改變 Y
-        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+        targetY = goGround ? groundY : airY;
     }
 
-    // 攻擊判定邏輯 (跟之前一樣)
-    void CheckHit(bool isGroundLayer)
+    void CheckHit(bool isGroundAttack)
     {
-        float targetY = isGroundLayer ? groundY : airY;
-        Vector2 attackPos = new Vector2(transform.position.x + attackOffset, targetY);
+        float hitTargetY = isGroundAttack ? groundY : airY;
+        Vector2 attackPos = new Vector2(transform.position.x + attackOffset, hitTargetY);
 
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPos, attackRange, enemyLayer);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPos, attackRange, enemyLayer);
 
-        if (hitEnemy != null)
+        foreach (Collider2D enemy in hitEnemies)
         {
-            // 呼叫 GameManager 加分
+            if (Mathf.Abs(enemy.transform.position.y - hitTargetY) > 1.0f)
+            {
+                continue;
+            }
+
             if (GameManager.instance != null)
             {
                 GameManager.instance.AddScore(100);
             }
-            Destroy(hitEnemy.gameObject);
+
+            Destroy(enemy.gameObject);
+            break;
         }
     }
 
-    // 畫出輔助線 (跟之前一樣)
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
+
         Vector2 groundAttackPos = new Vector2(transform.position.x + attackOffset, groundY);
         Gizmos.DrawWireSphere(groundAttackPos, attackRange);
 
