@@ -52,12 +52,15 @@ MonoBehaviour:
     actions: []
     timline:
     - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: f146849123bc70d4d84ae467194fe09f, type: 2}
+      myPlayableAsset: {fileID: 11400000, guid: d49b5ccd0442aa04b9d307dd275c4a78, type: 2}
       timing: 0
   - text: "\u300C\u554A\u2014\u2014\uFF01\u300D"
     speaker: {fileID: 0}
     actions: []
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: f146849123bc70d4d84ae467194fe09f, type: 2}
+      timing: 0
   - text: "\u51B0\u51B7\u7684\u5730\u4E0A\uFF0C\u4E00\u9053\u7D05\u8272\u7684\u5FAE\u5149\u6084\u7136\u9583\u720D\u3002 "
     speaker: {fileID: 0}
     actions: []

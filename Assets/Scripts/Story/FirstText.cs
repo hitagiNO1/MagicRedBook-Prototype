@@ -73,7 +73,7 @@ public class FirstText : MonoBehaviour
         if (animator != null) animator.SetTrigger("Hide");
 
         Debug.Log("場景結束，準備切換");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         ClearText();
         // 檢查是否有填寫場景名稱，避免報錯
         if (!string.IsNullOrEmpty(mainSceneName))

@@ -30,7 +30,6 @@ public class TimelineManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        DontDestroyOnLoad(gameObject); // 切換場景時不銷毀
     }
 
     // 註冊播放結束事件
