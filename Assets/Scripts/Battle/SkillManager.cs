@@ -871,6 +871,9 @@ public class SkillManager : MonoBehaviour
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill4Coroutine(playerIndex));
         dialogueText.text = $"大雞腿～\n緊縮成一團，使敵人找不到縫隙攻擊。\n選取對象:布萊克";
+        // 新增這行：把施放技能4的單位加入名單
+        buffDebuffManager.skill4BuffUnits.Add(playerUnits[playerIndex]);
+
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }

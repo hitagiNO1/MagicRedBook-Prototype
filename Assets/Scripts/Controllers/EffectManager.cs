@@ -28,8 +28,13 @@ public class EffectManager : MonoBehaviour
     public Sprite LylahurtFace;
 
     public Image Black;   //外框
-    public Image Lyla;   //
+    public Image Lyla;
+    public Sprite Blacknomal;
     public Sprite BlackBall;
+
+    [Header("DCAT特效")]
+    public GameObject Dcat3Prefab;
+    public GameObject Dcat4Prefab;
 
     void Awake()
     {
@@ -150,7 +155,30 @@ public class EffectManager : MonoBehaviour
         //Debug.Log($"播放特效 {effectName} ({(playLeft ? "左" : "右")}) at {pos}, scale={scale}");
     }
 
-
+    public void Dcat3()
+    {
+        StartCoroutine(PlayDcatPrefab(Dcat3Prefab));
+    }
+    public void Dcat4()
+    {
+        StartCoroutine(PlayDcatPrefab(Dcat4Prefab));
+        /* 修正：Dcat4 應該是一個 string，代表特效名稱
+        string effectName = "Dcat4";
+        if (effectDict.TryGetValue(effectName, out GameObject prefab))
+        {
+            StartCoroutine(PlayUIEffectCoroutine(prefab, Vector2.zero, 0f, 1));
+        }
+        else
+        {
+            Debug.LogWarning($"UI Effect '{effectName}' not found!");
+        }
+        */
+    }
+    private IEnumerator PlayDcatPrefab(GameObject prefab)
+    {
+        GameObject dc = Instantiate(prefab);
+        yield break;
+    }
     // 簡單的晃動：使用 Noise Profile
     public void ShakeCamera(float amplitude, float frequency, float duration)
     {
@@ -234,8 +262,9 @@ public class EffectManager : MonoBehaviour
         targetImage.color = originalColor;
         targetImage.sprite = originalSprite;
     }
-    public void Def()
+    public void Def4back()
     {
+        StartCoroutine(PlayBounceAndSwitch(Blacknomal));
     }
     public void Def4()
     {

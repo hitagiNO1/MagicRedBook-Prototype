@@ -505,7 +505,7 @@ public class Enemyskill : MonoBehaviour
         }
 
         bool playLeft = target.unitName != "布萊克";
-        EffectManager.Instance.PlayUIEffectOneSide("Dcat3", playLeft);
+        EffectManager.Instance.Dcat3();
 
         skillCooldowns[skillKey] = dcatskill3CooldownTurns;
         Debug.Log("DC3");
@@ -543,11 +543,11 @@ public class Enemyskill : MonoBehaviour
                                $"總共造成了總計 {totalDamageDealt} 點傷害！";
         }
 
-        EffectManager.Instance.PlayUIEffect("Dcat4", new Vector2(0, 0));
+        EffectManager.Instance.Dcat4();
 
         skillCooldowns[skillKey] = dcatskill4CooldownTurns;
         Debug.Log("DC4");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
     }
 
     // ==================== 通用輔助方法 ====================

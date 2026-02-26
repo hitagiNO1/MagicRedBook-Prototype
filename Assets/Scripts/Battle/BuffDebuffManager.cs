@@ -35,6 +35,9 @@ public class BuffDebuffManager : MonoBehaviour
     private Dictionary<Unit, int> critChanceBuffTurns = new Dictionary<Unit, int>();
     private HashSet<Unit> isCritChanceBuffed = new HashSet<Unit>();
 
+    // 新增：專門記錄誰身上有「技能4(大雞腿)」的防禦 Buff
+    public HashSet<Unit> skill4BuffUnits = new HashSet<Unit>();
+
     void Start()
     {
         if (enemyUnits == null)
@@ -299,6 +302,16 @@ public class BuffDebuffManager : MonoBehaviour
                 unit.defense = originalDefenseValues[unit];
                 unitsToRemove.Add(unit);
                 Debug.Log($"{unit.unitName} 的防禦 Buff 結束，恢復為 {unit.defense}");
+
+                // --- 新增：如果是技能4的防禦結束，就觸發動畫 ---
+                if (skill4BuffUnits.Contains(unit))
+                {
+                    skill4BuffUnits.Remove(unit); // 觸發過就從名單移除
+
+                    // 這裡放你的破盾動畫，例如呼叫 EffectManager：
+                    EffectManager.Instance.Def4back();
+                    Debug.Log("觸發技能 4 大雞腿的防禦結束動畫！");
+                }
             }
         }
 
@@ -411,7 +424,7 @@ public class BuffDebuffManager : MonoBehaviour
             critChanceBuffMultiplier.Remove(unit);
             isCritChanceBuffed.Remove(unit);
         }
-
+        skill4BuffUnits.Clear();
         Debug.Log("所有 Buff/Debuff 效果已清除");
     }
 
