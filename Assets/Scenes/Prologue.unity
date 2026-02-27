@@ -4207,7 +4207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &296261999
 Transform:
   m_ObjectHideFlags: 0
@@ -7633,7 +7633,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -60.14152}
+  m_LocalPosition: {x: 0, y: 0, z: -60.05152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7641,7 +7641,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.2799995, y: 30.070007}
+  m_AnchoredPosition: {x: 1.0099994, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -22318,7 +22318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1203823677
 Animator:
   serializedVersion: 5
@@ -24878,7 +24878,7 @@ Transform:
   m_GameObject: {fileID: 1246287581}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 1.2799995, y: 30.070007, z: -60.14152}
+  m_LocalPosition: {x: 1.0099994, y: 30.070007, z: -60.05152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -62040,6 +62040,8 @@ PlayableDirector:
     value: {fileID: 1203823676}
   - key: {fileID: -5921778081854645195, guid: c37e6e58e64061f4e8be522711ddb563, type: 2}
     value: {fileID: 1203823677}
+  - key: {fileID: 3692728874390651225, guid: 2b2f9fa125231cd46b3001dfaf8ac12e, type: 2}
+    value: {fileID: 296261998}
   m_ExposedReferences:
     m_References:
     - b66ebb15795ad27409b7990f21887984: {fileID: 1400622618}
@@ -70572,10 +70574,9 @@ GameObject:
   - component: {fileID: 3720424681303388706}
   - component: {fileID: 3720424681303388705}
   - component: {fileID: 3720424681303388707}
-  - component: {fileID: 3720424681303388708}
-  - component: {fileID: 3720424681303388709}
   - component: {fileID: 3720424681303388710}
   - component: {fileID: 3720424681303388711}
+  - component: {fileID: 3720424681303388708}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -112887,7 +112888,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1918971256742962036}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ecd8adbfedca164f9005a1351370f08, type: 3}
   m_Name: 
@@ -118647,7 +118648,7 @@ Transform:
   m_GameObject: {fileID: 9123987284521645872}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.28, y: 0.070000015, z: -8.18}
+  m_LocalPosition: {x: 1.01, y: 0.070000015, z: -8.09}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -122401,19 +122402,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3720424681303388709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052940225863114260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 970a8a9f2c5d4304390f218a2ee1a5ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lastPlayerPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &3720424681303388710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137935,7 +137923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottomBar: {fileID: 8165284785212235176}
-  FirstScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
+  FirstScene: {fileID: 0}
   IsDone: 0
 --- !u!1001 &4338867126315818196
 PrefabInstance:
@@ -158888,7 +158876,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 81
+  m_SortingOrder: 80
   m_SortAtRoot: 0
 --- !u!1001 &5306335523782881802
 PrefabInstance:

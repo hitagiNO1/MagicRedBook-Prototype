@@ -466,11 +466,11 @@ public class Enemyskill : MonoBehaviour
                                    $"全場瀰漫著毒霧！\n";
             }
         }
-
+        EffectManager.Instance.PlayUIEffect("Dcat2", new Vector2(0f, 0f));
 
         Debug.Log("DC2");
         skillCooldowns[skillKey] = dcatskill2CooldownTurns;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
     }
 
     private IEnumerator Dcatskill_3Coroutine(Unit self)
@@ -509,7 +509,7 @@ public class Enemyskill : MonoBehaviour
 
         skillCooldowns[skillKey] = dcatskill3CooldownTurns;
         Debug.Log("DC3");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3f);
     }
 
     private IEnumerator Dcatskill_4Coroutine(Unit self)

@@ -1046,20 +1046,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 11.009391
-          outSlope: 11.009391
+          inSlope: 9.144144
+          outSlope: 9.144144
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.118643984
+          outWeight: 0.22583501
         - serializedVersion: 3
-          time: 0.11044568
+          time: 0.32719296
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: 1.2464093
+          outSlope: 1.2464093
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.72899795
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -1194,7 +1194,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    separateAxes: 1
+    separateAxes: 0
   RotationModule:
     enabled: 0
     x:
@@ -5938,20 +5938,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 11.009391
-          outSlope: 11.009391
-          tangentMode: 0
+          inSlope: 10.972971
+          outSlope: 9.209458
+          tangentMode: 1
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.118643984
+          outWeight: 0.24381298
         - serializedVersion: 3
-          time: 0.11044568
+          time: 0.28286237
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: 1.2463925
+          outSlope: 1.2463925
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.6420087
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -14900,7 +14900,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.8207547, g: 0.2981043, b: 0.5701853, a: 1}
+      maxColor: {r: 0.2971047, g: 0, b: 0.33962262, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -19603,7 +19603,7 @@ Transform:
   m_GameObject: {fileID: 7184567022463295371}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.28, y: 2, z: 0.3}
+  m_LocalPosition: {x: -0.379, y: 3.2, z: 0.544}
   m_LocalScale: {x: 0.26212472, y: 0.26212472, z: 0.26212472}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24422,12 +24422,12 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7184567022463295371}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1000
+  m_Intensity: 200
   m_Range: 68.2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -24472,7 +24472,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 1.02e-43, y: NaN, z: 2.1773e-41, w: 5.423173e-38}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
