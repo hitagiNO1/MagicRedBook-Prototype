@@ -161,7 +161,7 @@ public class BattleSystem : MonoBehaviour
 
         // 這裡很重要！確保對話文字有更新
         if (dialogueText != null)
-            dialogueText.text = "玩家回合：請選擇技能與目標";
+            dialogueText.text = "<b>玩家回合</b>：請選擇技能與目標";
 
         // 呼叫 SkillManager 初始化 UI
         if (skillManager != null)
@@ -199,7 +199,7 @@ public class BattleSystem : MonoBehaviour
         skillManager?.ClearAllHighlights();
 
         if (dialogueText != null)
-            dialogueText.text = "敵人回合...";
+            dialogueText.text = "<b>敵人回合...</b>";
 
         yield return new WaitForSeconds(1f);
 

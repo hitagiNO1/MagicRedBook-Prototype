@@ -17,11 +17,14 @@ public class usercontrol : MonoBehaviour,
     private const int requiredClicks = 15;
     private bool gameWon = false;
 
+    [Header("UI - Game Info")]
+    public TextMeshProUGUI timerText;  // 新增：顯示剩餘時間的 UI
+    public TextMeshProUGUI scoreText;  // 新增：顯示擊中數量的 UI
+
     [Header("UI")]
     public TextMeshProUGUI resault;
     public boxgameflow gameflow;
     public GameObject backbutton;
-
 
     [Header("Return Settings")]
     public string mainSceneName;
@@ -49,6 +52,9 @@ public class usercontrol : MonoBehaviour,
         mouseborn.OnHoleRemoved += UnregisterHoleState;
 
         CleanUpHoleList();
+
+        // 初始化分數 UI
+        UpdateScoreUI();
     }
 
     void OnDestroy()
@@ -68,6 +74,15 @@ public class usercontrol : MonoBehaviour,
         if (gameover || gameWon) return;
 
         timer -= Time.deltaTime;
+
+        // ---- 更新時間 UI ----
+        if (timerText != null)
+        {
+            // 使用 Mathf.Max 確保時間不會顯示負數，並用 CeilToInt 無條件進位顯示整數秒
+            timerText.text = $"時間: {Mathf.CeilToInt(Mathf.Max(0, timer))}";
+        }
+        // --------------------
+
         if (timer <= 0f)
         {
             Debug.Log("時間到！未達標，遊戲結束！");
@@ -112,6 +127,11 @@ public class usercontrol : MonoBehaviour,
         {
             // ==== 點到老鼠 ====
             mouseClickCount++;
+
+            // ---- 更新分數 UI ----
+            UpdateScoreUI();
+            // --------------------
+
             Debug.Log($"點到老鼠！目前 {mouseClickCount}/{requiredClicks}");
 
             if (mouseClickCount >= requiredClicks)
@@ -136,6 +156,15 @@ public class usercontrol : MonoBehaviour,
             mouseborn.OnObjectClicked(clickedState.Hole);
     }
 
+    // 獨立出一個更新分數 UI 的方法，方便重複呼叫
+    private void UpdateScoreUI()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = $"分數: {mouseClickCount} / {requiredClicks}";
+        }
+    }
+
     //=====================================================================
     //  結果文字
     //=====================================================================
@@ -155,6 +184,11 @@ public class usercontrol : MonoBehaviour,
         holeStates.Clear();
         backbutton.SetActive(false);
 
+        // ---- 重新開始時重置 UI ----
+        UpdateScoreUI();
+        if (timerText != null) timerText.text = $"時間: {timer}";
+        // -------------------------
+
         if (mouseborn != null)
             mouseborn.Restart();
     }
@@ -173,7 +207,7 @@ public class usercontrol : MonoBehaviour,
         yield return null;
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
-    // 1. 變黑 (Fade Out to Black)
+
     private IEnumerator FadeOutAnimation()
     {
         if (fadeImage != null)
@@ -193,16 +227,6 @@ public class usercontrol : MonoBehaviour,
         }
     }
 
-    //=====================================================================
-    //  可選：滑鼠進出時切換 Hover 圖片（若要保留 hover 效果）
-    //=====================================================================
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        // 這裡可以寫 hover 特效（例如放大），目前留空
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        // 這裡可以寫離開特效
-    }
+    public void OnPointerEnter(PointerEventData eventData) { }
+    public void OnPointerExit(PointerEventData eventData) { }
 }

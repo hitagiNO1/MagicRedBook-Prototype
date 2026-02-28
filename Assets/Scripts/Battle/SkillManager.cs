@@ -213,7 +213,7 @@ public class SkillManager : MonoBehaviour
         {
             readableName = skillDisplayNameMap[latestSkillName];
         }
-        dialogueText.text = $"{playerUnit.unitName} 取消了 {readableName}";
+        dialogueText.text = $"<b>{playerUnit.unitName}</b> 取消了 <b>{readableName}</b>";
 
         skillQueues[latestPlayerIndex].RemoveAt(latestSkillIndex);
         selectedSkillNames[latestPlayerIndex].RemoveAt(latestSkillIndex);
@@ -394,7 +394,7 @@ public class SkillManager : MonoBehaviour
         string cooldownKey = $"{skillName}_{playerIndex}";
         if (skillCooldowns.ContainsKey(cooldownKey) && skillCooldowns[cooldownKey] > 0)
         {
-            dialogueText.text = $"技能 {displayName} 正在冷卻中，剩餘 {skillCooldowns[cooldownKey]} 回合！";
+            dialogueText.text = $"技能 <b>{displayName}</b> 正在冷卻中，剩餘 <b>{skillCooldowns[cooldownKey]}</b> 回合！";
             return true;
         }
         return false;
@@ -405,7 +405,7 @@ public class SkillManager : MonoBehaviour
         if (target != null && (enemyUnits.Contains(target) || playerUnits.Contains(target)) && !target.isDead)
         {
             selectedTargets[playerIndex] = target;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 已選擇目標：{target.unitName}";
+            dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 已選擇目標：<b>{target.unitName}</b>";
             HighlightTarget(target, true);
 
             foreach (var unit in enemyUnits) if (unit != target && !unit.isDead) HighlightTarget(unit, false);
@@ -414,7 +414,7 @@ public class SkillManager : MonoBehaviour
         else
         {
             selectedTargets[playerIndex] = null;
-            dialogueText.text = $"{playerUnits[playerIndex].unitName}：無效的目標，請點擊一個存活的目標！";
+            dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b>：無效的目標，請點擊一個存活的目標！";
         }
     }
 
@@ -457,7 +457,7 @@ public class SkillManager : MonoBehaviour
         bool isWaitingForPlayerTarget = pendingSkill == "catSkill_4" || pendingSkill == "Can" || pendingSkill == "Grass" || pendingSkill == "Drying";
         if (!isWaitingForPlayerTarget || pendingPlayerIndex < 0) return;
 
-        dialogueText.text = $"{playerUnits[pendingPlayerIndex].unitName} 選擇對 {selectedTarget.unitName} 使用 {pendingSkill}";
+        dialogueText.text = $"<b>{playerUnits[pendingPlayerIndex].unitName}</b> 選擇對 <b>{selectedTarget.unitName}</b> 使用 <b>{pendingSkill}</b>";
         SelectTarget(pendingPlayerIndex, selectedTarget);
         ExecutePendingSkill();
     }
@@ -477,7 +477,7 @@ public class SkillManager : MonoBehaviour
                 selectedTargets[playerIndex] = null;
             }
 
-            dialogueText.text = $"{playerUnits[playerIndex].unitName} 取消了 {skillName}";
+            dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 取消了 <b>{skillName}</b>";
             AddSkillIcon();
             UpdateAllSkillButtonStates();
         }
@@ -487,7 +487,7 @@ public class SkillManager : MonoBehaviour
     {
         if (target == null || target.isDead)
         {
-            dialogueText.text = $"{playerUnits[playerIndex].unitName}：請點擊一個有效的目標！";
+            dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b>：請點擊一個有效的目標！";
             return false;
         }
         return true;
@@ -568,9 +568,9 @@ public class SkillManager : MonoBehaviour
             yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
         }
         // 顯示傷害文字
-        dialogueText.text = $"{playerUnits[playerIndex].unitName} 使出 吃我一擊！\n" +
-                            $"甩出手上的球攻擊了 {target.unitName}\n" +
-                            $"{target.unitName} 受到了 {damageDealt} 點傷害！";
+        dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 使出 <b>吃我一擊！</b>\n" +
+                            $"甩出手上的球攻擊了 <b>{target.unitName}</b>\n" +
+                            $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
 
         // 特效部分不變
         if (enemyUnits.Count == 1)
@@ -619,8 +619,8 @@ public class SkillManager : MonoBehaviour
         }
 
         // 設定對話文字：只顯示總傷害
-        dialogueText.text = $"布萊克 使出了 上吧，球球們！\n用手上的球分散甩出攻擊了全部敵人\n" +
-                           $"總共造成 {totalDamageDealt} 點傷害！";
+        dialogueText.text = $"<b>布萊克</b> 使出了 <b>上吧，球球們</b>！\n用手上的球分散甩出攻擊了全部敵人\n" +
+                           $"總共造成 <b>{totalDamageDealt}</b> 點傷害！";
 
         skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
 
@@ -634,7 +634,7 @@ public class SkillManager : MonoBehaviour
         PlaySoundByName("skill3");
         buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 1.5f, 1);
         skillCooldowns["Skill_3_" + playerIndex] = skill3CooldownTurns;
-        dialogueText.text = $"布萊克 使出了 舔舔舔！\n將身上的毛整理好，使防禦力上升。";
+        dialogueText.text = $"<b>布萊克</b> 使出了 <b>舔舔舔</b>！\n將身上的毛整理好，使防禦力上升。";
         EffectManager.Instance.PlayUIEffect("B3", new Vector2(-802, -362));
         yield return new WaitForSeconds(1.5f);
     }
@@ -644,7 +644,7 @@ public class SkillManager : MonoBehaviour
         PlaySoundByName("Skill_4");
         buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
         skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
-        dialogueText.text = $"布萊克 使出了 大雞腿～\n緊縮成一團，使敵人找不到縫隙攻擊。";
+        dialogueText.text = $"<b>布萊克</b> 使出了 <b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。";
         EffectManager.Instance.PlayUIEffect("B4", new Vector2(-802, -362));
         yield return new WaitForSeconds(1.5f);
     }
@@ -679,8 +679,8 @@ public class SkillManager : MonoBehaviour
         }
 
         // 顯示傷害文字（可根據喜好調整風格）
-        dialogueText.text = $"布萊克 使出了 連環兔子踹！\n抱住 {target.unitName} ，使出最強攻擊兔子踹！\n" +
-                           $"{target.unitName} 受到了 {damageDealt} 點傷害！";
+        dialogueText.text = $"<b>布萊克</b> 使出了 <b>連環兔子踹</b>！\n抱住 <b>{target.unitName}</b> ，使出最強攻擊兔子踹！\n" +
+                           $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
 
         skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
 
@@ -719,8 +719,8 @@ public class SkillManager : MonoBehaviour
         }
 
         // 顯示傷害文字（可依喜好調整風格）
-        dialogueText.text = $"萊拉 使出了 三分球！\n撿起身邊的東西丟向 {target.unitName}！\n" +
-                           $"{target.unitName} 受到了 {damageDealt} 點傷害！";
+        dialogueText.text = $"<b>萊拉</b> 使出了 <b>三分球</b>！\n撿起身邊的東西丟向 <b>{target.unitName}</b>！\n" +
+                           $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
 
         EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
 
@@ -744,7 +744,7 @@ public class SkillManager : MonoBehaviour
         }
 
         skillCooldowns["catSkill_2_" + playerIndex] = catskill2CooldownTurns;
-        dialogueText.text = $"萊拉 使出了 小意思！\n將傷口進行包紮";
+        dialogueText.text = $"<b>萊拉</b> 使出了 <b>小意思</b>！\n將傷口進行包紮";
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
         yield return new WaitForSeconds(2.5f);
@@ -782,8 +782,8 @@ public class SkillManager : MonoBehaviour
         }
 
         // 顯示總傷害
-        dialogueText.text = $"萊拉 使出了 Do～Re～Mi～\n透過唱歌給全體敵人造成傷害！\n" +
-                           $"總共造成 {totalDamageDealt} 點傷害！";
+        dialogueText.text = $"<b>萊拉</b> 使出了 <b>o～Re～Mi～</b>D\n透過唱歌給全體敵人造成傷害！\n" +
+                           $"總共造成 <b>{totalDamageDealt}</b> 點傷害！";
 
         skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
 
@@ -807,7 +807,7 @@ public class SkillManager : MonoBehaviour
 
         buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2);
         skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
-        dialogueText.text = $"萊拉 使出了 打起精神來！\n對 {target.unitName} 施展魔法，提升其攻擊力";
+        dialogueText.text = $"<b>萊拉</b> 使出了 <b>打起精神來</b>！\n對 <b>{target.unitName}</b> 施展魔法，提升其攻擊力";
         int targetIndex = playerUnits.IndexOf(target);
         bool isTargetLeft = (targetIndex == 0);
         EffectManager.Instance.PlayUIEffectOneSide("L4", isTargetLeft);
@@ -821,7 +821,7 @@ public class SkillManager : MonoBehaviour
             buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1);
         }
         skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
-        dialogueText.text = $"萊拉 使出了 痛痛飛走～\n透過優美的歌聲振奮士氣，使我方全體承受傷害降低";
+        dialogueText.text = $"<b>萊拉</b> 使出了 <b>痛痛飛走</b>～\n透過優美的歌聲振奮士氣，使我方全體承受傷害降低";
         EffectManager.Instance.PlayUIEffect("L5", new Vector2(0, 0));
         yield return new WaitForSeconds(2.0f);
     }
@@ -834,7 +834,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_1");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(Skill1Coroutine(playerIndex, target));
-        dialogueText.text = $"吃我一擊！\n甩出手上的球攻擊\n選取對象:{target.unitName}";
+        dialogueText.text = $"<b>吃我一擊</b>！\n甩出手上的球攻擊\n選取對象:<b>{target.unitName}</b>";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -846,7 +846,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_2");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill2Coroutine(playerIndex));
-        dialogueText.text = $"上吧，球球們！\n手上的球分散甩出攻擊全部敵人\n布萊克 選擇了 上吧，球球們！";
+        dialogueText.text = $"<b>上吧，球球們</b>！\n手上的球分散甩出攻擊全部敵人\n<b>布萊克</b> 選擇了 <b>上吧，球球們</b>！";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -858,7 +858,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_3");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill3Coroutine(playerIndex));
-        dialogueText.text = $"舔舔舔！\n將身上的毛整理好，使防禦力上升。\n選取對象:布萊克";
+        dialogueText.text = $"<b>舔舔舔</b>！\n將身上的毛整理好，使防禦力上升。\n選取對象:<b>布萊克</b>";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -870,7 +870,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_4");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill4Coroutine(playerIndex));
-        dialogueText.text = $"大雞腿～\n緊縮成一團，使敵人找不到縫隙攻擊。\n選取對象:布萊克";
+        dialogueText.text = $"<b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。\n選取對象:<b>布萊克</b>";
         // 新增這行：把施放技能4的單位加入名單
         buffDebuffManager.skill4BuffUnits.Add(playerUnits[playerIndex]);
 
@@ -885,7 +885,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_5");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(Skill5Coroutine(playerIndex, target));
-        dialogueText.text = $"連環兔子踹！\n 抱住敵人，使出最強攻擊兔子踹！\n選取對象:{target.unitName}";
+        dialogueText.text = $"<b>連環兔子踹</b>！\n 抱住敵人，使出最強攻擊兔子踹！\n選取對象:<b>{target.unitName}</b>";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -897,7 +897,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_1");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(CatSkill1Coroutine(playerIndex, target));
-        dialogueText.text = $"三分球！\n 撿起身邊的東西丟向敵人。\n選取對象:{target.unitName}";
+        dialogueText.text = $"<b>三分球</b>！\n 撿起身邊的東西丟向敵人。\n選取對象:<b>{target.unitName}</b>";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -909,7 +909,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_2");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill2Coroutine(playerIndex));
-        dialogueText.text = $"小意思！\n將傷口進行包紮。\n萊拉 選擇了 小意思！";
+        dialogueText.text = $"<b>小意思</b>！\n將傷口進行包紮。\n<b>萊拉</b> 選擇了 <b>小意思</b>！";
         
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
@@ -922,7 +922,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_3");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill3Coroutine(playerIndex));
-        dialogueText.text = $"Do～Re～Mi～\n 大聲歌唱，干擾全部敵人。\n萊拉 選擇了 Do～Re～Mi～";
+        dialogueText.text = $"<b>Do～Re～Mi～</b>\n 大聲歌唱，干擾全部敵人。\n<b>萊拉</b> 選擇了 <b>Do～Re～Mi～</b>";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -934,7 +934,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_4");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(CatSkill4Coroutine(playerIndex, target));
-        dialogueText.text = $"打起精神來！\n 施展力量變強壯的魔法。\n 選取對象:{target.unitName}";
+        dialogueText.text = $"<b>打起精神來</b>！\n 施展力量變強壯的魔法。\n 選取對象:<b>{target.unitName}</b>";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -946,7 +946,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_5");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill5Coroutine(playerIndex));
-        dialogueText.text = $"痛痛飛走～\n 優美的歌聲，振奮隊伍士氣。\n萊拉 選擇了 痛痛飛走～";
+        dialogueText.text = $"<b>痛痛飛走</b>～\n 優美的歌聲，振奮隊伍士氣。\n<b>萊拉</b> 選擇了 <b>痛痛飛走</b>～";
         RemoveSkillIcon();
         UpdateAllSkillButtonStates();
     }
@@ -975,7 +975,7 @@ public class SkillManager : MonoBehaviour
         pendingSkill = skillID;
         pendingPlayerIndex = 0;
         // 動態顯示：請點擊一個敵人目標以使用 吃我一擊！！
-        dialogueText.text = $"請點擊一個敵人目標以使用 {GetSkillDisplayName(skillID)}！";
+        dialogueText.text = $"請點擊一個敵人目標以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
         SetButtonDimmed(skill1Button, true);
     }
 
@@ -1065,7 +1065,7 @@ public class SkillManager : MonoBehaviour
         isWaitingForTarget = true;
         pendingSkill = skillID;
         pendingPlayerIndex = 0;
-        dialogueText.text = $"請點擊一個敵人目標以使用 {GetSkillDisplayName(skillID)}！";
+        dialogueText.text = $"請點擊一個敵人目標以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
         SetButtonDimmed(skill5Button, true);
     }
 
@@ -1091,7 +1091,7 @@ public class SkillManager : MonoBehaviour
         isWaitingForTarget = true;
         pendingSkill = skillID;
         pendingPlayerIndex = 1;
-        dialogueText.text = $"請點擊一個敵人目標以使用 {GetSkillDisplayName(skillID)}！";
+        dialogueText.text = $"請點擊一個敵人目標以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
         SetButtonDimmed(catSkill1Button, true);
     }
 
@@ -1161,7 +1161,7 @@ public class SkillManager : MonoBehaviour
         pendingSkill = skillID;
         pendingPlayerIndex = 1;
         // 這裡因為是輔助技能，提示略有不同
-        dialogueText.text = $"請點擊一個玩家頭像以使用 {GetSkillDisplayName(skillID)}！";
+        dialogueText.text = $"請點擊一個玩家頭像以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
         SetButtonDimmed(catSkill4Button, true);
     }
 
@@ -1400,7 +1400,7 @@ public class SkillManager : MonoBehaviour
         if (buffDebuffManager.IsSkillDisabled(unit))
         {
             if (dialogueText != null)
-                dialogueText.text = $"{unit.unitName} 被技能封印，無法使用技能！";
+                dialogueText.text = $"<b>{unit.unitName}</b> 被技能封印，無法使用技能！";
             return false;
         }
         return true;

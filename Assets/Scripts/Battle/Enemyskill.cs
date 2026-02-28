@@ -171,31 +171,19 @@ public class Enemyskill : MonoBehaviour
         return coroutines;
     }
 
-    // ==================== SOFT 技能冷卻檢查 ====================
+    // ==================== SOFT 技能冷卻管理 ====================
     private IEnumerator Softskill_2Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Softskill_2";
-        if (!skillCooldowns.ContainsKey(skillKey)) skillCooldowns[skillKey] = 0;
-        if (skillCooldowns[skillKey] > 0)
-        {
-            Debug.Log($"{self.unitName} 的 Softskill_2 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            yield break;
-        }
+        skillCooldowns[skillKey] = 2; // 先進入冷卻，避免異常中斷時連發
         yield return StartCoroutine(PerformSoftskill_2(self));
-        skillCooldowns[skillKey] = 2;
     }
 
     private IEnumerator Softskill_3Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Softskill_3";
-        if (!skillCooldowns.ContainsKey(skillKey)) skillCooldowns[skillKey] = 0;
-        if (skillCooldowns[skillKey] > 0)
-        {
-            Debug.Log($"{self.unitName} 的 Softskill_3 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            yield break;
-        }
-        yield return StartCoroutine(PerformSoftskill_3(self));
         skillCooldowns[skillKey] = 2;
+        yield return StartCoroutine(PerformSoftskill_3(self));
     }
 
     // ==================== FISH 技能 ====================
@@ -210,8 +198,8 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 魚叉突刺！\n握緊手中叉子刺向 {target.unitName}\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>魚叉突刺</b>！\n握緊手中叉子刺向 <b>{target.unitName}</b>\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
 
         bool playLeft = target.unitName != "布萊克";
@@ -230,8 +218,8 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 神魚擺尾！\n用力彈起，用尾巴甩向 {target.unitName}。\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>神魚擺尾</b>！\n用力彈起，用尾巴甩向 <b>{target.unitName}</b>。\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
 
         bool playLeft = target.unitName != "布萊克";
@@ -251,8 +239,8 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 咬咬咬！\n大口咬向 {target.unitName}。\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>咬咬咬</b>！\n大口咬向 <b>{target.unitName}</b>。\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
 
         bool playLeft = target.unitName != "布萊克";
@@ -272,9 +260,9 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 陳年老痰！\n" +
-                               $"對 {target.unitName} 噴出帶毒黏液， {target.unitName} 中毒。\n" +
-                               $"{target.unitName} 將在接下來幾回合受到傷害...";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>陳年老痰</b>！\n" +
+                                $"對 <b>{target.unitName}</b> 噴出帶毒黏液， <b>{target.unitName}</b> 中毒。\n" +
+                                $"<b>{target.unitName}</b> 將在接下來幾回合受到傷害...";
         }
 
         bool playLeft = target.unitName != "布萊克";
@@ -296,9 +284,9 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 當頭棒喝！\n" +
-                               $"拿槌子敲向 {target.unitName}！\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>當頭棒喝</b>！\n" +
+                                $"拿槌子敲向 <b>{target.unitName}</b>！\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
 
         bool playLeft = target.unitName != "布萊克";
@@ -323,10 +311,10 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 滴答滴！\n" +
-                               $"敲擊自己腦袋，發出聲波攻擊 {target.unitName}！\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害，" +
-                               "攻擊與治療降低！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>滴答滴！</b>\n" +
+                                $"敲擊自己腦袋，發出聲波攻擊 <b>{target.unitName}</b>！\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害，" +
+                                "攻擊與治療降低！";
         }
 
         EffectManager.Instance.PlayUIEffect("Clock2", new Vector2(0, 0));
@@ -347,9 +335,9 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 軟軟甩擊！\n" +
-                               $"對 {target.unitName} 甩了一巴掌！\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 軟軟甩擊！\n" +
+                                $"對 <b>{target.unitName}</b> 甩了一巴掌！\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
         bool playLeft = target.unitName != "布萊克";
         EffectManager.Instance.PlayUIEffectOneSide("Blanket1", playLeft);
@@ -378,10 +366,10 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 軟軟纏繞！\n" +
-                               $"抱住 {target.unitName}， {target.unitName} 動彈不得。\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害，" +
-                               "並且無法使用技能！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>軟軟纏繞</b>！\n" +
+                                $"抱住 <b>{target.unitName}</b>， <b>{target.unitName}</b> 動彈不得。\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害，" +
+                                "並且無法使用技能！";
         }
 
         bool playLeft = target.unitName != "布萊克";
@@ -406,8 +394,8 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 軟軟擁抱！\n" +
-                               $"共造成了總計 {totalDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>軟軟擁抱</b>！\n" +
+                                $"共造成了總計 <b>{totalDamageDealt}</b> 點傷害！";
         }
 
         EffectManager.Instance.PlayUIEffect("Blanket3", new Vector2(0f, 0f));
@@ -426,11 +414,10 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 斬擊！\n" +
-                               $"對 {target.unitName} 進行斬擊！\n" +
-                               $"{target.unitName} 受到了 {actualDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>斬擊</b>！\n" +
+                                $"對 <b>{target.unitName}</b> 進行斬擊！\n" +
+                                $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
-
 
         Debug.Log("DC1");
         yield return new WaitForSeconds(1.5f);
@@ -439,14 +426,7 @@ public class Enemyskill : MonoBehaviour
     private IEnumerator Dcatskill_2Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Dcatskill_2";
-        if (!skillCooldowns.ContainsKey(skillKey))
-            skillCooldowns[skillKey] = 0;
-
-        if (skillCooldowns[skillKey] > 0)
-        {
-            Debug.Log($"{self.unitName} 的 Dcatskill_2 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            yield break;
-        }
+        skillCooldowns[skillKey] = dcatskill2CooldownTurns; // 執行時直接設定冷卻
 
         int totalAffected = 0;
 
@@ -462,28 +442,20 @@ public class Enemyskill : MonoBehaviour
         {
             if (totalAffected > 0)
             {
-                dialogueText.text = $"{self.unitName} 使用了 闇之氣息！\n" +
-                                   $"全場瀰漫著毒霧！\n";
+                dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>闇之氣息</b>！\n" +
+                                    $"全場瀰漫著毒霧！\n";
             }
         }
         EffectManager.Instance.PlayUIEffect("Dcat2", new Vector2(0f, 0f));
 
         Debug.Log("DC2");
-        skillCooldowns[skillKey] = dcatskill2CooldownTurns;
         yield return new WaitForSeconds(3f);
     }
 
     private IEnumerator Dcatskill_3Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Dcatskill_3";
-        if (!skillCooldowns.ContainsKey(skillKey))
-            skillCooldowns[skillKey] = 0;
-
-        if (skillCooldowns[skillKey] > 0)
-        {
-            Debug.Log($"{self.unitName} 的 Dcatskill_3 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            yield break;
-        }
+        skillCooldowns[skillKey] = dcatskill3CooldownTurns; // 執行時直接設定冷卻
 
         Unit target = GetRandomValidTarget(playerUnits);
         if (target == null || target.isDead) yield break;
@@ -499,15 +471,13 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 神之庇護！\n" +       
-                               $"強大的力量圍繞在？？？身旁！";
-
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>神之庇護！</b>\n" +
+                                $"強大的力量圍繞在？？？身旁！";
         }
 
         bool playLeft = target.unitName != "布萊克";
         EffectManager.Instance.Dcat3();
 
-        skillCooldowns[skillKey] = dcatskill3CooldownTurns;
         Debug.Log("DC3");
         yield return new WaitForSeconds(3f);
     }
@@ -515,14 +485,7 @@ public class Enemyskill : MonoBehaviour
     private IEnumerator Dcatskill_4Coroutine(Unit self)
     {
         string skillKey = $"{self.unitName}_Dcatskill_4";
-        if (!skillCooldowns.ContainsKey(skillKey))
-            skillCooldowns[skillKey] = 0;
-
-        if (skillCooldowns[skillKey] > 0)
-        {
-            Debug.Log($"{self.unitName} 的 Dcatskill_4 冷卻中，剩餘 {skillCooldowns[skillKey]} 回合");
-            yield break;
-        }
+        skillCooldowns[skillKey] = dcatskill4CooldownTurns; // 執行時直接設定冷卻
 
         int totalDamageDealt = 0;
         int damage = Mathf.RoundToInt(self.damage * 3.5f);
@@ -538,14 +501,13 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"{self.unitName} 使用了 死式，茈！\n" +
-                               $"聚集強大力量，掃向所有人！\n" +
-                               $"總共造成了總計 {totalDamageDealt} 點傷害！";
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>死式，茈</b>！\n" +
+                                $"聚集強大力量，掃向所有人！\n" +
+                                $"總共造成了總計 <b>{totalDamageDealt}</b> 點傷害！";
         }
 
         EffectManager.Instance.Dcat4();
 
-        skillCooldowns[skillKey] = dcatskill4CooldownTurns;
         Debug.Log("DC4");
         yield return new WaitForSeconds(3f);
     }
