@@ -16,10 +16,10 @@ MonoBehaviour:
   textColor: {r: 1, g: 1, b: 1, a: 0}
   BackColor: {fileID: 21300000, guid: e02ac628c227ea14ab6b99aaa3495629, type: 3}
   sprites:
-  - {fileID: 21300000, guid: fe14674c1ff7a5e4f885deb332244ff2, type: 3}
-  - {fileID: 21300000, guid: 1e423a085558196499d9ce81a4a8c985, type: 3}
-  - {fileID: 21300000, guid: ee95e66eb14c9e4408737f7511bf6146, type: 3}
-  - {fileID: 21300000, guid: b90da37b1c91b894da4b1c6d6c3bb4ad, type: 3}
-  - {fileID: 21300000, guid: a8fbcc9c37ef64049979248bad57db46, type: 3}
-  - {fileID: 21300000, guid: 06f48643f2db9f14487a6cedcd03347d, type: 3}
+  - {fileID: 21300000, guid: 077c4b182796edd478f0e25931bdcd48, type: 3}
+  - {fileID: 21300000, guid: 8470168cf78abcb4ab6da737ea4e0a13, type: 3}
+  - {fileID: 21300000, guid: 2a78b03dc9858cf4aa3b2fdb306438f3, type: 3}
+  - {fileID: 21300000, guid: ea92706eb6576274b9e98afd513f8553, type: 3}
+  - {fileID: 21300000, guid: f7c0ec34893e31348bfc3461c528428a, type: 3}
+  - {fileID: 21300000, guid: ae7c1b683c639574b9c07c4f89bc3885, type: 3}
   prefab: {fileID: 181739033971714129, guid: ff831fca6a3ee1b4ca252eef9b524f91, type: 3}

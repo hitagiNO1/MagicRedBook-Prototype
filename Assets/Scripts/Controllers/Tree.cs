@@ -17,10 +17,8 @@ public class Tree : MonoBehaviour
     [HideInInspector] public Transform currentPoint; // 記錄目前所在的點位
 
     // 接收 Manager 傳來的初始設定
-    public void Setup(TreeManager mgr, Transform point, GameObject ui, Image fade)
+    public void Setup(TreeManager mgr, Transform point, Image fade)
     {
-        // 把 Manager 傳來的 UI 存起來
-        InteractiveUI = ui;
         fadeImage = fade;
 
         if (InteractiveUI != null) InteractiveUI.SetActive(false);

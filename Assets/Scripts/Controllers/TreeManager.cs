@@ -15,7 +15,6 @@ public class TreeManager : MonoBehaviour
     public int activeCount = 3;
 
     [Header("場景 UI 參照")]
-    public GameObject sharedInteractiveUI; // 在場景的 Manager 裡把提示 UI 拖進來
     public Image sharedFadeImage;          // 在場景的 Manager 裡把黑幕 Image 拖進來
     // 用來記錄「目前沒有站人」的空閒點位
     private List<Transform> availablePoints = new List<Transform>();
@@ -52,7 +51,7 @@ public class TreeManager : MonoBehaviour
         Tree targetScript = newObj.GetComponent<Tree>();
         if (targetScript != null)
         {
-            targetScript.Setup(this, selectedPoint, sharedInteractiveUI, sharedFadeImage);
+            targetScript.Setup(this, selectedPoint, sharedFadeImage);
         }
 
         // 4. 因為這個點位站人了，把它從空閒清單移除
