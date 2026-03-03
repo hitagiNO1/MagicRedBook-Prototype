@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public int unitLevel;
     public bool isPlayer;
     // --- 裝備相關變數 ---
-    public string currentEquipment; // 當前裝備名稱
+    public List<string> equippedGear = new List<string>();
 
     [Header("Base Stats (For Recovery)")]
     public int baseDamage;          // 紀錄初始攻擊力

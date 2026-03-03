@@ -6,8 +6,10 @@ public class EquipmentManager : MonoBehaviour
 {
     public static EquipmentManager Instance { get; private set; }
 
-    [Header("目前裝備清單")]
-    // 這裡存放玩家目前穿戴的裝備名稱，你可以根據你的背包系統來對接
+    [Header("玩家擁有的裝備清單 (可用於顯示在背包UI)")]
+    public List<string> ownedEquipment = new List<string>();
+
+    [Header("全隊使用中的裝備總覽")]
     public List<string> equippedItems = new List<string>();
 
     private void Awake()
@@ -22,102 +24,127 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 檢查是否裝備了某件物品
-    /// </summary>
+    public void AddEquipment(string itemName)
+    {
+        if (!ownedEquipment.Contains(itemName))
+        {
+            ownedEquipment.Add(itemName);
+            Debug.Log($"獲得新裝備：{itemName}");
+        }
+    }
+
     public bool HasEquipment(string itemName)
     {
         return equippedItems.Contains(itemName);
     }
 
-    /// <summary>
-    /// 戰鬥開始時呼叫：套用所有裝備的永久屬性（拳套、盔甲、法杖）
-    /// </summary>
-    public void ApplyPermanentEquipmentEffects(Unit unit)
+    // ================= 新增：幫指定單位穿上特定裝備 =================
+    public void EquipItemToUnit(Unit unit, string itemName)
     {
-        if (unit == null) return;
+        if (unit == null || !ownedEquipment.Contains(itemName)) return;
 
-        // --- 膠帶拳套：增加攻擊力 (例如 +5) ---
-        if (HasEquipment("膠帶拳套"))
+        // 如果他已經穿著這件了，就不用再穿
+        if (unit.equippedGear.Contains(itemName)) return;
+
+        // 加入單位的裝備清單
+        unit.equippedGear.Add(itemName);
+        // 加入全域清單
+        equippedItems.Add(itemName);
+
+        // 重新計算屬性
+        RecalculateUnitStats(unit);
+
+        Debug.Log($"{unit.unitName} 裝備了 {itemName}！");
+    }
+
+    // ================= 新增：幫指定單位脫下裝備 =================
+    public void UnequipItemFromUnit(Unit unit, string itemName)
+    {
+        if (unit == null || !unit.equippedGear.Contains(itemName)) return;
+
+        // 移除裝備
+        unit.equippedGear.Remove(itemName);
+        equippedItems.Remove(itemName);
+
+        // 重新計算屬性
+        RecalculateUnitStats(unit);
+
+        Debug.Log($"{unit.unitName} 脫下了 {itemName}。");
+    }
+
+    // ================= 核心：重新計算單位的所有屬性 =================
+    // 因為可以穿多件裝備，每次穿脫都要「先還原，再把所有穿著的裝備屬性加回去」
+    private void RecalculateUnitStats(Unit unit)
+    {
+        // 1. 還原回最一開始的數值 (你在 Unit.cs 寫好的)
+        unit.ResetStatsToOuterBase();
+
+        // 2. 針對該單位目前穿著的每一件裝備，疊加屬性
+        foreach (string equipment in unit.equippedGear)
         {
-            unit.damage += 5;
-            Debug.Log($"{unit.unitName} 套用了膠帶拳套，攻擊力提升。");
+            if (equipment == "膠帶拳套")
+            {
+                unit.damage += 5;
+            }
+            if (equipment == "穿戴式紙箱盔甲")
+            {
+                unit.defense += 3;
+            }
+            if (equipment == "逗貓棒法杖")
+            {
+                unit.damage += 4;
+            }
         }
 
-        // --- 穿戴式紙箱盔甲：增加防禦力 (例如 +3) ---
-        if (HasEquipment("穿戴式紙箱盔甲"))
-        {
-            unit.defense += 3;
-            Debug.Log($"{unit.unitName} 套用了紙箱盔甲，防禦力提升。");
-        }
-
-        // --- 逗貓棒法杖：增加額外傷害或魔力 (例如 +4) ---
-        if (HasEquipment("逗貓棒法杖"))
-        {
-            unit.damage += 4;
-            Debug.Log($"{unit.unitName} 套用了逗貓棒法杖，傷害提升。");
-        }
-
-        // 如果是玩家 Unit，我們也順便檢查並套用地圖移動速度
+        // 3. 更新地圖速度和技能按鈕狀態
         if (unit.isPlayer)
         {
             RefreshOverworldSpeed();
         }
+        FindObjectOfType<SkillManager>()?.UpdateAllSkillButtonStates();
     }
 
-    /// <summary>
-    /// 專門處理地圖移動速度（劍客鞋子）
-    /// 當玩家穿上或脫下鞋子時，呼叫此方法
-    /// </summary>
+    // ================= 這個已經整合進 RecalculateUnitStats 了，可以保留或刪除 =================
+    // 為了保險起見，保留一個相容原本呼叫的方法，並將其導向重新計算
+    public void ApplyPermanentEquipmentEffects(Unit unit)
+    {
+        RecalculateUnitStats(unit);
+    }
+
     public void RefreshOverworldSpeed()
     {
-        // 尋找場景中的主角控制器
         CharControlles playerController = FindObjectOfType<CharControlles>();
 
         if (playerController != null)
         {
             if (HasEquipment("劍客鞋子"))
             {
-                playerController.SetSpeedBonus(2f); // 增加 2f 速度
+                playerController.SetSpeedBonus(2f);
             }
             else
             {
-                playerController.SetSpeedBonus(0f); // 沒穿則重置
+                playerController.SetSpeedBonus(0f);
             }
         }
     }
 
-    // 當你背包系統穿上裝備時，請呼叫此方法
-    public void EquipItem(string itemName)
-    {
-        if (!equippedItems.Contains(itemName))
-        {
-            equippedItems.Add(itemName);
-            RefreshOverworldSpeed(); // 穿上時立刻更新速度
-        }
-    }
-
-    // 當你背包系統脫下裝備時，請呼叫此方法
-    public void UnequipItem(string itemName)
-    {
-        if (equippedItems.Contains(itemName))
-        {
-            equippedItems.Remove(itemName);
-            RefreshOverworldSpeed(); // 脫下時立刻更新速度
-        }
-    }
+    // ================= 修改：二段傷害判定改看 equippedGear 清單 =================
     public IEnumerator ExecuteTapeGlovesExtraDamage(int playerIndex, Unit target)
     {
-        // 檢查是否裝備了膠帶拳套
-        if (HasEquipment("膠帶拳套") && target != null && !target.isDead)
-        {
-            yield return new WaitForSeconds(0.2f); // 稍微延遲，讓視覺更有層次感
+        SkillManager skillManager = FindObjectOfType<SkillManager>();
+        if (skillManager == null) yield break;
 
-            int extraDamage = 3; // 設定額外傷害數值
+        Unit attackingUnit = skillManager.playerUnits[playerIndex];
+
+        // 檢查攻擊者的裝備清單是否包含拳套
+        if (attackingUnit.equippedGear.Contains("膠帶拳套") && target != null && !target.isDead)
+        {
+            yield return new WaitForSeconds(0.2f);
+
+            int extraDamage = 3;
             target.currentHP -= extraDamage;
             if (target.currentHP < 0) target.currentHP = 0;
 
-            // 更新敵人的 HUD
             if (target.battleHUD != null)
             {
                 target.battleHUD.SetHP(target.currentHP);
@@ -125,10 +152,8 @@ public class EquipmentManager : MonoBehaviour
 
             Debug.Log($"膠帶拳套發動！對 {target.unitName} 造成額外 {extraDamage} 點傷害。");
 
-            // 如果敵人血量歸 0，觸發死亡邏輯
             if (target.currentHP <= 0)
             {
-                // 呼叫 BattleSystem 標記死亡 (假設 BattleSystem 是單例或可獲取)
                 FindObjectOfType<BattleSystem>()?.MarkEnemyAsDead(FindObjectOfType<BattleSystem>().enemyUnits.IndexOf(target));
             }
 

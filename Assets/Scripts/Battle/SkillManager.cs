@@ -325,9 +325,8 @@ public class SkillManager : MonoBehaviour
         bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
 
         // 2. 取得裝備限制狀態
-        bool p0OnlySkill1 = playerUnits[0].currentEquipment == "穿戴式紙箱盔甲";
-        bool p1OnlySkill1 = playerUnits[1].currentEquipment == "穿戴式紙箱盔甲";
-
+        bool p0OnlySkill1 = playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲");
+        bool p1OnlySkill1 = playerUnits[1].equippedGear.Contains("穿戴式紙箱盔甲");
         // 兔子按鈕
         skill1Button.interactable = !p0Disabled;
         skill2Button.interactable = !p0Disabled && !p0OnlySkill1;
