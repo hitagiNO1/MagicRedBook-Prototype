@@ -186,7 +186,7 @@ public class RedBook : MonoBehaviour
         //BookCamera.enabled = true;
         animator.SetTrigger("UP");
         menuUI.SetActive(true);
-        ShowPage(3); // 預設顯示 Monster
+        ShowPage(2); 
         Goal.UpdateObjective();
     }
 
