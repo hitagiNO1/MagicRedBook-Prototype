@@ -138,6 +138,19 @@ public class usercontrol : MonoBehaviour,
             {
                 gameWon = true;
                 gameWin();
+
+                // ================= 新增在這裡：發放盔甲 =================
+                if (EquipmentManager.Instance != null)
+                {
+                    EquipmentManager.Instance.AddEquipment("穿戴式紙箱盔甲");
+                    Debug.Log("小遊戲勝利！成功獲得：穿戴式紙箱盔甲");
+                }
+                else
+                {
+                    Debug.LogWarning("找不到 EquipmentManager！請確保它在切換場景時沒有被銷毀。");
+                }
+                // ========================================================
+
                 backbutton.SetActive(true);
                 gameflow.ShowResult();
             }

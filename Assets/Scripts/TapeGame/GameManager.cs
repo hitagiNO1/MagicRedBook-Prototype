@@ -88,7 +88,17 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         Time.timeScale = 0;
-        if (losePanel != null) losePanel.SetActive(true);
+        if (winPanel != null) winPanel.SetActive(true);
+
+        if (EquipmentManager.Instance != null)
+        {
+            EquipmentManager.Instance.AddEquipment("膠帶拳套");
+            Debug.Log("躲避球小遊戲勝利！成功獲得：膠帶拳套");
+        }
+        else
+        {
+            Debug.LogWarning("找不到 EquipmentManager！請確認它在切換場景時沒有被銷毀。");
+        }
     }
 
     // =========================================================

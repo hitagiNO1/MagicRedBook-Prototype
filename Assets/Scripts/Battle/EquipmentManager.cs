@@ -88,11 +88,11 @@ public class EquipmentManager : MonoBehaviour
             }
             if (equipment == "穿戴式紙箱盔甲")
             {
-                unit.defense += 3;
+                unit.defense += 40;
             }
             if (equipment == "逗貓棒法杖")
             {
-                unit.damage += 4;
+                unit.damage += 5;
             }
         }
 
@@ -117,14 +117,8 @@ public class EquipmentManager : MonoBehaviour
 
         if (playerController != null)
         {
-            if (HasEquipment("劍客鞋子"))
-            {
-                playerController.SetSpeedBonus(2f);
-            }
-            else
-            {
-                playerController.SetSpeedBonus(0f);
-            }
+            // 劍客鞋子的效果已移至戰鬥 AP 判定，不再影響地圖跑速
+            playerController.SetSpeedBonus(0f);
         }
     }
 
@@ -141,7 +135,7 @@ public class EquipmentManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.2f);
 
-            int extraDamage = 3;
+            int extraDamage = 10;
             target.currentHP -= extraDamage;
             if (target.currentHP < 0) target.currentHP = 0;
 
@@ -151,6 +145,24 @@ public class EquipmentManager : MonoBehaviour
             }
 
             Debug.Log($"膠帶拳套發動！對 {target.unitName} 造成額外 {extraDamage} 點傷害。");
+
+            // [修正1] 使用已經宣告好的區域變數 skillManager
+            if (skillManager.enemyUnits.Count == 1)
+            {
+                EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
+            }
+            else
+            {
+                // [修正2] 加上 skillManager. 前綴
+                int targetIndexForEffect = skillManager.enemyUnits.IndexOf(target);
+                bool isTargetLeft = (targetIndexForEffect == 0);
+                EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
+            }
+
+            // [修正3] 使用 $ 符號進行字串插值，把變數包在字串內
+            skillManager.dialogueText.text = $"膠帶拳套發動！對 {target.unitName} 造成額外 {extraDamage} 點傷害。";
+
+            yield return new WaitForSeconds(1.5f); // 原本的等待
 
             if (target.currentHP <= 0)
             {

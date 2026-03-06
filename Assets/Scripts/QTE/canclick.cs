@@ -29,6 +29,7 @@ public class canclick : MonoBehaviour
     public string mainSceneName;
     public Image fadeImage;
     public float fadeDuration = 1f;
+
     // Sprite 設置
     public Sprite[] columnSpecificWhiteSprites;
     public Sprite commonWhiteSprite;
@@ -38,6 +39,11 @@ public class canclick : MonoBehaviour
     [Header("Item Settings")]
     public ItemData[] itemOptions;
 
+    [Header("Equipment Reward Settings")]
+    public string rareEquipmentName = "劍客鞋子"; // 裝備名稱
+    public float equipmentDropChance = 0.05f;    // 裝備掉落機率 (0.05 = 5%)
+    private bool wonRareEquipment = false;       // 記錄本次是否抽中裝備
+
     // ★ 修改 1: 定義一個結構來儲存 "道具+數量"
     struct RewardInfo
     {
@@ -45,7 +51,7 @@ public class canclick : MonoBehaviour
         public int amount;
     }
 
-    // ★ 修改 2: 使用 List 來儲存多個選中的獎勵，而不是單個變數
+    // ★ 修改 2: 使用 List 來儲存多個選中的獎勵
     private List<RewardInfo> selectedRewards = new List<RewardInfo>();
 
     void Start()
@@ -55,9 +61,8 @@ public class canclick : MonoBehaviour
             Debug.LogWarning("請在 Inspector 設定 itemOptions！");
             return;
         }
-        // ... (省略 Sprite 檢查代碼，維持原樣) ...
 
-        // ★ 修改 3: 隨機選取 1 到 3 個不同的道具，數量各為 1 或 2
+        // 隨機選取獎勵
         GenerateRandomRewards();
     }
 
@@ -65,39 +70,47 @@ public class canclick : MonoBehaviour
     void GenerateRandomRewards()
     {
         selectedRewards.Clear();
+        wonRareEquipment = false; // 每次重新生成獎勵時，重置裝備抽獎狀態
 
         // 1. 建立一個暫存清單 (為了避免抽到重複的道具)
         List<ItemData> tempPool = new List<ItemData>(itemOptions);
 
         // 2. 決定要抽幾種道具 (1 ~ 3 種)
-        // 注意: 如果池子裡的道具少於 3 種，就最多只抽池子的大小
-        int typesCount = Random.Range(1, 4); // 隨機回傳 1, 2, 3
+        int typesCount = Random.Range(1, 4);
         int finalCount = Mathf.Min(typesCount, tempPool.Count);
 
         Debug.Log($"本次將抽出 {finalCount} 種道具");
 
         for (int i = 0; i < finalCount; i++)
         {
-            // 從池子隨機選一個
             int randomIndex = Random.Range(0, tempPool.Count);
             ItemData pickedItem = tempPool[randomIndex];
+            int randomAmt = Random.Range(1, 3); // 隨機數量 1 或 2
 
-            // 隨機數量 1 或 2
-            int randomAmt = Random.Range(1, 3); // 隨機回傳 1, 2
-
-            // 加入獎勵清單
             selectedRewards.Add(new RewardInfo { item = pickedItem, amount = randomAmt });
-
-            // 從暫存池移除，確保下次不會重複抽到同一個道具
             tempPool.RemoveAt(randomIndex);
 
             Debug.Log($"-- 選中獎勵: {pickedItem.itemName}, 數量: {randomAmt}");
+        }
+
+        // 3. 裝備的 5% 獨立抽獎機制
+        if (Random.value <= equipmentDropChance)
+        {
+            // 防呆檢查：如果玩家還沒拿過這件裝備，才給予獎勵
+            if (EquipmentManager.Instance != null && !EquipmentManager.Instance.ownedEquipment.Contains(rareEquipmentName))
+            {
+                wonRareEquipment = true;
+                Debug.Log($"-- 幸運觸發！抽中稀有裝備: {rareEquipmentName}");
+            }
+            else
+            {
+                Debug.Log($"-- 抽中稀有裝備，但玩家已經擁有了，跳過發放。");
+            }
         }
     }
 
     void Update()
     {
-        // ... (Update 內容完全不用動，維持原樣) ...
         if (gameEnded) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -133,11 +146,8 @@ public class canclick : MonoBehaviour
         }
     }
 
-    // ... (SpawnRow, OnCorrectTileClicked, OnWrongTileClicked, GameOver 維持原樣) ...
-
     void SpawnRow()
     {
-        // 這裡省略以節省篇幅，內容不需要改動
         if (blackTileGenerated >= targetSuccessCount) return;
         int blackCol = Random.Range(0, 3);
         for (int col = 0; col < 3; col++)
@@ -147,7 +157,7 @@ public class canclick : MonoBehaviour
             tile.name = $"{((col == blackCol) ? "BlackTile" : "WhiteTile")}_col{col}_row{blackTileGenerated}";
             tile.transform.position = spawnPoint.position + new Vector3((col - 1) * columnSpacing, 0f, 0f);
             Tile tileScript = tile.GetComponent<Tile>();
-            // ... 省略中間賦值 ...
+
             tileScript.isBlack = (col == blackCol);
             tileScript.col = col;
             tileScript.canclick = this;
@@ -155,7 +165,6 @@ public class canclick : MonoBehaviour
             SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
             BoxCollider2D collider = tile.GetComponent<BoxCollider2D>();
 
-            // Sprite 邏輯保持不變
             if (tileScript.isBlack)
             {
                 if (columnSpecificBlackSprites.Length > col) spriteRenderer.sprite = columnSpecificBlackSprites[col];
@@ -232,19 +241,27 @@ public class canclick : MonoBehaviour
         string finalMessage = "成功！";
         string finalItem = "";
 
-        // 2. 遍歷獎勵清單
+        // 2. 遍歷一般道具獎勵清單
         foreach (RewardInfo reward in selectedRewards)
         {
             if (reward.item != null)
             {
-                // ★ 修改 B: 使用 "+=" 來串接文字，而不是覆蓋
                 finalItem += $"{reward.item.itemName} x{reward.amount}\n";
 
-                // B. 加入背包
                 if (InventoryManager.Instance != null)
                 {
                     InventoryManager.Instance.AddItem(reward.item, reward.amount);
                 }
+            }
+        }
+
+        // ★ 新增: 結算時如果有抽中裝備，發放並加入文字 (只顯示名字，不顯示數量)
+        if (wonRareEquipment)
+        {
+            finalItem += $"{rareEquipmentName}\n";
+            if (EquipmentManager.Instance != null)
+            {
+                EquipmentManager.Instance.AddEquipment(rareEquipmentName);
             }
         }
 
@@ -300,13 +317,13 @@ public class canclick : MonoBehaviour
         yield return null;
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
-    // 1. 變黑 (Fade Out to Black)
+
     private IEnumerator FadeOutAnimation()
     {
         if (fadeImage != null)
         {
             fadeImage.gameObject.SetActive(true);
-            fadeImage.color = new Color(0, 0, 0, 0); // 從透明開始
+            fadeImage.color = new Color(0, 0, 0, 0);
 
             float elapsed = 0f;
             while (elapsed < fadeDuration)
@@ -316,9 +333,10 @@ public class canclick : MonoBehaviour
                 fadeImage.color = new Color(0, 0, 0, alpha);
                 yield return null;
             }
-            fadeImage.color = new Color(0, 0, 0, 1); // 確保全黑
+            fadeImage.color = new Color(0, 0, 0, 1);
         }
     }
+
     public void RestartGame()
     {
         gameEnded = false;
@@ -333,8 +351,6 @@ public class canclick : MonoBehaviour
         }
         activeTiles.Clear();
 
-        // ★ 修改 5: 重玩時，重新隨機產生新的獎勵組合 (看你想不想重玩時換獎勵)
-        // 如果希望獎勵固定，這行可以拿掉
         GenerateRandomRewards();
     }
 

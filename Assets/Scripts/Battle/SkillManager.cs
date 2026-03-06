@@ -66,7 +66,7 @@ public class SkillManager : MonoBehaviour
     public bool isWaitingForTarget = false;
     public string pendingSkill = null;
     public int pendingPlayerIndex = -1;
-
+    public static SkillManager Instance { get; private set; }
     // 正在執行的玩家計數器
     private int executingPlayerCount = 0;
 
@@ -115,7 +115,10 @@ public class SkillManager : MonoBehaviour
                 skillCooldowns["catSkill_5_1"] = 0;
             }
         }
-
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
         // 註解掉這行，因為這時 UI 可能還沒完全準備好
         // UpdateAllSkillButtonStates(); 
     }
@@ -306,42 +309,11 @@ public class SkillManager : MonoBehaviour
 
     public void UpdateAllSkillButtonStates()
     {
-        // 2. 檢查防呆：玩家數量對不對？
-        if (playerUnits == null || playerUnits.Count < 2)
-        {
-           
-            return;
-        }
-        if (buffDebuffManager == null)
-        {
- 
-            return;
-        }
+        // 1. 檢查防呆
+        if (playerUnits == null || playerUnits.Count < 2) return;
+        if (buffDebuffManager == null) return;
 
-     
-
-        // 1. 取得封印狀態
-        bool p0Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[0]);
-        bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
-
-        // 2. 取得裝備限制狀態
-        bool p0OnlySkill1 = playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲");
-        bool p1OnlySkill1 = playerUnits[1].equippedGear.Contains("穿戴式紙箱盔甲");
-        // 兔子按鈕
-        skill1Button.interactable = !p0Disabled;
-        skill2Button.interactable = !p0Disabled && !p0OnlySkill1;
-        skill3Button.interactable = !p0Disabled && !p0OnlySkill1;
-        skill4Button.interactable = !p0Disabled && !p0OnlySkill1;
-        skill5Button.interactable = !p0Disabled && !p0OnlySkill1;
-
-        // 貓咪按鈕
-        catSkill1Button.interactable = !p1Disabled;
-        catSkill2Button.interactable = !p1Disabled && !p1OnlySkill1;
-        catSkill3Button.interactable = !p1Disabled && !p1OnlySkill1;
-        catSkill4Button.interactable = !p1Disabled && !p1OnlySkill1;
-        catSkill5Button.interactable = !p1Disabled && !p1OnlySkill1;
-
-        // UI 變暗邏輯 (這裡如果出錯通常是因為字典找不到 Key)
+        // 2. 先執行原本的 UI 變暗與冷卻邏輯 (這會開關 interactable)
         try
         {
             SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
@@ -363,12 +335,54 @@ public class SkillManager : MonoBehaviour
             SetButtonDimmed(catSkill4Button, selectedSkillNames[1].Contains("catSkill_4"));
             SetButtonCooldownDimmed(catSkill5Button, skillCooldowns["catSkill_5_1"] > 0);
             SetButtonDimmed(catSkill5Button, selectedSkillNames[1].Contains("catSkill_5"));
-
-       
         }
         catch (System.Exception e)
         {
             Debug.LogError($"按鈕狀態更新時發生崩潰！錯誤原因: {e.Message}");
+        }
+
+        // 3. 取得封印狀態與裝備限制
+        bool p0Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[0]);
+        bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
+        bool p0OnlySkill1 = playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲");
+        bool p1OnlySkill1 = playerUnits[1].equippedGear.Contains("穿戴式紙箱盔甲");
+
+        // 4. 【關鍵修正】在最後面強制覆蓋 interactable，這樣就絕對不會被前面打開了！
+        if (p0Disabled)
+        {
+            skill1Button.interactable = false;
+            skill2Button.interactable = false;
+            skill3Button.interactable = false;
+            skill4Button.interactable = false;
+            skill5Button.interactable = false;
+        }
+        else if (p0OnlySkill1)
+        {
+            // 只有技能 1 根據是否已被選取來決定開關
+            skill1Button.interactable = !selectedSkillNames[0].Contains("Skill_1");
+            // 技能 2~5 強制上鎖
+            skill2Button.interactable = false;
+            skill3Button.interactable = false;
+            skill4Button.interactable = false;
+            skill5Button.interactable = false;
+        }
+
+        // 貓咪同理 (如果萊菈也能穿盔甲的話)
+        if (p1Disabled)
+        {
+            catSkill1Button.interactable = false;
+            catSkill2Button.interactable = false;
+            catSkill3Button.interactable = false;
+            catSkill4Button.interactable = false;
+            catSkill5Button.interactable = false;
+        }
+        else if (p1OnlySkill1)
+        {
+            catSkill1Button.interactable = !selectedSkillNames[1].Contains("catSkill_1");
+            catSkill2Button.interactable = false;
+            catSkill3Button.interactable = false;
+            catSkill4Button.interactable = false;
+            catSkill5Button.interactable = false;
         }
     }
 
@@ -561,11 +575,7 @@ public class SkillManager : MonoBehaviour
         }
         yield return new WaitForSeconds(1.5f); // 原本的等待
 
-        // --- 新增：觸發膠帶拳套二段傷害 ---
-        if (EquipmentManager.Instance != null)
-        {
-            yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
-        }
+
         // 顯示傷害文字
         dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 使出 <b>吃我一擊！</b>\n" +
                             $"甩出手上的球攻擊了 <b>{target.unitName}</b>\n" +
@@ -973,8 +983,18 @@ public class SkillManager : MonoBehaviour
         isWaitingForTarget = true;
         pendingSkill = skillID;
         pendingPlayerIndex = 0;
-        // 動態顯示：請點擊一個敵人目標以使用 吃我一擊！！
-        dialogueText.text = $"請點擊一個敵人目標以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
+
+        // ================= 新增：判斷紙箱盔甲並改變對話文字 =================
+        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲"))
+        {
+            dialogueText.text = "因為穿戴式紙箱盔甲，只能使用技能1！\n請點擊一個敵人目標！";
+        }
+        else
+        {
+            dialogueText.text = $"請點擊一個敵人目標以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
+        }
+        // ==================================================================
+
         SetButtonDimmed(skill1Button, true);
     }
 
@@ -1365,14 +1385,21 @@ public class SkillManager : MonoBehaviour
 
     public void InitSkillIcons()
     {
+        // --- 新增：每次回合開始初始化技能圖示前，判斷 AP 上限 ---
+        if (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("劍客靴子"))
+        {
+            maxSkillPerTurn = 5; // 有穿鞋子，給 5 點 AP
+        }
+        else
+        {
+            maxSkillPerTurn = 3; // 沒穿鞋子，恢復預設 3 點 AP
+        }
+        // ----------------------------------------------------------
 
         ResetSkillIcons();
 
-     
         ResetAllSkillButtonStates();
         // UpdateAllSkillButtonStates 已經被 ResetAllSkillButtonStates 呼叫過了，所以這裡不用再呼叫一次
-
-    
     }
 
     public void ClearSkillIcons()
