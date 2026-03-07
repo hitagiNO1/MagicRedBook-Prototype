@@ -1309,7 +1309,7 @@ MonoBehaviour:
   unitName: Lyla
   unitLevel: 1
   isPlayer: 0
-  currentEquipment: 
+  equippedGear: []
   baseDamage: 0
   baseDefense: 0
   damage: 25
@@ -6646,7 +6646,7 @@ MonoBehaviour:
   unitName: BlackCat
   unitLevel: 10
   isPlayer: 0
-  currentEquipment: 
+  equippedGear: []
   baseDamage: 0
   baseDefense: 0
   damage: 20
@@ -42148,6 +42148,10 @@ MonoBehaviour:
   itemSlotPrefab: {fileID: 1202362889968392020, guid: a379b7af0c511dd4ea89b10173b0d895, type: 3}
   confirmPanel: {fileID: 531949533}
   confirmText: {fileID: 361874844}
+  equipmentContentPanel: {fileID: 0}
+  equipmentSlotPrefab: {fileID: 0}
+  equipmentDatabase: []
+  currentPlayerIndex: 0
 --- !u!4 &1983435169 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6213484609877053579, guid: 14411bcff9f8169469e73c887aab30d2, type: 3}
@@ -122210,6 +122214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b23f41e2ed60eb45ae55fe5cc60ce28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownedEquipment: []
   equippedItems: []
 --- !u!95 &3721955857226714691
 Animator:
@@ -153449,7 +153454,7 @@ MonoBehaviour:
   unitName: BlackCat
   unitLevel: 10
   isPlayer: 0
-  currentEquipment: 
+  equippedGear: []
   baseDamage: 0
   baseDefense: 0
   damage: 20
@@ -160143,7 +160148,7 @@ MonoBehaviour:
   unitName: FISH
   unitLevel: 10
   isPlayer: 0
-  currentEquipment: 
+  equippedGear: []
   baseDamage: 0
   baseDefense: 0
   damage: 10
@@ -221581,7 +221586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
-  dialogueText: {fileID: 0}
+  dialogueText: {fileID: 2839821715735069237}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
 --- !u!1001 &7752914432219270425

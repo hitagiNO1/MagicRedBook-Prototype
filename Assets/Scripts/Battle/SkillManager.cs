@@ -119,15 +119,12 @@ public class SkillManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        // 註解掉這行，因為這時 UI 可能還沒完全準備好
-        // UpdateAllSkillButtonStates(); 
     }
 
     void Update()
     {
         if (isWaitingForTarget && Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Left mouse button clicked, processing target selection");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Unit targetUnit = null;
 
@@ -171,6 +168,32 @@ public class SkillManager : MonoBehaviour
             CancelLatestSkill();
         }
     }
+
+    // ==================== 新增：技能 AP 消耗判定 ====================
+    public int GetSkillCost(string skillName)
+    {
+        // 定義四技能耗費 2 AP，五技能耗費 3 AP
+        if (skillName == "Skill_4" || skillName == "catSkill_4") return 2;
+        if (skillName == "Skill_5" || skillName == "catSkill_5") return 3;
+
+        // 其他技能與道具預設耗費 1 AP
+        return 1;
+    }
+
+    // 將原本計算「技能數量」的方法，改為計算「總共消耗了多少 AP」
+    public int GetTotalSelectedSkills()
+    {
+        int totalAPUsed = 0;
+        foreach (var kvp in selectedSkillNames)
+        {
+            foreach (string skillName in kvp.Value)
+            {
+                totalAPUsed += GetSkillCost(skillName);
+            }
+        }
+        return totalAPUsed;
+    }
+    // ==============================================================
 
     public void CancelLatestSkill()
     {
@@ -231,7 +254,8 @@ public class SkillManager : MonoBehaviour
         Button buttonToRestore = GetSkillButton(latestPlayerIndex, latestSkillName);
         if (buttonToRestore != null) SetButtonDimmed(buttonToRestore, false);
 
-        AddSkillIcon();
+        // 取消時，根據技能消耗把 AP 圖示加回來
+        AddSkillIcon(GetSkillCost(latestSkillName));
         UpdateAllSkillButtonStates();
     }
 
@@ -309,11 +333,9 @@ public class SkillManager : MonoBehaviour
 
     public void UpdateAllSkillButtonStates()
     {
-        // 1. 檢查防呆
         if (playerUnits == null || playerUnits.Count < 2) return;
         if (buffDebuffManager == null) return;
 
-        // 2. 先執行原本的 UI 變暗與冷卻邏輯 (這會開關 interactable)
         try
         {
             SetButtonDimmed(skill1Button, selectedSkillNames[0].Contains("Skill_1"));
@@ -341,13 +363,11 @@ public class SkillManager : MonoBehaviour
             Debug.LogError($"按鈕狀態更新時發生崩潰！錯誤原因: {e.Message}");
         }
 
-        // 3. 取得封印狀態與裝備限制
         bool p0Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[0]);
         bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
         bool p0OnlySkill1 = playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲");
         bool p1OnlySkill1 = playerUnits[1].equippedGear.Contains("穿戴式紙箱盔甲");
 
-        // 4. 【關鍵修正】在最後面強制覆蓋 interactable，這樣就絕對不會被前面打開了！
         if (p0Disabled)
         {
             skill1Button.interactable = false;
@@ -358,16 +378,13 @@ public class SkillManager : MonoBehaviour
         }
         else if (p0OnlySkill1)
         {
-            // 只有技能 1 根據是否已被選取來決定開關
             skill1Button.interactable = !selectedSkillNames[0].Contains("Skill_1");
-            // 技能 2~5 強制上鎖
             skill2Button.interactable = false;
             skill3Button.interactable = false;
             skill4Button.interactable = false;
             skill5Button.interactable = false;
         }
 
-        // 貓咪同理 (如果萊菈也能穿盔甲的話)
         if (p1Disabled)
         {
             catSkill1Button.interactable = false;
@@ -491,7 +508,9 @@ public class SkillManager : MonoBehaviour
             }
 
             dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 取消了 <b>{skillName}</b>";
-            AddSkillIcon();
+
+            // 取消時，根據技能消耗把 AP 圖示加回來
+            AddSkillIcon(GetSkillCost(skillName));
             UpdateAllSkillButtonStates();
         }
     }
@@ -508,7 +527,6 @@ public class SkillManager : MonoBehaviour
 
     public bool ValidateSkill(int playerIndex, string skillName)
     {
-    
         if (!CanUseSkill(playerIndex)) return false;
 
         if (selectedSkillNames[playerIndex].Contains(skillName))
@@ -517,9 +535,10 @@ public class SkillManager : MonoBehaviour
             return false;
         }
 
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+        // 修改：檢查消耗的 AP 是否大於上限
+        if (GetTotalSelectedSkills() + GetSkillCost(skillName) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！";
             return false;
         }
 
@@ -529,7 +548,6 @@ public class SkillManager : MonoBehaviour
 
         return true;
     }
-
 
     private void ExecutePendingSkill()
     {
@@ -559,29 +577,22 @@ public class SkillManager : MonoBehaviour
     private IEnumerator Skill1Coroutine(int playerIndex, Unit target)
     {
         if (target == null || target.isDead || !enemyUnits.Contains(target)) yield break;
-
         PlaySoundByName("skill1");
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
-
-        // 呼叫 TakeDamage，並接收兩個回傳值
         int damageDealt;
         bool isKilled = target.TakeDamage(buffedDamage, out damageDealt);
 
-        // 更新 HUD（因為 TakeDamage 已經更新了，這裡可省略或保留）
         int targetIndex = enemyUnits.IndexOf(target);
         if (targetIndex >= 0 && targetIndex < enemyHUDs.Count && enemyHUDs[targetIndex] != null)
         {
             enemyHUDs[targetIndex].SetHP(target.currentHP);
         }
-        yield return new WaitForSeconds(1.5f); // 原本的等待
+        yield return new WaitForSeconds(1.5f);
 
-
-        // 顯示傷害文字
         dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 使出 <b>吃我一擊！</b>\n" +
                             $"甩出手上的球攻擊了 <b>{target.unitName}</b>\n" +
                             $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
 
-        // 特效部分不變
         if (enemyUnits.Count == 1)
         {
             EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
@@ -593,9 +604,7 @@ public class SkillManager : MonoBehaviour
             EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
         }
 
-        yield return new WaitForSeconds(1.5f); // 原本的等待
-
-        // --- 新增：觸發膠帶拳套二段傷害 ---
+        yield return new WaitForSeconds(1.5f);
         if (EquipmentManager.Instance != null)
         {
             yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
@@ -606,20 +615,15 @@ public class SkillManager : MonoBehaviour
     {
         PlaySoundByName("skill2");
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.5f);
-
         int totalDamageDealt = 0;
 
-        // 攻擊所有敵人並累加實際傷害
         foreach (Unit enemy in enemyUnits)
         {
             if (enemy == null || enemy.isDead) continue;
-
             int damageDealt;
             bool isKilled = enemy.TakeDamage(buffedDamage, out damageDealt);
-
             totalDamageDealt += damageDealt;
 
-            // 更新該敵人的 HUD
             int idx = enemyUnits.IndexOf(enemy);
             if (idx >= 0 && idx < enemyHUDs.Count && enemyHUDs[idx] != null)
             {
@@ -627,15 +631,12 @@ public class SkillManager : MonoBehaviour
             }
         }
 
-        // 設定對話文字：只顯示總傷害
         dialogueText.text = $"<b>布萊克</b> 使出了 <b>上吧，球球們</b>！\n用手上的球分散甩出攻擊了全部敵人\n" +
                            $"總共造成 <b>{totalDamageDealt}</b> 點傷害！";
 
         skillCooldowns["Skill_2_" + playerIndex] = skill2CooldownTurns;
-
         EffectManager.Instance.PlayUIEffect("B2", new Vector2(0, 0));
-
-        yield return new WaitForSeconds(1.5f);  // 給玩家一點時間看清楚總傷害數字
+        yield return new WaitForSeconds(1.5f);
     }
 
     private IEnumerator Skill3Coroutine(int playerIndex)
@@ -670,30 +671,23 @@ public class SkillManager : MonoBehaviour
 
         PlaySoundByName("skill4-1");
         PlaySoundByName("skill4-2");
-
-        // 先施加防禦 debuff
         buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
 
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.3f);
-
-        // 執行攻擊並取得實際傷害 + 是否擊殺
         int damageDealt;
         bool isKilled = target.TakeDamage(buffedDamage, out damageDealt);
 
-        // 更新目標的 HUD
         int targetIndex = enemyUnits.IndexOf(target);
         if (targetIndex >= 0 && targetIndex < enemyHUDs.Count && enemyHUDs[targetIndex] != null)
         {
             enemyHUDs[targetIndex].SetHP(target.currentHP);
         }
 
-        // 顯示傷害文字（可根據喜好調整風格）
         dialogueText.text = $"<b>布萊克</b> 使出了 <b>連環兔子踹</b>！\n抱住 <b>{target.unitName}</b> ，使出最強攻擊兔子踹！\n" +
                            $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
 
         skillCooldowns["Skill_5_" + playerIndex] = skill5CooldownTurns;
 
-        // 特效部分保持不變
         if (enemyUnits.Count == 1)
         {
             EffectManager.Instance.PlayUIEffect("B5", new Vector2(0, 0));
@@ -710,31 +704,27 @@ public class SkillManager : MonoBehaviour
             yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
         }
     }
+
     private IEnumerator CatSkill1Coroutine(int playerIndex, Unit target)
     {
         if (target == null || target.isDead || !enemyUnits.Contains(target)) yield break;
-
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
-
-        // 執行攻擊並取得實際傷害與是否擊殺
         int damageDealt;
         bool isKilled = target.TakeDamage(buffedDamage, out damageDealt);
 
-        // 更新目標的 HUD
         int targetIndex = enemyUnits.IndexOf(target);
         if (targetIndex >= 0 && targetIndex < enemyHUDs.Count && enemyHUDs[targetIndex] != null)
         {
             enemyHUDs[targetIndex].SetHP(target.currentHP);
         }
 
-        // 顯示傷害文字（可依喜好調整風格）
         dialogueText.text = $"<b>萊拉</b> 使出了 <b>三分球</b>！\n撿起身邊的東西丟向 <b>{target.unitName}</b>！\n" +
                            $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
 
         EffectManager.Instance.PlayUIEffect("L1", new Vector2(0, 0));
-
         yield return new WaitForSeconds(1.5f);
     }
+
     private IEnumerator CatSkill2Coroutine(int playerIndex)
     {
         foreach (Unit unit in playerUnits)
@@ -742,8 +732,6 @@ public class SkillManager : MonoBehaviour
             if (unit != null && !unit.isDead)
             {
                 buffDebuffManager.Heal(unit, 0.75f);
-
-                // 更新 HUD
                 int idx = playerUnits.IndexOf(unit);
                 if (idx >= 0 && idx < playerHUDs.Count && playerHUDs[idx] != null)
                 {
@@ -759,7 +747,6 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
     }
 
-
     private IEnumerator CatSkill3Coroutine(int playerIndex)
     {
         if (playerUnits[playerIndex] == null || playerUnits[playerIndex].currentHP <= 0)
@@ -769,20 +756,15 @@ public class SkillManager : MonoBehaviour
         }
 
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
-
         int totalDamageDealt = 0;
 
-        // 攻擊所有敵人並累加實際傷害
         foreach (Unit enemy in enemyUnits)
         {
             if (enemy == null || enemy.isDead) continue;
-
             int damageDealt;
             bool isKilled = enemy.TakeDamage(buffedDamage, out damageDealt);
-
             totalDamageDealt += damageDealt;
 
-            // 更新該敵人的 HUD
             int idx = enemyUnits.IndexOf(enemy);
             if (idx >= 0 && idx < enemyHUDs.Count && enemyHUDs[idx] != null)
             {
@@ -790,14 +772,11 @@ public class SkillManager : MonoBehaviour
             }
         }
 
-        // 顯示總傷害
-        dialogueText.text = $"<b>萊拉</b> 使出了 <b>o～Re～Mi～</b>D\n透過唱歌給全體敵人造成傷害！\n" +
+        dialogueText.text = $"<b>萊拉</b> 使出了 <b>Do～Re～Mi～</b>\n透過唱歌給全體敵人造成傷害！\n" +
                            $"總共造成 <b>{totalDamageDealt}</b> 點傷害！";
 
         skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
-
         EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
-
         yield return new WaitForSeconds(2f);
     }
 
@@ -843,8 +822,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_1");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(Skill1Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>吃我一擊</b>！\n甩出手上的球攻擊\n選取對象:<b>{target.unitName}</b>";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>吃我一擊</b>！\n甩出手上的球攻擊\nCD:0 消耗AP:1";
+
+        RemoveSkillIcon(GetSkillCost("Skill_1"));
         UpdateAllSkillButtonStates();
     }
 
@@ -855,8 +835,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_2");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill2Coroutine(playerIndex));
-        dialogueText.text = $"<b>上吧，球球們</b>！\n手上的球分散甩出攻擊全部敵人\n<b>布萊克</b> 選擇了 <b>上吧，球球們</b>！";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>上吧，球球們</b>！\n手上的球分散甩出攻擊全部敵人\nCD:2 消耗AP:1";
+
+        RemoveSkillIcon(GetSkillCost("Skill_2"));
         UpdateAllSkillButtonStates();
     }
 
@@ -867,8 +848,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_3");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill3Coroutine(playerIndex));
-        dialogueText.text = $"<b>舔舔舔</b>！\n將身上的毛整理好，使防禦力上升。\n選取對象:<b>布萊克</b>";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>舔舔舔</b>！\n將身上的毛整理好，使防禦力上升。\nCD:1 消耗AP:1";
+
+        RemoveSkillIcon(GetSkillCost("Skill_3"));
         UpdateAllSkillButtonStates();
     }
 
@@ -879,11 +861,10 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_4");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill4Coroutine(playerIndex));
-        dialogueText.text = $"<b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。\n選取對象:<b>布萊克</b>";
-        // 新增這行：把施放技能4的單位加入名單
+        dialogueText.text = $"<b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。\nCD:2 消耗AP:2";
         buffDebuffManager.skill4BuffUnits.Add(playerUnits[playerIndex]);
 
-        RemoveSkillIcon();
+        RemoveSkillIcon(GetSkillCost("Skill_4"));
         UpdateAllSkillButtonStates();
     }
 
@@ -894,8 +875,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_5");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(Skill5Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>連環兔子踹</b>！\n 抱住敵人，使出最強攻擊兔子踹！\n選取對象:<b>{target.unitName}</b>";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>連環兔子踹</b>！\n 抱住敵人，使出最強攻擊兔子踹！\nCD:2 消耗AP:3";
+
+        RemoveSkillIcon(GetSkillCost("Skill_5"));
         UpdateAllSkillButtonStates();
     }
 
@@ -906,8 +888,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_1");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(CatSkill1Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>三分球</b>！\n 撿起身邊的東西丟向敵人。\n選取對象:<b>{target.unitName}</b>";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>三分球</b>！\n 撿起身邊的東西丟向敵人。\nCD:0 消耗AP:1";
+
+        RemoveSkillIcon(GetSkillCost("catSkill_1"));
         UpdateAllSkillButtonStates();
     }
 
@@ -918,9 +901,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_2");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill2Coroutine(playerIndex));
-        dialogueText.text = $"<b>小意思</b>！\n將傷口進行包紮。\n<b>萊拉</b> 選擇了 <b>小意思</b>！";
-        
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>小意思</b>！\n將傷口進行包紮。\nCD:2 消耗AP:1";
+
+        RemoveSkillIcon(GetSkillCost("catSkill_2"));
         UpdateAllSkillButtonStates();
     }
 
@@ -931,8 +914,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_3");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill3Coroutine(playerIndex));
-        dialogueText.text = $"<b>Do～Re～Mi～</b>\n 大聲歌唱，干擾全部敵人。\n<b>萊拉</b> 選擇了 <b>Do～Re～Mi～</b>";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>Do～Re～Mi～</b>\n 大聲歌唱，干擾全部敵人。\nCD:1 消耗AP:1";
+
+        RemoveSkillIcon(GetSkillCost("catSkill_3"));
         UpdateAllSkillButtonStates();
     }
 
@@ -943,8 +927,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_4");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(CatSkill4Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>打起精神來</b>！\n 施展力量變強壯的魔法。\n 選取對象:<b>{target.unitName}</b>";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>打起精神來</b>！\n 施展力量變強壯的魔法。\nCD:2 消耗AP:2";
+
+        RemoveSkillIcon(GetSkillCost("catSkill_4"));
         UpdateAllSkillButtonStates();
     }
 
@@ -955,8 +940,9 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_5");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill5Coroutine(playerIndex));
-        dialogueText.text = $"<b>痛痛飛走</b>～\n 優美的歌聲，振奮隊伍士氣。\n<b>萊拉</b> 選擇了 <b>痛痛飛走</b>～";
-        RemoveSkillIcon();
+        dialogueText.text = $"<b>痛痛飛走</b>～\n 優美的歌聲，振奮隊伍士氣。\nCD:3 消耗AP:3";
+
+        RemoveSkillIcon(GetSkillCost("catSkill_5"));
         UpdateAllSkillButtonStates();
     }
 
@@ -974,9 +960,11 @@ public class SkillManager : MonoBehaviour
             SetButtonDimmed(skill1Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        // 判定 AP 是否足夠
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
 
@@ -984,7 +972,6 @@ public class SkillManager : MonoBehaviour
         pendingSkill = skillID;
         pendingPlayerIndex = 0;
 
-        // ================= 新增：判斷紙箱盔甲並改變對話文字 =================
         if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲"))
         {
             dialogueText.text = "因為穿戴式紙箱盔甲，只能使用技能1！\n請點擊一個敵人目標！";
@@ -993,7 +980,6 @@ public class SkillManager : MonoBehaviour
         {
             dialogueText.text = $"請點擊一個敵人目標以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
         }
-        // ==================================================================
 
         SetButtonDimmed(skill1Button, true);
     }
@@ -1004,17 +990,21 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_2", "2")) return;
-        if (selectedSkillNames[0].Contains("Skill_2"))
+
+        string skillID = "Skill_2";
+        if (selectedSkillNames[0].Contains(skillID))
         {
-            CancelSkill(0, "Skill_2");
+            CancelSkill(0, skillID);
             SetButtonDimmed(skill2Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
+
         Skill_2(0);
         SetButtonDimmed(skill2Button, true);
     }
@@ -1025,17 +1015,21 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_3", "3")) return;
-        if (selectedSkillNames[0].Contains("Skill_3"))
+
+        string skillID = "Skill_3";
+        if (selectedSkillNames[0].Contains(skillID))
         {
-            CancelSkill(0, "Skill_3");
+            CancelSkill(0, skillID);
             SetButtonDimmed(skill3Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
+
         Skill_3(0);
         SetButtonDimmed(skill3Button, true);
     }
@@ -1046,17 +1040,21 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
         if (CheckSkillCooldownAndShowMessage(0, "Skill_4", "4")) return;
-        if (selectedSkillNames[0].Contains("Skill_4"))
+
+        string skillID = "Skill_4";
+        if (selectedSkillNames[0].Contains(skillID))
         {
-            CancelSkill(0, "Skill_4");
+            CancelSkill(0, skillID);
             SetButtonDimmed(skill4Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
+
         Skill_4(0);
         SetButtonDimmed(skill4Button, true);
     }
@@ -1075,9 +1073,10 @@ public class SkillManager : MonoBehaviour
             SetButtonDimmed(skill5Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
 
@@ -1101,9 +1100,10 @@ public class SkillManager : MonoBehaviour
             SetButtonDimmed(catSkill1Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
 
@@ -1120,17 +1120,21 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_2", "2")) return;
-        if (selectedSkillNames[1].Contains("catSkill_2"))
+
+        string skillID = "catSkill_2";
+        if (selectedSkillNames[1].Contains(skillID))
         {
-            CancelSkill(1, "catSkill_2");
+            CancelSkill(1, skillID);
             SetButtonDimmed(catSkill2Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
+
         catSkill_2(1);
         SetButtonDimmed(catSkill2Button, true);
     }
@@ -1141,17 +1145,21 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_3", "3")) return;
-        if (selectedSkillNames[1].Contains("catSkill_3"))
+
+        string skillID = "catSkill_3";
+        if (selectedSkillNames[1].Contains(skillID))
         {
-            CancelSkill(1, "catSkill_3");
+            CancelSkill(1, skillID);
             SetButtonDimmed(catSkill3Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
+
         catSkill_3(1);
         SetButtonDimmed(catSkill3Button, true);
     }
@@ -1170,16 +1178,16 @@ public class SkillManager : MonoBehaviour
             SetButtonDimmed(catSkill4Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
 
         isWaitingForTarget = true;
         pendingSkill = skillID;
         pendingPlayerIndex = 1;
-        // 這裡因為是輔助技能，提示略有不同
         dialogueText.text = $"請點擊一個玩家頭像以使用 <b>{GetSkillDisplayName(skillID)}</b>！";
         SetButtonDimmed(catSkill4Button, true);
     }
@@ -1190,17 +1198,21 @@ public class SkillManager : MonoBehaviour
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(1)) return;
         if (CheckSkillCooldownAndShowMessage(1, "catSkill_5", "5")) return;
-        if (selectedSkillNames[1].Contains("catSkill_5"))
+
+        string skillID = "catSkill_5";
+        if (selectedSkillNames[1].Contains(skillID))
         {
-            CancelSkill(1, "catSkill_5");
+            CancelSkill(1, skillID);
             SetButtonDimmed(catSkill5Button, false);
             return;
         }
-        if (GetTotalSelectedSkills() >= maxSkillPerTurn)
+
+        if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
-            dialogueText.text = "已達技能數量上限！";
+            dialogueText.text = "AP不足！無法使用此技能。";
             return;
         }
+
         catSkill_5(1);
         SetButtonDimmed(catSkill5Button, true);
     }
@@ -1219,33 +1231,31 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-        // 改成 StartCoroutine，讓整個確認流程變成協程，依序執行兩個玩家
         StartCoroutine(ExecuteAllPlayerQueues());
     }
+
     private IEnumerator ExecuteAllPlayerQueues()
     {
         executingPlayerCount = 0;
 
-        // 先執行玩家 0（兔子）的所有技能
         if (skillQueues[0].Count > 0)
         {
             executingPlayerCount++;
             yield return StartCoroutine(ExecuteSkillQueueWithCallback(0));
         }
 
-        // 再執行玩家 1（貓）的所有技能
         if (skillQueues[1].Count > 0)
         {
             executingPlayerCount++;
             yield return StartCoroutine(ExecuteSkillQueueWithCallback(1));
         }
 
-        // 兩個玩家都執行完畢後，才通知 BattleSystem 進入敵人回合
         if (executingPlayerCount <= 0 && battlesystem != null)
         {
             battlesystem.OnPlayerConfirmSkillQueue();
         }
     }
+
     IEnumerator ExecuteSkillQueueWithCallback(int playerIndex)
     {
         yield return StartCoroutine(ExecuteSkillQueue(playerIndex));
@@ -1281,13 +1291,6 @@ public class SkillManager : MonoBehaviour
         skillNeedsTarget[playerIndex].Clear();
     }
 
-    public int GetTotalSelectedSkills()
-    {
-        int total = 0;
-        foreach (var queue in skillQueues.Values) total += queue.Count;
-        return total;
-    }
-
     void PerformMultiTargetAttack(int playerIndex, int damage)
     {
         if (enemyUnits == null || enemyUnits.Count == 0) return;
@@ -1320,23 +1323,34 @@ public class SkillManager : MonoBehaviour
             enemyHUDs[targetIndex].SetHP(target.currentHP);
     }
 
-    public void RemoveSkillIcon()
+    // ==================== AP 圖示控制 ====================
+    // 新增 cost 參數，消耗多少 AP 就刪掉多少顆寶石圖示
+    public void RemoveSkillIcon(int cost = 1)
     {
-        if (skillIcons.Count > 0)
+        for (int i = 0; i < cost; i++)
         {
-            Destroy(skillIcons[skillIcons.Count - 1]);
-            skillIcons.RemoveAt(skillIcons.Count - 1);
+            if (skillIcons.Count > 0)
+            {
+                Destroy(skillIcons[skillIcons.Count - 1]);
+                skillIcons.RemoveAt(skillIcons.Count - 1);
+            }
         }
     }
 
-    public void AddSkillIcon()
+    // 新增 cost 參數，取消技能時退回對應數量的 AP 圖示
+    public void AddSkillIcon(int cost = 1)
     {
-        if (GetTotalSelectedSkills() < maxSkillPerTurn)
+        for (int i = 0; i < cost; i++)
         {
-            GameObject icon = Instantiate(skillIconPrefab, skillIconParent);
-            skillIcons.Add(icon);
+            if (skillIcons.Count < maxSkillPerTurn)
+            {
+                GameObject icon = Instantiate(skillIconPrefab, skillIconParent);
+                icon.SetActive(true);
+                skillIcons.Add(icon);
+            }
         }
     }
+    // =====================================================
 
     public void ReduceCooldown()
     {
@@ -1347,6 +1361,7 @@ public class SkillManager : MonoBehaviour
         }
         UpdateAllSkillButtonStates();
     }
+
     private string GetSkillDisplayName(string skillKey)
     {
         if (skillDisplayNameMap.ContainsKey(skillKey))
@@ -1355,51 +1370,36 @@ public class SkillManager : MonoBehaviour
         }
         return skillKey; // 如果找不到，就回傳原始 ID
     }
+
     void ResetSkillIcons()
     {
-        // 1. 檢查防呆：Prefab 和 Parent 有沒有在 Inspector 拖進去？
-        if (skillIconPrefab == null)
-        {
-           
-            return;
-        }
-        if (skillIconParent == null)
-        {
-       
-            return;
-        }
+        if (skillIconPrefab == null) return;
+        if (skillIconParent == null) return;
 
-      
         foreach (GameObject icon in skillIcons) Destroy(icon);
         skillIcons.Clear();
 
-       
         for (int i = 0; i < maxSkillPerTurn; i++)
         {
             GameObject icon = Instantiate(skillIconPrefab, skillIconParent);
             icon.SetActive(true); // 確保生成的圖示沒有被隱藏
             skillIcons.Add(icon);
         }
-   
     }
 
     public void InitSkillIcons()
     {
-        // --- 新增：每次回合開始初始化技能圖示前，判斷 AP 上限 ---
         if (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("劍客靴子"))
         {
-            maxSkillPerTurn = 5; // 有穿鞋子，給 5 點 AP
+            maxSkillPerTurn = 5;
         }
         else
         {
-            maxSkillPerTurn = 3; // 沒穿鞋子，恢復預設 3 點 AP
+            maxSkillPerTurn = 3;
         }
-        // ----------------------------------------------------------
 
         ResetSkillIcons();
-
         ResetAllSkillButtonStates();
-        // UpdateAllSkillButtonStates 已經被 ResetAllSkillButtonStates 呼叫過了，所以這裡不用再呼叫一次
     }
 
     public void ClearSkillIcons()
