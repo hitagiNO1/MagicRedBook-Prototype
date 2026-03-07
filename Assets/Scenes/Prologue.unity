@@ -6525,7 +6525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e901abda54227343afcb94ef87d58ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: BlackCat
+  unitName: "\u5E03\u840A\u514B"
   unitLevel: 10
   isPlayer: 0
   equippedGear: []
@@ -206714,11 +206714,11 @@ MonoBehaviour:
   - effectName: Fish1
     prefab: {fileID: 6309938433455153388, guid: 39ec2ca8b6d02564f9e5e016ad89c66b, type: 3}
     leftPosition: {x: 805, y: -352}
-    rightPosition: {x: 805, y: -352}
+    rightPosition: {x: -805, y: -352}
   - effectName: Fish2
     prefab: {fileID: 6132545290400878021, guid: c736216d94ea7db4ab2419d7fac083e4, type: 3}
     leftPosition: {x: 708, y: -206}
-    rightPosition: {x: 708, y: -206}
+    rightPosition: {x: -708, y: -206}
   - effectName: Snake1
     prefab: {fileID: 939851737400155110, guid: 5bc6e420fd69f054091d8959ea05a536, type: 3}
     leftPosition: {x: 677, y: -230}

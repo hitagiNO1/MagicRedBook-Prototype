@@ -822,7 +822,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_1");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(Skill1Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>吃我一擊</b>！\n甩出手上的球攻擊\nCD:0 消耗AP:1";
+        dialogueText.text = $"<b>吃我一擊</b>！\n甩出手上的球攻擊\nCD : 0    消耗AP : 1";
 
         RemoveSkillIcon(GetSkillCost("Skill_1"));
         UpdateAllSkillButtonStates();
@@ -835,7 +835,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_2");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill2Coroutine(playerIndex));
-        dialogueText.text = $"<b>上吧，球球們</b>！\n手上的球分散甩出攻擊全部敵人\nCD:2 消耗AP:1";
+        dialogueText.text = $"<b>上吧，球球們</b>！\n手上的球分散甩出攻擊全部敵人\nCD : 2    消耗AP : 1";
 
         RemoveSkillIcon(GetSkillCost("Skill_2"));
         UpdateAllSkillButtonStates();
@@ -848,7 +848,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_3");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill3Coroutine(playerIndex));
-        dialogueText.text = $"<b>舔舔舔</b>！\n將身上的毛整理好，使防禦力上升。\nCD:1 消耗AP:1";
+        dialogueText.text = $"<b>舔舔舔</b>！\n將身上的毛整理好，使防禦力上升。\nCD : 1    消耗AP : 1";
 
         RemoveSkillIcon(GetSkillCost("Skill_3"));
         UpdateAllSkillButtonStates();
@@ -861,7 +861,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_4");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(Skill4Coroutine(playerIndex));
-        dialogueText.text = $"<b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。\nCD:2 消耗AP:2";
+        dialogueText.text = $"<b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。\nCD : 2    消耗AP : 2";
         buffDebuffManager.skill4BuffUnits.Add(playerUnits[playerIndex]);
 
         RemoveSkillIcon(GetSkillCost("Skill_4"));
@@ -875,7 +875,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("Skill_5");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(Skill5Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>連環兔子踹</b>！\n 抱住敵人，使出最強攻擊兔子踹！\nCD:2 消耗AP:3";
+        dialogueText.text = $"<b>連環兔子踹</b>！\n 抱住敵人，使出最強攻擊兔子踹！\nCD : 2    消耗AP : 3";
 
         RemoveSkillIcon(GetSkillCost("Skill_5"));
         UpdateAllSkillButtonStates();
@@ -888,7 +888,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_1");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(CatSkill1Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>三分球</b>！\n 撿起身邊的東西丟向敵人。\nCD:0 消耗AP:1";
+        dialogueText.text = $"<b>三分球</b>！\n 撿起身邊的東西丟向敵人。\nCD : 0    消耗AP : 1";
 
         RemoveSkillIcon(GetSkillCost("catSkill_1"));
         UpdateAllSkillButtonStates();
@@ -901,7 +901,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_2");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill2Coroutine(playerIndex));
-        dialogueText.text = $"<b>小意思</b>！\n將傷口進行包紮。\nCD:2 消耗AP:1";
+        dialogueText.text = $"<b>小意思</b>！\n將傷口進行包紮。\nCD : 2    消耗AP : 1";
 
         RemoveSkillIcon(GetSkillCost("catSkill_2"));
         UpdateAllSkillButtonStates();
@@ -914,7 +914,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_3");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill3Coroutine(playerIndex));
-        dialogueText.text = $"<b>Do～Re～Mi～</b>\n 大聲歌唱，干擾全部敵人。\nCD:1 消耗AP:1";
+        dialogueText.text = $"<b>Do～Re～Mi～</b>\n 大聲歌唱，干擾全部敵人。\nCD : 1    消耗AP : 1";
 
         RemoveSkillIcon(GetSkillCost("catSkill_3"));
         UpdateAllSkillButtonStates();
@@ -927,7 +927,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_4");
         skillNeedsTarget[playerIndex].Add(true);
         skillQueues[playerIndex].Add(CatSkill4Coroutine(playerIndex, target));
-        dialogueText.text = $"<b>打起精神來</b>！\n 施展力量變強壯的魔法。\nCD:2 消耗AP:2";
+        dialogueText.text = $"<b>打起精神來</b>！\n 施展力量變強壯的魔法。\nCD : 2    消耗AP : 2";
 
         RemoveSkillIcon(GetSkillCost("catSkill_4"));
         UpdateAllSkillButtonStates();
@@ -940,7 +940,7 @@ public class SkillManager : MonoBehaviour
         selectedSkillNames[playerIndex].Add("catSkill_5");
         skillNeedsTarget[playerIndex].Add(false);
         skillQueues[playerIndex].Add(CatSkill5Coroutine(playerIndex));
-        dialogueText.text = $"<b>痛痛飛走</b>～\n 優美的歌聲，振奮隊伍士氣。\nCD:3 消耗AP:3";
+        dialogueText.text = $"<b>痛痛飛走</b>～\n 優美的歌聲，振奮隊伍士氣。\nCD : 3    消耗AP : 3";
 
         RemoveSkillIcon(GetSkillCost("catSkill_5"));
         UpdateAllSkillButtonStates();
