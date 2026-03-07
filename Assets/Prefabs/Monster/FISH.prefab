@@ -293,7 +293,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -721
+  m_SortingOrder: -778
   m_SortAtRoot: 0
 --- !u!114 &5383440018781940189
 MonoBehaviour:
@@ -309,6 +309,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: FISH
   unitLevel: 10
+  isPlayer: 0
+  equippedGear: []
+  baseDamage: 0
+  baseDefense: 0
   damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
@@ -318,6 +322,7 @@ MonoBehaviour:
   critdmgplus: 1.5
   buffManager: {fileID: 0}
   battleHUD: {fileID: 0}
+  isDead: 0
   originalUnitName: 
 --- !u!114 &7752731964368406297
 MonoBehaviour:
@@ -332,6 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnits: []
+  dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 0}
 --- !u!95 &3656460382643309715
