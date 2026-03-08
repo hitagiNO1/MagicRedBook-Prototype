@@ -30755,7 +30755,7 @@ Transform:
   m_GameObject: {fileID: 269962102}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 567.13, y: 2.25, z: 35.8}
+  m_LocalPosition: {x: 565, y: 2.25, z: 30.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56188,7 +56188,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 13.838482}
+  m_LocalPosition: {x: 0, y: 0, z: -18.861523}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56196,7 +56196,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 602.3, y: 30.000008}
+  m_AnchoredPosition: {x: 372.9, y: 30.000008}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -137194,7 +137194,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.3300781, y: 1.1552734}
+  m_AnchoredPosition: {x: -2.3302002, y: 1.1552734}
   m_SizeDelta: {x: 36.980095, y: 76.89001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1206149948
@@ -158625,16 +158625,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmList:
-  - state: 0
+  - triggerType: 0
     clip: {fileID: 8300000, guid: 124ebd6a282ce814b8f912a8e8710a3e, type: 3}
-  - state: 1
+    state: 0
+    storyScene: {fileID: 0}
+  - triggerType: 0
     clip: {fileID: 8300000, guid: 124ebd6a282ce814b8f912a8e8710a3e, type: 3}
-  - state: 2
+    state: 1
+    storyScene: {fileID: 0}
+  - triggerType: 0
     clip: {fileID: 8300000, guid: 124ebd6a282ce814b8f912a8e8710a3e, type: 3}
-  - state: 5
+    state: 2
+    storyScene: {fileID: 0}
+  - triggerType: 0
     clip: {fileID: 8300000, guid: 124ebd6a282ce814b8f912a8e8710a3e, type: 3}
-  - state: 4
+    state: 5
+    storyScene: {fileID: 0}
+  - triggerType: 0
     clip: {fileID: 8300000, guid: f02733e15f82dc84ba25e279667436a7, type: 3}
+    state: 4
+    storyScene: {fileID: 0}
   fadeDuration: 1
   volumeSlider: {fileID: 0}
 --- !u!4 &1381323863
@@ -160617,7 +160627,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 602.3, y: 30.000008, z: 13.838482}
+  m_LocalPosition: {x: 372.9, y: 30.000008, z: -18.861523}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -220049,7 +220059,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.3300781, y: 1.1552734}
+  m_AnchoredPosition: {x: -2.3302002, y: 1.1552734}
   m_SizeDelta: {x: 36.980095, y: 76.89001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1880721312
@@ -224972,7 +224982,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 602.3, y: -0, z: 65.8}
+  m_LocalPosition: {x: 372.9, y: -0, z: 33.1}
   m_LocalScale: {x: -0.10000002, y: 0.10000002, z: 0.10000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -246877,7 +246887,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -659
+  m_SortingOrder: -332
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
@@ -263828,7 +263838,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3433247497458231736}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 2b2f9fa125231cd46b3001dfaf8ac12e, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -271758,6 +271768,7 @@ GameObject:
   - component: {fileID: 3720424681303388711}
   - component: {fileID: 3720424681303388714}
   - component: {fileID: 3720424681303388708}
+  - component: {fileID: 3720424681303388715}
   m_Layer: 0
   m_Name: ScritpManager
   m_TagString: Untagged
@@ -323530,6 +323541,37 @@ MonoBehaviour:
   targetPrefab: {fileID: 9142385395296598408, guid: 77e396d06c45cda43bcba4898d661de9, type: 3}
   activeCount: 3
   sharedFadeImage: {fileID: 1203823678}
+--- !u!114 &3720424681303388715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052940225863114260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879880004a4cc7b49986c23450ececfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmList:
+  - triggerType: 0
+    clip: {fileID: 8300000, guid: f02733e15f82dc84ba25e279667436a7, type: 3}
+    state: 4
+    storyScene: {fileID: 0}
+  - triggerType: 1
+    clip: {fileID: 8300000, guid: 3a36b8b04bd504d429c4c1c4145c5a11, type: 3}
+    state: 4
+    storyScene: {fileID: 11400000, guid: bd48da9cb579fe94e98b64f1496a3cd0, type: 2}
+  - triggerType: 1
+    clip: {fileID: 8300000, guid: a198b83dddee7f0468f240c531ed3b02, type: 3}
+    state: 4
+    storyScene: {fileID: 11400000, guid: 0e94288aceb0b2148a80160120cf6c4d, type: 2}
+  - triggerType: 1
+    clip: {fileID: 8300000, guid: 3a36b8b04bd504d429c4c1c4145c5a11, type: 3}
+    state: 4
+    storyScene: {fileID: 11400000, guid: 9ebe7605200cd5d439b4678e4ba726d0, type: 2}
+  fadeDuration: 1
+  volumeSlider: {fileID: 0}
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5

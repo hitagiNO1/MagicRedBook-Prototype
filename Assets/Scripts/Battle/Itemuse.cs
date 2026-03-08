@@ -159,11 +159,11 @@ public class Itemuse : MonoBehaviour
 
         if (healedCount > 0)
         {
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Tuna 恢復全體血量（共 +{totalHealedAmount} HP，治療了 {healedCount} 個單位）";
+            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 鮪魚肉泥 恢復全體血量（共 +{totalHealedAmount} HP，治療了 {healedCount} 個單位）";
         }
         else
         {
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Tuna，但全體已滿血，無效果";
+            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 鮪魚肉泥，但全體已滿血，無效果";
         }
 
         yield return new WaitForSeconds(2.0f);
@@ -196,7 +196,7 @@ public class Itemuse : MonoBehaviour
         drying.amount--;
         itemInventory["Drying"] = drying.amount;
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Drying 大幅提升 {target.unitName} 的攻擊力";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 凍乾 大幅提升 {target.unitName} 的攻擊力";
 
         // 可加入特效
         // EffectManager.Instance.PlayUIEffect("DryingEffect", ...);
@@ -230,7 +230,7 @@ public class Itemuse : MonoBehaviour
         skillManager.skillNeedsTarget[playerIndex].Add(false);
         skillManager.skillQueues[playerIndex].Add(TunaCoroutine(playerIndex));
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Tuna";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 鮪魚肉泥";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -262,7 +262,7 @@ public class Itemuse : MonoBehaviour
         skillManager.skillNeedsTarget[playerIndex].Add(true);
         skillManager.skillQueues[playerIndex].Add(DryingCoroutine(playerIndex, target));
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Drying 對 {target.unitName}";
+        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 凍乾 對 {target.unitName}";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -305,7 +305,7 @@ public class Itemuse : MonoBehaviour
 
         if (!HasItem("Tuna"))
         {
-            dialogueText.text = "沒有 Tuna 可使用！";
+            dialogueText.text = "沒有 鮪魚肉泥 可使用！";
             return;
         }
 
@@ -346,11 +346,11 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Drying";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "請點擊一個玩家頭像以使用 Drying！";
+            dialogueText.text = "請點擊一個玩家頭像以使用 凍乾！";
         }
         else
         {
-            dialogueText.text = "沒有 Drying 可使用！";
+            dialogueText.text = "沒有 凍乾 可使用！";
         }
     }
 

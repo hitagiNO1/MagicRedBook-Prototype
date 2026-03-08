@@ -107,12 +107,30 @@ public class TimelineManager : MonoBehaviour
             isWaitingForInput = true;     // 等待輸入
         }
     }
+    // 🌟 這是給 Timeline Signal 呼叫的「降低音量」方法 (無參數)
+    public void Signal_DuckBGM()
+    {
+        if (BGMManager.Instance != null)
+        {
+            BGMManager.Instance.DuckVolume();
+        }
+    }
+
+    // 🌟 這是給 Timeline Signal 呼叫的「恢復音量」方法 (無參數)
+    public void Signal_RestoreBGM()
+    {
+        if (BGMManager.Instance != null)
+        {
+            BGMManager.Instance.RestoreVolume();
+        }
+    }
     private void Update()
     {
-        if (isWaitingForInput && Input.GetKeyDown(KeyCode.Space))
+        // 判斷：正在等待輸入 且 (按下了空白鍵 或 按下了滑鼠左鍵)
+        if (isWaitingForInput && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
             isWaitingForInput = false;
-            director.Play();              // 繼續播放 Timeline
+            director.Play(); // 繼續播放 Timeline
         }
     }
 

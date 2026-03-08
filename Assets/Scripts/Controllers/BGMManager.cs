@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,25 +7,40 @@ public class BGMManager : MonoBehaviour
 {
     public static BGMManager Instance;
 
+    public enum BGMTriggerType
+    {
+        ByGameState,
+        ByStoryScene
+    }
+
     [System.Serializable]
     public class BGMEntry
     {
-        public GameState state;       // ¹ïÀ³ªº¹CÀ¸ª¬ºA
-        public AudioClip clip;        // ¸Óª¬ºAÀ³¼½©ñªº­µ¼Ö
+        public BGMTriggerType triggerType;
+        public AudioClip clip;
+        [Header("å¦‚æœé¡å‹æ˜¯ ByGameState æ‰éœ€è¦å¡«")]
+        public GameState state;
+        [Header("å¦‚æœé¡å‹æ˜¯ ByStoryScene æ‰éœ€è¦å¡«")]
+        public StoryScene storyScene;
+
     }
 
-    public List<BGMEntry> bgmList;     // ¦b Inspector «ü©wª¬ºA»P­µ¼Ö¹ïÀ³
-    public float fadeDuration = 1.0f;  // ²H¤J²H¥X®É¶¡¡]¬í¡^
-    public Slider volumeSlider;        // ­µ¶q·Æ±ì¡]¦b Inspector ¤¤¸j©w¡^
+    [Header("âš ï¸ è«‹ä¾ã€åŠ‡æƒ…ç™¼ç”Ÿå…ˆå¾Œé †åºã€ç”±ä¸Šå¾€ä¸‹æ’åˆ—")]
+    public List<BGMEntry> bgmList;
+    public float fadeDuration = 1.0f;
+    public Slider volumeSlider;
 
-    private Dictionary<GameState, AudioClip> bgmDict;
+    private Dictionary<GameState, AudioClip> stateBgmDict;
+
     private AudioSource audioSource;
     private GameState lastState;
+
+    // è¨˜éŒ„ç•¶å‰å€åŸŸå¸¸é§éŸ³æ¨‚
+    private AudioClip currentAreaBGM;
     private Coroutine fadeCoroutine;
 
     private void Awake()
     {
-        // ½T«O³æ¨Ò
         if (Instance == null)
         {
             Instance = this;
@@ -37,47 +52,106 @@ public class BGMManager : MonoBehaviour
             return;
         }
 
-        // ªì©l¤Æ AudioSource
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
         audioSource.volume = 0.35f;
 
-        // ±N list Âà´«¬° dictionary ¤è«K¬d§ä
-        bgmDict = new Dictionary<GameState, AudioClip>();
+        stateBgmDict = new Dictionary<GameState, AudioClip>();
+
         foreach (var entry in bgmList)
         {
-            if (!bgmDict.ContainsKey(entry.state))
+            if (entry.triggerType == BGMTriggerType.ByGameState)
             {
-                bgmDict.Add(entry.state, entry.clip);
+                if (!stateBgmDict.ContainsKey(entry.state))
+                    stateBgmDict.Add(entry.state, entry.clip);
             }
         }
 
-        // ¸j©w·Æ±ì¨Æ¥ó¡]¦pªG·Æ±ì¦s¦b¡^
+        // åˆå§‹åŒ–é è¨­çš„éŠç©éŸ³æ¨‚
+        if (stateBgmDict.ContainsKey(GameState.Playing))
+        {
+            currentAreaBGM = stateBgmDict[GameState.Playing];
+        }
+
         if (volumeSlider != null)
         {
             volumeSlider.onValueChanged.AddListener(SetVolume);
-            volumeSlider.value = audioSource.volume; // ªì©l¤Æ·Æ±ìÅã¥Ü­È
+            volumeSlider.value = audioSource.volume;
         }
     }
 
     private void Update()
     {
-        // ºÊÅ¥¹CÀ¸ª¬ºAÅÜ¤Æ¡A¦Û°Ê¤Á´«­I´º­µ¼Ö
-        GameState currentState = GameStateManager.Instance.currentState;
-        if (currentState != lastState)
+        // ==========================================
+        // 1. æ ¹æ“šã€Œå·²ç¶“æ’­æ”¾éçš„åŠ‡æƒ…é€²åº¦ã€æ±ºå®šç•¶å‰å€åŸŸéŸ³æ¨‚
+        // ==========================================
+        if (GameController.Instance != null)
         {
-            SwitchBGM(currentState);
-            lastState = currentState;
+            AudioClip latestUnlockedBGM = null;
+
+            // å…ˆçµ¦äºˆæœ€åŸºç¤çš„é è¨­éŠç©éŸ³æ¨‚
+            if (stateBgmDict.ContainsKey(GameState.Playing))
+            {
+                latestUnlockedBGM = stateBgmDict[GameState.Playing];
+            }
+
+            // éæ­·æ‰€æœ‰è¨­å®šï¼Œå°‹æ‰¾ç©å®¶å·²ç¶“è§¸ç™¼éçš„åŠ‡æƒ…
+            // (åªè¦è¶Šå¾Œé¢çš„åŠ‡æƒ…æœ‰è¢«æ’­æ”¾éï¼Œå°±æœƒè“‹æ‰å‰é¢è¨­å®šçš„éŸ³æ¨‚)
+            foreach (var entry in bgmList)
+            {
+                if (entry.triggerType == BGMTriggerType.ByStoryScene && entry.storyScene != null)
+                {
+                    // ğŸŒŸ ä¾ç…§ä½ çš„é‚è¼¯ï¼šæ¯”å°æ˜¯å¦å·²ç¶“åœ¨ ScenePlayedState å­—å…¸ä¸­
+                    if (GameController.Instance.ScenePlayedState.ContainsKey(entry.storyScene))
+                    {
+                        latestUnlockedBGM = entry.clip;
+                    }
+                }
+            }
+
+            // å¦‚æœç™¼ç¾ã€Œé€²åº¦æ¨é€²äº†ã€ï¼Œä¸”å°æ‡‰çš„éŸ³æ¨‚èˆ‡ç›®å‰æ’­æ”¾çš„ä¸åŒï¼Œå°±æº–å‚™åˆ‡æ›
+            if (latestUnlockedBGM != null && currentAreaBGM != latestUnlockedBGM)
+            {
+                currentAreaBGM = latestUnlockedBGM;
+
+                // å¦‚æœç•¶ä¸‹æ˜¯è™•æ–¼ã€ŒéŠç©ã€æˆ–ã€Œå°è©±ã€ç‹€æ…‹ï¼Œå°±ç«‹åˆ»åˆ‡æ›é€™é¦–æ–°è§£é–çš„ BGM
+                GameState currentState = GameStateManager.Instance.currentState;
+                if (currentState == GameState.Playing || currentState == GameState.Story || currentState == GameState.StoryNotMove)
+                {
+                    SwitchBGM(currentAreaBGM);
+                }
+            }
+        }
+
+        // ==========================================
+        // 2. è™•ç†éŠæˆ²ç‹€æ…‹æ”¹è®Š (ä¾‹å¦‚æ‰“é–‹æš«åœé¸å–®)
+        // ==========================================
+        GameState currentGameState = GameStateManager.Instance.currentState;
+        if (currentGameState != lastState)
+        {
+            bool isGameplayState = (currentGameState == GameState.Playing ||
+                                    currentGameState == GameState.Story ||
+                                    currentGameState == GameState.StoryNotMove);
+
+            if (isGameplayState && currentAreaBGM != null)
+            {
+                // å›åˆ°éŠç©ç•«é¢æ™‚ï¼Œæ’­æ”¾ç•¶ä¸‹é€²åº¦å°ˆå±¬çš„å€åŸŸéŸ³æ¨‚
+                SwitchBGM(currentAreaBGM);
+            }
+            else if (stateBgmDict.ContainsKey(currentGameState))
+            {
+                // è‹¥æ˜¯ç‰¹æ®Šç‹€æ…‹(å¦‚ Menu)ï¼Œå‰‡æ’­æ”¾å°æ‡‰çš„éŸ³æ¨‚
+                SwitchBGM(stateBgmDict[currentGameState]);
+            }
+
+            lastState = currentGameState;
         }
     }
 
-    // ¤Á´«¨ì¹ïÀ³ª¬ºAªº­µ¼Ö¡]­Y¤£¦P¡^
-    private void SwitchBGM(GameState state)
+    // --- ä»¥ä¸‹ç‚ºéŸ³æ•ˆæ§åˆ¶èˆ‡æ·¡å…¥æ·¡å‡º ---
+    private void SwitchBGM(AudioClip newClip)
     {
-        if (!bgmDict.ContainsKey(state)) return;
-
-        AudioClip newClip = bgmDict[state];
-        if (audioSource.clip == newClip) return; // ¦P¦±¥Ø¤£­«¼½
+        if (audioSource.clip == newClip) return;
 
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
@@ -85,13 +159,11 @@ public class BGMManager : MonoBehaviour
         fadeCoroutine = StartCoroutine(FadeToNewClip(newClip));
     }
 
-    // ²H¥X ¡÷ ¼½©ñ·s¦± ¡÷ ²H¤J
     private IEnumerator FadeToNewClip(AudioClip newClip)
     {
         float t = 0;
         float startVolume = audioSource.volume;
 
-        // ²H¥X
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -103,7 +175,6 @@ public class BGMManager : MonoBehaviour
         audioSource.clip = newClip;
         audioSource.Play();
 
-        // ²H¤J
         t = 0;
         while (t < fadeDuration)
         {
@@ -115,23 +186,17 @@ public class BGMManager : MonoBehaviour
         audioSource.volume = startVolume;
     }
 
-    // ¨Ñ¥~³¡©I¥s°±¤î­I´º­µ¼Ö¡A¥i¿ï¬O§_²H¥X
     public void StopBGM(bool fade = true)
     {
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
 
         if (fade)
-        {
             fadeCoroutine = StartCoroutine(FadeOutAndStop());
-        }
         else
-        {
             audioSource.Stop();
-        }
     }
 
-    // ²H¥X«á°±¤î¼½©ñ
     private IEnumerator FadeOutAndStop()
     {
         float t = 0;
@@ -148,16 +213,52 @@ public class BGMManager : MonoBehaviour
         audioSource.volume = startVolume;
     }
 
-    // ³]©w­I´º­µ¶q¡]±q·Æ±ì©Î¥~³¡©I¥s¡^
     public void SetVolume(float volume)
     {
         audioSource.volume = Mathf.Clamp01(volume);
     }
 
-    // µ¹ UI ªº·Æ±ì¥Î¡]Slider ªº onValueChanged ¸j³o­Ó¡^
-    public void SetVolumeFromSlider()
+    // ==========================================
+    // æ“´å……åŠŸèƒ½ï¼šTimeline æ’­æ”¾æ™‚çš„éŸ³é‡é–ƒé¿ (Audio Ducking)
+    // ==========================================
+    private float savedVolume = 0.35f; // ç”¨ä¾†è¨˜ä½é–ƒé¿å‰çš„åŸå§‹éŸ³é‡
+    private Coroutine volumeFadeCoroutine;
+
+    // å‘¼å«æ­¤æ–¹æ³•è®“éŸ³æ¨‚è®Šå°è²
+    public void DuckVolume()
     {
-        if (volumeSlider != null)
-            SetVolume(volumeSlider.value);
+        float targetVolume = 0.1f;
+        float duration = 0.5f;
+        // è¨˜ä½ç•¶å‰çš„éŸ³é‡ï¼ˆå¯èƒ½æ˜¯ç©å®¶ç”¨æ»‘æ¡¿èª¿éçš„ï¼‰
+        savedVolume = audioSource.volume;
+
+        if (volumeFadeCoroutine != null) StopCoroutine(volumeFadeCoroutine);
+        volumeFadeCoroutine = StartCoroutine(FadeVolumeOnly(targetVolume));
+    }
+
+    // å‘¼å«æ­¤æ–¹æ³•æ¢å¾©åŸæœ¬çš„éŸ³é‡
+    public void RestoreVolume(float duration = 0.5f)
+    {
+        // å¦‚æœæœ‰ç¶å®šæ»‘æ¡¿ï¼Œå°±ä»¥æ»‘æ¡¿çš„å€¼ç‚ºæº–ï¼Œå¦å‰‡ç”¨å‰›å‰›è¨˜ä½çš„éŸ³é‡
+        float target = volumeSlider != null ? volumeSlider.value : savedVolume;
+
+        if (volumeFadeCoroutine != null) StopCoroutine(volumeFadeCoroutine);
+        volumeFadeCoroutine = StartCoroutine(FadeVolumeOnly(target));
+    }
+
+    // åªæ”¹è®ŠéŸ³é‡ï¼Œä¸æ”¹è®ŠéŸ³æ¨‚ç‰‡æ®µçš„å”ç¨‹
+    private IEnumerator FadeVolumeOnly(float targetVolume)
+    {
+        float t = 0;
+        float startVolume = audioSource.volume;
+        float duration = 0.5f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startVolume, targetVolume, t / duration);
+            yield return null;
+        }
+
+        audioSource.volume = targetVolume;
     }
 }
