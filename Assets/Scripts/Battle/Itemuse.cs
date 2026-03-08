@@ -69,7 +69,7 @@ public class Itemuse : MonoBehaviour
     {
         if (!itemInventory.ContainsKey(itemName) || itemInventory[itemName] <= 0)
         {
-            dialogueText.text = $"沒有 {itemName} 可使用！";
+            dialogueText.text = $"沒有 <b>{itemName}</b> 可使用！";
             return false;
         }
         if (skillManager.GetTotalSelectedSkills() >= skillManager.maxSkillPerTurn)
@@ -80,6 +80,7 @@ public class Itemuse : MonoBehaviour
         return true;
     }
 
+    // 取消物品
     // 取消物品
     private void CancelItem(int playerIndex, string itemName)
     {
@@ -96,8 +97,17 @@ public class Itemuse : MonoBehaviour
                 skillManager.selectedTargets[playerIndex] = null;
             }
 
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 取消了 {itemName}";
-            skillManager.AddSkillIcon();
+            // --- 新增：將代號翻譯成中文 ---
+            string displayName = itemName;
+            if (itemName == "Can") displayName = "神聖罐罐";
+            else if (itemName == "Tuna") displayName = "鮪魚肉泥";
+            else if (itemName == "Grass") displayName = "貓草";
+            else if (itemName == "Drying") displayName = "凍乾";
+
+            dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 取消了 <b>{displayName}</b>";
+            // -----------------------------
+
+            skillManager.AddSkillIcon(skillManager.GetSkillCost(itemName)); // 順便幫你補上 AP 退還
             skillManager.UpdateAllSkillButtonStates();
         }
     }
@@ -124,7 +134,7 @@ public class Itemuse : MonoBehaviour
         bool isTargetLeft = (targetIndex == 0);
         EffectManager.Instance.PlayUIEffectOneSide("L2", isTargetLeft);
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 神聖罐罐 恢復 {target.unitName} 的血量（+{healAmount}）";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>神聖罐罐</b> 恢復 <b>{target.unitName}</b> 的血量（+<b>{healAmount}</b>）";
 
         yield return new WaitForSeconds(1.8f); // 調整特效時間
     }
@@ -159,11 +169,11 @@ public class Itemuse : MonoBehaviour
 
         if (healedCount > 0)
         {
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 鮪魚肉泥 恢復全體血量（共 +{totalHealedAmount} HP，治療了 {healedCount} 個單位）";
+            dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>鮪魚肉泥</b> 恢復全體血量（共 +<b>{totalHealedAmount}</b> HP，治療了 <b>{healedCount}</b> 個單位）";
         }
         else
         {
-            dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 鮪魚肉泥，但全體已滿血，無效果";
+            dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>鮪魚肉泥</b>，但全體已滿血，無效果";
         }
 
         yield return new WaitForSeconds(2.0f);
@@ -179,7 +189,7 @@ public class Itemuse : MonoBehaviour
         grass.amount--;
         itemInventory["Grass"] = grass.amount;
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 Grass 強化 {target.unitName} 的爆擊但削弱防禦";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>貓草</b> 強化 <b>{target.unitName}</b> 的爆擊但削弱防禦";
 
         // 可加入特效
         // EffectManager.Instance.PlayUIEffect("GrassEffect", ...);
@@ -191,12 +201,14 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
-        buffDebuffManager.ApplyDamageBuff(target, 4.0f, 2);
+        // ★ 將倍率 4.0f 改為 1.3f (代表提升現有攻擊力 30%)
+        buffDebuffManager.ApplyDamageBuff(target, 1.3f, 2);
 
         drying.amount--;
         itemInventory["Drying"] = drying.amount;
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 使用 凍乾 大幅提升 {target.unitName} 的攻擊力";
+        // ★ 順便修改對話文字，讓敘述更準確
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>凍乾</b> 提升了 <b>{target.unitName}</b> 的攻擊力";
 
         // 可加入特效
         // EffectManager.Instance.PlayUIEffect("DryingEffect", ...);
@@ -217,7 +229,8 @@ public class Itemuse : MonoBehaviour
         skillManager.skillNeedsTarget[playerIndex].Add(true);
         skillManager.skillQueues[playerIndex].Add(CanCoroutine(playerIndex, target));
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 神聖罐罐 對 {target.unitName}";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>神聖罐罐</b> 對 <b>{target.unitName}</b>\n"+
+                            $"恢復目標 「已損失血量」的 60%";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -230,8 +243,10 @@ public class Itemuse : MonoBehaviour
         skillManager.skillNeedsTarget[playerIndex].Add(false);
         skillManager.skillQueues[playerIndex].Add(TunaCoroutine(playerIndex));
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 鮪魚肉泥";
-        skillManager.RemoveSkillIcon();
+        // 在 dialogueText 前面加上 skillManager. 確保抓到正確的文字框
+        skillManager.dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>鮪魚肉泥</b>\n恢復我方存活全體成員 「最大血量」的 30%";
+
+        skillManager.RemoveSkillIcon(skillManager.GetSkillCost("Tuna")); // 順便幫你套用最新版的 AP 消耗寫法
         skillManager.UpdateAllSkillButtonStates();
     }
 
@@ -246,7 +261,9 @@ public class Itemuse : MonoBehaviour
         skillManager.skillNeedsTarget[playerIndex].Add(true);
         skillManager.skillQueues[playerIndex].Add(GrassCoroutine(playerIndex, target));
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 Grass 對 {target.unitName}";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>貓草</b> 對 <b>{target.unitName}</b>\n"+
+                            $"爆擊提升為原本的 1.5 倍，但防禦下降 30%\n" +
+                            $"持續時間:2回合";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -262,7 +279,9 @@ public class Itemuse : MonoBehaviour
         skillManager.skillNeedsTarget[playerIndex].Add(true);
         skillManager.skillQueues[playerIndex].Add(DryingCoroutine(playerIndex, target));
 
-        dialogueText.text = $"{skillManager.playerUnits[playerIndex].unitName} 選擇了 凍乾 對 {target.unitName}";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>凍乾</b> 對 <b>{target.unitName}</b>\n"+
+                            $"目標的攻擊力提升 30%\n"+
+                            $"持續時間：2 回合";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -286,7 +305,7 @@ public class Itemuse : MonoBehaviour
         }
         else
         {
-            dialogueText.text = "沒有 神聖罐罐 可使用！";
+            dialogueText.text = "沒有 <b>神聖罐罐</b> 可使用！";
         }
     }
 
@@ -305,7 +324,7 @@ public class Itemuse : MonoBehaviour
 
         if (!HasItem("Tuna"))
         {
-            dialogueText.text = "沒有 鮪魚肉泥 可使用！";
+            dialogueText.text = "沒有 <b>鮪魚肉泥</b> 可使用！";
             return;
         }
 
@@ -325,11 +344,11 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Grass";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "請點擊一個玩家頭像以使用 Grass！";
+            dialogueText.text = "請點擊一個玩家頭像以使用 <b>貓草</b>！";
         }
         else
         {
-            dialogueText.text = "沒有 Grass 可使用！";
+            dialogueText.text = "沒有 <b>貓草</b> 可使用！";
         }
     }
 
@@ -346,11 +365,11 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Drying";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "請點擊一個玩家頭像以使用 凍乾！";
+            dialogueText.text = "請點擊一個玩家頭像以使用 <b>凍乾</b>！";
         }
         else
         {
-            dialogueText.text = "沒有 凍乾 可使用！";
+            dialogueText.text = "沒有 <b>凍乾</b> 可使用！";
         }
     }
 

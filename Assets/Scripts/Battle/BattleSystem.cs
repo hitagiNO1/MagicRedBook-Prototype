@@ -227,6 +227,7 @@ public class BattleSystem : MonoBehaviour
         buffDebuffManager?.TickDamageBuffs();
         buffDebuffManager?.TickPoison();
         buffDebuffManager?.TickSkillDisable();
+        buffDebuffManager?.TickCritChanceBuffs();
 
         // 敵人技能冷卻減少
         foreach (GameObject enemyGO in enemyPrefabs)

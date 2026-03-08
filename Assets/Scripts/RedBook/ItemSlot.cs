@@ -104,7 +104,7 @@ public class ItemSlot : MonoBehaviour
                 break;
             case "鮪魚肉泥":
                 itemuse.TriggerTunaForPlayer(currentPlayerIndex);
-                skillmanager.dialogueText.text = $"{skillmanager.playerUnits[currentPlayerIndex].unitName} 選擇了 Tuna";
+                skillmanager.dialogueText.text = $"<b>{skillmanager.playerUnits[currentPlayerIndex].unitName}</b> 選擇了 <b>鮪魚肉泥</b>\n恢復我方存活全體成員 「最大血量」的 30%";
                 break;
 
 

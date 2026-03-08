@@ -48,7 +48,7 @@ public class BuffDebuffManager : MonoBehaviour
 
     void Update()
     {
-        TickCritChanceBuffs();
+ 
     }
 
     public void ApplyDamageBuff(Unit targetUnit, float multiplier, int turns)

@@ -39,6 +39,7 @@ public class SkillManager : MonoBehaviour
 
     // 道具
     { "Can", "罐罐" },
+    { "Tuna", "鮪魚肉泥" },
     { "Grass", "貓草" },
     { "Drying", "肉乾" }
 };
