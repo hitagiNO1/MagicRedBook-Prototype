@@ -301,7 +301,7 @@ public class Itemuse : MonoBehaviour
             skillManager.isWaitingForTarget = true;
             skillManager.pendingSkill = "Can";
             skillManager.pendingPlayerIndex = playerIndex;
-            dialogueText.text = "請點擊一個玩家頭像以使用 神聖罐罐！";
+            dialogueText.text = "請點擊一個玩家頭像以使用 <b>神聖罐罐</b>！";
         }
         else
         {
