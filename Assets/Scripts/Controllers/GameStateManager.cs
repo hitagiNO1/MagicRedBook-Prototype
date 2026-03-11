@@ -6,7 +6,7 @@ public enum GameState
     StoryNotMove, // 不能移動的重要劇情對話 GameController
     Mangaing, //過場中 TimelineManager
     Battle,   // 戰鬥中 BattleSystem
-    Redbook   //紅書中 RedBook
+    Redbook,   //紅書中 RedBook
 }
 public class GameStateManager : MonoBehaviour
 {

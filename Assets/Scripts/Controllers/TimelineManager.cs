@@ -10,6 +10,9 @@ public class TimelineManager : MonoBehaviour
     public static TimelineManager Instance { get; private set; }
     public PlayableDirector director;
 
+    [Header("【強制切換DCAT BGM 設定】")]
+    public AudioClip newBGMClip;
+
 
     [Header("Signal控制")]
     public ParticleSystem Magic1;
@@ -17,6 +20,7 @@ public class TimelineManager : MonoBehaviour
     public ParticleSystem Magic3;
     public ParticleSystem BookMagic;
     // 紀錄目前是否正在播放動畫
+
     public bool IsPlaying { get; private set; }
     private bool isWaitingForInput = false;
 
@@ -122,6 +126,14 @@ public class TimelineManager : MonoBehaviour
         if (BGMManager.Instance != null)
         {
             BGMManager.Instance.RestoreVolume();
+        }
+    }
+    // --- 🌟 新增：給 Timeline Signal 呼叫的「切換音樂」方法 ---
+    public void Signal_ChangeBGM()
+    {
+        if (BGMManager.Instance != null && newBGMClip != null)
+        {
+            BGMManager.Instance.ForceChangeBGM(newBGMClip);
         }
     }
     private void Update()
