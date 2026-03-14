@@ -226,13 +226,13 @@ namespace Common.Editor
            // Debug.Log("Ray hit: " + hit.collider.gameObject.name);
 
             // 判断射线是否击中 "Ground" 层
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("See Ttough"))
             {
                 //Debug.Log("Hit Ground at: " + hit.point);  // 打印碰撞点
                 return hit.point;
             }
 
-            Debug.Log("Hit non-ground object");
+            Debug.Log("Hit non-See Ttough object");
             return Vector3.negativeInfinity;  // 没有击中地面
         }
 

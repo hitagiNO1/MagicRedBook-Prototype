@@ -30,8 +30,8 @@ public class Enemyskill : MonoBehaviour
 
     // DCAT 專用冷卻時間
     private int dcatskill2CooldownTurns = 2;
-    private int dcatskill3CooldownTurns = 2;
-    private int dcatskill4CooldownTurns = 3;
+    private int dcatskill3CooldownTurns = 4;
+    private int dcatskill4CooldownTurns = 4;
 
     // ==================== 主要方法 ====================
     private bool IsSkillReady(string skillKey)
@@ -414,11 +414,12 @@ public class Enemyskill : MonoBehaviour
 
         if (dialogueText != null)
         {
-            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>斬擊</b>！\n" +
-                                $"對 <b>{target.unitName}</b> 進行斬擊！\n" +
+            dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>能量球</b>！\n" +
+                                $"對 <b>{target.unitName}</b> 射出能量球！\n" +
                                 $"<b>{target.unitName}</b> 受到了 <b>{actualDamageDealt}</b> 點傷害！";
         }
-
+        bool playLeft = target.unitName != "布萊克";
+        EffectManager.Instance.PlayUIEffectOneSide("Dcat1", playLeft);
         Debug.Log("DC1");
         yield return new WaitForSeconds(1.5f);
     }

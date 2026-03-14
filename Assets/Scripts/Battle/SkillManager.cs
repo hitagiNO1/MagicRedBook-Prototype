@@ -27,7 +27,7 @@ public class SkillManager : MonoBehaviour
     { "Skill_1", "吃我一擊！" },
     { "Skill_2", "上吧，球球們！" },
     { "Skill_3", "舔舔舔！" },
-    { "Skill_4", "大雞腿～" },
+    { "Skill_4", "一顆煤炭～" },
     { "Skill_5", "連環兔子踹！" },
 
     // 貓技能 (Player 1)
