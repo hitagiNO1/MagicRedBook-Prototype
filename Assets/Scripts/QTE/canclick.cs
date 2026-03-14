@@ -41,9 +41,13 @@ public class canclick : MonoBehaviour
 
     [Header("Equipment Reward Settings")]
     public string rareEquipmentName = "劍客鞋子"; // 裝備名稱
-    public float equipmentDropChance = 0.05f;    // 裝備掉落機率 (0.05 = 5%)
+    public float equipmentDropChance = 0.1f;    // 裝備掉落機率 (0.05 = 5%)
     private bool wonRareEquipment = false;       // 記錄本次是否抽中裝備
 
+
+    private AudioSource audioSource;
+    public AudioClip VicClip;
+    public AudioClip LosClip;
     // ★ 修改 1: 定義一個結構來儲存 "道具+數量"
     struct RewardInfo
     {
@@ -62,6 +66,9 @@ public class canclick : MonoBehaviour
             return;
         }
 
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.volume = 0.08f;
         // 隨機選取獎勵
         GenerateRandomRewards();
     }
@@ -145,7 +152,14 @@ public class canclick : MonoBehaviour
             }
         }
     }
-
+    private IEnumerator FadeToNewClip(AudioClip newClip)
+    {
+        yield return new WaitForSeconds(0.2f);
+        audioSource.Stop();
+        audioSource.clip = newClip;
+        audioSource.Play();
+        audioSource.loop = false;
+    }
     void SpawnRow()
     {
         if (blackTileGenerated >= targetSuccessCount) return;
@@ -207,6 +221,8 @@ public class canclick : MonoBehaviour
 
     public void GameOver(string reason)
     {
+        StartCoroutine(FadeToNewClip(LosClip));
+
         if (gameEnded) return;
         gameEnded = true;
         CancelInvoke(nameof(SpawnRow));
@@ -222,6 +238,8 @@ public class canclick : MonoBehaviour
 
     void GameClear()
     {
+        StartCoroutine(FadeToNewClip(VicClip));
+
         gameEnded = true;
         CancelInvoke(nameof(SpawnRow));
 
@@ -291,7 +309,6 @@ public class canclick : MonoBehaviour
     {
         if (gameEnded) return;
         StartCoroutine(SpawnRowCoroutine());
-        startButton.SetActive(false);
     }
 
     IEnumerator SpawnRowCoroutine()

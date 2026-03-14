@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class GameFlowManager : MonoBehaviour
 {
@@ -10,14 +11,13 @@ public class GameFlowManager : MonoBehaviour
     public GameObject startbutton;
     public canclick canclick;
     public GameObject track;
-    private AudioSource audioSource;
-    public AudioClip newClip;
+
+    public PlayableDirector director;
+    private bool isWaitingForInput = false;
     void Start()
     {
         ShowMainMenu();
-        audioSource = GetComponent<AudioSource>();
-        audioSource.loop = true;
-        audioSource.volume = 0.08f;
+
     }
 
     public void ShowMainMenu()
@@ -29,13 +29,7 @@ public class GameFlowManager : MonoBehaviour
 
     public void StartGame()
     {
-        mainCanvas.SetActive(false);
-        gameCanvas.SetActive(true);
-        resultCanvas.SetActive(false);
-        startbutton.SetActive(true);
-        canclick.RestartGame();
-        track.SetActive(true);
-
+        canclick.StartGame();
     }
 
     /*public void Restart()
@@ -49,24 +43,21 @@ public class GameFlowManager : MonoBehaviour
         gameCanvas.SetActive(false);
         resultCanvas.SetActive(true);
         track.SetActive(false);
-        // 顯示最終得分
-        audioSource.clip = newClip;
-        StartCoroutine(FadeOutAndStop());
     }
-    private IEnumerator FadeOutAndStop()
+    void Update()
     {
-        float t = 0;
-        float startVolume = audioSource.volume;
-
-        while (t < 1f)
+        if (isWaitingForInput && Input.anyKeyDown)
         {
-            t += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(startVolume, 0, t / 1f);
-            yield return null;
+            director.Resume();            // 恢復 Timeline
+            isWaitingForInput = false;    // 不再等待輸入
         }
-
-        audioSource.Stop();
-        audioSource.volume = startVolume;
     }
-
+    public void WaitForInputToContinue()
+    {
+        if (director != null && director.state == PlayState.Playing)
+        {
+            director.Pause();             // 暫停 Timeline
+            isWaitingForInput = true;     // 等待輸入
+        }
+    }
 }

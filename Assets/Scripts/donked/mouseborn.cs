@@ -63,13 +63,7 @@ public class mouseborn : MonoBehaviour
     void Start()
     {
         isQuitting = false;
-        usercontrol = FindObjectOfType<usercontrol>();
-        if (usercontrol == null)
-        {
-            Debug.LogError("§ä¤£¨ì usercontrol¡I");
-            enabled = false;
-            return;
-        }
+        
         if (!ValidateSprites()) { enabled = false; return; }
         if (!ValidateHoleArray()) { enabled = false; return; }
         InitializeHoles();
@@ -155,6 +149,7 @@ public class mouseborn : MonoBehaviour
 
     void Update()
     {
+        usercontrol = FindObjectOfType<usercontrol>();
         if (usercontrol != null && !usercontrol.IsGameActive())
         {
             CancelAllInvokesAndCoroutines();

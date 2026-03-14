@@ -161,7 +161,7 @@ public class usercontrol : MonoBehaviour,
             Debug.Log("點到 C4，遊戲結束！");
             gameover = true;
             getC4();
-            gameflow.ShowResult();
+            gameflow.ShowResultLOSS();
         }
 
         // 通知 mouseborn 做重置
@@ -181,9 +181,9 @@ public class usercontrol : MonoBehaviour,
     //=====================================================================
     //  結果文字
     //=====================================================================
-    public void getC4() => resault.text = "你點錯了!";
-    public void gamelose() => resault.text = "沒在時間內達成目標!";
-    public void gameWin() => resault.text = "達成目標!";
+    public void getC4() => resault.text = "這趟旅途不能沒有布萊克，再試試吧！";
+    public void gamelose() => resault.text = "這趟旅途不能沒有布萊克，再試試吧！";
+    public void gameWin() => resault.text = "成功捕獲！";
 
     //=====================================================================
     //  重新開始 / 返回
