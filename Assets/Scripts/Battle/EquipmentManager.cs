@@ -41,6 +41,14 @@ public class EquipmentManager : MonoBehaviour
     // ================= 新增：幫指定單位穿上特定裝備 =================
     public void EquipItemToUnit(Unit unit, string itemName)
     {
+        // ★ 新增檢查：如果在戰鬥中，就直接阻斷並返回
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsState(GameState.Battle))
+        {
+            Debug.LogWarning("戰鬥中無法穿戴裝備！");
+            // 如果你有全域的提示 UI，也可以在這裡呼叫，例如: ShowMessage("戰鬥中無法更換裝備");
+            return;
+        }
+
         if (unit == null || !ownedEquipment.Contains(itemName)) return;
 
         // 如果他已經穿著這件了，就不用再穿
@@ -56,10 +64,16 @@ public class EquipmentManager : MonoBehaviour
 
         Debug.Log($"{unit.unitName} 裝備了 {itemName}！");
     }
-
     // ================= 新增：幫指定單位脫下裝備 =================
     public void UnequipItemFromUnit(Unit unit, string itemName)
     {
+        // ★ 新增檢查：如果在戰鬥中，就直接阻斷並返回
+        if (GameStateManager.Instance != null && GameStateManager.Instance.IsState(GameState.Battle))
+        {
+            Debug.LogWarning("戰鬥中無法脫下裝備！");
+            return;
+        }
+
         if (unit == null || !unit.equippedGear.Contains(itemName)) return;
 
         // 移除裝備
@@ -71,6 +85,8 @@ public class EquipmentManager : MonoBehaviour
 
         Debug.Log($"{unit.unitName} 脫下了 {itemName}。");
     }
+
+
 
     // ================= 核心：重新計算單位的所有屬性 =================
     // 因為可以穿多件裝備，每次穿脫都要「先還原，再把所有穿著的裝備屬性加回去」
@@ -158,9 +174,9 @@ public class EquipmentManager : MonoBehaviour
                 bool isTargetLeft = (targetIndexForEffect == 0);
                 EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
             }
-
+            skillManager.PlaySoundByName("softskill1");
             // [修正3] 使用 $ 符號進行字串插值，把變數包在字串內
-            skillManager.dialogueText.text = $"膠帶拳套發動！對 {target.unitName} 造成額外 {extraDamage} 點傷害。";
+            skillManager.dialogueText.text = $"<b>膠帶拳套</b>發動！\n對 <b>{target.unitName}</b> 造成額外 <b>{extraDamage}</b> 點傷害。";
 
             yield return new WaitForSeconds(1.5f); // 原本的等待
 

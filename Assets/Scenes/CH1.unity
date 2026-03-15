@@ -23809,6 +23809,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 0}
 --- !u!4 &210002646
 Transform:
   m_ObjectHideFlags: 0
@@ -33454,6 +33455,7 @@ MonoBehaviour:
   dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 3720424681303388716}
 --- !u!114 &290101558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116107,6 +116109,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 0}
 --- !u!114 &1018057260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128584,6 +128587,7 @@ MonoBehaviour:
   dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 3720424681303388716}
 --- !u!114 &1132619229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139957,6 +139961,7 @@ MonoBehaviour:
   dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 0}
 --- !u!210 &1214941116
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -192212,6 +192217,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 0}
 --- !u!114 &1649820921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209568,6 +209574,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 0}
 --- !u!210 &1773212877
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -244310,6 +244317,7 @@ MonoBehaviour:
   dialogueText: {fileID: 0}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 0}
 --- !u!210 &2073287926
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -263907,6 +263915,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CLOCK
       objectReference: {fileID: 0}
+    - target: {fileID: 2002173326021242782, guid: 097e354aae500654ba9bd664fd41449e, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 3720424681303388716}
     - target: {fileID: 2002173326021242782, guid: 097e354aae500654ba9bd664fd41449e, type: 3}
       propertyPath: dialogueText
       value: 
@@ -325735,7 +325747,7 @@ MonoBehaviour:
     m_Bits: 128
   playerSkillButtons: []
   playerSkillIcons: []
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 3720424681303388716}
   skillIconPrefab: {fileID: 7392400310071351197, guid: 73240bd9a52a4dc418392145b9507b3c, type: 3}
   skillIconParent: {fileID: 416347393}
   skillIcons: []
@@ -327307,6 +327319,10 @@ PrefabInstance:
       propertyPath: buffManager
       value: 
       objectReference: {fileID: 3720424681303388705}
+    - target: {fileID: 7752731964368406297, guid: 15099cb494987664eacf6b03859f0ba7, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 3720424681303388716}
     - target: {fileID: 7752731964368406297, guid: 15099cb494987664eacf6b03859f0ba7, type: 3}
       propertyPath: dialogueText
       value: 
@@ -332910,6 +332926,10 @@ PrefabInstance:
       value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 5768338742510298433, guid: 6c8776bf430fe7c4d8b15efb39d433d8, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 3720424681303388716}
+    - target: {fileID: 5768338742510298433, guid: 6c8776bf430fe7c4d8b15efb39d433d8, type: 3}
       propertyPath: dialogueText
       value: 
       objectReference: {fileID: 422702079435835153}
@@ -334190,6 +334210,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 3720424681303388716}
 --- !u!1 &4138282837094861319
 GameObject:
   m_ObjectHideFlags: 0
@@ -369462,6 +369483,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 3720424681303388716}
 --- !u!1001 &5771814219555590012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -388607,6 +388629,7 @@ MonoBehaviour:
   dialogueText: {fileID: 422702079435835153}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 3720424681303388716}
 --- !u!1001 &6842222814828634977
 PrefabInstance:
   m_ObjectHideFlags: 0

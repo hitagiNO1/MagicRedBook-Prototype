@@ -364,43 +364,43 @@ public class SkillManager : MonoBehaviour
             Debug.LogError($"按鈕狀態更新時發生崩潰！錯誤原因: {e.Message}");
         }
 
+        // ★ 升級檢查：同時檢查單位身上，與全域的裝備管理器
         bool p0Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[0]);
         bool p1Disabled = buffDebuffManager.IsSkillDisabled(playerUnits[1]);
-        bool p0OnlySkill1 = playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲");
-        bool p1OnlySkill1 = playerUnits[1].equippedGear.Contains("穿戴式紙箱盔甲");
+        bool p0OnlySkill1 = playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲"));
+        bool p1OnlySkill1 = playerUnits[1].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲"));
 
+        // ★ 直接使用 SetButtonDimmed 讓按鈕徹底變灰並無法點擊
         if (p0Disabled)
         {
-            skill1Button.interactable = false;
-            skill2Button.interactable = false;
-            skill3Button.interactable = false;
-            skill4Button.interactable = false;
-            skill5Button.interactable = false;
+            SetButtonDimmed(skill1Button, true);
+            SetButtonDimmed(skill2Button, true);
+            SetButtonDimmed(skill3Button, true);
+            SetButtonDimmed(skill4Button, true);
+            SetButtonDimmed(skill5Button, true);
         }
         else if (p0OnlySkill1)
         {
-            skill1Button.interactable = !selectedSkillNames[0].Contains("Skill_1");
-            skill2Button.interactable = false;
-            skill3Button.interactable = false;
-            skill4Button.interactable = false;
-            skill5Button.interactable = false;
+            SetButtonDimmed(skill2Button, true);
+            SetButtonDimmed(skill3Button, true);
+            SetButtonDimmed(skill4Button, true);
+            SetButtonDimmed(skill5Button, true);
         }
 
         if (p1Disabled)
         {
-            catSkill1Button.interactable = false;
-            catSkill2Button.interactable = false;
-            catSkill3Button.interactable = false;
-            catSkill4Button.interactable = false;
-            catSkill5Button.interactable = false;
+            SetButtonDimmed(catSkill1Button, true);
+            SetButtonDimmed(catSkill2Button, true);
+            SetButtonDimmed(catSkill3Button, true);
+            SetButtonDimmed(catSkill4Button, true);
+            SetButtonDimmed(catSkill5Button, true);
         }
         else if (p1OnlySkill1)
         {
-            catSkill1Button.interactable = !selectedSkillNames[1].Contains("catSkill_1");
-            catSkill2Button.interactable = false;
-            catSkill3Button.interactable = false;
-            catSkill4Button.interactable = false;
-            catSkill5Button.interactable = false;
+            SetButtonDimmed(catSkill2Button, true);
+            SetButtonDimmed(catSkill3Button, true);
+            SetButtonDimmed(catSkill4Button, true);
+            SetButtonDimmed(catSkill5Button, true);
         }
     }
 
@@ -652,7 +652,7 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator Skill4Coroutine(int playerIndex)
     {
-        PlaySoundByName("Skill_4");
+        PlaySoundByName("Skill5");
         buffDebuffManager.ApplyDefenseBuff(playerUnits[playerIndex], 2.0f, 2);
         skillCooldowns["Skill_4_" + playerIndex] = skill4CooldownTurns;
         dialogueText.text = $"<b>布萊克</b> 使出了 <b>大雞腿</b>～\n緊縮成一團，使敵人找不到縫隙攻擊。";
@@ -709,6 +709,7 @@ public class SkillManager : MonoBehaviour
     private IEnumerator CatSkill1Coroutine(int playerIndex, Unit target)
     {
         if (target == null || target.isDead || !enemyUnits.Contains(target)) yield break;
+        PlaySoundByName("skill1");
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1f);
         int damageDealt;
         bool isKilled = target.TakeDamage(buffedDamage, out damageDealt);
@@ -737,6 +738,7 @@ public class SkillManager : MonoBehaviour
                 if (idx >= 0 && idx < playerHUDs.Count && playerHUDs[idx] != null)
                 {
                     playerHUDs[idx].SetHP(unit.currentHP);
+                    PlaySoundByName("catskill2");
                 }
             }
         }
@@ -793,7 +795,8 @@ public class SkillManager : MonoBehaviour
             skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
             yield break;
         }
-
+        PlaySoundByName("catskill4_1");
+        PlaySoundByName("catskill4_2");
         buffDebuffManager.ApplyDamageBuff(target, 2.0f, 2);
         skillCooldowns["catSkill_4_" + playerIndex] = catskill4CooldownTurns;
         dialogueText.text = $"<b>萊拉</b> 使出了 <b>打起精神來</b>！\n對 <b>{target.unitName}</b> 施展魔法，提升其攻擊力";
@@ -807,6 +810,7 @@ public class SkillManager : MonoBehaviour
     {
         foreach (Unit player in playerUnits)
         {
+            PlaySoundByName("catskill5");
             buffDebuffManager.ApplyFixedDamageReduction(player, 0.7f, 1);
         }
         skillCooldowns["catSkill_5_" + playerIndex] = catskill5CooldownTurns;
@@ -962,7 +966,6 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-        // 判定 AP 是否足夠
         if (GetTotalSelectedSkills() + GetSkillCost(skillID) > maxSkillPerTurn)
         {
             dialogueText.text = "AP不足！無法使用此技能。";
@@ -973,7 +976,8 @@ public class SkillManager : MonoBehaviour
         pendingSkill = skillID;
         pendingPlayerIndex = 0;
 
-        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲"))
+        // 升級檢查
+        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲")))
         {
             dialogueText.text = "因為穿戴式紙箱盔甲，只能使用技能1！\n請點擊一個敵人目標！";
         }
@@ -990,6 +994,14 @@ public class SkillManager : MonoBehaviour
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
+
+        // ★ 絕對阻斷：如果穿了盔甲，按了直接擋下來！
+        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲")))
+        {
+            dialogueText.text = "因為穿戴式紙箱盔甲，無法使用此技能！";
+            return;
+        }
+
         if (CheckSkillCooldownAndShowMessage(0, "Skill_2", "2")) return;
 
         string skillID = "Skill_2";
@@ -1015,6 +1027,14 @@ public class SkillManager : MonoBehaviour
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
+
+        // ★ 絕對阻斷
+        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲")))
+        {
+            dialogueText.text = "因為穿戴式紙箱盔甲，無法使用此技能！";
+            return;
+        }
+
         if (CheckSkillCooldownAndShowMessage(0, "Skill_3", "3")) return;
 
         string skillID = "Skill_3";
@@ -1040,6 +1060,14 @@ public class SkillManager : MonoBehaviour
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
+
+        // ★ 絕對阻斷
+        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲")))
+        {
+            dialogueText.text = "因為穿戴式紙箱盔甲，無法使用此技能！";
+            return;
+        }
+
         if (CheckSkillCooldownAndShowMessage(0, "Skill_4", "4")) return;
 
         string skillID = "Skill_4";
@@ -1065,6 +1093,14 @@ public class SkillManager : MonoBehaviour
         ClearAllHighlights();
         if (battlesystem.state != BattleState.PLAYERTURN) return;
         if (!CanUseSkill(0)) return;
+
+        // ★ 絕對阻斷
+        if (playerUnits[0].equippedGear.Contains("穿戴式紙箱盔甲") || (EquipmentManager.Instance != null && EquipmentManager.Instance.HasEquipment("穿戴式紙箱盔甲")))
+        {
+            dialogueText.text = "因為穿戴式紙箱盔甲，無法使用此技能！";
+            return;
+        }
+
         if (CheckSkillCooldownAndShowMessage(0, "Skill_5", "5")) return;
 
         string skillID = "Skill_5";
@@ -1411,7 +1447,7 @@ public class SkillManager : MonoBehaviour
 
     public void PlaySoundByName(string soundName)
     {
-        AudioClip clip = Resources.Load<AudioClip>("soundeffects/" + soundName);
+        AudioClip clip = Resources.Load<AudioClip>("BGM/soundeffects/" + soundName);
         if (clip != null && audioSource != null)
             audioSource.PlayOneShot(clip);
         else

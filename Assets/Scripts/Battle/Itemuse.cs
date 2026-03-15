@@ -118,6 +118,10 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
+        // --- ★ 新增：播放罐頭音效 (假設檔名叫 item_can) ---
+        skillManager.PlaySoundByName("can");
+        // ------------------------------------------------
+
         int lostHP = target.maxHP - target.currentHP;
         int healAmount = Mathf.RoundToInt(lostHP * 0.6f);
         target.currentHP = Mathf.Min(target.currentHP + healAmount, target.maxHP);
@@ -136,11 +140,14 @@ public class Itemuse : MonoBehaviour
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>神聖罐罐</b> 恢復 <b>{target.unitName}</b> 的血量（+<b>{healAmount}</b>）";
 
-        yield return new WaitForSeconds(1.8f); // 調整特效時間
+        yield return new WaitForSeconds(1.8f);
     }
-
     private IEnumerator TunaCoroutine(int playerIndex)
     {
+        // --- ★ 新增：播放肉泥音效 (假設檔名叫 item_tuna) ---
+        skillManager.PlaySoundByName("heal");
+        // ------------------------------------------------
+
         int totalHealedAmount = 0;
         int healedCount = 0;
 
@@ -183,6 +190,10 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
+        // --- ★ 新增：播放貓草音效 (假設檔名叫 item_grass) ---
+        skillManager.PlaySoundByName("catskill4_2");
+        // ------------------------------------------------
+
         buffDebuffManager.ApplyCritChanceBuff(target, 0.5f, 2);
         buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
 
@@ -191,9 +202,6 @@ public class Itemuse : MonoBehaviour
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>貓草</b> 強化 <b>{target.unitName}</b> 的爆擊但削弱防禦";
 
-        // 可加入特效
-        // EffectManager.Instance.PlayUIEffect("GrassEffect", ...);
-
         yield return new WaitForSeconds(1.8f);
     }
 
@@ -201,17 +209,16 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
-        // ★ 將倍率 4.0f 改為 1.3f (代表提升現有攻擊力 30%)
+        // --- ★ 新增：播放凍乾音效 (假設檔名叫 item_drying) ---
+        skillManager.PlaySoundByName("catskill4_2");
+        // -------------------------------------------------
+
         buffDebuffManager.ApplyDamageBuff(target, 1.3f, 2);
 
         drying.amount--;
         itemInventory["Drying"] = drying.amount;
 
-        // ★ 順便修改對話文字，讓敘述更準確
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>凍乾</b> 提升了 <b>{target.unitName}</b> 的攻擊力";
-
-        // 可加入特效
-        // EffectManager.Instance.PlayUIEffect("DryingEffect", ...);
 
         yield return new WaitForSeconds(2.0f);
     }

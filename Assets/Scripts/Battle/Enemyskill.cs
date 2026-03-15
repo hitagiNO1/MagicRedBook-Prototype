@@ -14,7 +14,8 @@ public class Enemyskill : MonoBehaviour
     public TextMeshProUGUI dialogueText;
     public List<Unit> playerUnits;
     public BuffDebuffManager buffDebuffManager;
-
+    [Header("音效設定")]
+    public AudioSource audioSource;
     // 技能冷卻字典 (所有敵人共用)
     private Dictionary<string, int> skillCooldowns = new Dictionary<string, int>();
 
@@ -195,7 +196,7 @@ public class Enemyskill : MonoBehaviour
         int damage = self.damage;
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("fishskill1");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>魚叉突刺</b>！\n握緊手中叉子刺向 <b>{target.unitName}</b>\n" +
@@ -215,7 +216,7 @@ public class Enemyskill : MonoBehaviour
         int damage = Mathf.RoundToInt(self.damage * 1.2f);
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("fishskill1");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>神魚擺尾</b>！\n用力彈起，用尾巴甩向 <b>{target.unitName}</b>。\n" +
@@ -236,7 +237,7 @@ public class Enemyskill : MonoBehaviour
         int damage = self.damage * 2;
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("snakeskill1");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>咬咬咬</b>！\n大口咬向 <b>{target.unitName}</b>。\n" +
@@ -257,7 +258,7 @@ public class Enemyskill : MonoBehaviour
         if (target == null || target.isDead) yield break;
 
         buffDebuffManager.ApplyPoison(target);
-
+        PlaySoundByName("snakeskill2");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>陳年老痰</b>！\n" +
@@ -281,7 +282,7 @@ public class Enemyskill : MonoBehaviour
         int damage = self.damage * 2;
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("clockskill1");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>當頭棒喝</b>！\n" +
@@ -308,7 +309,7 @@ public class Enemyskill : MonoBehaviour
         int damage = Mathf.RoundToInt(self.damage * 1.5f);
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("clockskill2");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>滴答滴！</b>\n" +
@@ -332,7 +333,7 @@ public class Enemyskill : MonoBehaviour
         int damage = self.damage * 2;
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("softskill1");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 軟軟甩擊！\n" +
@@ -359,7 +360,7 @@ public class Enemyskill : MonoBehaviour
         Unit target = validTargets[Random.Range(0, validTargets.Count)];
 
         buffDebuffManager.ApplySkillDisable(target, 2);
-
+        PlaySoundByName("softskill2");
         int damage = Mathf.RoundToInt(self.damage * 0.5f);
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
@@ -390,6 +391,7 @@ public class Enemyskill : MonoBehaviour
             int actualDamageDealt;
             bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
             totalDamageDealt += actualDamageDealt;
+            PlaySoundByName("softskill3");
         }
 
         if (dialogueText != null)
@@ -411,7 +413,7 @@ public class Enemyskill : MonoBehaviour
         int damage = Mathf.RoundToInt(self.damage * 2.5f);
         int actualDamageDealt;
         bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
-
+        PlaySoundByName("dcatskill1");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>能量球</b>！\n" +
@@ -437,6 +439,7 @@ public class Enemyskill : MonoBehaviour
 
             buffDebuffManager.ApplyPoison(target, 3);  // 對每個存活玩家施加 3 回合毒素
             totalAffected++;
+            PlaySoundByName("dcatskill2");
         }
 
         if (dialogueText != null)
@@ -469,7 +472,7 @@ public class Enemyskill : MonoBehaviour
 
         buffDebuffManager.ApplyDefenseBuff(self, 1.5f, 2);   // 防禦 +150%
         buffDebuffManager.ApplyDamageBuff(self, 2.0f, 2);    // 攻擊 +200%
-
+        PlaySoundByName("dcatskill3");
         if (dialogueText != null)
         {
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>神之庇護！</b>\n" +
@@ -498,6 +501,7 @@ public class Enemyskill : MonoBehaviour
             int actualDamageDealt;
             bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
             totalDamageDealt += actualDamageDealt;
+            PlaySoundByName("dcatskill4");
         }
 
         if (dialogueText != null)
@@ -545,6 +549,22 @@ public class Enemyskill : MonoBehaviour
                 skillCooldowns[skill]--;
                 Debug.Log($"技能 {skill} 冷卻剩餘 {skillCooldowns[skill]} 回合");
             }
+        }
+    }
+    public void PlaySoundByName(string soundName)
+    {
+        // 確保你的音效檔放在 Assets/Resources/BGM/soundeffects/ 裡面
+        AudioClip clip = Resources.Load<AudioClip>("BGM/soundeffects/" + soundName);
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            if (audioSource == null)
+                Debug.LogWarning("未設定 AudioSource，無法播放音效！");
+            else
+                Debug.LogWarning($"音效找不到: BGM/soundeffects/{soundName}");
         }
     }
 }
