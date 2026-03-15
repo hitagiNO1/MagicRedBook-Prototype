@@ -123621,7 +123621,7 @@ MonoBehaviour:
     m_Bits: 128
   playerSkillButtons: []
   playerSkillIcons: []
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 3720424681303388708}
   skillIconPrefab: {fileID: 7392400310071351197, guid: 73240bd9a52a4dc418392145b9507b3c, type: 3}
   skillIconParent: {fileID: 416347393}
   skillIcons: []
@@ -223345,6 +223345,7 @@ MonoBehaviour:
   dialogueText: {fileID: 2839821715735069237}
   playerUnits: []
   buffDebuffManager: {fileID: 3720424681303388705}
+  audioSource: {fileID: 3720424681303388708}
 --- !u!1001 &7752914432219270425
 PrefabInstance:
   m_ObjectHideFlags: 0
