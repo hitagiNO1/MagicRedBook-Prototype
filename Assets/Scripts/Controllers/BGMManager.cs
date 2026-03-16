@@ -14,7 +14,6 @@ public class BGMManager : MonoBehaviour
     }
 
     [System.Serializable]
-
     public class BGMEntry
     {
         public BGMTriggerType triggerType;
@@ -23,25 +22,32 @@ public class BGMManager : MonoBehaviour
         public GameState state;
         [Header("如果類型是 ByStoryScene 才需要填")]
         public StoryScene storyScene;
-
     }
 
     [Header("⚠️ 請依『劇情發生先後順序』由上往下排列")]
     public List<BGMEntry> bgmList;
-    public float fadeDuration = 1.0f;
-    public Slider volumeSlider;
-    public float Volume = 0.35f;
-    private Dictionary<GameState, AudioClip> stateBgmDict;
 
+    public float fadeDuration = 2.5f;
+
+    public Slider volumeSlider;
+    public float Volume = 0.1f;
+
+    [Header("最一開始啟動遊戲時的預設音樂")]
+    public AudioClip Firstclip;
+
+    private Dictionary<GameState, AudioClip> stateBgmDict;
     private AudioSource audioSource;
     private GameState lastState;
-    // ==========================================
-    // 新增：紀錄是否被 Timeline 強制接管了 BGM
-    // ==========================================
+
+    private HashSet<StoryScene> triggeredStories = new HashSet<StoryScene>();
     private bool isTimelineOverride = false;
-    // 記錄當前區域常駐音樂
     private AudioClip currentAreaBGM;
     private Coroutine fadeCoroutine;
+
+    // === 戰鬥暫存變數 ===
+    private bool isBattleOverride = false;
+    private AudioClip preBattleClip;
+    private AudioClip targetBGM;
 
     private void Awake()
     {
@@ -61,6 +67,7 @@ public class BGMManager : MonoBehaviour
 
         stateBgmDict = new Dictionary<GameState, AudioClip>();
 
+        // 將清單中依據 GameState 觸發的音樂存入字典
         foreach (var entry in bgmList)
         {
             if (entry.triggerType == BGMTriggerType.ByGameState)
@@ -70,52 +77,60 @@ public class BGMManager : MonoBehaviour
             }
         }
 
-        // 初始化預設的遊玩音樂
-        if (stateBgmDict.ContainsKey(GameState.Playing))
-        {
-            currentAreaBGM = stateBgmDict[GameState.Playing];
-        }
-
         if (volumeSlider != null)
         {
             volumeSlider.onValueChanged.AddListener(SetVolume);
             volumeSlider.value = audioSource.volume;
         }
     }
+
+    private void Start()
+    {
+        if (Firstclip != null)
+        {
+            currentAreaBGM = Firstclip;
+            targetBGM = Firstclip;
+            audioSource.clip = Firstclip;
+            audioSource.Play();
+        }
+    }
+
+    public void NotifyStoryStarted(StoryScene scene)
+    {
+        if (!triggeredStories.Contains(scene))
+        {
+            triggeredStories.Add(scene);
+        }
+    }
+
     public void ForceChangeBGM(AudioClip newClip)
     {
         if (newClip == null || currentAreaBGM == newClip) return;
 
         currentAreaBGM = newClip;
-        isTimelineOverride = true; //告訴系統不要再管劇情清單了
+        isTimelineOverride = true;
         SwitchBGM(newClip);
     }
+
     private void Update()
     {
-        // ==========================================
-        // 1. 根據「已經播放過的劇情進度」決定當前區域音樂
-        // ==========================================
+        // === 1. 背景處理劇情進度解鎖的區域音樂 ===
         if (GameController.Instance != null)
         {
-            AudioClip latestUnlockedBGM = null;
-
-            if (stateBgmDict.ContainsKey(GameState.Playing))
-            {
-                latestUnlockedBGM = stateBgmDict[GameState.Playing];
-            }
+            AudioClip latestUnlockedBGM = Firstclip;
 
             foreach (var entry in bgmList)
             {
                 if (entry.triggerType == BGMTriggerType.ByStoryScene && entry.storyScene != null)
                 {
-                    if (GameController.Instance.ScenePlayedState.ContainsKey(entry.storyScene))
+                    if (GameController.Instance.ScenePlayedState.ContainsKey(entry.storyScene) ||
+                        triggeredStories.Contains(entry.storyScene))
                     {
                         latestUnlockedBGM = entry.clip;
                     }
                 }
             }
 
-            // 🌟 關鍵攔截點 1：Timeline 介入時鎖死劇情音樂
             if (isTimelineOverride)
             {
                 latestUnlockedBGM = currentAreaBGM;
@@ -128,47 +143,80 @@ public class BGMManager : MonoBehaviour
                 GameState currentState = GameStateManager.Instance.currentState;
                 if (currentState == GameState.Playing || currentState == GameState.Story || currentState == GameState.StoryNotMove)
                 {
-                    SwitchBGM(currentAreaBGM);
+                    if (!isBattleOverride) SwitchBGM(currentAreaBGM);
                 }
             }
         }
 
-        // ==========================================
-        // 2. 處理遊戲狀態改變 (修復戰鬥音樂蓋過去的 Bug)
-        // ==========================================
+        // === 2. 核心：全自動監聽 GameState 的改變 ===
         GameState currentGameState = GameStateManager.Instance.currentState;
         if (currentGameState != lastState)
         {
-            // 🌟 關鍵攔截點 2：如果 Timeline 已經霸佔了 BGM，不管狀態怎麼切換，都強制鎖定
-            if (isTimelineOverride)
+            // 情況 A：剛進入戰鬥狀態
+            if (currentGameState == GameState.Battle)
             {
-                SwitchBGM(currentAreaBGM);
-            }
-            else
-            {
-                // 如果 Timeline 沒有介入，才照常理判斷狀態
-                bool isGameplayState = (currentGameState == GameState.Playing ||
-                                        currentGameState == GameState.Story ||
-                                        currentGameState == GameState.StoryNotMove);
+                isBattleOverride = true;
+                preBattleClip = targetBGM; // 記住進戰鬥前正在播的音樂
 
-                if (isGameplayState && currentAreaBGM != null)
+                // 如果字典裡有設定戰鬥音樂，就播戰鬥音樂
+                if (stateBgmDict.ContainsKey(GameState.Battle))
+                {
+                    SwitchBGM(stateBgmDict[GameState.Battle]);
+                }
+            }
+            // 情況 B：剛離開戰鬥狀態
+            else if (lastState == GameState.Battle)
+            {
+                isBattleOverride = false;
+
+                // 決定要恢復成哪首音樂（優先用戰鬥前存的，沒有就用當前區域音樂）
+                AudioClip clipToRestore = preBattleClip != null ? preBattleClip : currentAreaBGM;
+
+                // 如果離開戰鬥後，進入的不是一般遊玩狀態（例如進入紅書或過場），且該狀態有專屬音樂，則優先播專屬音樂
+                bool isGameplayState = (currentGameState == GameState.Playing || currentGameState == GameState.Story || currentGameState == GameState.StoryNotMove);
+                if (!isGameplayState && stateBgmDict.ContainsKey(currentGameState))
+                {
+                    clipToRestore = stateBgmDict[currentGameState];
+                }
+
+                if (clipToRestore != null)
+                {
+                    SwitchBGM(clipToRestore);
+                }
+            }
+            // 情況 C：其他一般狀態切換 (非戰鬥相關)
+            else if (!isBattleOverride)
+            {
+                if (isTimelineOverride)
                 {
                     SwitchBGM(currentAreaBGM);
                 }
-                else if (stateBgmDict.ContainsKey(currentGameState))
+                else
                 {
-                    SwitchBGM(stateBgmDict[currentGameState]);
+                    bool isGameplayState = (currentGameState == GameState.Playing ||
+                                            currentGameState == GameState.Story ||
+                                            currentGameState == GameState.StoryNotMove);
+
+                    if (isGameplayState && currentAreaBGM != null)
+                    {
+                        SwitchBGM(currentAreaBGM);
+                    }
+                    else if (stateBgmDict.ContainsKey(currentGameState))
+                    {
+                        SwitchBGM(stateBgmDict[currentGameState]);
+                    }
                 }
             }
 
-            lastState = currentGameState;
+            lastState = currentGameState; // 更新最後狀態
         }
     }
 
-    // --- 以下為音效控制與淡入淡出 ---
     private void SwitchBGM(AudioClip newClip)
     {
-        if (audioSource.clip == newClip) return;
+        if (targetBGM == newClip) return;
+
+        targetBGM = newClip;
 
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
@@ -180,10 +228,12 @@ public class BGMManager : MonoBehaviour
     {
         float t = 0;
         float startVolume = audioSource.volume;
+        float finalVolume = volumeSlider != null ? volumeSlider.value : Volume;
 
+        // 淡出
         while (t < fadeDuration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             audioSource.volume = Mathf.Lerp(startVolume, 0, t / fadeDuration);
             yield return null;
         }
@@ -192,15 +242,16 @@ public class BGMManager : MonoBehaviour
         audioSource.clip = newClip;
         audioSource.Play();
 
+        // 淡入
         t = 0;
         while (t < fadeDuration)
         {
-            t += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(0, startVolume, t / fadeDuration);
+            t += Time.unscaledDeltaTime;
+            audioSource.volume = Mathf.Lerp(0, finalVolume, t / fadeDuration);
             yield return null;
         }
 
-        audioSource.volume = startVolume;
+        audioSource.volume = finalVolume;
     }
 
     public void StopBGM(bool fade = true)
@@ -221,13 +272,14 @@ public class BGMManager : MonoBehaviour
 
         while (t < fadeDuration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             audioSource.volume = Mathf.Lerp(startVolume, 0, t / fadeDuration);
             yield return null;
         }
 
         audioSource.Stop();
         audioSource.volume = startVolume;
+        targetBGM = null;
     }
 
     public void SetVolume(float volume)
@@ -235,34 +287,25 @@ public class BGMManager : MonoBehaviour
         audioSource.volume = Mathf.Clamp01(volume);
     }
 
-    // ==========================================
-    // 擴充功能：Timeline 播放時的音量閃避 (Audio Ducking)
-    // ==========================================
     private Coroutine volumeFadeCoroutine;
 
-    // 呼叫此方法讓音樂變小聲
     public void DuckVolume()
     {
-        float targetVolume = 0.1f;
-        float duration = 0.5f;
-        // 記住當前的音量（可能是玩家用滑桿調過的）
+        float duckTarget = 0.01f;
         Volume = audioSource.volume;
 
         if (volumeFadeCoroutine != null) StopCoroutine(volumeFadeCoroutine);
-        volumeFadeCoroutine = StartCoroutine(FadeVolumeOnly(targetVolume));
+        volumeFadeCoroutine = StartCoroutine(FadeVolumeOnly(duckTarget));
     }
 
-    // 呼叫此方法恢復原本的音量
     public void RestoreVolume(float duration = 0.5f)
     {
-        // 如果有綁定滑桿，就以滑桿的值為準，否則用剛剛記住的音量
         float target = volumeSlider != null ? volumeSlider.value : Volume;
 
         if (volumeFadeCoroutine != null) StopCoroutine(volumeFadeCoroutine);
         volumeFadeCoroutine = StartCoroutine(FadeVolumeOnly(target));
     }
 
-    // 只改變音量，不改變音樂片段的協程
     private IEnumerator FadeVolumeOnly(float targetVolume)
     {
         float t = 0;
@@ -270,7 +313,7 @@ public class BGMManager : MonoBehaviour
         float duration = 0.5f;
         while (t < duration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             audioSource.volume = Mathf.Lerp(startVolume, targetVolume, t / duration);
             yield return null;
         }

@@ -56906,7 +56906,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 25.738478}
+  m_LocalPosition: {x: 0, y: 0, z: 34.838486}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56914,7 +56914,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 626.4, y: 30.000004}
+  m_AnchoredPosition: {x: 682.4, y: 30.000008}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -119362,8 +119362,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.728882, y: 5, z: 14.840191}
-  m_Center: {x: -3.8172607, y: 0, z: 2.3186398}
+  m_Size: {x: 4.728882, y: 5, z: 23.195072}
+  m_Center: {x: -3.8172607, y: 0, z: -1.8588009}
 --- !u!4 &1046918922
 Transform:
   m_ObjectHideFlags: 0
@@ -160402,6 +160402,7 @@ MonoBehaviour:
   fadeDuration: 1
   volumeSlider: {fileID: 0}
   Volume: 0.35
+  Firstclip: {fileID: 0}
 --- !u!4 &1381323863
 Transform:
   m_ObjectHideFlags: 0
@@ -162382,7 +162383,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 626.4, y: 30.000004, z: 25.738478}
+  m_LocalPosition: {x: 682.4, y: 30.000008, z: 34.838486}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -227230,7 +227231,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 626.4, y: -0, z: 77.7}
+  m_LocalPosition: {x: 682.4, y: -0, z: 86.8}
   m_LocalScale: {x: -0.10000002, y: 0.10000002, z: 0.10000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -244264,6 +244265,7 @@ GameObject:
   - component: {fileID: 2073287926}
   - component: {fileID: 2073287924}
   - component: {fileID: 2073287923}
+  - component: {fileID: 2073287929}
   m_Layer: 8
   m_Name: CD
   m_TagString: Untagged
@@ -244397,6 +244399,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &2073287929
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073287921}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 22.26, y: 23.893333, z: 0.2}
+  m_Center: {x: 0, y: 0.0000076293945, z: 0}
 --- !u!1 &2073374082
 GameObject:
   m_ObjectHideFlags: 0
@@ -249136,7 +249159,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -778
+  m_SortingOrder: -869
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
@@ -269762,7 +269785,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 1946157055
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -271610,7 +271633,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 14.55
   m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -325893,7 +325916,7 @@ MonoBehaviour:
   - triggerType: 1
     clip: {fileID: 8300000, guid: a198b83dddee7f0468f240c531ed3b02, type: 3}
     state: 4
-    storyScene: {fileID: 11400000, guid: 0e94288aceb0b2148a80160120cf6c4d, type: 2}
+    storyScene: {fileID: 11400000, guid: 7669f0dc15fccae41830ab09131bb7f3, type: 2}
   - triggerType: 1
     clip: {fileID: 8300000, guid: 3a36b8b04bd504d429c4c1c4145c5a11, type: 3}
     state: 4
@@ -325902,9 +325925,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 78a776b9498dd9947917866bf3bd3b79, type: 3}
     state: 4
     storyScene: {fileID: 11400000, guid: cfebebd33adcf1644970422277402ac4, type: 2}
-  fadeDuration: 1
+  fadeDuration: 5
   volumeSlider: {fileID: 0}
-  Volume: 0.35
+  Volume: 0.1
+  Firstclip: {fileID: 0}
 --- !u!82 &3720424681303388716
 AudioSource:
   m_ObjectHideFlags: 0
@@ -368399,8 +368423,8 @@ RectTransform:
   - {fileID: 259725666}
   - {fileID: 2644603841317974574}
   - {fileID: 1176471828}
-  - {fileID: 150312949}
   - {fileID: 671471093}
+  - {fileID: 150312949}
   - {fileID: 1435278914}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

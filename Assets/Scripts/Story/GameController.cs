@@ -92,6 +92,14 @@ public class GameController : MonoBehaviour
 
         Debug.Log("現正播故事 : "+currentScene);
 
+        // ==========================================
+        // 🌟 新增：在劇情「剛開始」時，立刻通知 BGMManager 準備切換音樂
+        // ==========================================
+        if (BGMManager.Instance != null && scene != null)
+        {
+            BGMManager.Instance.NotifyStoryStarted(scene);
+        }
+
     }
 
     private IEnumerator SwitchScene(StoryScene scene)          

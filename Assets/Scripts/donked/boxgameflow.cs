@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -7,7 +7,7 @@ public class boxgameflow : MonoBehaviour
 {
     [Header("Canvas")]
     public GameObject mainCanvas;
-    public GameObject gameCanvas;      // ¥u±±¨î¹CÀ¸ UI¡A¤£±±¨î­I´º
+    public GameObject gameCanvas;      // åªæ§åˆ¶éŠæˆ² UIï¼Œä¸æ§åˆ¶èƒŒæ™¯
     public GameObject resultCanvas;
 
     [Header("Buttons")]
@@ -16,15 +16,20 @@ public class boxgameflow : MonoBehaviour
     public GameObject Backbutton;
     public GameObject Restartbutton;
 
-    public PlayableDirector director;
-    private AudioSource audioSource;
+    [Header("Audio")]
+    // === ğŸŒŸ æ–°å¢ï¼šç”¨ä¾†æ”¾éŠæˆ²æ­£å¸¸éŠç©æ™‚çš„èƒŒæ™¯éŸ³æ¨‚ ===
+    public AudioClip GameBGM;
     public AudioClip VicClip;
     public AudioClip LosClip;
+
+    public PlayableDirector director;
+    private AudioSource audioSource;
     private bool isWaitingForInput = false;
+
     void Start()
     {
         ShowMainMenu();
-        director = GetComponent <PlayableDirector>();
+        director = GetComponent<PlayableDirector>();
         audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
     }
@@ -32,59 +37,72 @@ public class boxgameflow : MonoBehaviour
     public void ShowMainMenu()
     {
         mainCanvas.SetActive(true);
-        gameCanvas.SetActive(false);     // ¹CÀ¸ UI ÁôÂÃ
+        gameCanvas.SetActive(false);     // éŠæˆ² UI éš±è—
         resultCanvas.SetActive(false);
     }
 
     public void StartGame()
     {
         mainCanvas.SetActive(false);
-        gameCanvas.SetActive(true);      // ¥uÅã¥Ü¹CÀ¸ UI
+        gameCanvas.SetActive(true);      // åªé¡¯ç¤ºéŠæˆ² UI
         resultCanvas.SetActive(false);
         usercontrol.RestartGame();
         startbutton.SetActive(true);
+
+        // === ğŸŒŸ æ–°å¢ï¼šé‡ç©æ™‚ï¼ŒæŠŠéŸ³æ¨‚åˆ‡æ›å›æ­£å¸¸ BGM ä¸¦æ¢å¾©å¾ªç’°æ’­æ”¾ ===
+        if (GameBGM != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = GameBGM;
+            audioSource.loop = true;     // æ¢å¾©å¾ªç’°æ’­æ”¾
+            audioSource.Play();
+        }
     }
 
     public void ShowResult()
     {
         StartCoroutine(FadeToNewClip(VicClip));
         mainCanvas.SetActive(false);
-        gameCanvas.SetActive(false);     // ¹CÀ¸ UI ÁôÂÃ
+        gameCanvas.SetActive(false);     // éŠæˆ² UI éš±è—
         resultCanvas.SetActive(true);
         Backbutton.SetActive(true);
         Restartbutton.SetActive(false);
     }
+
     public void ShowResultLOSS()
     {
         StartCoroutine(FadeToNewClip(LosClip));
         mainCanvas.SetActive(false);
-        gameCanvas.SetActive(false);     // ¹CÀ¸ UI ÁôÂÃ
+        gameCanvas.SetActive(false);     // éŠæˆ² UI éš±è—
         resultCanvas.SetActive(true);
         Backbutton.SetActive(false);
         Restartbutton.SetActive(true);
     }
+
     private IEnumerator FadeToNewClip(AudioClip newClip)
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.01f);
         audioSource.Stop();
         audioSource.clip = newClip;
         audioSource.Play();
-        audioSource.loop = false;
+        audioSource.loop = false; // å‹åˆ©æˆ–å¤±æ•—éŸ³æ•ˆåªæ’­ä¸€æ¬¡
     }
+
     void Update()
     {
         if (isWaitingForInput && Input.anyKeyDown)
         {
-            director.Resume();            // «ì´_ Timeline
-            isWaitingForInput = false;    // ¤£¦Aµ¥«İ¿é¤J
+            director.Resume();            // æ¢å¾© Timeline
+            isWaitingForInput = false;    // ä¸å†ç­‰å¾…è¼¸å…¥
         }
     }
+
     public void WaitForInputToContinue()
     {
         if (director != null && director.state == PlayState.Playing)
         {
-            director.Pause();             // ¼È°± Timeline
-            isWaitingForInput = true;     // µ¥«İ¿é¤J
+            director.Pause();             // æš«åœ Timeline
+            isWaitingForInput = true;     // ç­‰å¾…è¼¸å…¥
         }
     }
 }

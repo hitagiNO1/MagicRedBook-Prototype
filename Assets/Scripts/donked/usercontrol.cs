@@ -14,7 +14,7 @@ public class usercontrol : MonoBehaviour,
     public bool gameover = false;
     public float timer = 60f;
     private int mouseClickCount = 0;
-    private const int requiredClicks = 15;
+    public const int requiredClicks = 10;
     private bool gameWon = false;
 
     [Header("UI - Game Info")]
@@ -181,8 +181,8 @@ public class usercontrol : MonoBehaviour,
     //=====================================================================
     //  結果文字
     //=====================================================================
-    public void getC4() => resault.text = "這趟旅途不能沒有布萊克，再試試吧！";
-    public void gamelose() => resault.text = "這趟旅途不能沒有布萊克，再試試吧！";
+    public void getC4() => resault.text = "這趟旅途不能沒有布萊克\n再試試吧！";
+    public void gamelose() => resault.text = "這趟旅途不能沒有布萊克\n再試試吧！";
     public void gameWin() => resault.text = "成功捕獲！";
 
     //=====================================================================

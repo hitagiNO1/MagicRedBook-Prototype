@@ -7717,7 +7717,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -67.46152}
+  m_LocalPosition: {x: 0, y: 0, z: -60.08152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7725,7 +7725,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 377.3, y: 30.070007}
+  m_AnchoredPosition: {x: 1.2699995, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -11312,8 +11312,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.6768494, y: 5, z: 3.5801392}
-  m_Center: {x: 1.295578, y: 0, z: 2.046688}
+  m_Size: {x: 6.897827, y: 5, z: 6.5362473}
+  m_Center: {x: 2.406067, y: 0, z: 0.56863403}
 --- !u!114 &747477890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15121,7 +15121,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -46
+  m_SortingOrder: 26
   m_SortAtRoot: 0
 --- !u!212 &1037822664
 SpriteRenderer:
@@ -20248,7 +20248,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -22772,7 +22772,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1203823677
 Animator:
   serializedVersion: 5
@@ -25131,6 +25131,7 @@ MonoBehaviour:
   fadeDuration: 1
   volumeSlider: {fileID: 0}
   Volume: 0.35
+  Firstclip: {fileID: 0}
 --- !u!4 &1381323863
 Transform:
   m_ObjectHideFlags: 0
@@ -25384,7 +25385,7 @@ Transform:
   m_GameObject: {fileID: 1246287581}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 377.3, y: 30.070005, z: -67.46152}
+  m_LocalPosition: {x: 1.2699995, y: 30.070007, z: -60.08152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -120000,7 +120001,7 @@ Transform:
   m_GameObject: {fileID: 9123987284521645872}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 377.3, y: 0.070000015, z: -15.5}
+  m_LocalPosition: {x: 1.27, y: 0.070000015, z: -8.12}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -123809,10 +123810,6 @@ MonoBehaviour:
     state: 4
     storyScene: {fileID: 0}
   - triggerType: 1
-    clip: {fileID: 8300000, guid: 124ebd6a282ce814b8f912a8e8710a3e, type: 3}
-    state: 0
-    storyScene: {fileID: 11400000, guid: 101ea20325689f0488d4ef886a7f39e5, type: 2}
-  - triggerType: 1
     clip: {fileID: 8300000, guid: 5e982f73955d9634d83adae7e353fdb9, type: 3}
     state: 0
     storyScene: {fileID: 11400000, guid: ec8a3608efbecd348b17f487c663ff81, type: 2}
@@ -123820,9 +123817,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 03bcef067f1553d4884a1c1d1d9a1f50, type: 3}
     state: 0
     storyScene: {fileID: 11400000, guid: 322cc1a5845dec844a3dab162f68e0ff, type: 2}
-  fadeDuration: 1
+  fadeDuration: 5
   volumeSlider: {fileID: 0}
-  Volume: 0.35
+  Volume: 0.1
+  Firstclip: {fileID: 8300000, guid: 124ebd6a282ce814b8f912a8e8710a3e, type: 3}
 --- !u!95 &3721955857226714691
 Animator:
   serializedVersion: 5
@@ -139268,7 +139266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottomBar: {fileID: 8165284785212235176}
-  FirstScene: {fileID: 0}
+  FirstScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   IsDone: 0
 --- !u!1001 &4338867126315818196
 PrefabInstance:
@@ -160143,7 +160141,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 154
+  m_SortingOrder: 81
   m_SortAtRoot: 0
 --- !u!1001 &5306335523782881802
 PrefabInstance:
@@ -167066,9 +167064,9 @@ RectTransform:
   - {fileID: 1736902324}
   - {fileID: 259725666}
   - {fileID: 1187138811574511458}
-  - {fileID: 150312949}
   - {fileID: 1848053153}
   - {fileID: 671471093}
+  - {fileID: 150312949}
   - {fileID: 1435278914}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -179645,7 +179643,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -208585,11 +208583,11 @@ MonoBehaviour:
     leftPosition: {x: 0, y: 0}
     rightPosition: {x: 0, y: 0}
   - effectName: B3
-    prefab: {fileID: 127556641128039160, guid: df148f9456435c740bfe066bdd1f11f3, type: 3}
+    prefab: {fileID: 505423299340272030, guid: df148f9456435c740bfe066bdd1f11f3, type: 3}
     leftPosition: {x: -800, y: 0}
     rightPosition: {x: 800, y: 0}
   - effectName: B4
-    prefab: {fileID: 1833722022911798073, guid: d349857acc135b54db84c4dc15a973a0, type: 3}
+    prefab: {fileID: 7012921725923027973, guid: 346af3b63f39ca846a331fc1268ad0bb, type: 3}
     leftPosition: {x: -800, y: 0}
     rightPosition: {x: 800, y: 0}
   - effectName: B5
@@ -255920,6 +255918,7 @@ GameObject:
   - component: {fileID: 7763575625291910271}
   - component: {fileID: 8200385310837606495}
   - component: {fileID: 6536202768153143609}
+  - component: {fileID: 9215084996609003001}
   m_Layer: 13
   m_Name: Altal
   m_TagString: Bush
@@ -255927,6 +255926,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &9215084996609003001
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9215084996609003000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7.3700004, y: 8.580002, z: 0.20000018}
+  m_Center: {x: -0.000061035156, y: 4.2900114, z: 0.000046666115}
 --- !u!1001 &9217114070439673493
 PrefabInstance:
   m_ObjectHideFlags: 0

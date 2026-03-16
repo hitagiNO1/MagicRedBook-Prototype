@@ -578,7 +578,7 @@ public class SkillManager : MonoBehaviour
     private IEnumerator Skill1Coroutine(int playerIndex, Unit target)
     {
         if (target == null || target.isDead || !enemyUnits.Contains(target)) yield break;
-        PlaySoundByName("skill1");
+        
         int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.2f);
         int damageDealt;
         bool isKilled = target.TakeDamage(buffedDamage, out damageDealt);
@@ -588,12 +588,9 @@ public class SkillManager : MonoBehaviour
         {
             enemyHUDs[targetIndex].SetHP(target.currentHP);
         }
-        yield return new WaitForSeconds(1.5f);
-
         dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 使出 <b>吃我一擊！</b>\n" +
                             $"甩出手上的球攻擊了 <b>{target.unitName}</b>\n" +
                             $"<b>{target.unitName}</b> 受到了 <b>{damageDealt}</b> 點傷害！";
-
         if (enemyUnits.Count == 1)
         {
             EffectManager.Instance.PlayUIEffect("B1", new Vector2(0, 0));
@@ -604,8 +601,9 @@ public class SkillManager : MonoBehaviour
             bool isTargetLeft = (targetIndexForEffect == 0);
             EffectManager.Instance.PlayUIEffectOneSide("B1", isTargetLeft);
         }
-
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
+        PlaySoundByName("skill1");
+        yield return new WaitForSeconds(1f);
         if (EquipmentManager.Instance != null)
         {
             yield return StartCoroutine(EquipmentManager.Instance.ExecuteTapeGlovesExtraDamage(playerIndex, target));
@@ -780,6 +778,7 @@ public class SkillManager : MonoBehaviour
 
         skillCooldowns["catSkill_3_" + playerIndex] = catskill3CooldownTurns;
         EffectManager.Instance.PlayUIEffect("L3", new Vector2(0, 0));
+        PlaySoundByName("catskill3");
         yield return new WaitForSeconds(2f);
     }
 

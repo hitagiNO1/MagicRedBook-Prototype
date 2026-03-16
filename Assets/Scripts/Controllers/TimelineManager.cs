@@ -60,6 +60,8 @@ public class TimelineManager : MonoBehaviour
         {
             string name = director.playableAsset.name;
             playedTimelines.Add(name);
+            // 2. 清除 Director 上綁定的動畫資產 (PlayableAsset)
+            dir.playableAsset = null;
         }
     }
 
