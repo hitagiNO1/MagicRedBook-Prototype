@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class PageCGUI : MonoBehaviour
 {
-    [Header("­¶­± Panels (¤­­Ó)")]
+    [Header("é é¢ Panels (äº”å€‹)")]
     [SerializeField] private GameObject[] pages;
 
-    [Header("­¶­± Prefabs ¹ïÀ³ panels")]
+    [Header("é é¢ Prefabs å°æ‡‰ panels")]
     [SerializeField] private GameObject[] pagesPrefabs;
 
     public static PageCGUI Instance;
@@ -21,24 +21,24 @@ public class PageCGUI : MonoBehaviour
 
     void Start()
     {
-        ShowPage(currentPage); // ªì©l¤ÆÅã¥Ü²Ä¤@­¶
+        ShowPage(currentPage); // åˆå§‹åŒ–é¡¯ç¤ºç¬¬ä¸€é 
     }
 
     /// <summary>
-    /// ¦b«ü©w­¶­±´À´«¤º®e
+    /// åœ¨æŒ‡å®šé é¢æ›¿æ›å…§å®¹
     /// </summary>
-    /// <param name="pageIndex">­¶­±¯Á¤Ş</param>
+    /// <param name="pageIndex">é é¢ç´¢å¼•</param>
     public void AddPage(int pageIndex)
     {
         if (pageIndex < 0 || pageIndex >= pages.Length)
         {
-            Debug.LogWarning("AddPage: pageIndex ¶W¥X½d³ò");
+            Debug.LogWarning("AddPage: pageIndex è¶…å‡ºç¯„åœ");
             return;
         }
 
         Transform pageTransform = pages[pageIndex].transform;
 
-        // ¦pªG¦³¤lª«¥ó¡A¥ı§R±¼
+        // å¦‚æœæœ‰å­ç‰©ä»¶ï¼Œå…ˆåˆªæ‰
         if (pageTransform.childCount > 0)
         {
             Destroy(pageTransform.GetChild(0).gameObject);
@@ -54,7 +54,7 @@ public class PageCGUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("AddPage: Prefab ¥¼³]©w©Î¯Á¤Ş¶W¥X½d³ò");
+            Debug.LogWarning("AddPage: Prefab æœªè¨­å®šæˆ–ç´¢å¼•è¶…å‡ºç¯„åœ");
         }
     }
 

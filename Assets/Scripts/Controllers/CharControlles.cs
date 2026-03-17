@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharControlles : MonoBehaviour
 {
     [Header("角色移動設定")]
-    public float baseWalkSpeed = 6f;    // 基礎走路速度
+    public float baseWalkSpeed = 4f;    // 基礎走路速度
     public float baseRunSpeed = 10f;   // 基礎奔跑速度
 
     // 透過屬性計算目前實際速度 = 基礎速度 + 裝備加成

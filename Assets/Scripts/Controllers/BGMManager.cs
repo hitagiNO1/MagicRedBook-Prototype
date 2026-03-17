@@ -143,7 +143,8 @@ public class BGMManager : MonoBehaviour
                 GameState currentState = GameStateManager.Instance.currentState;
                 if (currentState == GameState.Playing || currentState == GameState.Story || currentState == GameState.StoryNotMove)
                 {
-                    if (!isBattleOverride) SwitchBGM(currentAreaBGM);
+                    // 【修改點 1】如果有強制覆蓋(isTimelineOverride)，就算在戰鬥狀態也要允許播放
+                    if (!isBattleOverride || isTimelineOverride) SwitchBGM(currentAreaBGM);
                 }
             }
         }
@@ -158,8 +159,8 @@ public class BGMManager : MonoBehaviour
                 isBattleOverride = true;
                 preBattleClip = targetBGM; // 記住進戰鬥前正在播的音樂
 
-                // 如果字典裡有設定戰鬥音樂，就播戰鬥音樂
-                if (stateBgmDict.ContainsKey(GameState.Battle))
+                // 【修改點 2】如果被 ForceChangeBGM 強制覆蓋，就「不」切換成戰鬥音樂
+                if (!isTimelineOverride && stateBgmDict.ContainsKey(GameState.Battle))
                 {
                     SwitchBGM(stateBgmDict[GameState.Battle]);
                 }
@@ -169,19 +170,26 @@ public class BGMManager : MonoBehaviour
             {
                 isBattleOverride = false;
 
-                // 決定要恢復成哪首音樂（優先用戰鬥前存的，沒有就用當前區域音樂）
-                AudioClip clipToRestore = preBattleClip != null ? preBattleClip : currentAreaBGM;
-
-                // 如果離開戰鬥後，進入的不是一般遊玩狀態（例如進入紅書或過場），且該狀態有專屬音樂，則優先播專屬音樂
-                bool isGameplayState = (currentGameState == GameState.Playing || currentGameState == GameState.Story || currentGameState == GameState.StoryNotMove);
-                if (!isGameplayState && stateBgmDict.ContainsKey(currentGameState))
+                // 【修改點 3】如果是強制覆蓋狀態，不做額外恢復，直接維持目前的強制音樂
+                if (!isTimelineOverride)
                 {
-                    clipToRestore = stateBgmDict[currentGameState];
+                    AudioClip clipToRestore = preBattleClip != null ? preBattleClip : currentAreaBGM;
+
+                    bool isGameplayState = (currentGameState == GameState.Playing || currentGameState == GameState.Story || currentGameState == GameState.StoryNotMove);
+                    if (!isGameplayState && stateBgmDict.ContainsKey(currentGameState))
+                    {
+                        clipToRestore = stateBgmDict[currentGameState];
+                    }
+
+                    if (clipToRestore != null)
+                    {
+                        SwitchBGM(clipToRestore);
+                    }
                 }
-
-                if (clipToRestore != null)
+                else
                 {
-                    SwitchBGM(clipToRestore);
+                    // 維持 ForceChangeBGM 的音樂
+                    SwitchBGM(currentAreaBGM);
                 }
             }
             // 情況 C：其他一般狀態切換 (非戰鬥相關)

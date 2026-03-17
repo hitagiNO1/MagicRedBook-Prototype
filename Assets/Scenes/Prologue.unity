@@ -3584,7 +3584,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 10
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -240449,7 +240449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ed41428b2a4ba409e18b43974bf2e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseWalkSpeed: 6
+  baseWalkSpeed: 4
   baseRunSpeed: 10
   speedBonus: 0
   redbook: {fileID: 1827934625229369388}

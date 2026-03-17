@@ -23,7 +23,7 @@ MonoBehaviour:
       coords: {x: 0, y: 0}
       Right: 0
     timline: []
-  - text: "\u9019\u6D1E\u53E3\u770B\u8D77\u4F86\u5F88\u4E0D\u5999\uFF0C\u7D66\u4EBA\u4E00\u7A2E......\u7A92\u606F\u7684\u611F\u89BA\u3002"
+  - text: "\u9019\u5F8C\u9762\u7684\u8DEF\u770B\u8D77\u4F86\u5F88\u4E0D\u5999\uFF0C\u7D66\u4EBA\u4E00\u7A2E......\u7A92\u606F\u7684\u611F\u89BA\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions:
     - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}

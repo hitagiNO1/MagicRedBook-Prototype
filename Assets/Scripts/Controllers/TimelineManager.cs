@@ -237,9 +237,17 @@ public class TimelineManager : MonoBehaviour
     }
     public  void Page1Pick()
     {
+        PageCGUI.Instance.AddPage(0);
+    }
+    public void Page2Pick()
+    {
         PageCGUI.Instance.AddPage(1);
     }
     public void Page3Pick()
+    {
+        PageCGUI.Instance.AddPage(2);
+    }
+    public void Page4Pick()
     {
         PageCGUI.Instance.AddPage(3);
     }

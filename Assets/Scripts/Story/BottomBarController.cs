@@ -77,7 +77,7 @@ public class BottomBarController : MonoBehaviour
             {
                 if (!position) hasLeft = true; // 有左側角色
                 if (position) hasRight = true; // 有右側角色
-                Debug.Log(position);
+                //Debug.Log(position);
             }
             /* 檢查當前句子的角色位置
             if (currentScene.sentences[sentenceIndex].actions.Count > 0)

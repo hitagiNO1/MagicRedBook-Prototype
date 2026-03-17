@@ -99,7 +99,7 @@ MonoBehaviour:
       coords: {x: 0, y: 0}
       Right: 0
     timline: []
-  - text: "(\u7D05\u66F8\u5F9E\u6D6E\u8D77\u5FAE\u5F31\u7684\u767D\u5149\uFF0C\u5230\u5FEB\u901F\u9583\u720D\uFF0C\u4EE3\u8868\u8457\u4EC0\u9EBC\u6771\u897F\u5FEB\u901F\u9760\u8FD1\u3002)"
+  - text: "(\u6D6E\u8D77\u7684\u7D05\u66F8\u5FEB\u901F\u9583\u720D\u8457\u767D\u5149\uFF0C\u4F3C\u4E4E\u662F\u5728\u8B66\u544A\u8457\u5371\u96AA\u5373\u5C07\u9760\u8FD1\u3002)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
     timline:
