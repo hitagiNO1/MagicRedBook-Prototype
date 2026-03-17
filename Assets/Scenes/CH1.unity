@@ -56906,7 +56906,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -15.941522}
+  m_LocalPosition: {x: 0, y: 0, z: -17.26152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56914,7 +56914,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 369.66, y: 30.000008}
+  m_AnchoredPosition: {x: 370.9, y: 30.000008}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -162388,7 +162388,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 369.66, y: 30.000008, z: -15.941522}
+  m_LocalPosition: {x: 370.9, y: 30.000008, z: -17.26152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -227170,7 +227170,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 369.66, y: -0, z: 36.02}
+  m_LocalPosition: {x: 370.9, y: -0, z: 34.7}
   m_LocalScale: {x: -0.10000002, y: 0.10000002, z: 0.10000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -249118,7 +249118,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -361
+  m_SortingOrder: -348
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
@@ -332841,7 +332841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 979604863200588119, guid: 6c8776bf430fe7c4d8b15efb39d433d8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1102717462019289952, guid: 6c8776bf430fe7c4d8b15efb39d433d8, type: 3}
       propertyPath: Addmonster
@@ -371701,7 +371701,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &5897863011908472142
 PrefabInstance:
   m_ObjectHideFlags: 0
