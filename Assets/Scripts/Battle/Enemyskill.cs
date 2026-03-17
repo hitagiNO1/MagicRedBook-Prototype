@@ -57,7 +57,7 @@ public class Enemyskill : MonoBehaviour
         {
             yield return StartCoroutine(ExecuteSoftSkillsCoroutine(enemyUnit));
         }
-        else if (enemyName == "DCAT")
+        else if (enemyName == "Death")
         {
             yield return StartCoroutine(ExecuteDcatSkillsCoroutine(enemyUnit));
         }
@@ -461,28 +461,33 @@ public class Enemyskill : MonoBehaviour
         string skillKey = $"{self.unitName}_Dcatskill_3";
         skillCooldowns[skillKey] = dcatskill3CooldownTurns; // 執行時直接設定冷卻
 
-        Unit target = GetRandomValidTarget(playerUnits);
-        if (target == null || target.isDead) yield break;
 
-        int lostHP = target.maxHP - target.currentHP;
-        int damage = Mathf.RoundToInt(lostHP * 0.75f);
+        int healAmount = Mathf.RoundToInt(self.maxHP * 0.20f);
+        
+        self.currentHP = Mathf.Min(self.currentHP + healAmount, self.maxHP);
 
-        int actualDamageDealt;
-        bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
+        if (self.battleHUD != null)
+        {
+            self.battleHUD.SetHP(self.currentHP);
+        }
 
         buffDebuffManager.ApplyDefenseBuff(self, 1.5f, 2);   // 防禦 +150%
         buffDebuffManager.ApplyDamageBuff(self, 2.0f, 2);    // 攻擊 +200%
+
         PlaySoundByName("dcatskill3");
+
         if (dialogueText != null)
         {
+            // 順便把回復量顯示在對話框中，讓玩家知道發生了什麼事
             dialogueText.text = $"<b>{self.unitName}</b> 使用了 <b>神之庇護！</b>\n" +
-                                $"強大的力量圍繞在？？？身旁！";
+                                $"回復了 <b>{healAmount}</b> 點生命，\n" +
+                                $"強大的力量圍繞在身旁！";
         }
 
-        bool playLeft = target.unitName != "布萊克";
+        // 播放特效 (原本的 playLeft 變數因為 Dcat3() 沒用到，且現在沒有 target 了，可以直接移除)
         EffectManager.Instance.Dcat3();
 
-        Debug.Log("DC3");
+        Debug.Log("DC3 (回血與強化) 執行完畢");
         yield return new WaitForSeconds(3f);
     }
 
