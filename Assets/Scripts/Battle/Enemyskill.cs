@@ -506,7 +506,7 @@ public class Enemyskill : MonoBehaviour
             int actualDamageDealt;
             bool isKilled = target.TakeDamage(damage, out actualDamageDealt);
             totalDamageDealt += actualDamageDealt;
-            PlaySoundByName("dcatskill4");
+            
         }
 
         if (dialogueText != null)
@@ -517,9 +517,10 @@ public class Enemyskill : MonoBehaviour
         }
 
         EffectManager.Instance.Dcat4();
-
+        yield return new WaitForSeconds(0.5f);
+        PlaySoundByName("dcatskill4");
         Debug.Log("DC4");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.5f);
     }
 
     // ==================== 通用輔助方法 ====================
