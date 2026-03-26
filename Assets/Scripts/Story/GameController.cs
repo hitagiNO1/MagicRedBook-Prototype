@@ -41,47 +41,41 @@ public class GameController : MonoBehaviour
     {
         if ((TimelineManager.Instance?.IsPlaying ?? false))
             return; // Timeline 播放時不處理空白鍵與滑鼠輸入
+
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            if (state == State.STORYING && bottomBar.IsCompleted()) 
+            if (state == State.STORYING)
             {
-                
-                
-                if (bottomBar.IsLastSentence())
+                if (bottomBar.IsCompleted())
                 {
-                    state = State.IDLE;
-                    GameStateManager.Instance.SetState(GameState.Playing);
-                    bottomBar.Hide();
-                    IsDone = false;
-                    //故事播完會存入ScenePlayedState標示為true
-                    if (!ScenePlayedState.ContainsKey(currentScene))
+                    if (bottomBar.IsLastSentence())
                     {
-                        ScenePlayedState.Add(currentScene, true);
+                        state = State.IDLE;
+                        GameStateManager.Instance.SetState(GameState.Playing);
+                        bottomBar.Hide();
+                        IsDone = false;
+                        //故事播完會存入ScenePlayedState標示為true
+                        if (!ScenePlayedState.ContainsKey(currentScene))
+                        {
+                            ScenePlayedState.Add(currentScene, true);
+                        }
+                    }
+                    else
+                    {
+                        bottomBar.PlayNextSentence();
                     }
                 }
                 else
                 {
-                    bottomBar.PlayNextSentence();
+                    // 【新增】如果打字還沒完成，按空白鍵/滑鼠直接跳過打字效果
+                    bottomBar.SkipTyping();
                 }
             }
         }
-        /*檢查所有ScenePlayedState哪些已經播放
-        foreach (var kvp in ScenePlayedState)
-        {
-            Debug.Log("Scene : " + kvp.Key + ", 已播放 : " + kvp.Value);
-        }
-        */
     }
 
     public void PlayScene(StoryScene scene)
     {
-        /*
-        if (scene == null)
-        {
-            Debug.LogError("PlayScene 收到 null 的 scene！呼叫堆疊:\n" + System.Environment.StackTrace);
-            return;
-        }
-        */
         StartCoroutine(SwitchScene(scene));
         IsDone = true;
         if (scene.StopMove)
@@ -90,7 +84,7 @@ public class GameController : MonoBehaviour
         }
         else GameStateManager.Instance.SetState(GameState.Story);
 
-        Debug.Log("現正播故事 : "+currentScene);
+        Debug.Log("現正播故事 : " + currentScene);
 
         // ==========================================
         // 🌟 新增：在劇情「剛開始」時，立刻通知 BGMManager 準備切換音樂
@@ -99,14 +93,15 @@ public class GameController : MonoBehaviour
         {
             BGMManager.Instance.NotifyStoryStarted(scene);
         }
-
     }
 
-    private IEnumerator SwitchScene(StoryScene scene)          
+    private IEnumerator SwitchScene(StoryScene scene)
     {
         state = State.ANIMATE;
         currentScene = scene;
-        yield return new WaitForSeconds(1f);
+
+        yield return new WaitForSeconds(0.5f);
+
         if (scene is StoryScene)
         {
             bottomBar.ClearText();
@@ -119,20 +114,14 @@ public class GameController : MonoBehaviour
     // 這是給其他腳本使用的公開方法，用來等劇情播放完後再執行某個行為
     public void WaitForStoryEndThen(System.Action callback)
     {
-        // 啟動協程，並把要執行的行為當作參數傳進去
         StartCoroutine(WaitThenCall(callback));
     }
 
-    // 這是一個協程，會持續等待直到劇情播放完（IsDone 為 true）
-    // 然後才執行 callback 裡的行為
     private IEnumerator WaitThenCall(System.Action callback)
     {
-        // 當劇情還沒結束，就一直等待（每幀檢查一次）
         while (IsDone)
-            yield return new WaitForSeconds(2f);  
+            yield return new WaitForSeconds(2f);
 
-        // 劇情播完後，執行你傳進來的動作（如果有設定的話）
         callback?.Invoke();
     }
-
 }

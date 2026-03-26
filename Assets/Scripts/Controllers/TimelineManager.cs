@@ -217,6 +217,10 @@ public class TimelineManager : MonoBehaviour
     {
         GameStateManager.Instance.SetState(GameState.Playing);
     }
+    public void SetGameStateBattle()
+    {
+        GameStateManager.Instance.SetState(GameState.Battle);
+    }
 
     public void SwitchScene()
     {

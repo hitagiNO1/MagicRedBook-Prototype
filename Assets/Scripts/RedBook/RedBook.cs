@@ -18,7 +18,7 @@ public class RedBook : MonoBehaviour
     private Animator animator;
     public GameObject inventoryUI;
     private bool isTriggered = false;
-
+    public StoryScene storylimit;
     [Header("MAP")]
     public Transform player; // 玩家的 Transform
     public float thresholdX = 574.7f; // 臨界值 (例如 0)
@@ -78,8 +78,17 @@ public class RedBook : MonoBehaviour
         {
             if (GameStateManager.Instance.IsState(GameState.Playing))
             {
-                GameStateManager.Instance.SetState(GameState.Redbook);
-                OpenRedBook(GameState.Playing);
+                // 【修改處】新增判斷：只有當限制的劇情播完後，才能叫出紅書
+                if (AllLimitScenesPlayed())
+                {
+                    GameStateManager.Instance.SetState(GameState.Redbook);
+                    OpenRedBook(GameState.Playing);
+                }
+                else
+                {
+                    // (選擇性) 你可以在這裡加上提示音效或是 Debug.Log 告訴玩家「目前還無法使用」
+                    Debug.Log("劇情尚未解鎖，無法開啟紅書！");
+                }
             }
             else if (isOpen)
             {
@@ -88,7 +97,7 @@ public class RedBook : MonoBehaviour
         }
 
         // ESC 關閉紅書
-        if (Input.GetKeyDown(KeyCode.Escape) && isOpen)     
+        if (Input.GetKeyDown(KeyCode.Escape) && isOpen)
         {
             CloseRedBook();
         }
@@ -198,5 +207,23 @@ public class RedBook : MonoBehaviour
             pages[i].SetActive(i == index);
             PageTag.GetComponent<Image>().sprite = image[index];
         }
+    }
+
+    private bool AllLimitScenesPlayed()
+    {
+        // 【新增防呆機制】如果沒有設定 storylimit (為 null)，直接視為「已解鎖」，允許開啟紅書
+        if (storylimit == null)
+        {
+            return true;
+        }
+
+        bool played;
+        // 如果有設定 storylimit，再去檢查字典裡有沒有紀錄，或值是否為 true
+        if (!GameController.Instance.ScenePlayedState.TryGetValue(storylimit, out played) || !played)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

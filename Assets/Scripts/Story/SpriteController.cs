@@ -11,6 +11,8 @@ public class SpriteController : MonoBehaviour
     GameObject first;
 
     private bool isVisible = true; //讓disappear消失一次
+    private Coroutine destroyCoroutine; // 記錄目前的銷毀協程
+
     private void Awake()
     {
         switcher = GetComponent<SpriteSwitcher>();
@@ -26,33 +28,41 @@ public class SpriteController : MonoBehaviour
 
     public void Appear(Vector2 coords)
     {
+        CancelDestroy(); // 確保出場時不會被之前的計時器殺掉
+        isVisible = true;
         animator.SetTrigger("Show");
         rect.localPosition = coords;
         Flip();
     }
+
     public void Disappear()
-    {     
+    {
         if (!isVisible) return;
         animator.SetTrigger("Hide");
         isVisible = false;
-        StartCoroutine(WaitAndDisable());
+        destroyCoroutine = StartCoroutine(WaitAndDisable());
     }
+
     public void Show()
     {
+        CancelDestroy(); // 確保顯示時不會被之前的計時器殺掉
         isVisible = true;
         first.SetActive(true);
         Flip();
     }
+
     public void Hide()
     {
         first.SetActive(false);
     }
+
     public void Move(Vector2 coords)
     {
         rect.localPosition = coords;
         first.SetActive(true);
         Flip();
     }
+
     private void Flip()
     {
         Vector3 scale = transform.localScale;
@@ -68,24 +78,36 @@ public class SpriteController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
-    /*
-public void shock()
-{
-    animator.SetTrigger("shock");
-}
-public void shake()
-{
-    animator.SetTrigger("shake");
-}
 
-public void shakeback()
-{
-    animator.SetTrigger("shakeback");
-}
-*/
+    // 專門用來取消銷毀的方法
+    private void CancelDestroy()
+    {
+        if (destroyCoroutine != null)
+        {
+            StopCoroutine(destroyCoroutine);
+            destroyCoroutine = null;
+        }
+    }
+
+    /*
+    public void shock()
+    {
+        animator.SetTrigger("shock");
+    }
+    public void shake()
+    {
+        animator.SetTrigger("shake");
+    }
+
+    public void shakeback()
+    {
+        animator.SetTrigger("shakeback");
+    }
+    */
+
     public void SwitchSprite(Sprite sprite)
     {
-        if(switcher.GetImage() != sprite)
+        if (switcher.GetImage() != sprite)
         {
             switcher.SwitchImage(sprite);
         }
