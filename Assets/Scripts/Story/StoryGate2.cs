@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class StoryGate2 : MonoBehaviour
 {
+    // 給cd片收集玩觸發的
     private bool isTriggered = false;
 
     [Header("要播放的劇情")]

@@ -183,7 +183,7 @@ public class usercontrol : MonoBehaviour,
     //=====================================================================
     public void getC4() => resault.text = "這趟旅途不能沒有布萊克\n再試試吧！";
     public void gamelose() => resault.text = "這趟旅途不能沒有布萊克\n再試試吧！";
-    public void gameWin() => resault.text = "成功捕獲！";
+    public void gameWin() => resault.text = "成功捕獲布萊克！";
 
     //=====================================================================
     //  重新開始 / 返回

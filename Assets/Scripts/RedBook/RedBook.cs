@@ -18,6 +18,7 @@ public class RedBook : MonoBehaviour
     private Animator animator;
     public GameObject inventoryUI;
     private bool isTriggered = false;
+    [Header("紅書教學開啟，請放1-1-1")]
     public StoryScene storylimit;
     [Header("MAP")]
     public Transform player; // 玩家的 Transform
@@ -27,6 +28,9 @@ public class RedBook : MonoBehaviour
     public Image mapRenderer;
     public GameObject ZoneA;
     public GameObject ZoneB;
+    public GameObject ZoneC;
+    public StoryScene sceneA;
+    public StoryScene sceneB;
     /*
     [Header("限制：這些劇情都播過且結束才能播放 Timeline")]
     public List<GameScene> LimitScenes;
@@ -118,23 +122,67 @@ public class RedBook : MonoBehaviour
         // 判斷邏輯
         if (player.position.x < thresholdX)
         {
-            // 如果目前圖片不是 A，才換成 A (節省效能)
+            // ================= 【地圖一】 =================
             if (mapRenderer.sprite != spriteA)
             {
                 mapRenderer.sprite = spriteA;
-                ZoneA.SetActive(true);
-                ZoneB.SetActive(false);
             }
+
+            // 開啟 ZoneA，關閉 B 和 C
+            SetActiveOptimized(ZoneA, true);
+            SetActiveOptimized(ZoneB, false);
+            SetActiveOptimized(ZoneC, false);
         }
         else
         {
-            // 如果目前圖片不是 B，才換成 B
+            // ================= 【地圖二】 =================
             if (mapRenderer.sprite != spriteB)
             {
                 mapRenderer.sprite = spriteB;
-                ZoneA.SetActive(false);
-                ZoneB.SetActive(true);
             }
+
+            SetActiveOptimized(ZoneA, false); // 關閉地圖一的圖示
+
+            // 判斷劇情進度
+            bool playedA = HasPlayedScene(sceneA);
+            bool playedB = HasPlayedScene(sceneB);
+
+            // 如果「已經觸發A」且「還沒觸發B」
+            if (playedA && !playedB)
+            {
+                SetActiveOptimized(ZoneB, false);
+                SetActiveOptimized(ZoneC, true);  // 打開 ZoneC
+            }
+            else
+            {
+                // 其他情況 (尚未觸發A，或者已經觸發B代表結束了)
+                SetActiveOptimized(ZoneB, true);  // 打開 ZoneB
+                SetActiveOptimized(ZoneC, false);
+            }
+        }
+    }
+
+    // --- 以下為新增的輔助方法 ---
+
+    // 檢查特定劇情是否已經播過
+    private bool HasPlayedScene(StoryScene scene)
+    {
+        if (scene == null) return false; // 防呆
+
+        bool played;
+        if (GameController.Instance.ScenePlayedState.TryGetValue(scene, out played))
+        {
+            return played;
+        }
+        return false;
+    }
+
+    // 優化效能用的 SetActive：只有在狀態不同時才執行，避免每幀呼叫浪費效能
+    private void SetActiveOptimized(GameObject obj, bool state)
+    {
+        if (obj != null && obj.activeSelf != state)
+        {
+            obj.SetActive(state);
         }
     }
 

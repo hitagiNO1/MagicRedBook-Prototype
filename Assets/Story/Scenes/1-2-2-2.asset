@@ -99,4 +99,22 @@ MonoBehaviour:
       coords: {x: 0, y: 0}
       Right: 1
     timline: []
+  - text: ......
+    speaker: {fileID: 11400000, guid: bce99cd15077cfe42b8ca241c12fb73d, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}
+      spriteIndex: 15
+      actionType: 2
+      coords: {x: 0, y: 0}
+      Right: 1
+    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
+      spriteIndex: 9
+      actionType: 2
+      coords: {x: 0, y: 0}
+      Right: 0
+    timline: []
+  - text: "(\u7372\u5F97\u96B1\u85CF\u9053\u5177\u300C\u7A7F\u6234\u5F0F\u7D19\u7BB1\u76D4\u7532\u300D\uFF01)"
+    speaker: {fileID: 11400000, guid: bce99cd15077cfe42b8ca241c12fb73d, type: 2}
+    actions: []
+    timline: []
   nextScene: {fileID: 0}
