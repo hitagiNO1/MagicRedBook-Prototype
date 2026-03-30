@@ -9,6 +9,8 @@ public class ItemSlot : MonoBehaviour
     public Button useButton;
     public TextMeshProUGUI Description;
     public TextMeshProUGUI amount;
+    public Image Tag;
+    public TextMeshProUGUI Tagtext;
     public Itemuse itemuse; // 新增引用
     public RedBook redbook;
     private ItemData data;
@@ -26,6 +28,8 @@ public class ItemSlot : MonoBehaviour
         icon.sprite = item.icon;
         nameText.text = item.itemName;
         Description.text = item.description;
+        Tag.sprite = item.Tag;
+        Tagtext.text = item.Tagtext;
 
         // 先移除舊的監聽器，避免重複綁定
         useButton.onClick.RemoveAllListeners();

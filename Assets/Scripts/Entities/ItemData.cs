@@ -7,4 +7,6 @@ public class ItemData : ScriptableObject
     [TextArea] public string description;
     public Sprite icon;
     public int amount = 1;
+    public Sprite Tag;
+    public string Tagtext;
 }
