@@ -50580,7 +50580,7 @@ MonoBehaviour:
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
   maxHP: 100
-  currentHP: 100
+  currentHP: 10
   critChance: 0.25
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
@@ -57830,7 +57830,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 506, y: 30.000008}
+  m_AnchoredPosition: {x: 558.6, y: 30.000008}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -63608,7 +63608,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerSkill3ForPlayer0
         m_Mode: 1
@@ -76600,7 +76600,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerCatSkill4ForPlayer1
         m_Mode: 1
@@ -159038,7 +159038,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerCatSkill2ForPlayer1
         m_Mode: 1
@@ -164584,7 +164584,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 506, y: 30.000008, z: -16.961523}
+  m_LocalPosition: {x: 558.6, y: 30.000008, z: -16.961523}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -192138,7 +192138,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerCatSkill5ForPlayer1
         m_Mode: 1
@@ -198663,7 +198663,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerCatSkill1ForPlayer1
         m_Mode: 1
@@ -202504,7 +202504,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerSkill4ForPlayer0
         m_Mode: 1
@@ -202715,7 +202715,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerSkill2ForPlayer0
         m_Mode: 1
@@ -222428,7 +222428,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerCatSkill3ForPlayer1
         m_Mode: 1
@@ -230726,7 +230726,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 506, y: -0, z: 35}
+  m_LocalPosition: {x: 558.6, y: -0, z: 35}
   m_LocalScale: {x: -0.10000002, y: 0.10000002, z: 0.10000002}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -231720,7 +231720,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerSkill1ForPlayer0
         m_Mode: 1
@@ -247398,7 +247398,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3720424681303388706}
         m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: TriggerSkill5ForPlayer0
         m_Mode: 1

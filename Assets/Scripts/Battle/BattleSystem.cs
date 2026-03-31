@@ -70,7 +70,6 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator SetupBattle()
     {
         // ---------- 玩家初始化 ----------
-        
         playerUnits.Clear();
         for (int i = 0; i < playerPrefabs.Count; i++)
         {
@@ -83,6 +82,7 @@ public class BattleSystem : MonoBehaviour
             playerUnits.Add(playerUnit);
             if (i < playerHUDs.Count && playerHUDs[i] != null)
             {
+                playerHUDs[i].gameObject.SetActive(true); // ★ 新增：確保進入戰鬥時顯示 HUD
                 playerHUDs[i].SetHUD(playerUnit);
                 playerUnit.battleHUD = playerHUDs[i];
             }
@@ -107,6 +107,7 @@ public class BattleSystem : MonoBehaviour
             enemyUnits.Add(enemyUnit);
             if (i < enemyHUDs.Count && enemyHUDs[i] != null)
             {
+                enemyHUDs[i].gameObject.SetActive(true); // ★ 新增：確保進入戰鬥時顯示 HUD
                 enemyHUDs[i].SetHUD(enemyUnit);
                 enemyUnit.battleHUD = enemyHUDs[i];
             }
@@ -133,6 +134,13 @@ public class BattleSystem : MonoBehaviour
         skillManager.enemyHUDs = enemyHUDs;
         skillManager.buffDebuffManager = buffDebuffManager;
         skillManager.dialogueText = dialogueText;
+
+        // ★ 新增這行：在戰鬥開始前重置所有技能 CD ★
+        if (skillManager != null)
+        {
+            skillManager.ResetAllCooldowns();
+        }
+
         foreach (Unit player in playerUnits)
         {
             EquipmentManager.Instance.ApplyPermanentEquipmentEffects(player);
@@ -166,8 +174,6 @@ public class BattleSystem : MonoBehaviour
         // 呼叫 SkillManager 初始化 UI
         if (skillManager != null)
         {
-            // 如果你的 AP 儲存在 SkillManager，請確保這裡有重置它
-            // 例如：skillManager.currentAP = skillManager.maxAP;
             skillManager.InitSkillIcons();
         }
         else
@@ -218,7 +224,7 @@ public class BattleSystem : MonoBehaviour
             }
 
             // 可選：每個敵人攻擊完後加一點額外間隔（讓畫面呼吸一下）
-            yield return new WaitForSeconds(0.5f);  // 這個 0.5f 可以調整或刪除
+            yield return new WaitForSeconds(0.5f);
         }
 
         // Buff/Debuff 回合結束處理
@@ -263,29 +269,17 @@ public class BattleSystem : MonoBehaviour
     // 標記敵人死亡（關閉碰撞器、更新HUD，並啟動淡出協程）
     public void MarkEnemyAsDead(int index)
     {
-      
-       /* if (index < 0 || index >= enemyUnits.Count || index >= enemyPrefabs.Count)
-            return;*/
-
         Unit enemyUnit = enemyUnits[index];
         GameObject enemyGO = enemyPrefabs[index];
-
-        /*if (enemyUnit == null || enemyGO == null || enemyUnit.isDead)
-            return;*/
 
         enemyUnit.isDead = true;
         enemyUnit.currentHP = 0;
 
-        // 更新 HUD
-       /* if (index < enemyHUDs.Count && enemyHUDs[index] != null)
-            enemyHUDs[index].SetHP(0);*/
-      
         // 關閉碰撞器
         Collider2D col2D = enemyGO.GetComponent<Collider2D>();
         if (col2D) col2D.enabled = false;
         Collider col3D = enemyGO.GetComponent<Collider>();
         if (col3D) col3D.enabled = false;
-       
 
         Debug.Log($"敵人 {enemyUnit.unitName} 已死亡，將在回合結束後開始淡出消失");
 
@@ -296,9 +290,6 @@ public class BattleSystem : MonoBehaviour
     // 淡出協程：等待回合結束後才開始 1 秒淡出
     private IEnumerator FadeOutEnemyOnRoundEnd(GameObject enemyGO, int index)
     {
-        // 等待回合結束旗標為 true
-     //   yield return new WaitUntil(() => isRoundEnding);
-
         SpriteRenderer[] renderers = enemyGO.GetComponentsInChildren<SpriteRenderer>();
         if (renderers.Length == 0)
         {
@@ -473,6 +464,25 @@ public class BattleSystem : MonoBehaviour
         // 清除技能相關 UI
         skillManager?.ClearAllHighlights();
         skillManager?.ClearSkillIcons();
+
+        // ==========================================
+        // ★ 新增這段：強制隱藏所有 HUD，解決滑鼠懸停殘留 Bug ★
+        // ==========================================
+        if (enemyHUDs != null)
+        {
+            foreach (BattleHUD hud in enemyHUDs)
+            {
+                if (hud != null) hud.gameObject.SetActive(false);
+            }
+        }
+        if (playerHUDs != null)
+        {
+            foreach (BattleHUD hud in playerHUDs)
+            {
+                if (hud != null) hud.gameObject.SetActive(false);
+            }
+        }
+        // ==========================================
 
         // 播放隱藏動畫
         if (animator != null && !hideAnimationTriggered)

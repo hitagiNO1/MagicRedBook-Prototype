@@ -146,7 +146,14 @@ public class BuffDebuffManager : MonoBehaviour
         int reducedHeal = Mathf.RoundToInt(ApplyHealReduction(targetUnit, healAmount)); // 應用減益
         int newHealth = Mathf.Min(targetUnit.currentHP + reducedHeal, targetUnit.maxHP);
         int actualHealedAmount = newHealth - targetUnit.currentHP;
-        targetUnit.currentHP = newHealth;
+
+        targetUnit.currentHP = newHealth; // 這裡更新了實際血量
+
+        // ★ 更好的做法：把更新 HUD 的邏輯寫死在這裡！
+        if (targetUnit.battleHUD != null)
+        {
+            targetUnit.battleHUD.SetHP(targetUnit.currentHP);
+        }
 
         Debug.Log($"{targetUnit.unitName} 恢復了 {actualHealedAmount} 點血量（失去血量的 {lostper * 100}%），當前血量：{targetUnit.currentHP}/{targetUnit.maxHP}");
     }
