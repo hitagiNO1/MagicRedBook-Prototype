@@ -16,19 +16,14 @@ MonoBehaviour:
   sentences:
   - text: "\u563B\u563B\u563B\uFF5E\u54C8\u54C8\u54C8\u54C8\u54C8\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
-      spriteIndex: 6
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
+    actions: []
     timline: []
   - text: "\u5E03\u840A\u514B\u4F60\u770B\uFF01\u9019\u6A23\u50CF\u4E0D\u50CF\u6211\u7684\u5076\u50CF\uFF5E\uFF1F"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions: []
     timline: []
   - text: "......\u55B5\u3002"
-    speaker: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 99a7a061a13d5544998fdf3ccbd5365e, type: 2}
     actions: []
     timline: []
   - text: "\u54C8\u54C8\u54C8\u54C8\u54C8\uFF5E"

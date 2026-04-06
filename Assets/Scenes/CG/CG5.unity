@@ -454,8 +454,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1717fdff15f8c5144b1a6d507befeacc, type: 2}
-  m_sharedMaterial: {fileID: -6291414548951899134, guid: 1717fdff15f8c5144b1a6d507befeacc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
+  m_sharedMaterial: {fileID: -2029279069370666563, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -809,8 +809,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c91a045cfb0624ab4ce1a53af454c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeImage: {fileID: 1477506342}
-  fadeDuration: 1
 --- !u!1 &918627337
 GameObject:
   m_ObjectHideFlags: 3
@@ -1537,8 +1535,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1717fdff15f8c5144b1a6d507befeacc, type: 2}
-  m_sharedMaterial: {fileID: -6291414548951899134, guid: 1717fdff15f8c5144b1a6d507befeacc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
+  m_sharedMaterial: {fileID: -2029279069370666563, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
