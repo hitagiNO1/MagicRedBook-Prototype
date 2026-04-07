@@ -7564,10 +7564,12 @@ MonoBehaviour:
     MosterIcon: {fileID: 344647488}
     button: {fileID: 379225620}
     buttonimg: {fileID: 0}
+    SkillBut: {fileID: 0}
   - monsterImage: {fileID: 21300000, guid: 0c2b133985a251142afa27779f33bf01, type: 3}
     MosterIcon: {fileID: 1916734499}
     button: {fileID: 1521205655}
     buttonimg: {fileID: 0}
+    SkillBut: {fileID: 0}
 --- !u!4 &477292294 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1967780696701834511, guid: b92c96224fbc4ca49817128018952cf2, type: 3}
@@ -7765,7 +7767,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -59.96152}
+  m_LocalPosition: {x: 0, y: 0, z: -59.89152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7773,7 +7775,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 287.9, y: 30.070007}
+  m_AnchoredPosition: {x: 0.85999954, y: 30.070007}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -22957,7 +22959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1203823677
 Animator:
   serializedVersion: 5
@@ -25838,7 +25840,7 @@ Transform:
   m_GameObject: {fileID: 1246287581}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 287.9, y: 30.070007, z: -59.96152}
+  m_LocalPosition: {x: 0.85999954, y: 30.070007, z: -59.89152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -61917,6 +61919,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -102294,6 +102298,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -107998,6 +108004,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -120745,7 +120753,7 @@ Transform:
   m_GameObject: {fileID: 9123987284521645872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 287.9, y: 0.070000015, z: -8}
+  m_LocalPosition: {x: 0.86, y: 0.070000015, z: -7.93}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -127611,6 +127619,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -140013,7 +140023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottomBar: {fileID: 8165284785212235176}
-  FirstScene: {fileID: 0}
+  FirstScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   IsDone: 0
 --- !u!1001 &4338867126315818196
 PrefabInstance:
@@ -152959,6 +152969,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -200090,6 +200102,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -204818,6 +204832,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}
@@ -216932,6 +216948,8 @@ MonoBehaviour:
   useButton: {fileID: 0}
   Description: {fileID: 0}
   amount: {fileID: 0}
+  Tag: {fileID: 0}
+  Tagtext: {fileID: 0}
   itemuse: {fileID: 0}
   redbook: {fileID: 0}
   skillmanager: {fileID: 0}

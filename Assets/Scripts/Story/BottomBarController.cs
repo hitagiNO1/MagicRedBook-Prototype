@@ -31,8 +31,9 @@ public class BottomBarController : MonoBehaviour
     public GameObject spritesPrefab;
     bool playedTimeline = false;
 
-    // 【新增】用來記錄強制清理的協程，避免重複觸發
     private Coroutine cleanupCoroutine;
+    private Coroutine playCoroutine;
+    private bool isTyping = false;
 
     private enum State
     {
@@ -52,52 +53,70 @@ public class BottomBarController : MonoBehaviour
         {
             isHidden = true;
 
+            if (playCoroutine != null)
+            {
+                StopCoroutine(playCoroutine);
+                playCoroutine = null;
+            }
+
+            // 【重點修改 1】在隱藏前，先抓取「當前最後一句話」是否帶有 AfterClick 的 Timeline
+            List<StoryScene.Sentence.TimeLine> afterClickTimelines = new List<StoryScene.Sentence.TimeLine>();
+            if (currentScene != null && sentenceIndex >= 0 && sentenceIndex < currentScene.sentences.Count)
+            {
+                afterClickTimelines = currentScene.sentences[sentenceIndex].timline
+                    .FindAll(t => t.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick && t.animation && t.myPlayableAsset != null);
+            }
+
+            // 觸發 UI 漸出隱藏動畫
             if (leftCharacters > 0) animator.SetTrigger("LheadHide");
             if (rightCharacters > 0) animator.SetTrigger("RheadHide");
-
             animator.SetTrigger("Hide");
 
             foreach (var pair in sprites)
             {
-                if (pair.Value != null)
-                {
-                    pair.Value.Disappear();
-                }
+                if (pair.Value != null) pair.Value.Disappear();
             }
 
             leftCharacters = 0;
             rightCharacters = 0;
 
-            // 【新增】啟動終極保險：2.5秒後強制掃蕩畫面上殘留的頭像
+            // 開啟隱藏後的協程處理 (負責播 TL 和 清理殘留)
             if (cleanupCoroutine != null) StopCoroutine(cleanupCoroutine);
-            cleanupCoroutine = StartCoroutine(ForceCleanupSprites());
+            cleanupCoroutine = StartCoroutine(HideAndCleanupCoroutine(afterClickTimelines));
         }
     }
 
-    // 【新增】終極掃蕩防呆機制
-    private IEnumerator ForceCleanupSprites()
+    private IEnumerator HideAndCleanupCoroutine(List<StoryScene.Sentence.TimeLine> timelines)
     {
-        // 等待 2.5 秒，讓正常的 Disappear 動畫和角色自己的銷毀程序先跑完
+        // 【重點修改 2】給對話框一個漸出的時間。假設 Hide 動畫約 0.3 秒，你可以依據你的動畫長度修改這個數值。
+        // 這樣 TL 動畫就會在對話框「漸出得差不多時」才開始播放。
+        yield return new WaitForSeconds(0.3f);
+
+        // 播放最後一句的 AfterClick 動畫
+        if (timelines != null && timelines.Count > 0)
+        {
+            foreach (var timeline in timelines)
+            {
+                TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
+                yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+            }
+        }
+
+        // 正常等待 2.5 秒，確保其他角色的 Disappear 動畫播完
         yield return new WaitForSeconds(2.5f);
 
-        // 如果在這 2.5 秒內，玩家又觸發了新的對話 (對話框又跑出來了)，就取消掃蕩，避免誤殺新角色
         if (!isHidden) yield break;
 
-        // 暴力清除：不管字典裡有沒有紀錄，直接砍掉 spritesPrefab 下面的所有子物件
+        // 強制清理
         if (spritesPrefab != null)
         {
             foreach (Transform child in spritesPrefab.transform)
             {
-                if (child != null)
-                {
-                    Destroy(child.gameObject);
-                }
+                if (child != null) Destroy(child.gameObject);
             }
         }
 
-        // 確保字典也是乾淨的
         sprites.Clear();
-        Debug.Log("已執行頭像殘留掃蕩機制。");
     }
 
     public void Show()
@@ -123,32 +142,60 @@ public class BottomBarController : MonoBehaviour
 
     public void PlayNextSentence()
     {
+        if (playCoroutine != null) StopCoroutine(playCoroutine);
+
+        // 【重點修改 3】檢查「剛讀完的這句話」是否有 AfterClick 動畫。
+        // 如果有，就先播放 TL，播完再真的進入下一句。
+        if (currentScene != null && sentenceIndex >= 0 && sentenceIndex < currentScene.sentences.Count)
+        {
+            var sentence = currentScene.sentences[sentenceIndex];
+            var afterClickTimelines = sentence.timline.FindAll(t => t.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick && t.animation && t.myPlayableAsset != null);
+
+            if (afterClickTimelines.Count > 0)
+            {
+                playCoroutine = StartCoroutine(HandleAfterClickThenNext(afterClickTimelines));
+                return;
+            }
+        }
+
+        StartActualNextSentence();
+    }
+
+    private IEnumerator HandleAfterClickThenNext(List<StoryScene.Sentence.TimeLine> timelines)
+    {
+        state = State.PLAYING; // 鎖定狀態，防止這期間玩家狂點
+
+        foreach (var timeline in timelines)
+        {
+            TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
+            yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
+        }
+
+        StartActualNextSentence(); // TL播完，正式進入下一句
+    }
+
+    private void StartActualNextSentence()
+    {
         state = State.PLAYING;
-        StartCoroutine(PlaySentenceCoroutine());
+        playCoroutine = StartCoroutine(PlaySentenceCoroutine());
     }
 
     private IEnumerator PlaySentenceCoroutine()
     {
-        if (currentScene == null || currentScene.sentences.Count == 0)
-        {
-            Debug.LogError("當前場景或句子列表為空，無法播放下一句。");
-            yield break;
-        }
+        if (currentScene == null || currentScene.sentences.Count == 0) yield break;
 
         sentenceIndex++;
-        if (sentenceIndex >= currentScene.sentences.Count)
-        {
-            Debug.Log("已經播放完所有句子。");
-            yield break;
-        }
-        var sentence = currentScene.sentences[sentenceIndex];
+        if (sentenceIndex >= currentScene.sentences.Count) yield break;
 
+        var sentence = currentScene.sentences[sentenceIndex];
         bool hasTimeline = false;
+
         foreach (var timeline in sentence.timline)
         {
             if (timeline.animation && timeline.myPlayableAsset != null &&
                 timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.BeforeText)
             {
+                hasTimeline = true;
                 TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
                 yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
             }
@@ -156,8 +203,7 @@ public class BottomBarController : MonoBehaviour
 
         if (sentenceIndex == 0)
         {
-            if (hasTimeline)
-                yield return new WaitForSeconds(0.3f);
+            if (hasTimeline) yield return new WaitForSeconds(0.3f);
             Show();
         }
 
@@ -196,38 +242,21 @@ public class BottomBarController : MonoBehaviour
             }
         }
 
-        if (sentence.timline.Exists(t => t.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick))
-        {
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
-
-            foreach (var timeline in sentence.timline)
-            {
-                if (timeline.animation && timeline.myPlayableAsset != null &&
-                    timeline.timing == StoryScene.Sentence.TimeLine.TriggerTiming.AfterClick)
-                {
-                    TimelineManager.Instance.PlayTimeline(timeline.myPlayableAsset);
-                    yield return new WaitUntil(() => !TimelineManager.Instance.IsPlaying);
-                }
-            }
-        }
+        // 【重點修改 4】直接將狀態設為 COMPLETED。
+        // 不在這裡等點擊了！交給 GameManager 判斷，GameManager 呼叫 Hide/PlayNext 時，就會自動觸發上面的攔截機制。
+        state = State.COMPLETED;
     }
 
-    public bool IsCompleted()
-    {
-        return state == State.COMPLETED;
-    }
-
-    public bool IsLastSentence()
-    {
-        return sentenceIndex + 1 == currentScene.sentences.Count;
-    }
+    public bool IsCompleted() { return state == State.COMPLETED; }
+    public bool IsLastSentence() { return sentenceIndex + 1 == currentScene.sentences.Count; }
 
     private IEnumerator TypeText(string text)
     {
         barText.text = "";
         int wordIndex = 0;
+        isTyping = true;
 
-        while (state == State.PLAYING && wordIndex < text.Length)
+        while (isTyping && wordIndex < text.Length)
         {
             barText.text += text[wordIndex];
             yield return new WaitForSeconds(0.05f);
@@ -235,24 +264,18 @@ public class BottomBarController : MonoBehaviour
         }
 
         barText.text = text;
-        state = State.COMPLETED;
+        isTyping = false;
     }
 
     public void SkipTyping()
     {
-        if (state == State.PLAYING)
-        {
-            state = State.COMPLETED;
-        }
+        if (isTyping) isTyping = false;
     }
 
     private void ActSpeakers()
     {
         List<StoryScene.Sentence.Action> actions = currentScene.sentences[sentenceIndex].actions;
-        for (int i = 0; i < actions.Count; i++)
-        {
-            ActSpeaker(actions[i]);
-        }
+        for (int i = 0; i < actions.Count; i++) ActSpeaker(actions[i]);
     }
 
     private void ActSpeaker(StoryScene.Sentence.Action action)
@@ -268,10 +291,8 @@ public class BottomBarController : MonoBehaviour
                         .GetComponent<SpriteController>();
                     sprites.Add(action.speaker, controller);
                 }
-                else
-                {
-                    controller = sprites[action.speaker];
-                }
+                else controller = sprites[action.speaker];
+
                 controller.Setup(action.speaker.sprites[action.spriteIndex]);
 
                 if (action.Right == false)
@@ -292,10 +313,8 @@ public class BottomBarController : MonoBehaviour
                 if (sprites.ContainsKey(action.speaker))
                 {
                     controller = sprites[action.speaker];
-                    if (action.Right == false)
-                        controller.Move(Lcoords);
-                    else
-                        controller.Move(Rcoords);
+                    if (action.Right == false) controller.Move(Lcoords);
+                    else controller.Move(Rcoords);
                 }
                 break;
 
@@ -345,14 +364,8 @@ public class BottomBarController : MonoBehaviour
                     controller.Hide();
                     sprites.Remove(action.speaker);
 
-                    if (action.Right == false)
-                    {
-                        leftCharacters--;
-                    }
-                    else
-                    {
-                        rightCharacters--;
-                    }
+                    if (action.Right == false) leftCharacters--;
+                    else rightCharacters--;
                 }
                 break;
 
@@ -364,9 +377,6 @@ public class BottomBarController : MonoBehaviour
                 break;
         }
 
-        if (controller != null)
-        {
-            controller.SwitchSprite(action.speaker.sprites[action.spriteIndex]);
-        }
+        if (controller != null) controller.SwitchSprite(action.speaker.sprites[action.spriteIndex]);
     }
 }

@@ -139,8 +139,22 @@ public class mutiplebattle : MonoBehaviour
 
     private void Update()
     {
-        if (targetScript == null || targetScript.state == BattleState.END || targetScript.state == BattleState.RUN)
-            return;
+        if (targetScript == null) return;
+
+        // 【修正點】：當戰鬥狀態為 END 或 RUN 時，主動關閉相機並清理 HUD
+        if (targetScript.state == BattleState.END || targetScript.state == BattleState.RUN)
+        {
+            if (virtualCamera.enabled)
+            {
+                virtualCamera.enabled = false;
+
+                // 戰鬥結束時也應該把 HUD 清理掉，不然可能會殘留在畫面上
+                ClearInstantiatedHUDs();
+
+                Debug.Log("戰鬥狀態結束，已關閉 VCAM 並清理 HUD");
+            }
+            return; // 結束 Update，不執行後面的滑鼠射線邏輯
+        }
 
         // 原有：滑鼠懸停顯示邏輯
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -161,7 +175,7 @@ public class mutiplebattle : MonoBehaviour
             }
         }
 
-        // 🚀 新增：動態追蹤所有敵人 X 軸位置
+        // 動態追蹤所有敵人 X 軸位置
         foreach (var kvp in enemyToHUDMap)
         {
             if (kvp.Key == null) continue; // 敵人已銷毀
@@ -184,7 +198,7 @@ public class mutiplebattle : MonoBehaviour
                 );
 
                 // 只更新 X 軸，Y 軸保持固定（baseY）
-                hudRect.anchoredPosition = new Vector2(localPoint.x, 290f); // 使用你設定的 baseY
+                hudRect.anchoredPosition = new Vector2(localPoint.x, 290f);
             }
         }
     }
