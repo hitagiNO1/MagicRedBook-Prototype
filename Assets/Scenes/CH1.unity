@@ -15678,7 +15678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &132872200
 Transform:
   m_ObjectHideFlags: 0
@@ -37708,7 +37708,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -351
+  m_SortingOrder: -352
   m_Sprite: {fileID: 21300000, guid: fbbbf9a80c6c1bb40aaf9e772834de3a, type: 3}
   m_Color: {r: 0.735849, g: 0.7184941, b: 0.7184941, a: 0}
   m_FlipX: 0
@@ -50821,11 +50821,11 @@ MonoBehaviour:
   equippedGear: []
   baseDamage: 0
   baseDefense: 0
-  damage: 20
+  damage: 100
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
   maxHP: 100
-  currentHP: 50
+  currentHP: 100
   critChance: 0.25
   critdmgplus: 1.5
   buffManager: {fileID: 3720424681303388705}
@@ -58151,7 +58151,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -18.341522}
+  m_LocalPosition: {x: 0, y: 0, z: -18.26152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -58159,7 +58159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 371.08, y: 30.000008}
+  m_AnchoredPosition: {x: 370.8, y: 30.000008}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -70458,7 +70458,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &596456645
 Transform:
   m_ObjectHideFlags: 0
@@ -115389,7 +115389,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &998422825
 Transform:
   m_ObjectHideFlags: 0
@@ -115423,15 +115423,15 @@ MonoBehaviour:
   buffDebuffManager: {fileID: 3720424681303388705}
   enemyskill: {fileID: 1702630146}
   newEnemies:
-  - {fileID: 1702630138}
   - {fileID: 2001236985}
+  - {fileID: 1702630138}
   enemyUnits:
-  - {fileID: 1702630139}
   - {fileID: 2001236986}
+  - {fileID: 1702630139}
   Addmonster: {fileID: 8037911981722357347}
   monsters:
   - {fileID: 11400000, guid: f2337e68b9967bd4cab47c1c1e7757ea, type: 2}
-  - {fileID: 11400000, guid: 0dc774c1ec3821343be4e7db1a6b066e, type: 2}
+  - {fileID: 11400000, guid: 4236cff128d070d499d31cfc64824c4c, type: 2}
   enemyBattleHUDPrefab: {fileID: 7600166811978819099, guid: 4e533792e08c11b448a74e83a1bdb17e, type: 3}
 --- !u!136 &998422827
 CapsuleCollider:
@@ -144926,7 +144926,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -160
+  m_SortingOrder: -286
   m_SortAtRoot: 0
 --- !u!114 &1238466616
 MonoBehaviour:
@@ -146310,7 +146310,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -148
+  m_SortingOrder: -264
   m_SortAtRoot: 0
 --- !u!114 &1249122500
 MonoBehaviour:
@@ -165582,7 +165582,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 371.08, y: 30.000008, z: -18.341522}
+  m_LocalPosition: {x: 370.8, y: 30.000008, z: -18.26152}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -167683,7 +167683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1418070986
 Transform:
   m_ObjectHideFlags: 0
@@ -173367,7 +173367,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 47
+  m_SortingOrder: 65
   m_SortAtRoot: 0
 --- !u!114 &1461108981
 MonoBehaviour:
@@ -181671,7 +181671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1521340211
 Transform:
   m_ObjectHideFlags: 0
@@ -203038,7 +203038,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1702630139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203159,7 +203159,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -40
+  m_SortingOrder: -51
   m_SortAtRoot: 0
 --- !u!114 &1702630144
 MonoBehaviour:
@@ -203254,7 +203254,7 @@ Transform:
   m_GameObject: {fileID: 1702630138}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 3.58, y: 2.03, z: 0.81}
+  m_LocalPosition: {x: 4.12, y: 2.03, z: 1.89}
   m_LocalScale: {x: -0.3, y: 0.30000004, z: 0.30000004}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -232169,7 +232169,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 371.08, y: 0, z: 33.62}
+  m_LocalPosition: {x: 370.8, y: 0, z: 33.7}
   m_LocalScale: {x: -0.10000002, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -240159,7 +240159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2001236986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240297,7 +240297,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -42
+  m_SortingOrder: -53
   m_SortAtRoot: 0
 --- !u!114 &2001236992
 MonoBehaviour:
@@ -240375,7 +240375,7 @@ Transform:
   m_GameObject: {fileID: 2001236985}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: -4.58, y: 1.87, z: 1.06}
+  m_LocalPosition: {x: -5.41, y: 1.87, z: 2.14}
   m_LocalScale: {x: -0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -255420,7 +255420,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -337
+  m_SortingOrder: -338
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
@@ -270840,7 +270840,7 @@ MonoBehaviour:
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
   gameScript: {fileID: 4336947258115202937}
-  battleTrigger: {fileID: 0}
+  currentBattleCamera: {fileID: 0}
   battleFxContainer: {fileID: 335198499}
   currentPlayerIndex: 0
 --- !u!1 &539381587058987014
@@ -272314,7 +272314,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3433247497458231736}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 5612844fe0fc1734297224a4ff3e192b, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -272876,6 +272876,10 @@ PlayableDirector:
     value: {fileID: 1929828331}
   - key: {fileID: 5995848037309042756, guid: ec085e01aa022134ea104cecbf82c415, type: 2}
     value: {fileID: 651714029923838503}
+  - key: {fileID: 2957254132456714780, guid: 5c146237c922565439fd1d2e6492bc61, type: 2}
+    value: {fileID: 433154398}
+  - key: {fileID: -1590423724881810764, guid: 5b169604f0e63b34eaa941232fcdf9e1, type: 2}
+    value: {fileID: 433154398}
   m_ExposedReferences:
     m_References:
     - b66ebb15795ad27409b7990f21887984: {fileID: 1400622618}

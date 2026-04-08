@@ -47,6 +47,7 @@ public class mutiplebattle : MonoBehaviour
         }
 
         virtualCamera.enabled = true;
+        targetScript.currentBattleCamera = virtualCamera; // ★ 新增這行：把攝影機交給全局系統保管 ★
         ClearInstantiatedHUDs();
 
         Transform battleUI = GameObject.Find("BattleUI")?.transform;

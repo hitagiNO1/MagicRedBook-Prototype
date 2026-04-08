@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, RUN, END }
 
@@ -20,7 +21,9 @@ public class BattleSystem : MonoBehaviour
     public SkillManager skillManager;
     public BuffDebuffManager buffDebuffManager;
     public GameController gameScript;
-    public mutiplebattle battleTrigger;
+
+    [Header("動態指派的攝影機")]
+    [HideInInspector] public CinemachineVirtualCamera currentBattleCamera; // 新增這行
 
     [Header("特效容器")]
     public GameObject battleFxContainer;
@@ -396,6 +399,12 @@ public class BattleSystem : MonoBehaviour
             return;
         }
         isBattleEnding = true;
+
+        if (currentBattleCamera != null)
+        {
+            currentBattleCamera.enabled = false;
+            currentBattleCamera = null; // 關閉後清空參考
+        }
 
         if (state == BattleState.WON)
         {

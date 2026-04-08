@@ -154,7 +154,7 @@ public class canclick : MonoBehaviour
     }
     private IEnumerator FadeToNewClip(AudioClip newClip)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.001f);
         audioSource.Stop();
         audioSource.clip = newClip;
         audioSource.Play();

@@ -81,7 +81,7 @@ public class boxgameflow : MonoBehaviour
 
     private IEnumerator FadeToNewClip(AudioClip newClip)
     {
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.001f);
         audioSource.Stop();
         audioSource.clip = newClip;
         audioSource.Play();
