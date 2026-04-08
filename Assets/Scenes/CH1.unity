@@ -331851,16 +331851,16 @@ MonoBehaviour:
   isWaitingForTarget: 0
   pendingSkill: 
   pendingPlayerIndex: -1
-  skill1Button: {fileID: 0}
-  skill2Button: {fileID: 0}
-  skill3Button: {fileID: 0}
-  skill4Button: {fileID: 0}
-  skill5Button: {fileID: 0}
-  catSkill1Button: {fileID: 0}
-  catSkill2Button: {fileID: 0}
-  catSkill3Button: {fileID: 0}
-  catSkill4Button: {fileID: 0}
-  catSkill5Button: {fileID: 0}
+  skill1Button: {fileID: 1943757561}
+  skill2Button: {fileID: 1712497499}
+  skill3Button: {fileID: 532560710}
+  skill4Button: {fileID: 1709278029}
+  skill5Button: {fileID: 2069098303}
+  catSkill1Button: {fileID: 1677505192}
+  catSkill2Button: {fileID: 1355354522}
+  catSkill3Button: {fileID: 1855032337}
+  catSkill4Button: {fileID: 659272104}
+  catSkill5Button: {fileID: 1627029402}
 --- !u!114 &3720424681303388707
 MonoBehaviour:
   m_ObjectHideFlags: 0

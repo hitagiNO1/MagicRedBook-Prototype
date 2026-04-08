@@ -504,7 +504,7 @@ public class SkillManager : MonoBehaviour
                 selectedTargets[playerIndex] = null;
             }
 
-            dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 取消了 <b>{skillName}</b>";
+            dialogueText.text = $"<b>{playerUnits[playerIndex].unitName}</b> 取消了 <b>{GetSkillDisplayName(skillName)}</b>";
 
             AddSkillIcon(GetSkillCost(skillName));
             UpdateAllSkillButtonStates();
