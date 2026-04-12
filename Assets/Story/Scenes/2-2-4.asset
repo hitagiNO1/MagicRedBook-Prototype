@@ -16,7 +16,12 @@ MonoBehaviour:
   sentences:
   - text: "\u54C8\u54C8\u54C8\u54C8\u54C8\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 11
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: "\u5E03\u840A\u514B\uFF01\uFF01\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -48,7 +53,12 @@ MonoBehaviour:
     timline: []
   - text: "\u54C8\u54C8\u54C8\uFF5E\u5E03\u840A\u514B\uFF0C\u4F60\u6700\u6367\u5834\u4E86\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 10
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: "\u7576\u521D\u8D70\u9032\u6A02\u5668\u884C\uFF0C\u7B2C\u4E00\u773C\u5C31\u76F8\u4E2D\u5B83\u4E86\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -64,7 +74,12 @@ MonoBehaviour:
     timline: []
   - text: "\u54C7\u554A\u2026\u2026"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 11
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: ......
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -76,7 +91,12 @@ MonoBehaviour:
     timline: []
   - text: "\u6211\u89BA\u5F97\u554A\u2026\u2026\u6211\u597D\u50CF\uFF0C\u771F\u7684\u5F80\u5922\u60F3\u66F4\u8FD1\u4E86\u4E00\u6B65\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 10
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: "......\u55B5\uFF01"
     speaker: {fileID: 11400000, guid: 99a7a061a13d5544998fdf3ccbd5365e, type: 2}
@@ -88,7 +108,12 @@ MonoBehaviour:
     timline: []
   - text: "\u4F60\u53EF\u662F\u6211\u7B2C\u4E00\u500B\u807D\u773E\u5462\uFF0C\u5E03\u840A\u514B\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 10
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: "\u554A\uFF01\u5982\u679C\u5E36\u8457\u4E00\u96BB\u9ED1\u8C93\u4E00\u8D77\u81EA\u5F48\u81EA\u5531\u2026\u2026\u597D\u50CF\u5F88\u6709\u770B\u982D\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -100,7 +125,12 @@ MonoBehaviour:
     timline: []
   - text: "\u54C8\u54C8\u54C8\uFF5E\u90A3\u5E03\u840A\u514B\u4F60\u8981\u7576\u7B2C\u4E8C\u4E3B\u5531\u3002"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 11
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: "\u53EA\u8981\u5728\u65C1\u908A\u55B5\u55B5\u53EB\u5C31\u597D\u4E86\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -108,7 +138,12 @@ MonoBehaviour:
     timline: []
   - text: "\u6211\u5011\u5C31\u53EB\u2014\u2014\u9ED1\u8C93\u6A02\u5718\uFF01"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 10
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   - text: "......\u55B5\u55DA\uFF1F"
     speaker: {fileID: 11400000, guid: 99a7a061a13d5544998fdf3ccbd5365e, type: 2}
@@ -116,6 +151,11 @@ MonoBehaviour:
     timline: []
   - text: "\u54C8\u54C8\u54C8\uFF5E\u5C0D\u5C0D\u5C0D\uFF0C\u5C31\u662F\u9019\u6A23\uFF01\u5E03\u840A\u514B\u597D\u68D2\u54E6\uFF5E"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions: []
+    actions:
+    - speaker: {fileID: 11400000, guid: f3fdb2924f94d2742ae390dbb0d250da, type: 2}
+      spriteIndex: 11
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 0
     timline: []
   nextScene: {fileID: 0}

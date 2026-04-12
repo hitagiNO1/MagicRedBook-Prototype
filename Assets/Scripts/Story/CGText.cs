@@ -28,7 +28,7 @@ public class CGText : MonoBehaviour
 
     private enum State { PLAYING, COMPLETED }
     private State state = State.COMPLETED;
-
+    private bool isSkipping = false;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -41,7 +41,6 @@ public class CGText : MonoBehaviour
 
     private void Update()
     {
-        // 修正：只有在場景為空時才不執行，移除 state == COMPLETED 的限制
         if (currentScene == null) return;
 
         // 玩家點擊：下一句或跳過
@@ -60,13 +59,11 @@ public class CGText : MonoBehaviour
                     StartCoroutine(EndSceneSequence());
                 }
             }
-            // 情況 B：字還在打 (PLAYING) -> (如果你想做「瞬間顯示全文字」的功能可寫在這)
-            // else 
-            // {
-            //     StopAllCoroutines();
-            //     barText.text = currentSentence.text;
-            //     state = State.COMPLETED;
-            // }
+            // 情況 B：字還在打 (PLAYING) -> 觸發跳過打字
+            else
+            {
+                isSkipping = true;
+            }
         }
     }
 
@@ -122,12 +119,7 @@ public class CGText : MonoBehaviour
 
     private IEnumerator ReturnToMainScene()
     {
-        // 1. 告訴管理器：這個 ID 的事件已經完成了！
-        if (CGManager.Instance != null)
-        {
-            CGManager.Instance.SetItemTriggered(targetItemID);
-        }
-        // 2. 找到原本的主場景
+        // 1. 先找到原本的主場景並喚醒所有物件
         Scene mainScene = SceneManager.GetSceneByName(mainSceneName);
 
         if (mainScene.IsValid() && mainScene.isLoaded)
@@ -135,23 +127,25 @@ public class CGText : MonoBehaviour
             GameObject[] rootObjects = mainScene.GetRootGameObjects();
             foreach (GameObject obj in rootObjects)
             {
-                // 當這行執行，主場景物件被設為 Active = true
-                // 它們身上的 ItemTrigger.OnEnable() 就會瞬間執行
-                // 然後自動發現 Manager 的狀態變了，進而自己換圖
+                // ★ 先讓包含 ScriptManager 在內的主場景物件全部 Active = true
                 obj.SetActive(true);
             }
-            // ★ 1. 直接呼叫靜態方法還原狀態
-            // 這裡會自動找到主場景，並只打開原本該開的物件
-            SceneSwapper.RestoreMainScene(mainSceneName);
 
-            // 2. 等待一幀確保狀態切換順暢 (選用)
-            yield return null;
+            SceneSwapper.RestoreMainScene(mainSceneName);
+            yield return null; // 等待一幀確保狀態切換順暢
         }
         else
         {
             Debug.LogError("找不到主場景，可能已被卸載或是名稱錯誤！");
         }
 
+        // 2. ★ 移到這裡！現在 ScriptManager 已經醒來了，可以安全地啟動協程了！
+        if (CGManager.Instance != null)
+        {
+            CGManager.Instance.SetItemTriggered(targetItemID);
+        }
+
+        // 3. 最後卸載目前的 CG 場景
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
     // --- 以下對話邏輯 
@@ -214,11 +208,21 @@ public class CGText : MonoBehaviour
     {
         barText.text = "";
         state = State.PLAYING;
+        isSkipping = false; // 每次開始打字前，重置跳過開關
+
         for (int i = 0; i < text.Length; i++)
         {
+            // 如果玩家按下了跳過
+            if (isSkipping)
+            {
+                barText.text = text; // 直接顯示完整文字
+                break;               // 打斷迴圈，不再逐字等待
+            }
+
             barText.text += text[i];
             yield return new WaitForSeconds(0.07f);
         }
+
         state = State.COMPLETED;
     }
 
