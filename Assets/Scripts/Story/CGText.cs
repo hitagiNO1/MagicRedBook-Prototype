@@ -17,6 +17,12 @@ public class CGText : MonoBehaviour
     public PlayableAsset TCG;              // 中間的背景動畫
     public PlayableAsset FadeOutTimeline;  // 淡出 (從亮變黑)
 
+    // --- ★ 新增：音樂設定 ---
+    [Header("Audio Settings")]
+    public AudioSource bgmSource;          // 掛載播放 BGM 的 AudioSource
+    public float bgmFadeDuration = 2.0f;   // 淡入淡出時間 (預設 1 秒)
+    private float originalBgmVolume = 1.0f;// 紀錄原本設定的音量
+
     [Header("Data")]
     public int targetItemID; // 請在 Inspector 設定這個劇情對應的物品 ID (0~5)
     public StoryScene currentScene;
@@ -29,6 +35,17 @@ public class CGText : MonoBehaviour
     private enum State { PLAYING, COMPLETED }
     private State state = State.COMPLETED;
     private bool isSkipping = false;
+
+    private void Awake()
+    {
+        // ★ 在 Awake 時先記錄 Inspector 中設定的音量，並將音量歸零準備淡入
+        if (bgmSource != null)
+        {
+            originalBgmVolume = bgmSource.volume;
+            bgmSource.volume = 0f;
+        }
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -36,6 +53,14 @@ public class CGText : MonoBehaviour
         // 防呆：如果忘記拉 Director，嘗試自動抓取
         if (director == null)
             director = GetComponent<PlayableDirector>();
+
+        // ★ 剛進入場景時，啟動 BGM 淡入
+        if (bgmSource != null)
+        {
+            if (!bgmSource.isPlaying) bgmSource.Play();
+            StartCoroutine(FadeBGM(originalBgmVolume, bgmFadeDuration));
+        }
+
         StartCoroutine(PlaySceneSequence());
     }
 
@@ -59,12 +84,31 @@ public class CGText : MonoBehaviour
                     StartCoroutine(EndSceneSequence());
                 }
             }
-            // 情況 B：字還在打 (PLAYING) -> 觸發跳過打字
+            // 情況 B：字還在打 (PLAYING) -> 觸發跳過打字，直接顯示文字
             else
             {
                 isSkipping = true;
             }
         }
+    }
+
+    // --- ★ 新增：共用的 BGM 淡入淡出協程 ---
+    private IEnumerator FadeBGM(float targetVolume, float duration)
+    {
+        if (bgmSource == null) yield break;
+
+        float startVolume = bgmSource.volume;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            // 根據時間比例，平滑改變音量
+            bgmSource.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / duration);
+            yield return null;
+        }
+
+        bgmSource.volume = targetVolume;
     }
 
     // --- [核心] 1. 開場流程 ---
@@ -94,6 +138,12 @@ public class CGText : MonoBehaviour
         // 鎖定狀態，避免重複點擊
         state = State.PLAYING;
 
+        // ★ 準備結束場景時，啟動 BGM 淡出到 0
+        if (bgmSource != null)
+        {
+            StartCoroutine(FadeBGM(0f, bgmFadeDuration));
+        }
+
         // A. 隱藏對話框
         animator.SetTrigger("Hide");
         ClearText();
@@ -110,7 +160,6 @@ public class CGText : MonoBehaviour
             director.Play();
             // 關鍵：等待淡出播完
             yield return new WaitForSeconds(waitAfterSceneEnd);
-
         }
 
         Debug.Log("場景結束 (全黑)。");
@@ -148,7 +197,8 @@ public class CGText : MonoBehaviour
         // 3. 最後卸載目前的 CG 場景
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
-    // --- 以下對話邏輯 
+
+    // --- 以下對話邏輯 --- 
 
     public void PlayNextSentence()
     {
@@ -169,7 +219,7 @@ public class CGText : MonoBehaviour
                 HandleAction(action);
         }
 
-        // BeforeText Timeline (注意：這會暫時切換掉背景 TCG，如果是短特效建議用另一個 Director，若是單純切鏡頭則沒差)
+        // BeforeText Timeline 
         if (currentSentence.timline != null)
         {
             foreach (var timeline in currentSentence.timline)
@@ -178,9 +228,6 @@ public class CGText : MonoBehaviour
                 {
                     director.Play(timeline.myPlayableAsset);
                     yield return new WaitUntil(() => director.state != PlayState.Playing);
-
-                    // 特效播完後，如果要恢復背景 TCG，需要重新 Play TCG
-                    // if (TCG != null) director.Play(TCG); 
                 }
             }
         }

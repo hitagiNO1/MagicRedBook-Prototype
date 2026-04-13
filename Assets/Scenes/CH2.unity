@@ -4066,11 +4066,11 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.593
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0.287
-  m_DeadZoneHeight: 0.278
+  m_DeadZoneWidth: 0
+  m_DeadZoneHeight: 0.337
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.8
+  m_SoftZoneWidth: 0
   m_SoftZoneHeight: 0.8
   m_BiasX: 0
   m_BiasY: 0
@@ -5778,7 +5778,7 @@ Camera:
   far clip plane: 1000
   field of view: 20
   orthographic: 1
-  orthographic size: 8.16
+  orthographic size: 6.3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -5810,7 +5810,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -24.120003, y: 3.2668}
+  m_AnchoredPosition: {x: -24.12, y: 0.5218004}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -15616,6 +15616,8 @@ MonoBehaviour:
   InteractiveUI: {fileID: 569305893}
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
+  bgmSource: {fileID: 3720424681303388708}
+  audioFadeDuration: 1
 --- !u!95 &1748143842
 Animator:
   serializedVersion: 5
@@ -15992,6 +15994,8 @@ MonoBehaviour:
   InteractiveUI: {fileID: 1397726315}
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
+  bgmSource: {fileID: 3720424681303388708}
+  audioFadeDuration: 1
 --- !u!95 &1804322591
 Animator:
   serializedVersion: 5
@@ -16592,10 +16596,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0713ae5e744a684082a2f9c799602c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniGameSceneName: CG5
+  miniGameSceneName: CG6
   InteractiveUI: {fileID: 268850183}
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
+  bgmSource: {fileID: 3720424681303388708}
+  audioFadeDuration: 1
 --- !u!95 &1880422682
 Animator:
   serializedVersion: 5
@@ -16869,6 +16875,8 @@ MonoBehaviour:
   InteractiveUI: {fileID: 792689812}
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
+  bgmSource: {fileID: 3720424681303388708}
+  audioFadeDuration: 1
 --- !u!95 &1891985136
 Animator:
   serializedVersion: 5
@@ -17343,6 +17351,8 @@ MonoBehaviour:
   InteractiveUI: {fileID: 1850240743}
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
+  bgmSource: {fileID: 3720424681303388708}
+  audioFadeDuration: 1
 --- !u!95 &1934024411
 Animator:
   serializedVersion: 5
@@ -21280,7 +21290,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: da36813b6cba0594ea8dc65e61a62243, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 0.152
   m_Pitch: 1
   Loop: 0
@@ -27253,6 +27263,8 @@ MonoBehaviour:
   InteractiveUI: {fileID: 121672010}
   fadeImage: {fileID: 1203823678}
   fadeDuration: 1
+  bgmSource: {fileID: 3720424681303388708}
+  audioFadeDuration: 1
 --- !u!114 &5550247945950013336
 MonoBehaviour:
   m_ObjectHideFlags: 0

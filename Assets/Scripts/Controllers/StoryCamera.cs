@@ -37,24 +37,42 @@ public class StoryCamerar : MonoBehaviour
 
     private void ApplyCameraState(GameState newState)
     {
-        // 判斷是否為劇情狀態
+        // 情況 1：明確進入劇情狀態
         if (newState == GameState.Story || newState == GameState.StoryNotMove)
         {
-            // 切換為劇情鏡頭 (提高優先度)
             storyCamera.Priority = 20;
             playerCamera.Priority = 11;
             Debug.Log("[CameraSwitcher] 已切換至：劇情對話鏡頭");
         }
-        else
+
+        // ★ 情況 2：進入過場動畫 (Mangaing)
+        else if (newState == GameState.Mangaing)
         {
-            // 只要不是劇情狀態，就切回玩家主鏡頭
+            // 拿出你 GameStateManager 裡的法寶：確認「上一個狀態」是什麼
+            GameState prevState = GameStateManager.Instance.previousState;
+
+            // 如果是從「劇情」途中切進動畫的 -> 維持劇情鏡頭
+            if (prevState == GameState.Story || prevState == GameState.StoryNotMove)
+            {
+                storyCamera.Priority = 20;
+                playerCamera.Priority = 11;
+                Debug.Log("[CameraSwitcher] 這是劇情中的動畫，維持：劇情對話鏡頭");
+            }
+            // 如果是從「遊玩」(Playing) 或其他狀態切進動畫的 -> 維持玩家鏡頭
+            else
+            {
+                storyCamera.Priority = 10;
+                playerCamera.Priority = 11;
+                Debug.Log("[CameraSwitcher] 這裡是一般動畫，維持：平常探索鏡頭");
+            }
+        }
+
+        // 情況 3：明確回到自由探索狀態
+        else if (newState == GameState.Playing)
+        {
             storyCamera.Priority = 10;
             playerCamera.Priority = 11;
             Debug.Log("[CameraSwitcher] 已切換回：平常探索鏡頭");
         }
-
-        // 💡 擴充提示：
-        // 如果之後需要讓 Blake 打開魔導紅書（GameState.Redbook）時，
-        // 也有一個專屬的 UI 特寫鏡頭，只要在這裡多加一個 else if 就能輕鬆達成。
     }
 }
