@@ -12,12 +12,15 @@ public class InventoryUI : MonoBehaviour
     public TextMeshProUGUI confirmText;
 
     [Header("===== 裝備 (Equipment) 設定 =====")]
-    public Transform equipmentContentPanel; // 裝備的 UI 清單容器 (若與道具同一個版面，可拉同一個 contentPanel)
-    public GameObject equipmentSlotPrefab; // 裝備的 UI 項目 prefab (掛有 EquipmentSlot 腳本的 Prefab)
-    public List<EquipmentData> equipmentDatabase; // 裝備資料庫，把所有 EquipmentData 拖曳進來
-    public int currentPlayerIndex = 0; // 當前查看裝備的玩家 (0=布萊克, 1=萊菈)
+    public Transform equipmentContentPanel;
+    public GameObject equipmentSlotPrefab;
+    public List<EquipmentData> equipmentDatabase;
+    public int currentPlayerIndex = 0;
 
-    private ItemData selectedItem; // 當前選取的道具
+
+    private EquipmentData selectedEquipment;
+    private bool isEquippingAction;
+    private int selectedPlayerIndex;
 
     public void RefreshUI()
     {
@@ -93,24 +96,54 @@ public class InventoryUI : MonoBehaviour
     // ==================== 道具使用邏輯 (保留原本的) ====================
 
     // 顯示是否使用道具的確認面板
-    public void PromptUse(ItemData item)
+    public void UseItemDirectly(ItemData item)
     {
-        selectedItem = item;
-        confirmText.text = $"使用 {item.itemName}？";
+        if (item != null && item.amount > 0)
+        {
+            Debug.Log($"立刻使用了 {item.itemName}，效果：{item.description}");
+            item.amount -= 1;
+
+            // ★ 這裡可以呼叫你 Itemuse.cs 裡面的具體邏輯
+            // 例如：如果是補血藥水就立刻加血等
+
+            RefreshUI(); // 扣除數量後直接重整畫面
+        }
+    }
+    public void PromptEquip(EquipmentData equipData, int playerIndex, bool isEquipping)
+    {
+        selectedEquipment = equipData;
+        isEquippingAction = isEquipping;
+        selectedPlayerIndex = playerIndex;
+
+        string actionText = isEquipping ? "穿上" : "脫下";
+        SkillManager skillManager = FindObjectOfType<SkillManager>();
+        string playerName = skillManager != null ? skillManager.playerUnits[playerIndex].unitName : "玩家";
+
+        confirmText.text = $"要讓 {playerName} {actionText} {equipData.equipmentName} 嗎？";
         confirmPanel.SetActive(true);
     }
-
     // 點擊使用道具
     public void ConfirmUse()
     {
-        if (selectedItem != null)
+        if (selectedEquipment != null)
         {
-            Debug.Log($"使用了 {selectedItem.itemName}，效果：{selectedItem.description}");
-            selectedItem.amount -= 1;
-
-            // 此處可進一步處理非戰鬥時的道具效果
+            SkillManager skillmanager = FindObjectOfType<SkillManager>();
+            if (skillmanager != null)
+            {
+                Unit targetUnit = skillmanager.playerUnits[selectedPlayerIndex];
+                if (isEquippingAction)
+                {
+                    EquipmentManager.Instance.EquipItemToUnit(targetUnit, selectedEquipment.equipmentName);
+                }
+                else
+                {
+                    EquipmentManager.Instance.UnequipItemFromUnit(targetUnit, selectedEquipment.equipmentName);
+                }
+            }
         }
 
+        // 隱藏面板並重新整理
+        selectedEquipment = null;
         confirmPanel.SetActive(false);
         RefreshUI();
     }
@@ -118,9 +151,9 @@ public class InventoryUI : MonoBehaviour
     // 取消使用
     public void CancelUse()
     {
+        selectedEquipment = null;
         confirmPanel.SetActive(false);
     }
-
     // ==================== 裝備切換邏輯 ====================
 
     // 如果紅書介面上有按鈕可以切換布萊克(0)或萊菈(1)，把按鈕的 OnClick 綁定這個方法

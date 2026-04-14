@@ -47,34 +47,28 @@ public class EquipmentSlot : MonoBehaviour
 
     public void OnEquipButtonClicked()
     {
-        if (data == null) return;
+        // 加個監視器，確定按鈕真的有被按到
+        Debug.Log($"1. 裝備按鈕被點擊了！目前點擊的是：{(data != null ? data.equipmentName : "未知裝備")}");
 
-        SkillManager skillmanager = FindObjectOfType<SkillManager>();
-        if (skillmanager == null)
+        // 基本防呆檢查
+        if (data == null)
         {
-            Debug.LogError("找不到 SkillManager！");
+            Debug.LogError("錯誤：裝備資料 (data) 是空的！");
             return;
         }
 
-        // 取得要操作的目標玩家
-        Unit targetUnit = skillmanager.playerUnits[targetPlayerIndex];
-
-        // 執行穿脫邏輯
-        if (isEquipped)
+        if (uiRef == null)
         {
-            // 如果已經穿著，就呼叫脫下
-            EquipmentManager.Instance.UnequipItemFromUnit(targetUnit, data.equipmentName);
-        }
-        else
-        {
-            // 如果還沒穿著，就呼叫穿上
-            EquipmentManager.Instance.EquipItemToUnit(targetUnit, data.equipmentName);
+            Debug.LogError("錯誤：InventoryUI 參照 (uiRef) 是空的！請確認 InventoryUI 生成格子時有沒有把自己傳進來。");
+            return;
         }
 
-        // 執行完畢後，通知 InventoryUI 重新整理畫面，讓按鈕文字更新
-        if (uiRef != null)
-        {
-            uiRef.RefreshUI();
-        }
+        // 紀錄目前的狀態，看是要穿還是要脫
+        bool willEquip = !isEquipped;
+        Debug.Log($"2. 準備呼叫確認面板，動作將會是：{(willEquip ? "穿上" : "脫下")}");
+
+        // ★ 核心修改：不要在這裡直接穿脫了！
+        // 把裝備資料、目標玩家、以及要做什麼動作，丟給 InventoryUI 去處理
+        uiRef.PromptEquip(data, targetPlayerIndex, willEquip);
     }
 }

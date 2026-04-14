@@ -86,10 +86,7 @@ public class Itemuse : MonoBehaviour
     {
         if (skillManager.selectedSkillNames[playerIndex].Contains(itemName))
         {
-            int index = skillManager.selectedSkillNames[playerIndex].IndexOf(itemName);
-            skillManager.selectedSkillNames[playerIndex].RemoveAt(index);
-            skillManager.skillQueues[playerIndex].RemoveAt(index);
-            skillManager.skillNeedsTarget[playerIndex].RemoveAt(index);
+            skillManager.RemoveSkillFromQueue(playerIndex, itemName);
 
             if (skillManager.selectedTargets.ContainsKey(playerIndex) && skillManager.selectedTargets[playerIndex] != null)
             {
@@ -232,9 +229,8 @@ public class Itemuse : MonoBehaviour
             return;
         }
 
-        skillManager.selectedSkillNames[playerIndex].Add("Can");
-        skillManager.skillNeedsTarget[playerIndex].Add(true);
-        skillManager.skillQueues[playerIndex].Add(CanCoroutine(playerIndex, target));
+        // 把那三行刪掉，改成這行：
+        skillManager.AddSkillToQueue(playerIndex, "Can", true, CanCoroutine(playerIndex, target));
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>神聖罐罐</b> 對 <b>{target.unitName}</b>\n"+
                             $"恢復目標 「已損失血量」的 60%";
@@ -246,9 +242,8 @@ public class Itemuse : MonoBehaviour
     {
         if (!ValidateItem(playerIndex, "Tuna")) return;
 
-        skillManager.selectedSkillNames[playerIndex].Add("Tuna");
-        skillManager.skillNeedsTarget[playerIndex].Add(false);
-        skillManager.skillQueues[playerIndex].Add(TunaCoroutine(playerIndex));
+        // 把那三行刪掉，改成這行：
+        skillManager.AddSkillToQueue(playerIndex, "Tuna", false, TunaCoroutine(playerIndex));
 
         // 在 dialogueText 前面加上 skillManager. 確保抓到正確的文字框
         skillManager.dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>鮪魚肉泥</b>\n恢復我方存活全體成員 「最大血量」的 30%";
@@ -264,9 +259,8 @@ public class Itemuse : MonoBehaviour
             return;
         }
 
-        skillManager.selectedSkillNames[playerIndex].Add("Grass");
-        skillManager.skillNeedsTarget[playerIndex].Add(true);
-        skillManager.skillQueues[playerIndex].Add(GrassCoroutine(playerIndex, target));
+        // 把那三行刪掉，改成這行：
+        skillManager.AddSkillToQueue(playerIndex, "Grass", true, GrassCoroutine(playerIndex, target));
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>貓草</b> 對 <b>{target.unitName}</b>\n"+
                             $"爆擊提升為原本的 1.5 倍，但防禦下降 30%\n" +
@@ -282,9 +276,8 @@ public class Itemuse : MonoBehaviour
             return;
         }
 
-        skillManager.selectedSkillNames[playerIndex].Add("Drying");
-        skillManager.skillNeedsTarget[playerIndex].Add(true);
-        skillManager.skillQueues[playerIndex].Add(DryingCoroutine(playerIndex, target));
+        // 把那三行刪掉，改成這行：
+        skillManager.AddSkillToQueue(playerIndex, "Drying", true, DryingCoroutine(playerIndex, target));
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>凍乾</b> 對 <b>{target.unitName}</b>\n"+
                             $"目標的攻擊力提升 30%\n"+

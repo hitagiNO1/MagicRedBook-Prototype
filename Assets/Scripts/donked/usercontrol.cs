@@ -166,7 +166,10 @@ public class usercontrol : MonoBehaviour,
 
         // 通知 mouseborn 做重置
         if (mouseborn != null)
+        {
+            // ★ 還原為最乾淨安全的寫法
             mouseborn.OnObjectClicked(clickedState.Hole);
+        }
     }
 
     // 獨立出一個更新分數 UI 的方法，方便重複呼叫
@@ -202,6 +205,7 @@ public class usercontrol : MonoBehaviour,
         if (timerText != null) timerText.text = $"時間: {timer}";
         // -------------------------
 
+        // 呼叫 mouseborn 的 Restart()，它現在會自動把所有箱子歸零了！
         if (mouseborn != null)
             mouseborn.Restart();
     }

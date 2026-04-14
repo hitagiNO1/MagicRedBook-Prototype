@@ -47,6 +47,10 @@ public class mouseborn : MonoBehaviour
     private readonly List<Holenumber> occupiedHoles = new List<Holenumber>();
     private readonly HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>();
     private readonly Dictionary<Holenumber, int> holeGeneration = new Dictionary<Holenumber, int>();
+
+    // ★ 新增：用來記錄每個洞的初始絕對位置
+    private readonly Dictionary<Holenumber, Vector3> initialHolePositions = new Dictionary<Holenumber, Vector3>();
+
     private int globalGeneration = 0;
 
     public System.Action<HoleState> OnHoleSpawned;
@@ -63,7 +67,7 @@ public class mouseborn : MonoBehaviour
     void Start()
     {
         isQuitting = false;
-        
+
         if (!ValidateSprites()) { enabled = false; return; }
         if (!ValidateHoleArray()) { enabled = false; return; }
         InitializeHoles();
@@ -113,6 +117,9 @@ public class mouseborn : MonoBehaviour
             GameObject go = holeObjectArray[i];
             Holenumber hole = (Holenumber)i;
             holeObjects[hole] = go;
+
+            // ★ 記錄初始位置
+            initialHolePositions[hole] = go.transform.position;
 
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
             if (sr != null)
@@ -277,6 +284,21 @@ public class mouseborn : MonoBehaviour
     private void ResetHole(Holenumber hole)
     {
         if (!holeObjects.TryGetValue(hole, out GameObject go) || go == null) return;
+
+        // ==========================================
+        // ★ 核心修復：強制將座標還原，並重置動畫
+        // ==========================================
+        if (initialHolePositions.ContainsKey(hole))
+        {
+            go.transform.position = initialHolePositions[hole];
+        }
+        Animator anim = go.GetComponent<Animator>();
+        if (anim != null)
+        {
+            anim.Rebind();
+            anim.Update(0f);
+        }
+
         if (!holeRenderers.TryGetValue(hole, out SpriteRenderer sr)) return;
 
         HoleState state = go.GetComponent<HoleState>();
