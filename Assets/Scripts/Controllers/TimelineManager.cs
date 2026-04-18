@@ -230,6 +230,10 @@ public class TimelineManager : MonoBehaviour
     {
         SceneManager.LoadScene("CH2");
     }
+    public void GoCG6()
+    {
+        SceneManager.LoadScene("CG6");
+    }
 
     public void GoTapeGame()
     {

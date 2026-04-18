@@ -263,7 +263,10 @@ public class CGTextEND : MonoBehaviour
         barText.text = "";
         personNameText.text = "";
     }
-
+    public void GoMain()
+    {
+        SceneManager.LoadScene("Main");
+    }
     private bool IsCompleted() => state == State.COMPLETED;
     private bool IsLastSentence() => sentenceIndex + 1 >= currentScene.sentences.Count;
 }

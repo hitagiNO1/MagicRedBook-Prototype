@@ -863,6 +863,7 @@ GameObject:
   - component: {fileID: 1118190014}
   - component: {fileID: 1118190013}
   - component: {fileID: 1118190015}
+  - component: {fileID: 1118190016}
   m_Layer: 5
   m_Name: TextBar
   m_TagString: Untagged
@@ -1069,6 +1070,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1118190016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118190008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: cba8a0b9da5f3db4391505682d320505, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1118190014}
+          m_TargetAssemblyTypeName: CGTextEND, Assembly-CSharp
+          m_MethodName: GoMain
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1133895680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1230,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1133895680}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 40528ce5c2d5581429c81b12c1cb06f9, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 250b80ae075602f4c8752e3cb3a47f0b, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -1227,6 +1258,8 @@ PlayableDirector:
     value: {fileID: 1477506341}
   - key: {fileID: -4191374838335442898, guid: 250b80ae075602f4c8752e3cb3a47f0b, type: 2}
     value: {fileID: 1477506345}
+  - key: {fileID: -2829474745308215566, guid: 250b80ae075602f4c8752e3cb3a47f0b, type: 2}
+    value: {fileID: 1118190016}
   m_ExposedReferences:
     m_References: []
 --- !u!1 &1151898471
@@ -1514,7 +1547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
