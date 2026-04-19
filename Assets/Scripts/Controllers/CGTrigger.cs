@@ -3,9 +3,7 @@ using UnityEngine;
 public class CGTrigger : MonoBehaviour
 {
     [Header("設定區")]
-    [Tooltip("請對應 ItemManager 裡的 ID (0-5)")]
     public int itemID;
-
     private SpriteRenderer myRenderer;
 
     void Awake()
@@ -13,25 +11,45 @@ public class CGTrigger : MonoBehaviour
         myRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // --- 關鍵邏輯：從 CG 場景回來時執行 ---
-    // 當主場景重新被設為 Active，或物件被開啟時，這行會瞬間執行
     void OnEnable()
     {
-        // 檢查是否需要換圖
+        // 1. 醒來的第一件事：先檢查一次現有狀態
         CheckAndRefreshImage();
+
+        // 2. 訂閱廣播頻道：只要 CGManager 有廣播，就去執行 OnStateChanged 函式
+        if (CGManager.Instance != null)
+        {
+            CGManager.Instance.OnCGStateChanged += OnStateChanged;
+        }
     }
-    // 檢查狀態並執行換圖
-    void CheckAndRefreshImage()
+
+    void OnDisable()
     {
-        // 防呆：確保 Manager 活著
+        // ★ 好習慣：物件關閉時要退訂廣播，避免報錯
+        if (CGManager.Instance != null)
+        {
+            CGManager.Instance.OnCGStateChanged -= OnStateChanged;
+        }
+    }
+
+    // 當收到廣播時執行的動作
+    private void OnStateChanged(int triggeredID)
+    {
+        // 檢查廣播的 ID 是不是自己負責的 ID
+        if (triggeredID == itemID)
+        {
+            CheckAndRefreshImage();
+        }
+    }
+
+    public void CheckAndRefreshImage()
+    {
         if (CGManager.Instance == null) return;
 
-        // 如果這個 ID 在 ItemManager 裡被標記為 "已觸發" (由 CGText 設定)
         if (CGManager.Instance.IsItemTriggered(itemID))
         {
             Sprite newSprite = CGManager.Instance.GetTriggeredSprite(itemID);
 
-            // 確保有新圖片且 Renderer 存在
             if (newSprite != null && myRenderer != null)
             {
                 myRenderer.sprite = newSprite;
