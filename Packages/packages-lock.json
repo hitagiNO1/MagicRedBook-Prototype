@@ -10,8 +10,16 @@
       },
       "hash": "04c1ca72cde82318e11eb1281dc4c3d314a2e68c"
     },
+    "com.esotericsoftware.spine.timeline": {
+      "version": "file:G:/unity套件/com.esotericsoftware.spine.timeline-3.8",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.timeline": "1.2.10"
+      }
+    },
     "com.esotericsoftware.spine.urp-shaders": {
-      "version": "file:../Assets/Resources/com.esotericsoftware.spine.urp-shaders-3.8-2019.3",
+      "version": "file:G:/unity套件/com.esotericsoftware.spine.urp-shaders-3.8-2019.3",
       "depth": 0,
       "source": "local",
       "dependencies": {
