@@ -1712,7 +1712,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 17.5
+        time: 18.5
         value: 1
         inSlope: 0
         outSlope: 0
@@ -1721,7 +1721,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 18.5
+        time: 19.5
         value: 0
         inSlope: 0
         outSlope: 0
@@ -1760,7 +1760,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 18.5
+    m_StopTime: 19.5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -1799,7 +1799,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 17.5
+        time: 18.5
         value: 1
         inSlope: 0
         outSlope: 0
@@ -1808,7 +1808,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 18.5
+        time: 19.5
         value: 0
         inSlope: 0
         outSlope: 0
@@ -2184,6 +2184,22 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &-577419278660918550
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 18.233333333333334
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: 6ddb405176096514080da073dcac3123, type: 2}
 --- !u!114 &-376357328840715094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2334,7 +2350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 18.483333333333334
+  m_Time: 19.5
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: 5a6a4a80ddad37a4b88c5d56b4a8bc10, type: 2}
@@ -3442,6 +3458,7 @@ MonoBehaviour:
   m_Markers:
     m_Objects:
     - {fileID: 337249680690593802}
+    - {fileID: -577419278660918550}
 --- !u!74 &2746544149297518694
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -3780,7 +3797,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -5823340546085695164}
-    m_Duration: 18.85
+    m_Duration: 19.516666666666666
     m_TimeScale: 1
     m_ParentTrack: {fileID: 6297228466144493415}
     m_EaseInDuration: 0

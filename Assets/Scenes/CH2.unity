@@ -6526,7 +6526,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 123.75, y: 4.2668}
+  m_AnchoredPosition: {x: 125.79, y: 3.4668}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -16478,7 +16478,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 123.75, y: 4.2668, z: -10}
+  m_LocalPosition: {x: 125.79, y: 3.4668, z: -10}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18064,7 +18064,7 @@ Transform:
   m_GameObject: {fileID: 1581239185}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 123.75, y: 1.5217999, z: -10}
+  m_LocalPosition: {x: 125.79, y: 0.7217999, z: -10}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27425,7 +27425,7 @@ Transform:
   m_GameObject: {fileID: 1334490360547603651}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 123.26, y: 0.1, z: 0}
+  m_LocalPosition: {x: 125.3, y: -0.7, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -28087,7 +28087,7 @@ MonoBehaviour:
   - triggerType: 1
     clip: {fileID: 8300000, guid: 7d3e7971f6f2b954fb3d076d79588542, type: 3}
     state: 1
-    storyScene: {fileID: 11400000, guid: 9d5dbb5814f555b4f9bcfcb4f45fb439, type: 2}
+    storyScene: {fileID: 11400000, guid: 511aa6e204632194eba514440a9c62b0, type: 2}
   fadeDuration: 2
   volumeSlider: {fileID: 0}
   Volume: 0.15
