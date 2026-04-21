@@ -503,6 +503,22 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(ResetBattleFlags());
     }
 
+    public void ProcessAllDeaths()
+    {
+        // 掃描場上所有敵人
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            Unit enemy = enemyUnits[i];
+
+            // 如果敵人存在，還沒被標記死亡，且血量已經歸零，就正式處決
+            if (enemy != null && !enemy.isDead && enemy.currentHP <= 0)
+            {
+                // 呼叫你原本寫好的死亡淡出與關閉碰撞邏輯
+                MarkEnemyAsDead(i);
+            }
+        }
+    }
+
     private IEnumerator ResetBattleFlags()
     {
         yield return new WaitForSeconds(1.5f);

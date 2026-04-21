@@ -119,7 +119,7 @@ public class InventoryUI : MonoBehaviour
         SkillManager skillManager = FindObjectOfType<SkillManager>();
         string playerName = skillManager != null ? skillManager.playerUnits[playerIndex].unitName : "玩家";
 
-        confirmText.text = $"要讓 {playerName} {actionText} {equipData.equipmentName} 嗎？";
+        confirmText.text = $"要讓 <b>{playerName}</b> {actionText} <b>{equipData.equipmentName}</b> 嗎？";
         confirmPanel.SetActive(true);
     }
     // 點擊使用道具

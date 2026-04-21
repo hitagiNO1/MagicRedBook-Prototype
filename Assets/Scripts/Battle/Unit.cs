@@ -92,19 +92,16 @@ public class Unit : MonoBehaviour
             battleHUD.SetHP(currentHP);
         }
 
-        if (currentHP <= 0 && !isDead)
+        // ==========================================
+        // ★ 修改重點：移除直接呼叫 MarkEnemyAsDead 的邏輯
+        // ==========================================
+        if (currentHP <= 0)
         {
-            isDead = true;
-            BattleSystem battleSystem = FindObjectOfType<BattleSystem>();
-            if (battleSystem != null && battleSystem.enemyUnits.Contains(this))
-            {
-                int index = battleSystem.enemyUnits.IndexOf(this);
-                if (index >= 0)
-                {
-                    battleSystem.MarkEnemyAsDead(index);
-                }
-            }
-            return true;
+            // 注意：這裡先不要把 isDead 設為 true！
+            // 讓它保持 false，確保後續排隊的技能在執行時，不會被其他防呆機制擋下來。
+            // isDead 的狀態標記，會在你剛寫好的 BattleSystem.ProcessAllDeaths() 裡面統一處理。
+
+            return true; // 回傳 true 代表「這下攻擊足以致死」
         }
 
         return false;
