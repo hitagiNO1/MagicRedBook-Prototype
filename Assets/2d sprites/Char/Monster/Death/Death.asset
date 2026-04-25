@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Death
   m_EditorClassIdentifier: 
   monsterName: "\u8C93\u6B7B\u795E"
-  description: 
+  description: "\u8EAB\u70BA\u969B\u5730\u7684\u5F15\u8DEF\u8005\uFF0C\u8C93\u6B7B\u795E\u7A7F\u68AD\u5728\u9748\u9B42\u8207\u7A7A\u9593\u7684\u6D41\u8F49\u4E4B\u9593\uFF0C\u5F15\u9818\u8457\u6BCF\u4E00\u9846\u7834\u788E\u7684\u8C93\u9748\u5C0B\u56DE\u5B89\u5BE7\u3002"
   monsterPic: {fileID: 21300000, guid: 21712623a019b1144be65a7abeb36972, type: 3}
   monsterskill: {fileID: 21300000, guid: 9246d338ba847ac4f8250ecbab485bff, type: 3}
   skills:
