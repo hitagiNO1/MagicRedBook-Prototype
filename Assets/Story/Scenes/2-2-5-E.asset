@@ -206,7 +206,10 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 0401471fd3a76b843ab0cb31f8a3290b, type: 2}
+      timing: 1
   - text: "(\u524D\u65B9\u7684\u9ED1\u6697\u4E2D\uFF0C\u552F\u4E00\u6B98\u5B58\u7684\u56DE\u61B6\u9583\u720D\u8457\u8A6D\u7570\u7684\u5FAE\u5149\uFF0C\u96DC\u8A0A\u5728\u7A7A\u6C23\u4E2D\u55E1\u9CF4\u3002)"
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []

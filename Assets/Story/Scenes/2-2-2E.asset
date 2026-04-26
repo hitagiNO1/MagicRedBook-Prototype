@@ -192,5 +192,8 @@ MonoBehaviour:
       actionType: 0
       coords: {x: 0, y: 0}
       Right: 0
-    timline: []
+    timline:
+    - animation: 1
+      myPlayableAsset: {fileID: 11400000, guid: 12df096f34871df47b4d73d17984f7c0, type: 2}
+      timing: 2
   nextScene: {fileID: 0}
