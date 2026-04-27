@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2688011799659414296}
-  - component: {fileID: 6296822153081543682}
   m_Layer: 6
   m_Name: FallTreee
   m_TagString: Untagged
@@ -63,22 +62,6 @@ Transform:
   - {fileID: 6431153260579194879}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6296822153081543682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1012133083881062991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8674711239a43f244a7d8aadde2dc39b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  storyToPlay: {fileID: 0}
-  LimitScenes:
-  - {fileID: 11400000, guid: 9ebe7605200cd5d439b4678e4ba726d0, type: 2}
-  - {fileID: 11400000, guid: 5b2820c7bce1e614fbd2a1b730133bfa, type: 2}
 --- !u!1 &1108174797890863902
 GameObject:
   m_ObjectHideFlags: 0

@@ -37710,7 +37710,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -686
+  m_SortingOrder: -336
   m_Sprite: {fileID: 21300000, guid: fbbbf9a80c6c1bb40aaf9e772834de3a, type: 3}
   m_Color: {r: 0.735849, g: 0.7184941, b: 0.7184941, a: 0}
   m_FlipX: 0
@@ -58153,7 +58153,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482807939}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: 15.138477}
+  m_LocalPosition: {x: 0, y: 0, z: -19.861523}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -58161,7 +58161,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 44.94, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 597, y: 30.000008}
+  m_AnchoredPosition: {x: 371.3, y: 30.000008}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &482807943
@@ -140950,7 +140950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1203823677
 Animator:
   serializedVersion: 5
@@ -165686,7 +165686,7 @@ Transform:
   m_GameObject: {fileID: 1400622617}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 597, y: 30.000008, z: 15.138477}
+  m_LocalPosition: {x: 371.3, y: 30.000008, z: -19.861523}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -232273,7 +232273,7 @@ Transform:
   m_GameObject: {fileID: 1929828331}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000029802322, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 597, y: 0, z: 67.1}
+  m_LocalPosition: {x: 371.3, y: 0, z: 32.1}
   m_LocalScale: {x: -0.10000002, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -255524,7 +255524,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: -672
+  m_SortingOrder: -322
   m_SortAtRoot: 0
 --- !u!1001 &2107747186
 PrefabInstance:
