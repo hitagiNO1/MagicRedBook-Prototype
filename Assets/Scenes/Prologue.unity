@@ -15307,7 +15307,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -81931293
   m_SortingLayer: 2
-  m_SortingOrder: 26
+  m_SortingOrder: -46
   m_SortAtRoot: 0
 --- !u!212 &1037822664
 SpriteRenderer:
@@ -21725,8 +21725,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.125019, y: 5, z: 18.563885}
-  m_Center: {x: -0.43749046, y: 0, z: -5.282753}
+  m_Size: {x: 1.4160233, y: 5, z: 40.169334}
+  m_Center: {x: 0.91700745, y: 0, z: -4.5522575}
 --- !u!4 &1105927152
 Transform:
   m_ObjectHideFlags: 0
@@ -21736,7 +21736,7 @@ Transform:
   m_GameObject: {fileID: 1105927149}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.6, y: 2.25, z: 0.6}
+  m_LocalPosition: {x: 27, y: 2.25, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -61969,7 +61969,7 @@ MonoBehaviour:
   skillManager: {fileID: 3720424681303388706}
   buffDebuffManager: {fileID: 3720424681303388705}
   gameScript: {fileID: 4336947258115202937}
-  battleTrigger: {fileID: 0}
+  currentBattleCamera: {fileID: 0}
   battleFxContainer: {fileID: 0}
   currentPlayerIndex: 0
 --- !u!1001 &538447820776969837
@@ -64004,6 +64004,8 @@ PlayableDirector:
   - key: {fileID: 177410990946661590, guid: 2b2f9fa125231cd46b3001dfaf8ac12e, type: 2}
     value: {fileID: 1503856737}
   - key: {fileID: -5886210236999144597, guid: 7a37e8e4265a1ba43a8a7e76bef1082f, type: 2}
+    value: {fileID: 897171991241011713}
+  - key: {fileID: -3884755488404385082, guid: c304dcc14d0ef1d409659b32fcd84585, type: 2}
     value: {fileID: 897171991241011713}
   m_ExposedReferences:
     m_References:
@@ -124381,6 +124383,7 @@ MonoBehaviour:
   skillIconParent: {fileID: 416347393}
   skillIcons: []
   maxSkillPerTurn: 3
+  executionOrderTracker: 
   isWaitingForTarget: 0
   pendingSkill: 
   pendingPlayerIndex: -1

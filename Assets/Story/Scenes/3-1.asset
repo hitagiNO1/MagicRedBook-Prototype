@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
   m_Name: 3-1
   m_EditorClassIdentifier: 
-  StopMove: 0
+  StopMove: 1
   sentences:
   - text: "\u5E03\u840A\u514B\uFF01\uFF01\uFF01\u55DA\u55DA\u55DA......"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
@@ -81,7 +81,7 @@ MonoBehaviour:
       Right: 0
     timline:
     - animation: 1
-      myPlayableAsset: {fileID: 0}
+      myPlayableAsset: {fileID: 11400000, guid: 5369b7b0a2dc67f499e52d1bee5f9683, type: 2}
       timing: 0
   - text: "\u6C42\u4F60\u2026\u2026\u80FD\u4E0D\u80FD\u2026\u2026\u8B93\u6211\uFF0C\u518D\u898B\u4ED6\u4E00\u6B21\u2026\u2026"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
