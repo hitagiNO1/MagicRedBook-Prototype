@@ -26,7 +26,7 @@ public class SkillManager : MonoBehaviour
         { "Skill_1", "吃我一擊！" },
         { "Skill_2", "上吧，球球們！" },
         { "Skill_3", "舔舔舔！" },
-        { "Skill_4", "一顆煤炭～" },
+        { "Skill_4", "大雞腿～" },
         { "Skill_5", "連環兔子踹！" },
         { "catSkill_1", "三分球！" },
         { "catSkill_2", "小意思！" },
@@ -676,16 +676,237 @@ public class SkillManager : MonoBehaviour
     public void catSkill_5(int playerIndex) { if (playerIndex != 1 || !ValidateSkill(playerIndex, "catSkill_5")) return; AddSkillToQueue(playerIndex, "catSkill_5", false, CatSkill5Coroutine(playerIndex)); dialogueText.text = $"<b>痛痛飛走</b>～\n 優美的歌聲，振奮隊伍士氣。\nCD : 3   消耗AP : 3"; RemoveSkillIcon(GetSkillCost("catSkill_5")); UpdateAllSkillButtonStates(); }
 
     // ==================== Trigger 按鈕事件 ====================
-    public void TriggerSkill1ForPlayer0() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return; string id = "Skill_1"; if (selectedSkillNames[0].Contains(id)) { CancelSkill(0, id); SetButtonDimmed(skill1Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) { dialogueText.text = "AP不足！"; return; } isWaitingForTarget = true; pendingSkill = id; pendingPlayerIndex = 0; dialogueText.text = "請點擊一個敵人目標！"; SetButtonDimmed(skill1Button, true); }
-    public void TriggerSkill2ForPlayer0() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return; if (CheckSkillCooldownAndShowMessage(0, "Skill_2", "2")) return; string id = "Skill_2"; if (selectedSkillNames[0].Contains(id)) { CancelSkill(0, id); SetButtonDimmed(skill2Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; Skill_2(0); SetButtonDimmed(skill2Button, true); }
-    public void TriggerSkill3ForPlayer0() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return; if (CheckSkillCooldownAndShowMessage(0, "Skill_3", "3")) return; string id = "Skill_3"; if (selectedSkillNames[0].Contains(id)) { CancelSkill(0, id); SetButtonDimmed(skill3Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; Skill_3(0); SetButtonDimmed(skill3Button, true); }
-    public void TriggerSkill4ForPlayer0() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return; if (CheckSkillCooldownAndShowMessage(0, "Skill_4", "4")) return; string id = "Skill_4"; if (selectedSkillNames[0].Contains(id)) { CancelSkill(0, id); SetButtonDimmed(skill4Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; Skill_4(0); SetButtonDimmed(skill4Button, true); }
-    public void TriggerSkill5ForPlayer0() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return; if (CheckSkillCooldownAndShowMessage(0, "Skill_5", "5")) return; string id = "Skill_5"; if (selectedSkillNames[0].Contains(id)) { CancelSkill(0, id); SetButtonDimmed(skill5Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; isWaitingForTarget = true; pendingSkill = id; pendingPlayerIndex = 0; SetButtonDimmed(skill5Button, true); }
-    public void TriggerCatSkill1ForPlayer1() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return; string id = "catSkill_1"; if (selectedSkillNames[1].Contains(id)) { CancelSkill(1, id); SetButtonDimmed(catSkill1Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; isWaitingForTarget = true; pendingSkill = id; pendingPlayerIndex = 1; SetButtonDimmed(catSkill1Button, true); }
-    public void TriggerCatSkill2ForPlayer1() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return; if (CheckSkillCooldownAndShowMessage(1, "catSkill_2", "2")) return; string id = "catSkill_2"; if (selectedSkillNames[1].Contains(id)) { CancelSkill(1, id); SetButtonDimmed(catSkill2Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; catSkill_2(1); SetButtonDimmed(catSkill2Button, true); }
-    public void TriggerCatSkill3ForPlayer1() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return; if (CheckSkillCooldownAndShowMessage(1, "catSkill_3", "3")) return; string id = "catSkill_3"; if (selectedSkillNames[1].Contains(id)) { CancelSkill(1, id); SetButtonDimmed(catSkill3Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; catSkill_3(1); SetButtonDimmed(catSkill3Button, true); }
-    public void TriggerCatSkill4ForPlayer1() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return; if (CheckSkillCooldownAndShowMessage(1, "catSkill_4", "4")) return; string id = "catSkill_4"; if (selectedSkillNames[1].Contains(id)) { CancelSkill(1, id); SetButtonDimmed(catSkill4Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; isWaitingForTarget = true; pendingSkill = id; pendingPlayerIndex = 1; SetButtonDimmed(catSkill4Button, true); }
-    public void TriggerCatSkill5ForPlayer1() { ClearAllHighlights(); if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return; if (CheckSkillCooldownAndShowMessage(1, "catSkill_5", "5")) return; string id = "catSkill_5"; if (selectedSkillNames[1].Contains(id)) { CancelSkill(1, id); SetButtonDimmed(catSkill5Button, false); return; } if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn) return; catSkill_5(1); SetButtonDimmed(catSkill5Button, true); }
+    public void TriggerSkill1ForPlayer0()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return;
+        string id = "Skill_1";
+        if (selectedSkillNames[0].Contains(id))
+        {
+            CancelSkill(0, id);
+            SetButtonDimmed(skill1Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        isWaitingForTarget = true;
+        pendingSkill = id;
+        pendingPlayerIndex = 0;
+        dialogueText.text = $"準備使用 <b>吃我一擊</b>！\n請點擊一個敵人目標！\n";
+        SetButtonDimmed(skill1Button, true);
+    }
+
+    public void TriggerSkill2ForPlayer0()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return;
+        if (CheckSkillCooldownAndShowMessage(0, "Skill_2", "2")) return;
+        string id = "Skill_2";
+        if (selectedSkillNames[0].Contains(id))
+        {
+            CancelSkill(0, id);
+            SetButtonDimmed(skill2Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        Skill_2(0);
+        SetButtonDimmed(skill2Button, true);
+    }
+
+    public void TriggerSkill3ForPlayer0()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return;
+        if (CheckSkillCooldownAndShowMessage(0, "Skill_3", "3")) return;
+        string id = "Skill_3";
+        if (selectedSkillNames[0].Contains(id))
+        {
+            CancelSkill(0, id);
+            SetButtonDimmed(skill3Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        Skill_3(0);
+        SetButtonDimmed(skill3Button, true);
+    }
+
+    public void TriggerSkill4ForPlayer0()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return;
+        if (CheckSkillCooldownAndShowMessage(0, "Skill_4", "4")) return;
+        string id = "Skill_4";
+        if (selectedSkillNames[0].Contains(id))
+        {
+            CancelSkill(0, id);
+            SetButtonDimmed(skill4Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        Skill_4(0);
+        SetButtonDimmed(skill4Button, true);
+    }
+
+    public void TriggerSkill5ForPlayer0()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(0)) return;
+        if (CheckSkillCooldownAndShowMessage(0, "Skill_5", "5")) return;
+
+        string id = "Skill_5";
+        if (selectedSkillNames[0].Contains(id))
+        {
+            CancelSkill(0, id);
+            SetButtonDimmed(skill5Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+
+        isWaitingForTarget = true;
+        pendingSkill = id;
+        pendingPlayerIndex = 0;
+
+        // ★ 補上文字顯示：讓玩家知道現在要選目標
+        dialogueText.text = $"準備使用 <b>連環兔子踹</b>！\n請點擊一個敵人目標！";
+        SetButtonDimmed(skill5Button, true);
+    }
+
+    public void TriggerCatSkill1ForPlayer1()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return;
+
+        string id = "catSkill_1";
+        if (selectedSkillNames[1].Contains(id))
+        {
+            CancelSkill(1, id);
+            SetButtonDimmed(catSkill1Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+
+        isWaitingForTarget = true;
+        pendingSkill = id;
+        pendingPlayerIndex = 1;
+
+        // ★ 補上文字顯示
+        dialogueText.text = $"準備使用 <b>三分球</b>！\n請點擊一個敵人目標！\n";
+        SetButtonDimmed(catSkill1Button, true);
+    }
+
+    public void TriggerCatSkill2ForPlayer1()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return;
+        if (CheckSkillCooldownAndShowMessage(1, "catSkill_2", "2")) return;
+        string id = "catSkill_2";
+        if (selectedSkillNames[1].Contains(id))
+        {
+            CancelSkill(1, id);
+            SetButtonDimmed(catSkill2Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        catSkill_2(1);
+        SetButtonDimmed(catSkill2Button, true);
+    }
+
+    public void TriggerCatSkill3ForPlayer1()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return;
+        if (CheckSkillCooldownAndShowMessage(1, "catSkill_3", "3")) return;
+        string id = "catSkill_3";
+        if (selectedSkillNames[1].Contains(id))
+        {
+            CancelSkill(1, id);
+            SetButtonDimmed(catSkill3Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        catSkill_3(1);
+        SetButtonDimmed(catSkill3Button, true);
+    }
+
+    public void TriggerCatSkill4ForPlayer1()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return;
+        if (CheckSkillCooldownAndShowMessage(1, "catSkill_4", "4")) return;
+
+        string id = "catSkill_4";
+        if (selectedSkillNames[1].Contains(id))
+        {
+            CancelSkill(1, id);
+            SetButtonDimmed(catSkill4Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+
+        isWaitingForTarget = true;
+        pendingSkill = id;
+        pendingPlayerIndex = 1;
+
+        // ★ 補上文字顯示 (注意這招是輔助技能，所以提示點擊我方)
+        dialogueText.text = $"準備使用 <b>打起精神來</b>！\n請點擊一個我方目標！\n";
+        SetButtonDimmed(catSkill4Button, true);
+    }
+
+    public void TriggerCatSkill5ForPlayer1()
+    {
+        ClearAllHighlights();
+        if (battlesystem.state != BattleState.PLAYERTURN || !CanUseSkill(1)) return;
+        if (CheckSkillCooldownAndShowMessage(1, "catSkill_5", "5")) return;
+        string id = "catSkill_5";
+        if (selectedSkillNames[1].Contains(id))
+        {
+            CancelSkill(1, id);
+            SetButtonDimmed(catSkill5Button, false);
+            return;
+        }
+        if (GetTotalSelectedSkills() + GetSkillCost(id) > maxSkillPerTurn)
+        {
+            dialogueText.text = "AP不足！";
+            return;
+        }
+        catSkill_5(1);
+        SetButtonDimmed(catSkill5Button, true);
+    }
 
     public void OnConfirmSkillQueue()
     {

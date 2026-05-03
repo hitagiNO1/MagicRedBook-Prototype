@@ -16,7 +16,9 @@ public class InventoryUI : MonoBehaviour
     public GameObject equipmentSlotPrefab;
     public List<EquipmentData> equipmentDatabase;
     public int currentPlayerIndex = 0;
-
+    [Header("===== 音效設定 =====")]
+    public AudioSource uiAudioSource; // 負責播放 UI 音效的組件
+    public AudioClip equipSound;      // 確認裝備/脫下的音效檔案
 
     private EquipmentData selectedEquipment;
     private bool isEquippingAction;
@@ -119,25 +121,65 @@ public class InventoryUI : MonoBehaviour
         SkillManager skillManager = FindObjectOfType<SkillManager>();
         string playerName = skillManager != null ? skillManager.playerUnits[playerIndex].unitName : "玩家";
 
-        confirmText.text = $"要讓 <b>{playerName}</b> {actionText} <b>{equipData.equipmentName}</b> 嗎？";
+        string effectText = "";
+
+        // 依照裝備的「名字」來給予不同的效果文字
+        switch (equipData.equipmentName)
+        {
+            case "膠帶拳套":
+                effectText = "增加5點攻擊力，布萊克的技能可以額外造成一小段傷害";
+                break;
+            case "穿戴式紙箱盔甲": // 替換成你第二個裝備的名字
+                effectText = "增加40點防禦力，但只能使用技能一";
+                break;
+            case "劍客靴子": // 替換成你第三個裝備的名字
+                effectText = "將技能行動點變成5點";
+                break;
+            case "逗貓棒法杖": // 替換成你第四個裝備的名字
+                effectText = "增加10點攻擊力";
+                break;
+            default:
+                // 如果名字都不符合，就預設抓取 ScriptableObject 裡的 description
+                effectText = equipData.description;
+                break;
+        }
+
+        // 組合成你要的最終格式 (\n 代表換行)
+        confirmText.text = $"要讓{playerName}{actionText}{equipData.equipmentName}嗎？\n效果:{effectText}";
+
         confirmPanel.SetActive(true);
     }
     // 點擊使用道具
     public void ConfirmUse()
     {
+        AudioClip confirmSound = Resources.Load<AudioClip>("BGM/soundeffects/equip");
+
+        if (uiAudioSource != null && confirmSound != null)
+        {
+            uiAudioSource.PlayOneShot(confirmSound);
+        }
+        else if (confirmSound == null)
+        {
+            Debug.LogWarning("找不到音效檔案！請確認路徑是否正確：Resources/BGM/soundeffects/equip (注意大小寫)");
+        }
         if (selectedEquipment != null)
         {
             SkillManager skillmanager = FindObjectOfType<SkillManager>();
             if (skillmanager != null)
             {
-                Unit targetUnit = skillmanager.playerUnits[selectedPlayerIndex];
-                if (isEquippingAction)
+                // ★ 把原本只抓一個目標的寫法，改成迴圈同時處理 0 和 1
+                foreach (Unit targetUnit in skillmanager.playerUnits)
                 {
-                    EquipmentManager.Instance.EquipItemToUnit(targetUnit, selectedEquipment.equipmentName);
-                }
-                else
-                {
-                    EquipmentManager.Instance.UnequipItemFromUnit(targetUnit, selectedEquipment.equipmentName);
+                    if (targetUnit == null) continue; // 防呆
+
+                    if (isEquippingAction)
+                    {
+                        EquipmentManager.Instance.EquipItemToUnit(targetUnit, selectedEquipment.equipmentName);
+                    }
+                    else
+                    {
+                        EquipmentManager.Instance.UnequipItemFromUnit(targetUnit, selectedEquipment.equipmentName);
+                    }
                 }
             }
         }

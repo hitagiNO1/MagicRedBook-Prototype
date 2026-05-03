@@ -108,7 +108,7 @@ public class EquipmentManager : MonoBehaviour
             }
             if (equipment == "³r¿ß´Îªk§ú")
             {
-                unit.damage += 5;
+                unit.damage += 10;
             }
         }
 
