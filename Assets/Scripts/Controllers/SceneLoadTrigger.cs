@@ -18,7 +18,7 @@ public class SceneLoadTrigger : MonoBehaviour
 
     private bool isLoading = false;
     private bool playerInRange = false;
-
+    private bool isFirstTime = true; // 紀錄是否為第一次啟動
     void Awake()
     {
         // 在 Awake 先記錄好初始音量，避免 OnEnable 執行時抓到 0
@@ -43,6 +43,15 @@ public class SceneLoadTrigger : MonoBehaviour
     // --- 修改：當場景被重新喚醒時 (從 CG 回來) ---
     void OnEnable()
     {
+        // ★ 如果是遊戲剛開始的第一次載入，把開關關掉，然後直接跳出，不播動畫！
+        if (isFirstTime)
+        {
+            isFirstTime = false;
+            return;
+        }
+
+        // ---------------- 以下是從別的場景「切回來」時才會執行的邏輯 ----------------
+
         // 檢查：如果黑幕是開著的，而且顏色是黑的 (Alpha > 0.9)
         if (fadeImage != null && fadeImage.gameObject.activeSelf && fadeImage.color.a > 0.9f)
         {
@@ -50,8 +59,8 @@ public class SceneLoadTrigger : MonoBehaviour
             StartCoroutine(FadeInAnimation());
         }
 
-        // ★ 音樂淡入：如果我們有設定音樂，回來時把它漸進式播回來
-        if (bgmSource != null && !isLoading) // 確保不是正在載入中才觸發
+        // 音樂淡入：如果我們有設定音樂，回來時把它漸進式播回來
+        if (bgmSource != null && !isLoading)
         {
             StartCoroutine(FadeInAudio());
         }
