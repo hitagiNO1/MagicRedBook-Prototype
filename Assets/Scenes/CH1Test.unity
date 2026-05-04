@@ -274016,6 +274016,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b54b47f64d033da48a7299935075be4c, type: 2}
   - {fileID: 11400000, guid: f2ebf0934dc1ff14f83e122e9a803a1c, type: 2}
   currentPlayerIndex: 0
+  uiAudioSource: {fileID: 0}
+  equipSound: {fileID: 0}
 --- !u!114 &665938469933563219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332145,9 +332147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b23f41e2ed60eb45ae55fe5cc60ce28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedEquipment:
-  - "\u7A7F\u6234\u5F0F\u7D19\u7BB1\u76D4\u7532"
-  - "\u528D\u5BA2\u9774\u5B50"
+  ownedEquipment: []
   equippedItems: []
 --- !u!114 &3720424681303388714
 MonoBehaviour:
