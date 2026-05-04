@@ -19,6 +19,7 @@ public class TimelineManager : MonoBehaviour
     public ParticleSystem Magic2;
     public ParticleSystem Magic3;
     public ParticleSystem BookMagic;
+    public Unit Blackunit;
     // 紀錄目前是否正在播放動畫
 
     public bool IsPlaying { get; private set; }
@@ -258,5 +259,10 @@ public class TimelineManager : MonoBehaviour
     public void Page4Pick()
     {
         PageCGUI.Instance.AddPage(3);
+    }
+    public void AddTape()
+    {
+        EquipmentManager.Instance.AddEquipment("膠帶拳套");
+        EquipmentManager.Instance.EquipItemToUnit(Blackunit, "膠帶拳套");
     }
 }

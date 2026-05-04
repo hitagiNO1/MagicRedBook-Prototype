@@ -50824,7 +50824,7 @@ MonoBehaviour:
   equippedGear: []
   baseDamage: 0
   baseDefense: 0
-  damage: 100
+  damage: 10
   defenseData: {fileID: 11400000, guid: 1fb37c7977392794d9eb193f8117a45d, type: 2}
   defense: 10
   maxHP: 100
@@ -273100,6 +273100,8 @@ PlayableDirector:
     value: {fileID: 1759570061}
   - key: {fileID: -3248329465226781363, guid: ecdf7810e5af4704292f4bf9b6a3a91a, type: 2}
     value: {fileID: 1759570063}
+  - key: {fileID: -275015402448433743, guid: dcd49a90c2518a44c81fc974ffb5de9a, type: 2}
+    value: {fileID: 433154398}
   m_ExposedReferences:
     m_References:
     - b66ebb15795ad27409b7990f21887984: {fileID: 1400622618}
@@ -292780,6 +292782,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: aa46417feb80f44498ba6cc4e2a25ec0, type: 2}
     - {fileID: 11400000, guid: 0a950852b9190364db60c6a3fc97c8b8, type: 2}
     - {fileID: 11400000, guid: ed82866f1264a4a458767ef2710ef13a, type: 2}
+    - {fileID: 11400000, guid: af532ca989c02c242928fa6cadac1605, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -292968,6 +292971,20 @@ MonoBehaviour:
         - m_Target: {fileID: 3125049232095753072}
           m_TargetAssemblyTypeName: TimelineManager, Assembly-CSharp
           m_MethodName: SetGameStateBattle
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3125049232095753072}
+          m_TargetAssemblyTypeName: TimelineManager, Assembly-CSharp
+          m_MethodName: AddTape
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -318948,6 +318965,7 @@ MonoBehaviour:
   Magic2: {fileID: 1613483814941613786}
   Magic3: {fileID: 0}
   BookMagic: {fileID: 0}
+  Blackunit: {fileID: 437807605}
 --- !u!1001 &3127568113830598561
 PrefabInstance:
   m_ObjectHideFlags: 0

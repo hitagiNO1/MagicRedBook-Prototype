@@ -100,6 +100,15 @@ public class InventoryUI : MonoBehaviour
     // 顯示是否使用道具的確認面板
     public void UseItemDirectly(ItemData item)
     {
+        // === 新增：如果不在戰鬥狀態，直接 Return 不執行任何反應 ===
+        if (!GameStateManager.Instance.IsState(GameState.Battle))
+        {
+            Debug.Log("目前非戰鬥狀態，無法使用道具！");
+            // 這裡可以加上提示文字：confirmText.text = "戰鬥外無法使用道具！";
+            return;
+        }
+        // ==========================================================
+
         if (item != null && item.amount > 0)
         {
             Debug.Log($"立刻使用了 {item.itemName}，效果：{item.description}");
