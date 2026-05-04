@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: "\u51CD\u4E7E"
   description: "\u51CD\u4E7E\u5DF4\u5DF4\u5927\u4FE0\uFF0C\u597D\u5403\u5230\u4F60\u7121\u6CD5\u6297\u62D2"
   icon: {fileID: 21300000, guid: e61721648e9790d4f98d19b4b8939232, type: 3}
-  amount: 8
+  amount: 0
   Tag: {fileID: 21300000, guid: 9e0e23e9126dd1c428c4665253d0d50d, type: 3}
   Tagtext: "\u589E\u50B7"
