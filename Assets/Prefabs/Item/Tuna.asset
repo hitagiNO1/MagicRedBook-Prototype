@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: "\u9BAA\u9B5A\u8089\u6CE5"
   description: "\u6211\u4E0D\u611B\u559D\u6C34\uFF0C\u6211\u5C31\u8981\u5403\u8089\u6CE5\uFF0C\u8AB0\u53EB\u6211\u662F\u58DE\u86CB\u5C0F\u8C93\u54AA\uFF5E"
   icon: {fileID: 21300000, guid: 1c4b06e30770f7d41841a90be67dbfc2, type: 3}
-  amount: 0
+  amount: 2
   Tag: {fileID: 21300000, guid: c1167d5664760cd4db6e0c3d115cf276, type: 3}
   Tagtext: "\u6CBB\u7642"
