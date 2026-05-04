@@ -39,6 +39,20 @@ public class ItemSlot : MonoBehaviour
 
         // 綁定新的點擊事件
         useButton.onClick.AddListener(OnUseButtonClicked);
+
+        // === ★ 新增：根據遊戲狀態決定按鈕是否可點擊與反灰 ===
+        if (GameStateManager.Instance != null)
+        {
+            // 如果在戰鬥中，interactable 為 true (可點擊、正常顏色)
+            // 如果不在戰鬥中，interactable 為 false (不可點擊、自動變灰)
+            useButton.interactable = GameStateManager.Instance.IsState(GameState.Battle);
+        }
+        else
+        {
+            // 防呆機制：如果找不到 GameStateManager，預設鎖住
+            useButton.interactable = false;
+        }
+        // =========================================================
     }
 
     public void OnUseButtonClicked()

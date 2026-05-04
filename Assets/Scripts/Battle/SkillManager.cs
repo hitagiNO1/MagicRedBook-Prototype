@@ -211,18 +211,27 @@ public class SkillManager : MonoBehaviour
 
     public void CancelLatestSkill()
     {
+        // 情況 1：取消「正在等待選擇目標」的技能 (修改這裡)
         if (isWaitingForTarget && pendingSkill != null && pendingPlayerIndex >= 0)
         {
             Button pendingButton = GetSkillButton(pendingPlayerIndex, pendingSkill);
             if (pendingButton != null) SetButtonDimmed(pendingButton, false);
+
+            // ★ 修改點：抓取正在準備施放的角色名稱與技能名稱
+            Unit playerUnitPending = playerUnits[pendingPlayerIndex];
+            string readablePendingName = GetSkillDisplayName(pendingSkill);
+
+            // 顯示你想要的文字 (保留了 <b> 粗體標籤讓視覺更清楚，不需要可以拿掉)
+            dialogueText.text = $"<b>{playerUnitPending.unitName}</b> 取消了 <b>{readablePendingName}</b>";
+
             isWaitingForTarget = false;
             pendingSkill = null;
             pendingPlayerIndex = -1;
-            dialogueText.text = "已取消正在選擇的技能";
             UpdateAllSkillButtonStates();
             return;
         }
 
+        // 情況 2：取消已經完全確認好的技能
         if (executionOrderTracker.Count == 0)
         {
             dialogueText.text = "沒有可取消的技能";
@@ -236,6 +245,7 @@ public class SkillManager : MonoBehaviour
         Unit playerUnit = playerUnits[latestPlayerIndex];
         string readableName = GetSkillDisplayName(latestSkillName);
 
+        // 這裡原本就已經是你想要的格式了
         dialogueText.text = $"<b>{playerUnit.unitName}</b> 取消了 <b>{readableName}</b>";
 
         if (selectedTargets.ContainsKey(latestPlayerIndex) && selectedTargets[latestPlayerIndex] != null)

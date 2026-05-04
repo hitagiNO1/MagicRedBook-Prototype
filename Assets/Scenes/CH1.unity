@@ -332050,7 +332050,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b23f41e2ed60eb45ae55fe5cc60ce28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedEquipment: []
+  ownedEquipment:
+  - "\u7A7F\u6234\u5F0F\u7D19\u7BB1\u76D4\u7532"
+  - "\u528D\u5BA2\u9774\u5B50"
+  - "\u81A0\u5E36\u62F3\u5957"
+  - "\u9017\u8C93\u68D2\u6CD5\u6756"
   equippedItems: []
 --- !u!114 &3720424681303388714
 MonoBehaviour:

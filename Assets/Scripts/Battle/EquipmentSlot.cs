@@ -18,6 +18,7 @@ public class EquipmentSlot : MonoBehaviour
     private bool isEquipped;
 
     // 給 InventoryUI 呼叫的初始化方法 (對標你的 ItemSlot.Setup)
+    // 給 InventoryUI 呼叫的初始化方法 (對標你的 ItemSlot.Setup)
     public void Setup(EquipmentData equipData, InventoryUI ui, int playerIndex, bool currentlyEquipped)
     {
         data = equipData;
@@ -43,6 +44,20 @@ public class EquipmentSlot : MonoBehaviour
         // 3. 綁定按鈕事件 (跟你的 ItemSlot 一樣，先清空再綁定)
         actionButton.onClick.RemoveAllListeners();
         actionButton.onClick.AddListener(OnEquipButtonClicked);
+
+        // === ★ 新增：根據遊戲狀態決定裝備按鈕是否可點擊與反灰 ===
+        if (GameStateManager.Instance != null)
+        {
+            // 如果「不是」在戰鬥中 (!IsState)，interactable 為 true (可點擊、正常顏色)
+            // 如果「是」在戰鬥中，interactable 為 false (不可點擊、自動變灰)
+            actionButton.interactable = !GameStateManager.Instance.IsState(GameState.Battle);
+        }
+        else
+        {
+            // 防呆機制：如果找不到 GameStateManager，預設可以點擊
+            actionButton.interactable = true;
+        }
+        // ==========================================================
     }
 
     public void OnEquipButtonClicked()
