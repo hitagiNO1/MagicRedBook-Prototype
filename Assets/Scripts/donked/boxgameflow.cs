@@ -11,7 +11,6 @@ public class boxgameflow : MonoBehaviour
     public GameObject resultCanvas;
 
     [Header("Buttons")]
-    public GameObject startbutton;
     public usercontrol usercontrol;
     public GameObject Backbutton;
     public GameObject Restartbutton;
@@ -47,7 +46,6 @@ public class boxgameflow : MonoBehaviour
         gameCanvas.SetActive(true);      // 只顯示遊戲 UI
         resultCanvas.SetActive(false);
         usercontrol.RestartGame();
-        startbutton.SetActive(true);
 
         // === 🌟 新增：重玩時，把音樂切換回正常 BGM 並恢復循環播放 ===
         if (GameBGM != null)
