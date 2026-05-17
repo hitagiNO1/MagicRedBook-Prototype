@@ -54,27 +54,6 @@ MonoBehaviour:
     speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
     actions: []
     timline: []
-  - text: "\u9019\u500B\u662F......\u5931\u8E64\u7684\u9801\u9762......\uFF1F"
-    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-      spriteIndex: 25
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
-    timline: []
-  - text: "\u4E8B\u5230\u5982\u4ECA\uFF0C\u8490\u96C6\u9019\u4E9B\u9084\u6709\u4EC0\u9EBC\u610F\u7FA9......"
-    speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-    actions:
-    - speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
-      spriteIndex: 24
-      actionType: 0
-      coords: {x: 0, y: 0}
-      Right: 0
-    timline:
-    - animation: 0
-      myPlayableAsset: {fileID: 0}
-      timing: 0
   - text: "\u5E03\u840A\u514B\u624B\u4E0A\uFF0C\u88AB\u55BB\u70BA\u201D\u9810\u8A00\u4E4B\u66F8\u201D\uFF0C\u5C6C\u65BC\u516C\u4E3B\u7684\u9B54\u6CD5\u7D05\u66F8\u3002"
     speaker: {fileID: 11400000, guid: 782db9cfa2b21e64e83db65b0f0a00ae, type: 2}
     actions:

@@ -332186,7 +332186,7 @@ MonoBehaviour:
   - {fileID: 697952127}
   - {fileID: 1875975783}
   - {fileID: 1595918147}
-  targetPrefab: {fileID: 9142385395296598408, guid: 4587356ee1f983149b4c7ba1df7b0ec6, type: 3}
+  targetPrefab: {fileID: 9142385395296598408, guid: c87d694f93427c94c958d245b03a58cd, type: 3}
   activeCount: 3
   sharedFadeImage: {fileID: 1203823678}
 --- !u!114 &3720424681303388715

@@ -119,8 +119,20 @@ public class Tree : MonoBehaviour
             yield return null;
         }
 
-        // 3. ★ 呼叫紀錄功能，但排除自己 (gameObject)
-        // 這樣做之後，其他物件都關了，唯獨這個 Script 還活著，可以繼續往下跑
+        // --- 加入 Debug 來抓出問題 ---
+        if (manager != null)
+        {
+            Debug.Log($"<color=yellow>[移動測試]</color> {gameObject.name} 準備移動。原座標: {transform.position}");
+            manager.RelocateObject(this);
+            Debug.Log($"<color=green>[移動測試]</color> {gameObject.name} 執行移動完畢。新座標: {transform.position}");
+        }
+        else
+        {
+            Debug.LogError($"<color=red>[嚴重錯誤]</color> {gameObject.name} 的 manager 是空的！請刪除場景上手動擺放的樹，讓 TreeManager 自動生成它！");
+        }
+        // -----------------------------
+
+        // 3. 呼叫紀錄功能
         SceneSwapper.RecordAndHideMainScene(gameObject);
 
         // 4. 設定新場景為 Active
@@ -130,15 +142,7 @@ public class Tree : MonoBehaviour
             SceneManager.SetActiveScene(miniGameScene);
         }
 
-        if (manager != null)
-        {
-            manager.RelocateObject(this);
-        }
-
-        // 5. ★ 任務完成，安心上路
-        // 這行執行後，這個物件會變成 Inactive，Coroutine 會停止。
-        // 但因為 SceneSwapper 已經紀錄了我們的 ID，
-        // 所以等一下呼叫 RestoreMainScene 時，我們又會被復活，觸發 OnEnable！
+        // 5. 任務完成，安心上路
         gameObject.SetActive(false);
     }
 
@@ -168,6 +172,15 @@ public class Tree : MonoBehaviour
             StartCoroutine(FadeInAnimation());
         }
 
+        // --- 修復：重置所有狀態，確保物件能被再次觸發 ---
+        isLoading = false;
         playerInRange = false;
+
+        // 重新啟用碰撞器，讓 OnTriggerEnter 能再次偵測到玩家
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = true;
+        }
     }
 }

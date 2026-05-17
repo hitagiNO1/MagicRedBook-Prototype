@@ -47,11 +47,15 @@ public class TreeManager : MonoBehaviour
         // 2. 生成物件
         GameObject newObj = Instantiate(targetPrefab, selectedPoint.position, selectedPoint.rotation);
 
-        // 3. 把管理員(自己)和點位資訊交給生成的物件
-        Tree targetScript = newObj.GetComponent<Tree>();
+        // 3. ★ 關鍵修改 1：使用 GetComponentInChildren 去子物件層級抓取腳本
+        Tree targetScript = newObj.GetComponentInChildren<Tree>();
         if (targetScript != null)
         {
             targetScript.Setup(this, selectedPoint, sharedFadeImage);
+        }
+        else
+        {
+            Debug.LogError("在 Prefab 及其子物件中都找不到 Tree 腳本！");
         }
 
         // 4. 因為這個點位站人了，把它從空閒清單移除
@@ -59,23 +63,34 @@ public class TreeManager : MonoBehaviour
     }
 
     // 當物件被點擊（互動）時，物件會呼叫這個方法
+    // 當物件被點擊（互動）時，物件會呼叫這個方法
     public void RelocateObject(Tree objScript)
     {
-        // 1. 釋放這個物件「原本」的點位（加回空閒清單）
-        availablePoints.Add(objScript.currentPoint);
+        // 防呆：確保空閒清單裡還有位置可以去
+        if (availablePoints.Count == 0)
+        {
+            Debug.LogWarning("沒有多餘的空閒點位可以移動了！");
+            return;
+        }
 
-        // 2. 隨機找一個「新的」空閒點位
+        // 1. 先從「目前的」空閒清單隨機找一個新點位 
         int randomIndex = Random.Range(0, availablePoints.Count);
         Transform newPoint = availablePoints[randomIndex];
 
-        // 3. 把物件瞬間移動到新點位 (模擬消失又出現在別處)
-        objScript.transform.position = newPoint.position;
-        objScript.transform.rotation = newPoint.rotation;
-
-        // 4. 更新該物件記錄的目前點位
-        objScript.currentPoint = newPoint;
-
-        // 5. 將新點位從空閒清單中移除，避免下一個物件又跑來這
+        // 2. 將新抽到的點位從空閒清單中移除
         availablePoints.RemoveAt(randomIndex);
+
+        // 3. 把這個物件「原本」的點位加回空閒清單
+        availablePoints.Add(objScript.currentPoint);
+
+        // 4. ★ 關鍵修改 2：抓取父物件 (整個 Prefab) 進行移動
+        // 如果這個物件確實有父物件，就移動父物件；如果沒有，就移動自己
+        Transform targetToMove = objScript.transform.parent != null ? objScript.transform.parent : objScript.transform;
+
+        targetToMove.position = newPoint.position;
+        targetToMove.rotation = newPoint.rotation;
+
+        // 5. 更新該物件記錄的目前點位
+        objScript.currentPoint = newPoint;
     }
 }
