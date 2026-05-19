@@ -16,7 +16,7 @@ public class BuffDebuffManager : MonoBehaviour
     private HashSet<Unit> hasFixedReduction = new HashSet<Unit>();
     private Dictionary<Unit, int> poisonTurnsRemaining = new Dictionary<Unit, int>();
     private HashSet<Unit> isPoisoned = new HashSet<Unit>();
-    private float poisonDamagePercentage = 0.15f;
+    private float poisonDamagePercentage = 0.4f;
 
     // 新增：攻擊 buff 管理
     private Dictionary<Unit, int> damageBuffTurnsRemaining = new Dictionary<Unit, int>();

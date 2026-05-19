@@ -6,9 +6,9 @@ using TMPro;
 public class Itemuse : MonoBehaviour
 {
     public RedBook redbook;
-    public SkillManager skillManager; // 引用 SkillManager
-    public BuffDebuffManager buffDebuffManager; // 引用 BuffDebuffManager 以執行效果
-    public TextMeshProUGUI dialogueText; // 用於顯示訊息
+    public SkillManager skillManager;
+    public BuffDebuffManager buffDebuffManager;
+    public TextMeshProUGUI dialogueText;
     public List<BattleHUD> playerHUDs;
     public List<Unit> playerUnits;
     public ItemData can;
@@ -18,58 +18,44 @@ public class Itemuse : MonoBehaviour
 
     private float lastTunaClickTime = 0f;
 
-    // 物品庫存管理
-    private Dictionary<string, int> itemInventory = new Dictionary<string, int>(); // 物品庫存
+    // ★ 修改 1：移除了 private Dictionary<string, int> itemInventory 
+    // 從現在起，Itemuse 直接以 ItemData 為唯一真理！
 
     void Start()
     {
-        // 從 ItemData 讀取道具數量並初始化庫存
-        if (can != null)
-        {
-            itemInventory["Can"] = can.amount;
-        }
-        else
-        {
-            Debug.LogWarning("Can ItemData 未指定！");
-        }
-        if (tuna != null)
-        {
-            itemInventory["Tuna"] = tuna.amount;
-        }
-        else
-        {
-            Debug.LogWarning("Tuna ItemData 未指定！");
-        }
-        if (grass != null)
-        {
-            itemInventory["Grass"] = grass.amount;
-        }
-        else
-        {
-            Debug.LogWarning("Grass ItemData 未指定！");
-        }
-        if (drying != null)
-        {
-            itemInventory["Drying"] = drying.amount;
-        }
-        else
-        {
-            Debug.LogWarning("Drying ItemData 未指定！");
-        }
-
-        Debug.Log("=== 物品庫存初始化完成 ===");
-        foreach (var item in itemInventory)
-        {
-            Debug.Log($"{item.Key}: {item.Value} 個");
-        }
+        // ★ 修改 2：不需再將數字寫入字典，完全依賴 ItemData
+        Debug.Log("=== Itemuse 初始化完成，直接讀取 ItemData ===");
     }
 
-    // 驗證物品是否可用
+    // ==================== 其他工具方法 (移到前面方便看) ====================
+
+    // ★ 修改 3：所有檢查數量的方法，直接回傳 ItemData.amount
+    public int GetItemCount(string itemName)
+    {
+        if (itemName == "Can" && can != null) return can.amount;
+        if (itemName == "Tuna" && tuna != null) return tuna.amount;
+        if (itemName == "Grass" && grass != null) return grass.amount;
+        if (itemName == "Drying" && drying != null) return drying.amount;
+        return 0;
+    }
+
+    public bool HasItem(string itemName)
+    {
+        return GetItemCount(itemName) > 0;
+    }
+
+    // ★ 修改 4：驗證物品是否可用，並將代號轉為中文顯示
     private bool ValidateItem(int playerIndex, string itemName)
     {
-        if (!itemInventory.ContainsKey(itemName) || itemInventory[itemName] <= 0)
+        if (!HasItem(itemName))
         {
-            dialogueText.text = $"沒有 <b>{itemName}</b> 可使用！";
+            string displayName = itemName;
+            if (itemName == "Can") displayName = "神聖罐罐";
+            else if (itemName == "Tuna") displayName = "鮪魚肉泥";
+            else if (itemName == "Grass") displayName = "貓草";
+            else if (itemName == "Drying") displayName = "凍乾";
+
+            dialogueText.text = $"沒有 <b>{displayName}</b> 可使用！";
             return false;
         }
         if (skillManager.GetTotalSelectedSkills() >= skillManager.maxSkillPerTurn)
@@ -80,7 +66,6 @@ public class Itemuse : MonoBehaviour
         return true;
     }
 
-    // 取消物品
     // 取消物品
     private void CancelItem(int playerIndex, string itemName)
     {
@@ -94,7 +79,6 @@ public class Itemuse : MonoBehaviour
                 skillManager.selectedTargets[playerIndex] = null;
             }
 
-            // --- 新增：將代號翻譯成中文 ---
             string displayName = itemName;
             if (itemName == "Can") displayName = "神聖罐罐";
             else if (itemName == "Tuna") displayName = "鮪魚肉泥";
@@ -102,9 +86,8 @@ public class Itemuse : MonoBehaviour
             else if (itemName == "Drying") displayName = "凍乾";
 
             dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 取消了 <b>{displayName}</b>";
-            // -----------------------------
 
-            skillManager.AddSkillIcon(skillManager.GetSkillCost(itemName)); // 順便幫你補上 AP 退還
+            skillManager.AddSkillIcon(skillManager.GetSkillCost(itemName));
             skillManager.UpdateAllSkillButtonStates();
         }
     }
@@ -115,35 +98,28 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
-        // --- ★ 新增：播放罐頭音效 (假設檔名叫 item_can) ---
         skillManager.PlaySoundByName("can");
-        // ------------------------------------------------
 
         int lostHP = target.maxHP - target.currentHP;
         int healAmount = Mathf.RoundToInt(lostHP * 0.6f);
         target.currentHP = Mathf.Min(target.currentHP + healAmount, target.maxHP);
 
-        if (target.battleHUD != null)
-        {
-            target.battleHUD.SetHP(target.currentHP);
-        }
+        if (target.battleHUD != null) target.battleHUD.SetHP(target.currentHP);
 
-        can.amount--;
-        itemInventory["Can"] = can.amount;
+        // ★ 修改 5：直接扣除 ItemData 數量即可，不用再更新字典
+        if (can != null) can.amount--;
 
         int targetIndex = skillManager.playerUnits.IndexOf(target);
         bool isTargetLeft = (targetIndex == 0);
         EffectManager.Instance.PlayUIEffectOneSide("L2", isTargetLeft);
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>神聖罐罐</b> 恢復 <b>{target.unitName}</b> 的血量（+<b>{healAmount}</b>）";
-
         yield return new WaitForSeconds(1.8f);
     }
+
     private IEnumerator TunaCoroutine(int playerIndex)
     {
-        // --- ★ 新增：播放肉泥音效 (假設檔名叫 item_tuna) ---
         skillManager.PlaySoundByName("heal");
-        // ------------------------------------------------
 
         int totalHealedAmount = 0;
         int healedCount = 0;
@@ -158,27 +134,19 @@ public class Itemuse : MonoBehaviour
                 totalHealedAmount += actualHeal;
                 healedCount++;
 
-                if (player.battleHUD != null)
-                {
-                    player.battleHUD.SetHP(player.currentHP);
-                }
+                if (player.battleHUD != null) player.battleHUD.SetHP(player.currentHP);
             }
         }
 
-        tuna.amount--;
-        itemInventory["Tuna"] = tuna.amount;
+        if (tuna != null) tuna.amount--; // ★ 扣除 ItemData 數量
 
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(800, 0));
         EffectManager.Instance.PlayUIEffect("L2", new Vector2(-800, 0));
 
         if (healedCount > 0)
-        {
             dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>鮪魚肉泥</b> 恢復全體血量（共 +<b>{totalHealedAmount}</b> HP，治療了 <b>{healedCount}</b> 個單位）";
-        }
         else
-        {
             dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>鮪魚肉泥</b>，但全體已滿血，無效果";
-        }
 
         yield return new WaitForSeconds(2.0f);
     }
@@ -187,18 +155,14 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
-        // --- ★ 新增：播放貓草音效 (假設檔名叫 item_grass) ---
         skillManager.PlaySoundByName("catskill4_2");
-        // ------------------------------------------------
 
         buffDebuffManager.ApplyCritChanceBuff(target, 0.5f, 2);
         buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
 
-        grass.amount--;
-        itemInventory["Grass"] = grass.amount;
+        if (grass != null) grass.amount--; // ★ 扣除 ItemData 數量
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>貓草</b> 強化 <b>{target.unitName}</b> 的爆擊但削弱防禦";
-
         yield return new WaitForSeconds(1.8f);
     }
 
@@ -206,17 +170,12 @@ public class Itemuse : MonoBehaviour
     {
         if (target == null || target.currentHP <= 0) yield break;
 
-        // --- ★ 新增：播放凍乾音效 (假設檔名叫 item_drying) ---
         skillManager.PlaySoundByName("catskill4_2");
-        // -------------------------------------------------
-
         buffDebuffManager.ApplyDamageBuff(target, 1.3f, 2);
 
-        drying.amount--;
-        itemInventory["Drying"] = drying.amount;
+        if (drying != null) drying.amount--; // ★ 扣除 ItemData 數量
 
         dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 使用 <b>凍乾</b> 提升了 <b>{target.unitName}</b> 的攻擊力";
-
         yield return new WaitForSeconds(2.0f);
     }
 
@@ -224,16 +183,10 @@ public class Itemuse : MonoBehaviour
 
     public void UseCan(int playerIndex, Unit target)
     {
-        if (!ValidateItem(playerIndex, "Can") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target))
-        {
-            return;
-        }
-
-        // 把那三行刪掉，改成這行：
+        if (!ValidateItem(playerIndex, "Can") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target)) return;
         skillManager.AddSkillToQueue(playerIndex, "Can", true, CanCoroutine(playerIndex, target));
 
-        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>神聖罐罐</b> 對 <b>{target.unitName}</b>\n"+
-                            $"恢復目標 「已損失血量」的 60%";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>神聖罐罐</b> 對 <b>{target.unitName}</b>\n恢復目標 「已損失血量」的 60%";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -241,47 +194,29 @@ public class Itemuse : MonoBehaviour
     public void UseTuna(int playerIndex)
     {
         if (!ValidateItem(playerIndex, "Tuna")) return;
-
-        // 把那三行刪掉，改成這行：
         skillManager.AddSkillToQueue(playerIndex, "Tuna", false, TunaCoroutine(playerIndex));
 
-        // 在 dialogueText 前面加上 skillManager. 確保抓到正確的文字框
         skillManager.dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>鮪魚肉泥</b>\n恢復我方存活全體成員 「最大血量」的 30%";
-
-        skillManager.RemoveSkillIcon(skillManager.GetSkillCost("Tuna")); // 順便幫你套用最新版的 AP 消耗寫法
+        skillManager.RemoveSkillIcon(skillManager.GetSkillCost("Tuna"));
         skillManager.UpdateAllSkillButtonStates();
     }
 
     public void UseGrass(int playerIndex, Unit target)
     {
-        if (!ValidateItem(playerIndex, "Grass") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target))
-        {
-            return;
-        }
-
-        // 把那三行刪掉，改成這行：
+        if (!ValidateItem(playerIndex, "Grass") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target)) return;
         skillManager.AddSkillToQueue(playerIndex, "Grass", true, GrassCoroutine(playerIndex, target));
 
-        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>貓草</b> 對 <b>{target.unitName}</b>\n"+
-                            $"爆擊提升為原本的 1.5 倍，但防禦下降 30%\n" +
-                            $"持續時間:2回合";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>貓草</b> 對 <b>{target.unitName}</b>\n爆擊提升為原本的 1.5 倍，但防禦下降 30%\n持續時間:2回合";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
 
     public void UseDrying(int playerIndex, Unit target)
     {
-        if (!ValidateItem(playerIndex, "Drying") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target))
-        {
-            return;
-        }
-
-        // 把那三行刪掉，改成這行：
+        if (!ValidateItem(playerIndex, "Drying") || !skillManager.ValidateTarget(playerIndex, target) || !skillManager.playerUnits.Contains(target)) return;
         skillManager.AddSkillToQueue(playerIndex, "Drying", true, DryingCoroutine(playerIndex, target));
 
-        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>凍乾</b> 對 <b>{target.unitName}</b>\n"+
-                            $"目標的攻擊力提升 30%\n"+
-                            $"持續時間：2 回合";
+        dialogueText.text = $"<b>{skillManager.playerUnits[playerIndex].unitName}</b> 選擇了 <b>凍乾</b> 對 <b>{target.unitName}</b>\n目標的攻擊力提升 30%\n持續時間：2 回合";
         skillManager.RemoveSkillIcon();
         skillManager.UpdateAllSkillButtonStates();
     }
@@ -292,10 +227,7 @@ public class Itemuse : MonoBehaviour
     {
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
 
-        if (skillManager.selectedSkillNames[playerIndex].Contains("Can"))
-        {
-            CancelItem(playerIndex, "Can");
-        }
+        if (skillManager.selectedSkillNames[playerIndex].Contains("Can")) CancelItem(playerIndex, "Can");
         else if (HasItem("Can"))
         {
             skillManager.isWaitingForTarget = true;
@@ -303,10 +235,7 @@ public class Itemuse : MonoBehaviour
             skillManager.pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個玩家頭像以使用 <b>神聖罐罐</b>！";
         }
-        else
-        {
-            dialogueText.text = "沒有 <b>神聖罐罐</b> 可使用！";
-        }
+        else dialogueText.text = "沒有 <b>神聖罐罐</b> 可使用！";
     }
 
     public void TriggerTunaForPlayer(int playerIndex)
@@ -327,7 +256,6 @@ public class Itemuse : MonoBehaviour
             dialogueText.text = "沒有 <b>鮪魚肉泥</b> 可使用！";
             return;
         }
-
         UseTuna(playerIndex);
     }
 
@@ -335,10 +263,7 @@ public class Itemuse : MonoBehaviour
     {
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
 
-        if (skillManager.selectedSkillNames[playerIndex].Contains("Grass"))
-        {
-            CancelItem(playerIndex, "Grass");
-        }
+        if (skillManager.selectedSkillNames[playerIndex].Contains("Grass")) CancelItem(playerIndex, "Grass");
         else if (HasItem("Grass"))
         {
             skillManager.isWaitingForTarget = true;
@@ -346,20 +271,14 @@ public class Itemuse : MonoBehaviour
             skillManager.pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個玩家頭像以使用 <b>貓草</b>！";
         }
-        else
-        {
-            dialogueText.text = "沒有 <b>貓草</b> 可使用！";
-        }
+        else dialogueText.text = "沒有 <b>貓草</b> 可使用！";
     }
 
     public void TriggerDryingForPlayer(int playerIndex)
     {
         if (skillManager.battlesystem.state != BattleState.PLAYERTURN) return;
 
-        if (skillManager.selectedSkillNames[playerIndex].Contains("Drying"))
-        {
-            CancelItem(playerIndex, "Drying");
-        }
+        if (skillManager.selectedSkillNames[playerIndex].Contains("Drying")) CancelItem(playerIndex, "Drying");
         else if (HasItem("Drying"))
         {
             skillManager.isWaitingForTarget = true;
@@ -367,49 +286,35 @@ public class Itemuse : MonoBehaviour
             skillManager.pendingPlayerIndex = playerIndex;
             dialogueText.text = "請點擊一個玩家頭像以使用 <b>凍乾</b>！";
         }
-        else
-        {
-            dialogueText.text = "沒有 <b>凍乾</b> 可使用！";
-        }
+        else dialogueText.text = "沒有 <b>凍乾</b> 可使用！";
     }
 
-    // ==================== 其他工具方法 ====================
-
-    public int GetItemCount(string itemName)
-    {
-        return itemInventory.ContainsKey(itemName) ? itemInventory[itemName] : 0;
-    }
-
-    public bool HasItem(string itemName)
-    {
-        return itemInventory.ContainsKey(itemName) && itemInventory[itemName] > 0;
-    }
+    // ==================== 字典防呆輔助 (給其他腳本呼叫用) ====================
 
     public Dictionary<string, int> GetAllItemCounts()
     {
-        return new Dictionary<string, int>(itemInventory);
+        Dictionary<string, int> dict = new Dictionary<string, int>();
+        if (can != null) dict["Can"] = can.amount;
+        if (tuna != null) dict["Tuna"] = tuna.amount;
+        if (grass != null) dict["Grass"] = grass.amount;
+        if (drying != null) dict["Drying"] = drying.amount;
+        return dict;
     }
 
     public void AddItem(string itemName, int amount)
     {
-        if (itemInventory.ContainsKey(itemName))
-        {
-            itemInventory[itemName] += amount;
-        }
-        else
-        {
-            itemInventory[itemName] = amount;
-        }
-        Debug.Log($"獲得 {amount} 個 {itemName}，當前數量：{itemInventory[itemName]}");
+        if (itemName == "Can" && can != null) can.amount += amount;
+        else if (itemName == "Tuna" && tuna != null) tuna.amount += amount;
+        else if (itemName == "Grass" && grass != null) grass.amount += amount;
+        else if (itemName == "Drying" && drying != null) drying.amount += amount;
     }
 
     public void RemoveItem(string itemName, int amount)
     {
-        if (itemInventory.ContainsKey(itemName))
-        {
-            itemInventory[itemName] = Mathf.Max(0, itemInventory[itemName] - amount);
-            Debug.Log($"移除 {amount} 個 {itemName}，剩餘數量：{itemInventory[itemName]}");
-        }
+        if (itemName == "Can" && can != null) can.amount = Mathf.Max(0, can.amount - amount);
+        else if (itemName == "Tuna" && tuna != null) tuna.amount = Mathf.Max(0, tuna.amount - amount);
+        else if (itemName == "Grass" && grass != null) grass.amount = Mathf.Max(0, grass.amount - amount);
+        else if (itemName == "Drying" && drying != null) drying.amount = Mathf.Max(0, drying.amount - amount);
     }
 
     public void redbookuse()

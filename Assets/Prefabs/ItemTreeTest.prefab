@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bcb5738f7d97bc42ae39e06584e1b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniGameSceneName: ItemGame
+  miniGameSceneName: ItemGame_Test
   fadeDuration: 1
   InteractiveUI: {fileID: 4282828131774556702}
   fadeImage: {fileID: 0}

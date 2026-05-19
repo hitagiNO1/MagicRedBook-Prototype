@@ -17,10 +17,7 @@ MonoBehaviour:
   - text: "\u554A\u554A\u554A\u554A\u554A\u2014\u2014\u5514\u54C7\u5440\uFF01"
     speaker: {fileID: 11400000, guid: 2f4f881bd9fcf0f428232bfffe413220, type: 2}
     actions: []
-    timline:
-    - animation: 1
-      myPlayableAsset: {fileID: 11400000, guid: 0890e6bca3ab9304c91bc478b089e536, type: 2}
-      timing: 0
+    timline: []
   - text: "\u55DA\u54C7\u2026\u2026\u5C41\u80A1\u597D\u75DB\u2026\u2026"
     speaker: {fileID: 11400000, guid: ba40ea94def04444582a484795b61ca1, type: 2}
     actions:

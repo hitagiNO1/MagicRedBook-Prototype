@@ -20,6 +20,28 @@ public class StoryTrigger2 : MonoBehaviour
     [Header("條件 完成時 劇情")]
     public StoryScene sceneB;
 
+
+    [HideInInspector]
+    public GameController Gamescript;
+    [Header("劇情進場驚嘆號動畫設定")]
+    [HideInInspector] // 同樣隱藏，不用手動拖曳
+    public Animator introAnimator;
+    void Start()
+    {
+        // 1. 自動尋找 GameController (因為你有寫單例 Instance，直接抓就好！)
+        Gamescript = GameController.Instance;
+
+        // 2. 自動尋找驚嘆號物件並取得 Animator 
+        GameObject introObj = GameObject.Find("TriggerStory");
+        if (introObj != null)
+        {
+            introAnimator = introObj.GetComponent<Animator>();
+        }
+        else
+        {
+            Debug.LogWarning("找不到驚嘆號物件，請確認 GameObject.Find 裡的名稱是否正確。");
+        }
+    }
     void Update()
     {
         // --------------------------------------------------------
@@ -53,6 +75,10 @@ public class StoryTrigger2 : MonoBehaviour
                 GameController.Instance.PlayScene(sceneA);
             }
 
+            if (introAnimator != null)
+            {
+                introAnimator.SetTrigger("PlayIntro");
+            }
             isTriggered = true; // 確保只執行一次
         }
     }

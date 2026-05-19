@@ -217,8 +217,13 @@ MonoBehaviour:
       Right: 0
     timline: []
   - text: "\u7576\u7136\u53EF\u4EE5\uFF01\u7559\u5728\u8EAB\u908A\u4E5F\u662F\u5F92\u589E\u9EBB\u7169\u800C\u5DF2\uFF0C\u4F60\u5011\u80FD\u8655\u7406\u5B83\u771F\u662F\u592A\u597D\u4E86\u3002"
-    speaker: {fileID: 11400000, guid: 755db819ff1a2ea4aa12594b5b3997b8, type: 2}
-    actions: []
+    speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+    actions:
+    - speaker: {fileID: 11400000, guid: c3ccda3cb82c2fe4f8d86cf55714aeca, type: 2}
+      spriteIndex: 4
+      actionType: 0
+      coords: {x: 0, y: 0}
+      Right: 1
     timline: []
   - text: "\u592A\u597D\u4E86\uFF0C\u840A\u83C8\uFF01\u6211\u5011\u53C8\u627E\u56DE\u4E00\u9801\u4E86\u3002"
     speaker: {fileID: 11400000, guid: e1c953448bc2f584ba07644c7d06769b, type: 2}

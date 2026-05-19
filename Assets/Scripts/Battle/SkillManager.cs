@@ -616,7 +616,7 @@ public class SkillManager : MonoBehaviour
         {
             if (player != null && !player.isDead)
             {
-                buffDebuffManager.Heal(player, 0.75f);
+                buffDebuffManager.Heal(player, 0.5f);
                 PlaySoundByName("catskill2");
             }
         }

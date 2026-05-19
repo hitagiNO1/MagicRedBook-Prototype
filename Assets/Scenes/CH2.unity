@@ -26546,7 +26546,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3433247497458231736}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: f604e7eb91547e543bd98494648f28af, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -26960,6 +26960,12 @@ PlayableDirector:
     value: {fileID: 5372479735757186302}
   - key: {fileID: -5052242211303417716, guid: 5369b7b0a2dc67f499e52d1bee5f9683, type: 2}
     value: {fileID: 38243638025048297}
+  - key: {fileID: 8343778370798322079, guid: f604e7eb91547e543bd98494648f28af, type: 2}
+    value: {fileID: 1203823676}
+  - key: {fileID: 525106135933575748, guid: f604e7eb91547e543bd98494648f28af, type: 2}
+    value: {fileID: 1203823677}
+  - key: {fileID: 1355020469354510514, guid: f604e7eb91547e543bd98494648f28af, type: 2}
+    value: {fileID: 1632535654622852043}
   m_ExposedReferences:
     m_References:
     - b66ebb15795ad27409b7990f21887984: {fileID: 1400622618}
@@ -46933,7 +46939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bookRenderer: {fileID: 8574294908418165228}
-  target: {fileID: 5550247945950013330}
+  target: {fileID: 1880422679}
   maxDistance: 140
   minSpeed: 8
   maxSpeed: 12
