@@ -574,7 +574,7 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         buffDebuffManager.ApplyDefenseDebuff(target, 0.7f, 2);
-        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 1.3f);
+        int buffedDamage = Mathf.RoundToInt(playerUnits[playerIndex].damage * 2f);
         int damageDealt;
         bool isKilled = target.TakeDamage(buffedDamage, out damageDealt);
 

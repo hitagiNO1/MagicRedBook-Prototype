@@ -88,7 +88,7 @@ public class usercontrol : MonoBehaviour,
             Debug.Log("時間到！未達標，遊戲結束！");
             gameover = true;
             gamelose();
-            gameflow.ShowResult();
+            gameflow.ShowResultLOSS();
         }
     }
 

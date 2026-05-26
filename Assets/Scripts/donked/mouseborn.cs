@@ -47,12 +47,10 @@ public class mouseborn : MonoBehaviour
     private readonly List<Holenumber> occupiedHoles = new List<Holenumber>();
     private readonly HashSet<Holenumber> clickedHoles = new HashSet<Holenumber>();
     private readonly Dictionary<Holenumber, int> holeGeneration = new Dictionary<Holenumber, int>();
-
-    // ★ 新增：用來記錄每個洞的初始絕對位置
     private readonly Dictionary<Holenumber, Vector3> initialHolePositions = new Dictionary<Holenumber, Vector3>();
 
     private int globalGeneration = 0;
-
+    private bool isInitialized = false;
     public System.Action<HoleState> OnHoleSpawned;
     public System.Action<HoleState> OnHoleRemoved;
 
@@ -60,18 +58,38 @@ public class mouseborn : MonoBehaviour
 
     void Awake()
     {
-        if (mouseRoot != null) return;
-        mouseRoot = transform.GetChild(1);
+        if (mouseRoot == null)
+        {
+            mouseRoot = transform.GetChild(1);
+        }
+
+        // ★ 提早到 Awake 執行，確保在畫面第一次渲染前，所有洞都已經是 spriteA
+        if (holeObjectArray != null && holeObjectArray.Length == 9)
+        {
+            InitializeHoles();
+        }
     }
 
     void Start()
     {
         isQuitting = false;
+        isInitialized = false; // 預設為 false
 
         if (!ValidateSprites()) { enabled = false; return; }
         if (!ValidateHoleArray()) { enabled = false; return; }
-        InitializeHoles();
-        ScheduleSpawns();
+
+        InitializeHoles(); // 這裡會記錄初始位置
+
+        // ★ 關鍵修改：不立刻 ScheduleSpawns()。
+        // 改為在 0.1 秒後（確保所有 Dictionary 都存好了）再執行
+        Invoke(nameof(CompleteInitialization), 0.1f);
+    }
+
+    // 新增一個函式
+    private void CompleteInitialization()
+    {
+        isInitialized = true;
+        ScheduleSpawns(); // 只有到這裡才真正開始生老鼠
     }
 
     void OnEnable() => ScheduleSpawns();
@@ -117,8 +135,6 @@ public class mouseborn : MonoBehaviour
             GameObject go = holeObjectArray[i];
             Holenumber hole = (Holenumber)i;
             holeObjects[hole] = go;
-
-            // ★ 記錄初始位置
             initialHolePositions[hole] = go.transform.position;
 
             SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
@@ -129,7 +145,6 @@ public class mouseborn : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Hole {i} 沒有 SpriteRenderer！");
                 continue;
             }
 
@@ -144,8 +159,25 @@ public class mouseborn : MonoBehaviour
     private void ScheduleSpawns()
     {
         CancelInvoke();
-        InvokeRepeating(nameof(Create), 0f, mouseSpawnInterval);
-        InvokeRepeating(nameof(Boom), 3f, c4SpawnInterval);
+        // ★ 修正：不要用 0f，改用 mouseSpawnInterval
+        InvokeRepeating(nameof(Create), mouseSpawnInterval, mouseSpawnInterval);
+        InvokeRepeating(nameof(Boom), c4SpawnInterval, c4SpawnInterval);
+    }
+
+    void Update()
+    {
+        if (usercontrol == null)
+        {
+            usercontrol = FindObjectOfType<usercontrol>();
+        }
+
+        // ★ 修正：註解掉或刪除下面這段，不要殺死協程！
+        /*
+        if (usercontrol != null && !usercontrol.IsGameActive())
+        {
+            CancelAllInvokesAndCoroutines();
+        }
+        */
     }
 
     private void CancelAllInvokesAndCoroutines()
@@ -154,20 +186,16 @@ public class mouseborn : MonoBehaviour
         StopAllCoroutines();
     }
 
-    void Update()
-    {
-        usercontrol = FindObjectOfType<usercontrol>();
-        if (usercontrol != null && !usercontrol.IsGameActive())
-        {
-            CancelAllInvokesAndCoroutines();
-        }
-    }
+
 
     public void Create()
     {
         if (!CanSpawn()) return;
         Holenumber hole = GetUniqueHole();
         if (hole == Holenumber.Invalid || !holeObjects.ContainsKey(hole)) return;
+
+        // ★ 修正二：選好洞後「立刻」標記為已佔用，避免在播放 Shake 動畫期間被其他物件選走
+        occupiedHoles.Add(hole);
         StartCoroutineSafe(ShakeAndSpawn(hole, spriteB, true, mouseExistTime));
     }
 
@@ -176,6 +204,9 @@ public class mouseborn : MonoBehaviour
         if (!CanSpawn()) return;
         Holenumber hole = GetUniqueHole();
         if (hole == Holenumber.Invalid || !holeObjects.ContainsKey(hole)) return;
+
+        // ★ 修正二：選好洞後「立刻」標記為已佔用
+        occupiedHoles.Add(hole);
         Sprite c4 = Random.value > 0.5f ? spriteC4_1 : spriteC4_2;
         StartCoroutineSafe(ShakeAndSpawn(hole, c4, false, c4ExistTime));
     }
@@ -186,8 +217,8 @@ public class mouseborn : MonoBehaviour
             && usercontrol.IsGameActive()
             && gameObject.activeInHierarchy
             && !isQuitting
-            && occupiedHoles.Count < 8
-            && GetMouseCount() < 1;
+            && isInitialized    // ★ 新增這行：確認初始化已完全完成
+            && occupiedHoles.Count < 8;
     }
 
     private int GetMouseCount()
@@ -207,8 +238,16 @@ public class mouseborn : MonoBehaviour
 
     private IEnumerator ShakeAndSpawn(Holenumber hole, Sprite target, bool isMouse, float delay)
     {
-        if (isQuitting || !holeObjects.TryGetValue(hole, out GameObject go) || go == null) yield break;
-        if (!holeRenderers.TryGetValue(hole, out SpriteRenderer sr) || sr == null) yield break;
+        if (isQuitting || !holeObjects.TryGetValue(hole, out GameObject go) || go == null)
+        {
+            occupiedHoles.Remove(hole); // 如果發生錯誤，將洞釋放
+            yield break;
+        }
+        if (!holeRenderers.TryGetValue(hole, out SpriteRenderer sr) || sr == null)
+        {
+            occupiedHoles.Remove(hole);
+            yield break;
+        }
 
         globalGeneration++;
         int currentGen = globalGeneration;
@@ -229,7 +268,7 @@ public class mouseborn : MonoBehaviour
         HoleState state = go.GetComponent<HoleState>() ?? go.AddComponent<HoleState>();
         state.Initialize(hole, mouseRoot, isMouse, this);
 
-        occupiedHoles.Add(hole);
+        // 注意：這裡原本有 occupiedHoles.Add(hole); 已經移到 Create 和 Boom 中了
         clickedHoles.Remove(hole);
         OnHoleSpawned?.Invoke(state);
 
@@ -285,9 +324,6 @@ public class mouseborn : MonoBehaviour
     {
         if (!holeObjects.TryGetValue(hole, out GameObject go) || go == null) return;
 
-        // ==========================================
-        // ★ 核心修復：強制將座標還原，並重置動畫
-        // ==========================================
         if (initialHolePositions.ContainsKey(hole))
         {
             go.transform.position = initialHolePositions[hole];

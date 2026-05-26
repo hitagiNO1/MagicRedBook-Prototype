@@ -458,7 +458,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0/15
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ffd636e440719094b92f6ddca0b46322, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_sharedMaterial: {fileID: 9091311622442440409, guid: ffd636e440719094b92f6ddca0b46322, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -522,7 +522,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &176728327
@@ -1243,7 +1243,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e807d4eb372d0f243bf72edc421aafd5, type: 2}
   - {fileID: 11400000, guid: 8077eba7ac597314b91c11f44707d57d, type: 2}
   - {fileID: 11400000, guid: ad1f8d38b1a34a242982e60d76ec66a3, type: 2}
-  rareEquipmentName: "\u528D\u5BA2\u978B\u5B50"
+  rareEquipmentName: "\u528D\u5BA2\u9774\u5B50"
   equipmentDropChance: 0.1
   VicClip: {fileID: 8300000, guid: 871d5d93a869320449c1e2ddf8ae5953, type: 3}
   LosClip: {fileID: 8300000, guid: 8c856fe253399bd4dbdfde82bc0914f4, type: 3}

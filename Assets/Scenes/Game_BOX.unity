@@ -1074,7 +1074,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1005694435
 MonoBehaviour:
@@ -1150,7 +1150,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u518D\u8A66\u4E00\u6B21"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ffd636e440719094b92f6ddca0b46322, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_sharedMaterial: {fileID: 9091311622442440409, guid: ffd636e440719094b92f6ddca0b46322, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1033150919
@@ -1526,7 +1526,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1073257248
 MonoBehaviour:
@@ -1672,7 +1672,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1076552138
 MonoBehaviour:
@@ -1853,7 +1853,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1296198706
 MonoBehaviour:
@@ -2035,7 +2035,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6642\u9593 :"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e087f607f16c95d408b055ec58fb2357, type: 2}
   m_sharedMaterial: {fileID: -2029279069370666563, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2099,7 +2099,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1441037128
@@ -2497,7 +2497,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1518877511
 MonoBehaviour:
@@ -2643,7 +2643,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1541642407
 MonoBehaviour:
@@ -2830,7 +2830,6 @@ MonoBehaviour:
   mainCanvas: {fileID: 553306120}
   gameCanvas: {fileID: 2091093242}
   resultCanvas: {fileID: 122981143}
-  startbutton: {fileID: 0}
   usercontrol: {fileID: 1517387923}
   Backbutton: {fileID: 1467081387}
   Restartbutton: {fileID: 690184270}
@@ -3074,7 +3073,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u5206\u6578 :"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e087f607f16c95d408b055ec58fb2357, type: 2}
   m_sharedMaterial: {fileID: -2029279069370666563, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3138,7 +3137,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1664669291
@@ -3297,7 +3296,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &1706603032
 MonoBehaviour:
@@ -3469,9 +3468,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u96E2\u958B\u5C0F\u904A\u6232"
+  m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ffd636e440719094b92f6ddca0b46322, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7a8c2551b8e8b1343812e89d763c7abd, type: 2}
   m_sharedMaterial: {fileID: 9091311622442440409, guid: ffd636e440719094b92f6ddca0b46322, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3535,7 +3534,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1798847220
@@ -3972,7 +3971,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &2079046109
 MonoBehaviour:
@@ -4199,7 +4198,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &2092192876
 MonoBehaviour:

@@ -40,7 +40,7 @@ public class canclick : MonoBehaviour
     public ItemData[] itemOptions;
 
     [Header("Equipment Reward Settings")]
-    public string rareEquipmentName = "劍客鞋子"; // 裝備名稱
+    public string rareEquipmentName = "劍客靴子"; // 裝備名稱
     public float equipmentDropChance = 0.1f;    // 裝備掉落機率 (0.05 = 5%)
     private bool wonRareEquipment = false;       // 記錄本次是否抽中裝備
 
