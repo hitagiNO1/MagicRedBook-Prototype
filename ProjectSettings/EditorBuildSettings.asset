@@ -48,9 +48,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CG/CG6.unity
     guid: 28c8c94c46a9d4a4c914fa66d9d55d65
   - enabled: 1
-    path: Assets/Scenes/Game_BOX_Test.unity
-    guid: 52cf748d496f00b4f8e8b3d5e57218ed
-  - enabled: 1
     path: Assets/Scenes/ItemGame_Test.unity
     guid: 6f45b9b6bbb0776488ad1cd53278e5fd
+  - enabled: 1
+    path: Assets/Scenes/Game_BOX_Test.unity
+    guid: 133dd0058e4085e45915e5086bb4e92c
   m_configObjects: {}
