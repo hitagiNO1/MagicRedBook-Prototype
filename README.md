@@ -165,6 +165,6 @@ Assets/
 
 License & Copyright
 
-© 2026 Jetter (吳杰霖). All rights reserved.
+© 2026 Aedh (吳杰霖). All rights reserved.
 
 本專案作品（包含程式碼、美術資材、文件）僅供個人作品集展示與面試審查使用，未經許可禁止任何商業用途、二次修改或轉載。
